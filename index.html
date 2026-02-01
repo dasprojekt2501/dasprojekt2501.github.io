@@ -15,7 +15,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
             line-height: 1.6;
             color: #333;
-            background-color: #fff;
+            background-color: #faf8f5;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
@@ -79,27 +79,40 @@
         }
 
         .theme-toggle {
-            background: none;
-            border: 1px solid #e0e0e0;
-            border-radius: 20px;
-            padding: 8px 16px;
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 0.9em;
-            color: #333;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease;
+            padding: 0;
         }
 
         body.dark-mode .theme-toggle {
-            border-color: #333;
-            color: #e0e0e0;
+            background-color: #2a2a2a;
         }
 
         .theme-toggle:hover {
-            background-color: #f5f5f5;
+            opacity: 0.8;
         }
 
-        body.dark-mode .theme-toggle:hover {
-            background-color: #2a2a2a;
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
         }
 
         .essays {
@@ -181,8 +194,8 @@
                     <a href="index.html">Home</a>
                     <a href="about.html">About</a>
                 </nav>
-                <button class="theme-toggle" onclick="toggleTheme()">
-                    <span class="theme-text">Dark Mode</span>
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                    <div class="toggle-circle"></div>
                 </button>
             </div>
         </header>
@@ -229,7 +242,6 @@
         const currentTheme = localStorage.getItem('theme') || 'light';
         if (currentTheme === 'dark') {
             document.body.classList.add('dark-mode');
-            updateThemeButton();
         }
 
         function toggleTheme() {
@@ -238,17 +250,6 @@
             // Save preference
             const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
             localStorage.setItem('theme', theme);
-            
-            updateThemeButton();
-        }
-
-        function updateThemeButton() {
-            const themeText = document.querySelector('.theme-text');
-            if (document.body.classList.contains('dark-mode')) {
-                themeText.textContent = 'Light Mode';
-            } else {
-                themeText.textContent = 'Dark Mode';
-            }
         }
     </script>
 </body>

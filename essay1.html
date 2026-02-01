@@ -15,7 +15,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
             line-height: 1.6;
             color: #333;
-            background-color: #fff;
+            background-color: #faf8f5;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
@@ -78,28 +78,175 @@
             text-decoration: underline;
         }
 
-        .theme-toggle {
-            background: none;
-            border: 1px solid #e0e0e0;
-            border-radius: 20px;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 0.9em;
-            color: #333;
-            transition: all 0.3s ease;
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        body.dark-mode .theme-toggle {
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            color: #333;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
             border-color: #333;
             color: #e0e0e0;
         }
 
-        .theme-toggle:hover {
-            background-color: #f5f5f5;
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
         }
 
-        body.dark-mode .theme-toggle:hover {
+        body.dark-mode .toc-toggle:hover {
             background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+            transition: color 0.2s ease;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list a:hover {
+            color: #0066cc;
+        }
+
+        body.dark-mode .toc-list a:hover {
+            color: #4a9eff;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         .essay-header {
@@ -201,6 +348,15 @@
     </style>
 </head>
 <body>
+    <div class="toc-overlay" onclick="toggleTOC()"></div>
+    
+    <div class="toc-sidebar">
+        <div class="toc-header">Table of Contents</div>
+        <ul class="toc-list" id="tocList">
+            <!-- Table of contents will be generated here -->
+        </ul>
+    </div>
+
     <div class="container">
         <header>
             <h1>Your Name</h1>
@@ -210,9 +366,16 @@
                     <a href="../index.html">Home</a>
                     <a href="../about.html">About</a>
                 </nav>
-                <button class="theme-toggle" onclick="toggleTheme()">
-                    <span class="theme-text">Dark Mode</span>
-                </button>
+                <div class="controls">
+                    <button class="toc-toggle" onclick="toggleTOC()" aria-label="Toggle table of contents">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -231,10 +394,10 @@
                     This is the next paragraph. Break up your content into paragraphs for better readability. The simple design lets your writing shine.
                 </p>
 
-                <h2>Using Subheadings</h2>
+                <h2 id="first-section">Using Subheadings</h2>
 
                 <p>
-                    For longer essays, subheadings help organize your content and improve readability.
+                    For longer essays, subheadings help organize your content and improve readability. Notice how the table of contents automatically includes all your headings!
                 </p>
 
                 <p>
@@ -244,6 +407,8 @@
                 <blockquote>
                     "This is an example of a blockquote. You can use this format to highlight important quotes or passages."
                 </blockquote>
+
+                <h3 id="using-lists">Using Lists</h3>
 
                 <p>
                     You can also use lists:
@@ -265,14 +430,22 @@
                     <li>Third step</li>
                 </ol>
 
-                <h3>Even Smaller Subheadings</h3>
+                <h2 id="second-section">Another Major Section</h2>
 
                 <p>
-                    You can use smaller subheadings when needed for further organization.
+                    You can use as many sections as you need to organize your essay effectively.
                 </p>
 
+                <h3 id="subsection">A Subsection</h3>
+
                 <p>
-                    This is your conclusion. Use this template freely to write your essays and share your thoughts.
+                    Smaller subheadings appear indented in the table of contents for clear hierarchy.
+                </p>
+
+                <h2 id="conclusion">Conclusion</h2>
+
+                <p>
+                    This is your conclusion. Use this template freely to write your essays and share your thoughts. Click the hamburger menu (three lines) at the top right to see the table of contents!
                 </p>
             </div>
 
@@ -291,7 +464,6 @@
         const currentTheme = localStorage.getItem('theme') || 'light';
         if (currentTheme === 'dark') {
             document.body.classList.add('dark-mode');
-            updateThemeButton();
         }
 
         function toggleTheme() {
@@ -300,18 +472,49 @@
             // Save preference
             const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
             localStorage.setItem('theme', theme);
-            
-            updateThemeButton();
         }
 
-        function updateThemeButton() {
-            const themeText = document.querySelector('.theme-text');
-            if (document.body.classList.contains('dark-mode')) {
-                themeText.textContent = 'Light Mode';
-            } else {
-                themeText.textContent = 'Dark Mode';
-            }
+        // Table of Contents functionality
+        function generateTOC() {
+            const tocList = document.getElementById('tocList');
+            const headings = document.querySelectorAll('.essay-content h2, .essay-content h3');
+            
+            headings.forEach((heading, index) => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                
+                // Create ID if it doesn't exist
+                if (!heading.id) {
+                    heading.id = 'heading-' + index;
+                }
+                
+                a.href = '#' + heading.id;
+                a.textContent = heading.textContent;
+                
+                if (heading.tagName === 'H3') {
+                    a.classList.add('toc-h3');
+                }
+                
+                // Close TOC when clicking a link
+                a.onclick = function() {
+                    toggleTOC();
+                };
+                
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
         }
+
+        function toggleTOC() {
+            const sidebar = document.querySelector('.toc-sidebar');
+            const overlay = document.querySelector('.toc-overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        // Generate TOC when page loads
+        window.addEventListener('DOMContentLoaded', generateTOC);
     </script>
 </body>
 </html>
