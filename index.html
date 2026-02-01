@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Essays</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+            position: relative;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .theme-toggle {
+            border-color: #333;
+            color: #e0e0e0;
+        }
+
+        .theme-toggle:hover {
+            background-color: #f5f5f5;
+        }
+
+        body.dark-mode .theme-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .essays {
+            margin-top: 40px;
+        }
+
+        .essay-item {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        body.dark-mode .essay-item {
+            border-bottom-color: #2a2a2a;
+        }
+
+        .essay-item:last-child {
+            border-bottom: none;
+        }
+
+        .essay-title {
+            font-size: 1.4em;
+            margin-bottom: 8px;
+        }
+
+        .essay-title a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        body.dark-mode .essay-title a {
+            color: #e0e0e0;
+        }
+
+        .essay-title a:hover {
+            color: #0066cc;
+        }
+
+        body.dark-mode .essay-title a:hover {
+            color: #4a9eff;
+        }
+
+        .essay-date {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .essay-excerpt {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        body.dark-mode .essay-excerpt {
+            color: #999;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Name</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="index.html">Home</a>
+                    <a href="about.html">About</a>
+                </nav>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <span class="theme-text">Dark Mode</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="essays">
+            <article class="essay-item">
+                <h2 class="essay-title">
+                    <a href="essays/essay1.html">Your First Essay Title</a>
+                </h2>
+                <div class="essay-date">February 1, 2026</div>
+                <p class="essay-excerpt">
+                    This is where you write a summary or the opening lines of your essay. Write something compelling that makes readers want to click and read more.
+                </p>
+            </article>
+
+            <article class="essay-item">
+                <h2 class="essay-title">
+                    <a href="essays/essay2.html">Your Second Essay Title</a>
+                </h2>
+                <div class="essay-date">January 15, 2026</div>
+                <p class="essay-excerpt">
+                    Another essay introduction. Keep the layout simple and readable, just like this template demonstrates.
+                </p>
+            </article>
+
+            <article class="essay-item">
+                <h2 class="essay-title">
+                    <a href="essays/essay3.html">Your Third Essay Title</a>
+                </h2>
+                <div class="essay-date">January 1, 2026</div>
+                <p class="essay-excerpt">
+                    Yet another essay. You can copy and expand this template as needed to add more essays to your collection.
+                </p>
+            </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Your Name. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            updateThemeButton();
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+            
+            updateThemeButton();
+        }
+
+        function updateThemeButton() {
+            const themeText = document.querySelector('.theme-text');
+            if (document.body.classList.contains('dark-mode')) {
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeText.textContent = 'Dark Mode';
+            }
+        }
+    </script>
+</body>
+</html>
