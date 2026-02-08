@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sinking News Strategic Failure: A Reuters Institute 2026 Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+            position: relative;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            color: #333;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
+            border-color: #333;
+            color: #e0e0e0;
+        }
+
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .toc-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+            transition: color 0.2s ease;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list a:hover {
+            color: #0066cc;
+        }
+
+        body.dark-mode .toc-list a:hover {
+            color: #4a9eff;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .essay-header {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .essay-meta {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        .essay-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .essay-content p {
+            margin-bottom: 20px;
+        }
+
+        .essay-content h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .essay-content h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .essay-content h4 {
+            font-size: 1.1em;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .essay-content blockquote {
+            border-left: 3px solid #e0e0e0;
+            padding-left: 20px;
+            margin: 30px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        body.dark-mode .essay-content blockquote {
+            border-left-color: #333;
+            color: #999;
+        }
+
+        .essay-content ul, .essay-content ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .essay-content li {
+            margin-bottom: 8px;
+        }
+
+        /* Tables */
+        .essay-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+        }
+
+        .essay-content thead {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .essay-content thead {
+            background-color: #2a2a2a;
+        }
+
+        .essay-content th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        body.dark-mode .essay-content th {
+            border-bottom-color: #333;
+        }
+
+        .essay-content td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .essay-content td {
+            border-bottom-color: #333;
+        }
+
+        .essay-content tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        body.dark-mode .essay-content tbody tr:hover {
+            background-color: #252525;
+        }
+
+        /* Code blocks */
+        .essay-content pre {
+            background-color: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        body.dark-mode .essay-content pre {
+            background-color: #2a2a2a;
+            border-color: #333;
+        }
+
+        .essay-content code {
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .essay-content p code, 
+        .essay-content li code, 
+        .essay-content td code {
+            background-color: #e8e4dd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+
+        body.dark-mode .essay-content p code,
+        body.dark-mode .essay-content li code,
+        body.dark-mode .essay-content td code {
+            background-color: #2a2a2a;
+        }
+
+        /* Info boxes */
+        .info-box, .warning-box, .success-box, .danger-box {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+            border-left: 4px solid;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            border-left-color: #1976d2;
+        }
+
+        body.dark-mode .info-box {
+            background-color: #1a2a3a;
+            border-left-color: #64b5f6;
+        }
+
+        .warning-box {
+            background-color: #fff3e0;
+            border-left-color: #f57c00;
+        }
+
+        body.dark-mode .warning-box {
+            background-color: #3a2a1a;
+            border-left-color: #ffb74d;
+        }
+
+        .success-box {
+            background-color: #e8f5e9;
+            border-left-color: #388e3c;
+        }
+
+        body.dark-mode .success-box {
+            background-color: #1a3a2a;
+            border-left-color: #81c784;
+        }
+
+        .danger-box {
+            background-color: #ffebee;
+            border-left-color: #d32f2f;
+        }
+
+        body.dark-mode .danger-box {
+            background-color: #3a1a1a;
+            border-left-color: #e57373;
+        }
+
+        /* Highlight cells - ダークモード対応 */
+        .highlight-cell {
+            background-color: #e8f5e9 !important;
+        }
+
+        body.dark-mode .highlight-cell {
+            background-color: #1a3a2a !important;
+        }
+
+        /* Section divider */
+        .section-divider {
+            margin: 50px 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+        }
+
+        body.dark-mode .section-divider {
+            background: linear-gradient(to right, transparent, #333, transparent);
+        }
+
+        /* Emphasis colors */
+        .check {
+            color: #388e3c;
+            font-weight: bold;
+        }
+
+        body.dark-mode .check {
+            color: #81c784;
+        }
+
+        .cross {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        body.dark-mode .cross {
+            color: #e57373;
+        }
+
+        .stars {
+            color: #f57c00;
+        }
+
+        body.dark-mode .stars {
+            color: #ffb74d;
+        }
+
+        .back-link {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .back-link {
+            border-top-color: #333;
+        }
+
+        .back-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        body.dark-mode .back-link a {
+            color: #4a9eff;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        em {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="toc-overlay" onclick="toggleTOC()"></div>
+    
+    <div class="toc-sidebar">
+        <div class="toc-header">Table of Contents</div>
+        <ul class="toc-list" id="tocList">
+            <!-- Auto-generated -->
+        </ul>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html">Home</a>
+                    <a href="../about.html">About</a>
+                    <a href="essay3ja.html">Japanese</a>
+                </nav>
+                <div class="controls">
+                    <button class="toc-toggle" onclick="toggleTOC()" aria-label="Toggle table of contents">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <article>
+            <div class="essay-header">
+                <h1 class="essay-title">The Sinking News Strategic Failure: A Reuters Institute 2026 Analysis</h1>
+                <div class="essay-meta">February 8, 2026 | Data-Driven Assessment of a Failing Organization</div>
+            </div>
+
+            <div class="essay-content">
+                <div class="info-box">
+                    <p><strong>About This Report:</strong> This analysis examines The Sinking News's strategic failures based on the Reuters Institute for the Study of Journalism's "Journalism and Technology Trends and Predictions 2026" report, which surveyed 280 media executives across 51 countries. It reveals how The Sinking News is moving in the exact opposite direction of every global media trend—and why collapse is inevitable without radical change.</p>
+                </div>
+
+                <h2 id="section-1">1. Current State of The Sinking News</h2>
+
+                <h3 id="basic-info">Basic Overview</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Format</strong></td>
+                            <td>Print + Website</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Content</strong></td>
+                            <td>English translations of The Sinking Newspaper articles</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Parent Company</strong></td>
+                            <td>The Sinking Newspaper</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Financial State</strong></td>
+                            <td>¥300 million annual deficit</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Revenue Structure</strong></td>
+                            <td>Subscriptions + advertising &lt; personnel costs</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="business-evolution">The Strategic Pivot That Failed</h3>
+
+                <p><strong>2018: Launch of subscription model</strong></p>
+                <ul>
+                    <li>Website paywall implemented</li>
+                    <li>Monthly pageviews: ~400,000</li>
+                </ul>
+
+                <p><strong>2019: Abandonment of subscription (after ~1 year)</strong></p>
+                <ul>
+                    <li>Paid subscribers showed zero growth</li>
+                    <li>Management decision: "We need awareness first"</li>
+                    <li>Nearly all articles made free</li>
+                    <li>Subscription system left in place (existing paid subscribers unknowingly paying for nothing)</li>
+                </ul>
+
+                <p><strong>2019-2026: The PV-Obsessed Era (7 years)</strong></p>
+                <ul>
+                    <li>KPI: Pageviews (PV)</li>
+                    <li>Management evaluation: PV growth</li>
+                    <li>PV growth leads to promotions</li>
+                    <li>Monthly PV trajectory: 400,000 → 1,000,000 (2.5x increase, +600,000)</li>
+                </ul>
+
+                <div class="danger-box">
+                    <p><strong>The Result After 7 Years:</strong></p>
+                    <ul>
+                        <li>PV: Up 150%</li>
+                        <li>Paid subscribers: Still zero</li>
+                        <li>Revenue from PV strategy: ~¥3-7 million/year (negligible)</li>
+                        <li>Annual deficit: ¥300 million (unchanged)</li>
+                    </ul>
+                </div>
+
+                <h3 id="org-culture">Current Organizational Culture</h3>
+
+                <p><strong>Management behavior:</strong></p>
+                <ul>
+                    <li>"Increase PV!" "Write better articles!"</li>
+                    <li>But no effective strategy provided</li>
+                    <li>Evaluated on short-term metrics (PV), get promoted</li>
+                </ul>
+
+                <p><strong>Employee state:</strong></p>
+                <ul>
+                    <li>Resigned to failure: "We don't have enough resources"</li>
+                    <li>Implicit understanding: "We don't need to make money"</li>
+                    <li>No crisis awareness because The Sinking Newspaper covers losses indefinitely</li>
+                </ul>
+
+                <p><strong>Management reality:</strong></p>
+                <ul>
+                    <li>No actual requirement to turn a profit</li>
+                    <li>¥300 million annual deficit normalized</li>
+                    <li>Subsidy from The Sinking Newspaper continues despite The Sinking Newspaper's own declining fortunes</li>
+                </ul>
+
+                <hr class="section-divider">
+
+                <h2 id="section-2">2. Reuters Institute 2026 Report: Key Findings</h2>
+
+                <h3 id="survey-overview">Survey Overview</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Organization</strong></td>
+                            <td>Reuters Institute for the Study of Journalism (Oxford University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Survey Target</strong></td>
+                            <td>280 media executives from 51 countries</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Survey Period</strong></td>
+                            <td>November 18 - December 20, 2025</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Context</strong></td>
+                            <td>Latest edition of ~20-year industry forecasting report</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="industry-confidence">Plummeting Industry Confidence</h3>
+
+                <p><strong>Confidence in journalism's future:</strong></p>
+
+                <pre><code>2022: 60% confident
+2026: 38% confident (-22 points)
+
+Not confident: 10% → 18% (+8 points)</code></pre>
+
+                <p><strong>Three main reasons for pessimism:</strong></p>
+
+                <ol>
+                    <li><strong>AI & platform disruption creating uncertainty</strong>
+                        <ul>
+                            <li>Collapsing search and social traffic</li>
+                            <li>AI chatbots summarizing/repackaging content</li>
+                            <li>Traffic-dependent business models crumbling</li>
+                        </ul>
+                    </li>
+                    <li><strong>Disconnect from youth and low-interest audiences</strong>
+                        <ul>
+                            <li>Trust shifting to creators and influencers</li>
+                            <li>Traditional media becoming "irrelevant"</li>
+                            <li>Increased vulnerability to misinformation</li>
+                        </ul>
+                    </li>
+                    <li><strong>Political attacks, dismissal, and circumvention</strong>
+                        <ul>
+                            <li>"Fake news" labeling</li>
+                            <li>Lawsuit intimidation</li>
+                            <li>Politicians going directly to podcasters/YouTubers</li>
+                            <li>Example: Trump administration's "Offender Hall of Shame" webpage targeting media</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3 id="traffic-collapse">The Traffic Collapse</h3>
+
+                <div class="danger-box">
+                    <p><strong>Search traffic forecast: -43% over next 3 years</strong></p>
+                    <p>Distribution:</p>
+                    <ul>
+                        <li>Optimistic: Less than -20%</li>
+                        <li>Median: -43%</li>
+                        <li>Pessimistic: -75% or more (~20% of respondents)</li>
+                    </ul>
+                </div>
+
+                <p><strong>Actual measured data (Chartbeat, Nov 2024 - Nov 2025):</strong></p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Global</th>
+                            <th>US</th>
+                            <th>Europe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Google Search</strong></td>
+                            <td class="cross">-33%</td>
+                            <td class="cross">-38%</td>
+                            <td class="cross">-17%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Google Discover</strong></td>
+                            <td class="cross">-21%</td>
+                            <td class="cross">-29%</td>
+                            <td class="cross">-18%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Facebook</strong></td>
+                            <td class="check">+9%</td>
+                            <td class="check">+23%</td>
+                            <td class="check">+5%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>X (Twitter)</strong></td>
+                            <td class="check">+15%</td>
+                            <td class="check">+29%</td>
+                            <td class="cross">-22%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td class="cross">-24%</td>
+                            <td class="cross">-28%</td>
+                            <td class="cross">-19%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Google AI Overviews impact:</strong></p>
+                <ul>
+                    <li>~10-15% of US search results display AI summaries</li>
+                    <li>May 2025: Official US launch</li>
+                    <li>June 2025 onward: Expanded to 100 countries</li>
+                    <li>End 2025: Live in 200+ countries</li>
+                </ul>
+
+                <div class="warning-box">
+                    <p><strong>"Zero-click search" is increasing:</strong> When AI Overviews appear, users read the summary and never click through to the original article.</p>
+                </div>
+
+                <h3 id="revenue-priorities">2026 Revenue Model Priorities</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Revenue Source</th>
+                            <th>Importance</th>
+                            <th>Change from Prior Year</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Subscription/Membership</strong></td>
+                            <td>76%</td>
+                            <td>-5pp (was 81% in 2020)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Display Ads/Sponsorship</strong></td>
+                            <td>68%</td>
+                            <td>No change</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Native Advertising</strong></td>
+                            <td>64%</td>
+                            <td>+5pp (video growth driving this)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Events (in-person/online)</strong></td>
+                            <td>54%</td>
+                            <td>+6pp (community focus)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Platform Revenue (incl. AI)</strong></td>
+                            <td>37%</td>
+                            <td>+17pp (NEW category)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="success-box">
+                    <p><strong>Key finding: 76% of global media prioritize subscriptions.</strong></p>
+                    <p>The Sinking News abandoned subscriptions 7 years ago.</p>
+                </div>
+
+                <h3 id="content-strategy">Content Strategy Shifts</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Strategy</th>
+                            <th>Net Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>INCREASE: Original investigations</strong></td>
+                            <td class="check">+91</td>
+                        </tr>
+                        <tr>
+                            <td><strong>INCREASE: Analysis/commentary</strong></td>
+                            <td class="check">+82</td>
+                        </tr>
+                        <tr>
+                            <td><strong>INCREASE: Human interest stories</strong></td>
+                            <td class="check">+72</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DECREASE: Service journalism</strong></td>
+                            <td class="cross">-42</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DECREASE: Evergreen content</strong></td>
+                            <td class="cross">-32</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DECREASE: General news</strong></td>
+                            <td class="cross">-38</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Reason:</strong> AI chatbots easily commoditize generic content. Media must differentiate through original reporting and analysis.</p>
+
+                <h3 id="format-priorities">Format Investment Priorities</h3>
+
+                <ul>
+                    <li><strong>Video:</strong> 79% increasing investment</li>
+                    <li><strong>Audio/Podcasts:</strong> 71% increasing investment</li>
+                    <li><strong>Text:</strong> Maintaining (but AI easily summarizes it)</li>
+                </ul>
+
+                <h3 id="platform-strategy">Platform Strategy</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Platform</th>
+                            <th>Net Score</th>
+                            <th>Strategy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>YouTube</td>
+                            <td class="check">+74</td>
+                            <td>TOP PRIORITY (+22pp vs 2025)</td>
+                        </tr>
+                        <tr>
+                            <td>AI Platforms</td>
+                            <td class="check">+61</td>
+                            <td>Growing focus</td>
+                        </tr>
+                        <tr>
+                            <td>TikTok</td>
+                            <td class="check">+56</td>
+                            <td>High priority</td>
+                        </tr>
+                        <tr>
+                            <td>Instagram</td>
+                            <td class="check">+41</td>
+                            <td>Focus</td>
+                        </tr>
+                        <tr>
+                            <td>X (Twitter)</td>
+                            <td class="cross">-52</td>
+                            <td>DEPRIORITIZE</td>
+                        </tr>
+                        <tr>
+                            <td>Facebook</td>
+                            <td class="cross">-23</td>
+                            <td>DEPRIORITIZE</td>
+                        </tr>
+                        <tr>
+                            <td>Traditional SEO</td>
+                            <td class="cross">-25</td>
+                            <td>DEPRIORITIZE</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <hr class="section-divider">
+
+                <h2 id="section-3">3. The Global Divergence: How The Sinking News Contradicts Every Trend</h2>
+
+                <h3 id="revenue-divergence">Revenue Model Divergence</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Global Priority</th>
+                            <th>The Sinking News Reality</th>
+                            <th>Gap</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Subscriptions (76%)</td>
+                            <td>Abandoned subscriptions</td>
+                            <td class="stars">★★★★★</td>
+                        </tr>
+                        <tr>
+                            <td>Platform independence</td>
+                            <td>Platform-dependent (Google/social)</td>
+                            <td class="stars">★★★★★</td>
+                        </tr>
+                        <tr>
+                            <td>Direct traffic focus</td>
+                            <td>No direct traffic strategy</td>
+                            <td class="stars">★★★★★</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="content-divergence">Content Strategy Divergence</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Global Direction</th>
+                            <th>The Sinking News Reality</th>
+                            <th>Gap</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Original investigations (+91)</td>
+                            <td>Primarily translations</td>
+                            <td class="stars">★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td>Analysis/commentary (+82)</td>
+                            <td>Limited original analysis</td>
+                            <td class="stars">★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td>Decrease general news (-38)</td>
+                            <td>General news focused</td>
+                            <td class="stars">★★★★☆</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="format-divergence">Format Strategy Divergence</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Global Investment</th>
+                            <th>The Sinking News Reality</th>
+                            <th>Gap</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Video (79% increasing)</td>
+                            <td>Primarily text</td>
+                            <td class="stars">★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td>Audio/Podcasts (71%)</td>
+                            <td>Unknown/minimal</td>
+                            <td class="stars">★★★★☆</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="platform-divergence">Platform Strategy Divergence</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Global Priority</th>
+                            <th>The Sinking News Reality</th>
+                            <th>Gap</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>YouTube (+74)</td>
+                            <td>Unclear/weak</td>
+                            <td class="stars">★★★★★</td>
+                        </tr>
+                        <tr>
+                            <td>TikTok (+56)</td>
+                            <td>Unknown</td>
+                            <td class="stars">★★★★★</td>
+                        </tr>
+                        <tr>
+                            <td>Deprioritize traditional SEO (-25)</td>
+                            <td>"Increase PV" = Google dependence</td>
+                            <td class="stars">★★★★★</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="danger-box">
+                    <p><strong>Overall Divergence Score: 4.5/5 stars</strong></p>
+                    <p>The Sinking News is moving in the opposite direction of global best practices on nearly every critical dimension.</p>
+                </div>
+
+                <hr class="section-divider">
+
+                <h2 id="section-4">4. The PV Strategy: A 7-Year Failed Experiment</h2>
+
+                <h3 id="experiment-design">The Unintentional Natural Experiment</h3>
+
+                <div class="info-box">
+                    <p><strong>Hypothesis:</strong> "Low awareness prevents subscriber growth. Increase PV → awareness increases → subscribers increase"</p>
+                    <p><strong>Duration:</strong> 2018-2026 (7 years)</p>
+                    <p><strong>Independent variable:</strong> PV (400k → 1M, +150%)</p>
+                    <p><strong>Dependent variable:</strong> Paid subscribers</p>
+                    <p><strong>Result:</strong> Subscriber count did not increase</p>
+                </div>
+
+                <div class="danger-box">
+                    <p><strong>Scientific conclusion: The hypothesis is falsified.</strong></p>
+                    <p>Seven years is more than sufficient time to test this hypothesis. There is no rational justification for continuing the same strategy.</p>
+                </div>
+
+                <h3 id="financial-impact">Revenue Impact Analysis</h3>
+
+                <p><strong>PV Strategy Revenue (Actual):</strong></p>
+
+                <pre><code>Monthly ad revenue:
+- Best case: 1M PV × 0.8 × $5 CPM = $4,000 (~¥600k)
+- Typical case: 1M PV × 0.8 × $2 CPM = $1,600 (~¥240k)
+
+Annual:
+- Best case: ~¥7.2M
+- Typical case: ~¥2.88M
+
+PV increase contribution (+600k):
+- Annual: ~¥1.73M - ¥4.32M</code></pre>
+
+                <p><strong>Subscription Strategy Revenue (Conservative Counterfactual):</strong></p>
+
+                <pre><code>Assumptions:
+- 2018 start: 500 subscribers
+- Annual growth: 20% (below industry average)
+- Monthly price: $10
+- Churn: Not factored (conservative)
+
+8-Year cumulative revenue: ~¥148.5 million</code></pre>
+
+                <p><strong>PV strategy cumulative (8 years): ~¥23 million</strong></p>
+
+                <div class="danger-box">
+                    <h4>Opportunity Cost:</h4>
+                    <p style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0;">¥148.5M - ¥23M = <span style="color: #d32f2f;">¥125.5 million</span></p>
+                </div>
+
+                <h3 id="enterprise-value">Enterprise Value Destruction</h3>
+
+                <p><strong>Current enterprise value (PV model):</strong></p>
+
+                <pre><code>Subscription assets: ~0 → value: ¥0
+Ad business: ¥2.88M/year × 2x = ¥5.76M
+Total: ~¥6M</code></pre>
+
+                <p><strong>If 1,000 subscribers had been maintained:</strong></p>
+
+                <pre><code>LTV: $10/mo × 24 months = $240
+Subscriber value: 1,000 × $240 = $240,000
+Multiple: 4x
+→ Subscription business value: $960,000 (~¥144M)
+
+Ad business: ¥5.76M
+Total enterprise value: ~¥150M</code></pre>
+
+                <div class="danger-box">
+                    <h4>Value Destroyed:</h4>
+                    <p style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0;"><span style="color: #d32f2f;">~¥144 million</span></p>
+                </div>
+
+                <h3 id="logical-contradictions">Logical Contradictions in Management's Excuse</h3>
+
+                <p><strong>Contradiction 1: Causality Reversal</strong></p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Management's Claim</th>
+                            <th>Actual Causality</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Low awareness → no subscribers<br>↓<br>Increase awareness (PV) → subscribers</td>
+                            <td>Unclear value → no subscribers<br>↓<br>Clarify value → subscribers<br>↓<br>Subscribers → word-of-mouth awareness</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Evidence:</strong> Financial Times and The Economist succeeded with paywalls from day one. They never pursued a "free first" strategy.</p>
+
+                <p><strong>Contradiction 2: Behavioral Economics Impossibility</strong></p>
+
+                <div class="warning-box">
+                    <p><strong>Endowment Effect:</strong> People don't want to pay for what they got for free</p>
+                    <p><strong>Reference Point Dependence:</strong> "Free" becomes the baseline</p>
+                    <p><strong>Loss Aversion:</strong> Paywall feels like a loss</p>
+                </div>
+
+                <p><strong>What's happening at The Sinking News:</strong></p>
+
+                <pre><code>Reader perception:
+"The Sinking News is a free, convenient site"
+   ↓
+Paywall proposal:
+"Why should I pay for what was always free?"
+   ↓
+Result:
+Exit or install ad blocker</code></pre>
+
+                <p><strong>Contradiction 3: No Measurement</strong></p>
+
+                <p>Management cannot answer these questions:</p>
+                <ol>
+                    <li>"Of 1 million PV, how many felt The Sinking News has value?" → <span class="cross">Not measured</span></li>
+                    <li>"What's the free-to-paid conversion rate?" → <span class="cross">Not measured (can't measure with zero subscribers)</span></li>
+                    <li>"How many more PVs until we're 'sufficiently known'?" → <span class="cross">No criteria</span></li>
+                    <li>"At that point, what conversion rate do you expect?" → <span class="cross">No assumption</span></li>
+                </ol>
+
+                <div class="danger-box">
+                    <p><strong>The basic scientific method (measure → evaluate → improve) is completely absent.</strong></p>
+                </div>
+
+                <h3 id="industry-benchmarks">Industry Benchmarks</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Media</th>
+                            <th>Model</th>
+                            <th>Subscribers</th>
+                            <th>Free Strategy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Financial Times</strong></td>
+                            <td>Paid-first</td>
+                            <td>1M+</td>
+                            <td>None</td>
+                        </tr>
+                        <tr>
+                            <td><strong>The Economist</strong></td>
+                            <td>Paid-first</td>
+                            <td>1M+</td>
+                            <td>None</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nikkei Asia</strong></td>
+                            <td>Hybrid</td>
+                            <td>Undisclosed</td>
+                            <td>Limited free</td>
+                        </tr>
+                        <tr>
+                            <td><strong>The Sinking News</strong></td>
+                            <td><strong>Free</strong></td>
+                            <td><strong>~0</strong></td>
+                            <td><strong>Everything free</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Success factors:</strong> Clear value proposition, strict paywall, premium pricing ($15-30/month), direct traffic focus.</p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-5">5. The Management Excuse: A Complete Logical Breakdown</h2>
+
+                <h3 id="excuse-text">The Excuse (Full Text)</h3>
+
+                <blockquote>
+                    <p>"The subscription model produced zero paid subscriber growth, so we first need people to know about The Sinking News. That's why we made it free and are increasing PV."</p>
+                </blockquote>
+
+                <h3 id="logical-structure">Logical Structure Breakdown</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Element</th>
+                            <th>Content</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Premise</strong></td>
+                            <td>P1: Subscription model didn't grow subscribers<br>P2: The reason is "low awareness"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hypothesis</strong></td>
+                            <td>H: Increase awareness (PV) → subscribers will grow</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Action</strong></td>
+                            <td>A: Make content free to increase PV</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Prediction</strong></td>
+                            <td>E: PV increases → awareness increases → subscribers increase</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Result</strong></td>
+                            <td>R: PV increased 2.5x (400k→1M)<br>But subscribers didn't increase</td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-cell"><strong>Scientific Conclusion</strong></td>
+                            <td class="highlight-cell"><strong>Hypothesis H is FALSIFIED</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="refutation-1">Refutation 1: Premise P2 ("low awareness") is unverified</h3>
+
+                <p><strong>Alternative hypotheses (never tested):</strong></p>
+                <ul>
+                    <li>"The Sinking Newspaper translations" as value proposition is weak</li>
+                    <li>No differentiation from competitors (Nikkei Asia, Japan Times)</li>
+                    <li>Unclear target audience</li>
+                    <li>Insufficient content quality/depth</li>
+                </ul>
+
+                <div class="warning-box">
+                    <p><strong>What evidence supports "awareness" as the problem rather than these alternatives?</strong> None.</p>
+                </div>
+
+                <h3 id="refutation-2">Refutation 2: 7 Years of Data Completely Disproves the Hypothesis</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Experiment Duration</strong></td>
+                            <td>2018-2026 (7 years)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Independent Variable Change</strong></td>
+                            <td>PV: 400k → 1M (+150%)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dependent Variable Change</strong></td>
+                            <td>Paid subscribers: No increase</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Statistical Interpretation</strong></td>
+                            <td>Sample size: 84 data points (7 years × 12 months)<br>Effect size: Zero</td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-cell"><strong>Conclusion</strong></td>
+                            <td class="highlight-cell"><strong>No causal relationship between PV increase and subscriber growth</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="refutation-3">Refutation 3: The Psychological Impossibility of "Free → Paid"</h3>
+
+                <div class="info-box">
+                    <p><strong>Reference Point Dependence:</strong></p>
+                    <pre><code>Reader's reference point: "The Sinking News = free"
+Paywall: Loss from reference point
+→ Strong resistance</code></pre>
+
+                    <p><strong>Endowment Effect:</strong></p>
+                    <pre><code>"Already have it for free" creates high psychological barrier to payment
+→ Zero willingness to pay</code></pre>
+
+                    <p><strong>Cognitive Dissonance:</strong></p>
+                    <pre><code>"It was always free, why suddenly paid?"
+→ No sense of fairness</code></pre>
+                </div>
+
+                <h3 id="refutation-4">Refutation 4: Confusion with "Freemium"</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>True Freemium Model</th>
+                            <th>The Sinking News Reality</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Basic features: Free</td>
+                            <td>Nearly all content: Free</td>
+                        </tr>
+                        <tr>
+                            <td>Premium features: Paid</td>
+                            <td>Paid-exclusive content: Almost none</td>
+                        </tr>
+                        <tr>
+                            <td>Examples: Spotify, LinkedIn, NYT (partial)</td>
+                            <td>This is "completely free"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="warning-box">
+                    <p><strong>The Sinking News problem:</strong></p>
+                    <ul>
+                        <li>No constraints on free version</li>
+                        <li>Unclear premium version superiority</li>
+                        <li><strong>Zero conversion motivation</strong></li>
+                    </ul>
+                </div>
+
+                <h3 id="refutation-5">Refutation 5: Industry Counter-Examples</h3>
+
+                <div class="success-box">
+                    <p><strong>Success cases that did NOT use "free first" strategy:</strong></p>
+
+                    <p><strong>1. Financial Times:</strong></p>
+                    <ul>
+                        <li>Paid from 1997 web launch</li>
+                        <li>Clear value: "Essential for business professionals"</li>
+                        <li>Current: 1M+ paid subscribers</li>
+                    </ul>
+
+                    <p><strong>2. The Economist:</strong></p>
+                    <ul>
+                        <li>Consistent premium pricing strategy</li>
+                        <li>Free trials exist, but clear paywall</li>
+                        <li>Current: 1M+ paid subscribers</li>
+                    </ul>
+
+                    <p><strong>3. The Information:</strong></p>
+                    <ul>
+                        <li>Launched 2013 with $399/year subscription from day one</li>
+                        <li>Tech industry focus</li>
+                        <li>Subscriber count: Tens of thousands (estimated)</li>
+                    </ul>
+                </div>
+
+                <p><strong>Common pattern:</strong> They established a "valuable information requires payment" culture from the start. They never compromised with "free first." Result: Attracted readers with high willingness to pay.</p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-6">6. The "No Need to Profit" Organizational Structure: A Fatal Disease</h2>
+
+                <h3 id="zombie-definition">Definition of a Zombie Company</h3>
+
+                <div class="info-box">
+                    <p><strong>Economic definition:</strong> A company that cannot generate profit and would not survive without creditor (in this case, parent company) support.</p>
+                </div>
+
+                <p><strong>The Sinking News situation:</strong></p>
+                <ul>
+                    <li>Annual deficit: ¥300 million</li>
+                    <li>Prospect for self-sustaining profitability: None</li>
+                    <li>Parent company subsidy: Ongoing</li>
+                    <li><strong>Textbook zombie company</strong></li>
+                </ul>
+
+                <h3 id="incentive-collapse">Complete Incentive Structure Collapse</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stakeholder</th>
+                            <th>Current Benefit</th>
+                            <th>Reform Motivation</th>
+                            <th>Resistance Factors</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Parent (The Sinking Newspaper)</strong></td>
+                            <td>"We have an English paper" prestige</td>
+                            <td class="cross">Low</td>
+                            <td>Reform cost, failure risk</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Management</strong></td>
+                            <td>Salary, status, no waves</td>
+                            <td class="cross">Zero</td>
+                            <td>Accountability, effort</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Employees</strong></td>
+                            <td>Job security, easy workplace</td>
+                            <td class="cross">Low</td>
+                            <td>Change anxiety</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Paid Subscribers</strong></td>
+                            <td>(Betrayed)</td>
+                            <td>None</td>
+                            <td>(No voice)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="danger-box">
+                    <p><strong>Conclusion: Nobody is seriously motivated to change this structure.</strong></p>
+                </div>
+
+                <h3 id="management-incentives">Management Incentive Detail</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Status Quo Rewards</th>
+                            <th>Reform Attempt Rewards</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Salary: Continues<br>
+                                Status: Maintained<br>
+                                Evaluation: PV growth = achieved<br>
+                                Promotion: Possible with short-term KPIs<br>
+                                Risk: Zero
+                            </td>
+                            <td>
+                                Salary: Unchanged<br>
+                                Status: At risk<br>
+                                Evaluation: Uncertain (blamed if fails)<br>
+                                Promotion: May become more distant<br>
+                                Risk: High
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="highlight-cell" style="text-align: center; font-weight: bold;">
+                                Rational choice: Status quo
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="cultural-rot">Cultural Rot</h3>
+
+                <div class="warning-box">
+                    <p><strong>1. Loss of Ownership:</strong></p>
+                    <pre><code>"The Sinking Newspaper will bail us out anyway"
+→ "No need to think seriously"
+→ "Just coast along"</code></pre>
+
+                    <p><strong>2. Talent Decay/Exodus:</strong></p>
+                    <pre><code>Talented young staff: "Can't grow here"
+→ Quit or give up
+→ Only "resigned people" and "retirement-track generation" remain</code></pre>
+
+                    <p><strong>3. Innovation Death:</strong></p>
+                    <pre><code>New proposals: "Too risky"
+→ "Status quo is safe"
+→ "Follow precedent"
+→ Decline spiral</code></pre>
+
+                    <p><strong>4. Learning Stops:</strong></p>
+                    <pre><code>No pain from failure
+→ No feedback loop
+→ Same mistakes repeated</code></pre>
+                </div>
+
+                <h3 id="boiling-frog">The Boiling Frog Phenomenon</h3>
+
+                <div class="danger-box">
+                    <pre><code>Water temperature gradually rises
+   ↓
+Frog doesn't notice
+   ↓
+By the time it notices, it's cooked</code></pre>
+
+                    <p><strong>The Sinking News current state:</strong></p>
+                    <pre><code>2018: Subscription fails (temperature rising)
+2020: PV strategy also failing (hotter)
+2023: The Sinking Newspaper struggling (danger zone)
+2026: Still unaware (near boiling)
+2027-28: The Sinking Newspaper ad revenue crashes (AI search impact)
+2029-30: Major The Sinking Newspaper restructuring
+2031: Sudden Sinking News closure announcement
+Result: Mass unemployment, zero preparation</code></pre>
+                </div>
+
+                <h3 id="The Sinking Newspaper-situation">The Sinking Newspaper's Own Crisis</h3>
+
+                <p><strong>Japanese newspaper industry trends:</strong></p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Circulation</th>
+                            <th>Change</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2000</td>
+                            <td>~53.7M</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>2010</td>
+                            <td>~49.5M</td>
+                            <td>-8%</td>
+                        </tr>
+                        <tr>
+                            <td>2020</td>
+                            <td>~35.1M</td>
+                            <td>-29% (from 2010)</td>
+                        </tr>
+                        <tr>
+                            <td>2025</td>
+                            <td>~28M (est.)</td>
+                            <td>-20% (from 2020)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="highlight-cell">Annual rate: ~5-7% decline continues</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="danger-box">
+                    <p><strong>The Time Bomb:</strong></p>
+                    <pre><code>2026: The Sinking Newspaper still has capacity (can subsidize Sinking News)
+2027-28: Ad revenue plummets (AI search impact hits hard)
+2029-30: Major restructuring
+2031~: "The Sinking News is a luxury we can't afford"
+      → Sudden closure</code></pre>
+                </div>
+
+                <h3 id="employee-impact">Employee Impact by Age</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Age Group</th>
+                            <th>Impact Level</th>
+                            <th>Reason / Strategy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Late 50s-60s<br>(Retirement-track)</strong></td>
+                            <td class="check">Low</td>
+                            <td>
+                                Reason: Retirement soon, pension secure<br>
+                                Strategy: Coast to retirement
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>40s-Early 50s<br>(Sandwiched)</strong></td>
+                            <td class="stars">Medium</td>
+                            <td>
+                                Reason: Job switching difficult, but 10-20 years left to work<br>
+                                Strategy: Unclear (probably status quo)<br>
+                                Risk: Stranded when closure hits
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>30s<br>(Mid-career)</strong></td>
+                            <td class="cross">High</td>
+                            <td>
+                                Reason: Wasting peak career years<br>
+                                Strategy: Should consider switching but can't decide<br>
+                                Risk: Unemployed with family at closure
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>20s<br>(Young staff)</strong></td>
+                            <td class="cross" style="font-weight: bold;">MAXIMUM</td>
+                            <td>
+                                Reason:<br>
+                                - 10 years later, suddenly unemployed at 30<br>
+                                - No real skills acquired<br>
+                                - Shrinking industry, no job options<br>
+                                Strategy: Escape immediately<br>
+                                Risk: Life plan collapse
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="young-scenario">Concrete Scenario (20-something journalist)</h3>
+
+                <div class="danger-box">
+                    <pre><code>2026 (Age 25):
+  Joins The Sinking News
+  "Writing in English sounds cool!"
+
+2028 (Age 27):
+  "Wait, my salary isn't increasing..."
+  "They only talk about PV, but does it matter?"
+
+2031 (Age 30):
+  Sudden closure announcement
+  "Unemployed starting tomorrow..."
+
+2031~:
+  Job hunting
+  "The Sinking News? Oh, the one that folded..."
+  "Your skills? English translations... that's it?"
+  "Video? Data analysis? ...No, I can't do those"
+  
+  Can't get hired
+  
+  Non-regular employment
+  
+  Life derailed</code></pre>
+
+                    <p><strong>This is not hyperbole. This is a realistic scenario.</strong></p>
+                </div>
+
+                <hr class="section-divider">
+
+                <h2 id="section-7">7. Success Stories: Learning from Global English News Media</h2>
+
+                <h3 id="ft-case">Financial Times</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Founded</td>
+                            <td>1888</td>
+                        </tr>
+                        <tr>
+                            <td>Headquarters</td>
+                            <td>London</td>
+                        </tr>
+                        <tr>
+                            <td>Paid Subscribers</td>
+                            <td>1M+ (as of 2023)</td>
+                        </tr>
+                        <tr>
+                            <td>Monthly Price</td>
+                            <td>$75 (Standard), $39 (Digital-only)</td>
+                        </tr>
+                        <tr>
+                            <td>Parent Company</td>
+                            <td>Nikkei Inc. (acquired 2015)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Success factors:</strong></p>
+
+                <ol>
+                    <li><strong>Clear value proposition:</strong> "Essential for global business leaders" → Clear target → High willingness to pay</li>
+                    <li><strong>Paid from the start:</strong> 1997 website launch → Paid model from beginning → No "free first" compromise</li>
+                    <li><strong>Premium pricing:</strong> No discounting → "Valuable information requires payment" culture → Maintains brand value</li>
+                    <li><strong>Direct traffic emphasis:</strong> Reduce Google dependence → Email newsletters → App optimization → Build habitual direct visits</li>
+                    <li><strong>Data-driven:</strong> Rigorous retention analysis → Which articles drive retention → Personalization</li>
+                </ol>
+
+                <h3 id="economist-case">The Economist</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Founded</td>
+                            <td>1843</td>
+                        </tr>
+                        <tr>
+                            <td>Paid Subscribers</td>
+                            <td>1M+</td>
+                        </tr>
+                        <tr>
+                            <td>Monthly Price</td>
+                            <td>~$20 (annual discount to ~$12-15/month)</td>
+                        </tr>
+                        <tr>
+                            <td>Feature</td>
+                            <td>Anonymous articles (no bylines) → Recently changing</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Success factors:</strong></p>
+
+                <ol>
+                    <li><strong>Unique perspective:</strong> Focus on "analysis and commentary" → Context, not breaking news → Difficult for AI to replicate</li>
+                    <li><strong>Global elite targeting:</strong> Policymakers, executives, academics → Highly educated → High willingness to pay</li>
+                    <li><strong>Strict paywall:</strong> Quality content always paid → Don't satisfy readers for free → "Pay if you want to read"</li>
+                    <li><strong>Brand consistency:</strong> 150+ year history → "Badge of intellectual elite" → Status symbol</li>
+                    <li><strong>Multi-format:</strong> Print → Digital → Podcasts → Events → Video</li>
+                    <li><strong>Recent changes:</strong> Abandoning some anonymity → Journalists as personalities → Podcast personalities → Attract younger audience</li>
+                </ol>
+
+                <h3 id="nikkei-asia-case">Nikkei Asia</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Founded</td>
+                            <td>2020 (reorganized from Nikkei Asian Review)</td>
+                        </tr>
+                        <tr>
+                            <td>Headquarters</td>
+                            <td>Tokyo</td>
+                        </tr>
+                        <tr>
+                            <td>Target</td>
+                            <td>Global readers interested in Asian business</td>
+                        </tr>
+                        <tr>
+                            <td>Monthly Price</td>
+                            <td>~$20-30</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Success factors:</strong></p>
+
+                <ol>
+                    <li><strong>Clear differentiation:</strong> "Asian business" focus → Differentiated from Bloomberg, FT → Niche but important market</li>
+                    <li><strong>Leveraging Nikkei assets:</strong> Nikkei's reporting network → Asia bureaus → Access to unique information</li>
+                    <li><strong>Hybrid model:</strong> Some free (marketing) → Clear paid-exclusive content → Proper freemium execution</li>
+                    <li><strong>B2B strategy:</strong> Corporate licenses → Group plans → Higher unit prices</li>
+                </ol>
+
+                <h3 id="common-patterns">Common Success Patterns</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Element</th>
+                            <th>Successful Media</th>
+                            <th>The Sinking News</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Clear value proposition</strong></td>
+                            <td class="check">"Must-read for X" in one sentence</td>
+                            <td class="cross">Unclear ("The Sinking Newspaper translations")</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Target clarity</strong></td>
+                            <td class="check">Specific segment, not "everyone"</td>
+                            <td class="cross">Vague ("English readers in general"?)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Paywall conviction</strong></td>
+                            <td class="check">From start or clear transition point</td>
+                            <td class="cross">Free</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Premium pricing</strong></td>
+                            <td class="check">No discounting ($15-30/month standard)</td>
+                            <td class="cross">Free, so unknown</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Uniqueness</strong></td>
+                            <td class="check">Information/perspective unavailable elsewhere</td>
+                            <td class="cross">Low (translation-focused)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Direct traffic</strong></td>
+                            <td class="check">Escape platform dependence</td>
+                            <td class="cross">Platform-dependent</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multi-format</strong></td>
+                            <td class="check">Text, video, audio, events</td>
+                            <td class="cross">Primarily text</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Community</strong></td>
+                            <td class="check">Treat readers as "members"</td>
+                            <td class="cross">Absent</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <hr class="section-divider">
+
+                <div class="danger-box" style="margin-top: 3rem; padding: 2rem;">
+                    <h2 style="margin-top: 0;">Conclusion: The Unavoidable Verdict</h2>
+                    
+                    <p><strong>The Sinking News faces existential crisis from three directions:</strong></p>
+
+                    <ol>
+                        <li><strong>Strategic Failure:</strong> The 7-year PV experiment proved subscription abandonment was wrong. Opportunity cost: ¥125M+. Enterprise value destroyed: ¥144M.</li>
+                        
+                        <li><strong>Global Divergence:</strong> Moving opposite to successful global media on every key dimension (revenue model, content strategy, platform approach, format investment).</li>
+                        
+                        <li><strong>Organizational Dysfunction:</strong> The "no need to profit" structure creates perverse incentives, talent rot, and inevitable collapse when the parent company (itself struggling) withdraws support.</li>
+                    </ol>
+
+                    <p><strong>Management's "awareness-first" excuse is comprehensively refuted by:</strong></p>
+                    <ul>
+                        <li>7 years of empirical data (PV up, subscribers flat)</li>
+                        <li>Behavioral economics (free→paid conversion psychologically impossible without value differentiation)</li>
+                        <li>Industry benchmarks (all successful English news media used paywall-first)</li>
+                        <li>Opportunity cost analysis (¥125M foregone revenue)</li>
+                        <li>Logical contradictions (no measurement, no goals, moving goalposts)</li>
+                    </ul>
+
+                    <p><strong>Realistic timeline without reform:</strong></p>
+                    <pre style="background: none; border: none; padding: 0;"><code>2026-27: Status quo
+2028: The Sinking Newspaper crisis deepens (AI search impact)
+2029-30: Major restructuring
+2031: The Sinking News closure
+Result: Mass unemployment, wasted careers, especially devastating for employees in their 20s-30s</code></pre>
+
+                    <p style="font-size: 1.25rem; font-weight: bold; margin-top: 2rem;">Core lesson from Reuters 2026 report: Media survival requires clear value proposition, direct audience relationships, subscription focus, multi-format investment, and platform independence.</p>
+
+                    <p style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0;">The Sinking News violates every principle. Without radical change, closure is not a possibility but a certainty.</p>
+                </div>
+
+                <div style="margin-top: 3rem; padding: 1.5rem; background: var(--info-box, #e3f2fd); border-radius: 6px;">
+                    <p><strong>Sources:</strong></p>
+                    <ul style="margin: 0.5rem 0 0 0;">
+                        <li>Reuters Institute for the Study of Journalism (2026). "Journalism and Technology Trends and Predictions 2026"</li>
+                        <li>Chartbeat Analytics Data (2023-2025)</li>
+                        <li>Digital News Report (2021-2025)</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html">← Back to all essays</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Theme preference
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+
+        // Auto-generate table of contents
+        function generateTOC() {
+            const tocList = document.getElementById('tocList');
+            const headings = document.querySelectorAll('.essay-content h2, .essay-content h3, .essay-content h4');
+            
+            headings.forEach((heading, index) => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                
+                if (!heading.id) {
+                    heading.id = 'heading-' + index;
+                }
+                
+                a.href = '#' + heading.id;
+                a.textContent = heading.textContent;
+                
+                if (heading.tagName === 'H3') {
+                    a.classList.add('toc-h3');
+                }
+                if (heading.tagName === 'H4') {
+                    a.classList.add('toc-h3');
+                    a.style.paddingLeft = '30px';
+                    a.style.fontSize = '0.8em';
+                }
+                
+                a.onclick = function() {
+                    toggleTOC();
+                };
+                
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+
+        function toggleTOC() {
+            const sidebar = document.querySelector('.toc-sidebar');
+            const overlay = document.querySelector('.toc-overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        window.addEventListener('DOMContentLoaded', generateTOC);
+    </script>
+</body>
+</html>
