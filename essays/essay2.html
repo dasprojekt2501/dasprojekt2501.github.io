@@ -1,344 +1,520 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Japan News完全分析レポート</title>
-    <link rel="stylesheet" href="../styles.css">
+    <title>Essay Title - Your Name</title>
     <style>
-        /* レポート専用の追加スタイル */
-        .report-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 2px solid var(--border-color);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .report-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+            position: relative;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            color: #333;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
+            border-color: #333;
+            color: #e0e0e0;
+        }
+
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .toc-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+            transition: color 0.2s ease;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list a:hover {
+            color: #0066cc;
+        }
+
+        body.dark-mode .toc-list a:hover {
+            color: #4a9eff;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .essay-header {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
             line-height: 1.3;
         }
 
-        .report-header .subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
+        .essay-meta {
+            color: #999;
+            font-size: 0.95em;
         }
 
-        .report-header .meta {
-            font-size: 0.95rem;
-            color: var(--text-tertiary);
-        }
-
-        /* テーブル */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-size: 0.95rem;
-        }
-
-        thead {
-            background: var(--table-header-bg);
-        }
-
-        th {
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        td {
-            padding: 0.875rem 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        tbody tr:hover {
-            background: var(--hover-bg);
-        }
-
-        /* コードブロック */
-        pre {
-            background: var(--code-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-            line-height: 1.6;
-        }
-
-        code {
-            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-
-        p code, li code, td code {
-            background: var(--inline-code-bg);
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
-
-        /* ボックススタイル */
-        .info-box, .warning-box, .success-box, .danger-box {
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            border-left: 5px solid;
-        }
-
-        .info-box {
-            background: var(--info-bg);
-            border-left-color: var(--info-color);
-        }
-
-        .warning-box {
-            background: var(--warning-bg);
-            border-left-color: var(--warning-color);
-        }
-
-        .success-box {
-            background: var(--success-bg);
-            border-left-color: var(--success-color);
-        }
-
-        .danger-box {
-            background: var(--danger-bg);
-            border-left-color: var(--danger-color);
-        }
-
-        /* 引用 */
-        blockquote {
-            border-left: 4px solid var(--accent-color);
-            margin: 1.5rem 0;
-            padding: 1rem 1.5rem;
-            background: var(--quote-bg);
-            font-style: italic;
-        }
-
-        /* リスト */
-        ul, ol {
-            margin: 1rem 0;
-            padding-left: 2rem;
-        }
-
-        li {
-            margin: 0.5rem 0;
+        .essay-content {
+            font-size: 1.05em;
             line-height: 1.8;
         }
 
-        /* セクション区切り */
-        .section-divider {
-            margin: 3rem 0;
-            border: 0;
-            height: 2px;
-            background: linear-gradient(to right, transparent, var(--border-color), transparent);
+        .essay-content p {
+            margin-bottom: 20px;
         }
 
-        /* チェックマーク・バツ印 */
-        .check {
-            color: var(--success-color);
-            font-weight: bold;
+        .essay-content h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
         }
 
-        .cross {
-            color: var(--danger-color);
-            font-weight: bold;
+        .essay-content h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
-        /* スター評価 */
-        .stars {
-            color: var(--warning-color);
+        .essay-content blockquote {
+            border-left: 3px solid #e0e0e0;
+            padding-left: 20px;
+            margin: 30px 0;
+            color: #666;
+            font-style: italic;
         }
 
-        /* メタデータボックス */
-        .metadata {
-            background: var(--secondary-bg);
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            font-size: 0.9rem;
+        body.dark-mode .essay-content blockquote {
+            border-left-color: #333;
+            color: #999;
         }
 
-        /* レスポンシブ */
-        @media (max-width: 768px) {
-            .report-header h1 {
-                font-size: 1.75rem;
-            }
+        .essay-content ul, .essay-content ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
 
-            table {
-                font-size: 0.85rem;
-            }
-            
-            th, td {
-                padding: 0.5rem;
-            }
+        .essay-content li {
+            margin-bottom: 8px;
+        }
+
+        .back-link {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .back-link {
+            border-top-color: #333;
+        }
+
+        .back-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        body.dark-mode .back-link a {
+            color: #4a9eff;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
         }
     </style>
 </head>
 <body>
-    <!-- ダークモード切り替えボタン（既存のスタイルを使用） -->
-    <button class="theme-toggle" id="themeToggle" aria-label="ダークモード切り替え">
-        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-    </button>
-
-    <!-- ハンバーガーメニューボタン（既存のスタイルを使用） -->
-    <button class="menu-toggle" id="menuToggle" aria-label="メニュー">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-
-    <!-- 目次（既存のスタイルを使用） -->
-    <nav class="table-of-contents" id="tableOfContents">
-        <h2>目次</h2>
-        <ul>
-            <li><a href="#section-1">1. The Japan Newsの現状概要</a></li>
-            <li><a href="#section-2">2. ロイター研究所レポート2026の主要知見</a></li>
-            <li><a href="#section-3">3. 世界のメディアトレンドとの乖離</a></li>
-            <li><a href="#section-4">4. PV至上主義の問題点</a></li>
-            <li><a href="#section-5">5. 管理職の言い訳の論理的破綻</a></li>
-            <li><a href="#section-6">6. 「稼がなくていい」組織構造の問題</a></li>
-            <li><a href="#section-7">7. 成功事例から学ぶ</a></li>
-            <li><a href="#section-8">8. 取るべき戦略</a></li>
-            <li><a href="#section-9">9. 管理職説得の戦術</a></li>
-            <li><a href="#section-10">10. 結論：現実的な選択肢</a></li>
+    <div class="toc-overlay" onclick="toggleTOC()"></div>
+    
+    <div class="toc-sidebar">
+        <div class="toc-header">Table of Contents</div>
+        <ul class="toc-list" id="tocList">
+            <!-- Table of contents will be generated here -->
         </ul>
-    </nav>
+    </div>
 
-    <!-- メインコンテンツ -->
-    <main class="container">
-        <div class="report-header">
-            <h1>The Japan News 完全分析レポート</h1>
-            <p class="subtitle">現状・問題点・世界のトレンド・解決策の包括的まとめ</p>
-            <p class="meta">ロイター研究所「Journalism and Technology Trends and Predictions 2026」に基づく戦略提言</p>
-        </div>
+    <div class="container">
+        <header>
+            <h1>Your Name</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html">Home</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div class="controls">
+                    <button class="toc-toggle" onclick="toggleTOC()" aria-label="Toggle table of contents">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
+            </div>
+        </header>
 
-        <!-- ============================================ -->
-        <!-- ここから下にテキストコンテンツを貼り付けてください -->
-        <!-- ============================================ -->
+        <article>
+            <div class="essay-header">
+                <h1 class="essay-title">Write Your Essay Title Here</h1>
+                <div class="essay-meta">February 1, 2026</div>
+            </div>
 
-        <div class="info-box">
-            <p><strong>本レポートについて：</strong> このレポートは、ロイター研究所（オックスフォード大学）による最新の業界調査レポート「Journalism and Technology Trends and Predictions 2026」のデータと知見に基づき、The Japan Newsの現状を多角的に分析し、具体的な改革提案を行うものです。</p>
-        </div>
+            <div class="essay-content">
+                <p>
+                    This is where your essay content begins. Wrap each paragraph in &lt;p&gt; tags.
+                </p>
 
-        <section id="section-1">
-            <h2>1. The Japan Newsの現状概要</h2>
+                <p>
+                    This is the next paragraph. Break up your content into paragraphs for better readability. The simple design lets your writing shine.
+                </p>
+
+                <h2 id="first-section">Using Subheadings</h2>
+
+                <p>
+                    For longer essays, subheadings help organize your content and improve readability. Notice how the table of contents automatically includes all your headings!
+                </p>
+
+                <p>
+                    If you want to include a quote, you can do it like this:
+                </p>
+
+                <blockquote>
+                    "This is an example of a blockquote. You can use this format to highlight important quotes or passages."
+                </blockquote>
+
+                <h3 id="using-lists">Using Lists</h3>
+
+                <p>
+                    You can also use lists:
+                </p>
+
+                <ul>
+                    <li>First item</li>
+                    <li>Second item</li>
+                    <li>Third item</li>
+                </ul>
+
+                <p>
+                    Or numbered lists:
+                </p>
+
+                <ol>
+                    <li>First step</li>
+                    <li>Second step</li>
+                    <li>Third step</li>
+                </ol>
+
+                <h2 id="second-section">Another Major Section</h2>
+
+                <p>
+                    You can use as many sections as you need to organize your essay effectively.
+                </p>
+
+                <h3 id="subsection">A Subsection</h3>
+
+                <p>
+                    Smaller subheadings appear indented in the table of contents for clear hierarchy.
+                </p>
+
+                <h2 id="conclusion">Conclusion</h2>
+
+                <p>
+                    This is your conclusion. Use this template freely to write your essays and share your thoughts. Click the hamburger menu (three lines) at the top right to see the table of contents!
+                </p>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html">← Back to all essays</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 Your Name. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
             
-            <!-- ここにセクション1のテキストを貼り付け -->
+            // Save preference
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+
+        // Table of Contents functionality
+        function generateTOC() {
+            const tocList = document.getElementById('tocList');
+            const headings = document.querySelectorAll('.essay-content h2, .essay-content h3');
             
-        </section>
+            headings.forEach((heading, index) => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                
+                // Create ID if it doesn't exist
+                if (!heading.id) {
+                    heading.id = 'heading-' + index;
+                }
+                
+                a.href = '#' + heading.id;
+                a.textContent = heading.textContent;
+                
+                if (heading.tagName === 'H3') {
+                    a.classList.add('toc-h3');
+                }
+                
+                // Close TOC when clicking a link
+                a.onclick = function() {
+                    toggleTOC();
+                };
+                
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
 
-        <hr class="section-divider">
-
-        <section id="section-2">
-            <h2>2. ロイター研究所レポート2026の主要知見</h2>
+        function toggleTOC() {
+            const sidebar = document.querySelector('.toc-sidebar');
+            const overlay = document.querySelector('.toc-overlay');
             
-            <!-- ここにセクション2のテキストを貼り付け -->
-            
-        </section>
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
 
-        <hr class="section-divider">
-
-        <section id="section-3">
-            <h2>3. 世界のメディアトレンドとThe Japan Newsの乖離</h2>
-            
-            <!-- ここにセクション3のテキストを貼り付け -->
-            
-        </section>
-
-        <hr class="section-divider">
-
-        <section id="section-4">
-            <h2>4. PV至上主義の問題点：データによる完全否定</h2>
-            
-            <!-- ここにセクション4のテキストを貼り付け -->
-            
-        </section>
-
-        <hr class="section-divider">
-
-        <section id="section-5">
-            <h2>5. 管理職の言い訳の論理的破綻</h2>
-            
-            <!-- ここにセクション5のテキストを貼り付け -->
-            
-        </section>
-
-        <hr class="section-divider">
-
-        <section id="section-6">
-            <h2>6. 「稼がなくていい」組織構造の致命的問題</h2>
-            
-            <!-- ここにセクション6のテキストを貼り付け -->
-            
-        </section>
-
-        <hr class="section-divider">
-
-        <section id="section-7">
-            <h2>7. 成功事例：世界の英字ニュースメディアから学ぶ</h2>
-            
-            <!-- ここにセクション7のテキストを貼り付け -->
-            
-        </section>
-
-        <hr class="section-divider">
-
-        <section id="section-8">
-            <h2>8. The Japan Newsが取るべき戦略（短期・中期・長期）</h2>
-            
-            <!-- ここにセクション8のテキストを貼り付け -->
-            
-        </section>
-
-        <hr class="section-divider">
-
-        <section id="section-9">
-            <h2>9. 管理職説得のための戦術と心理学的アプローチ</h2>
-            
-            <!-- ここにセクション9のテキストを貼り付け -->
-            
-        </section>
-
-        <hr class="section-divider">
-
-        <section id="section-10">
-            <h2>10. 結論：絶望の中の現実的な選択肢</h2>
-            
-            <!-- ここにセクション10のテキストを貼り付け -->
-            
-        </section>
-
-        <!-- ============================================ -->
-        <!-- テキストコンテンツ貼り付けここまで -->
-        <!-- ============================================ -->
-
-        <div style="text-align: center; margin: 4rem 0 2rem 0; padding: 2rem; background: var(--secondary-bg); border-radius: 8px;">
-            <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                <a href="../index.html" style="color: var(--accent-color); text-decoration: none;">← ホームに戻る</a>
-            </p>
-        </div>
-
-    </main>
-
-    <!-- 既存のJavaScriptを使用 -->
-    <script src="../script.js"></script>
+        // Generate TOC when page loads
+        window.addEventListener('DOMContentLoaded', generateTOC);
+    </script>
 </body>
 </html>
