@@ -551,6 +551,33 @@ body.dark-mode .stars {
         em {
             font-style: italic;
         }
+        /* Sourcesボックス用 */
+.sources-box {
+    background: #f5f5f5;
+}
+
+body.dark-mode .sources-box {
+    background: #2a2a2a;
+}
+
+/* 残っているカラー背景を強制的にグレーに */
+[style*="background: #e8f5e9"],
+[style*="background-color: #e8f5e9"],
+[style*="background: #1a3a2a"],
+[style*="background-color: #1a3a2a"],
+[style*="background: #e3f2fd"],
+[style*="background-color: #e3f2fd"] {
+    background-color: #f5f5f5 !important;
+}
+
+body.dark-mode [style*="background: #e8f5e9"],
+body.dark-mode [style*="background-color: #e8f5e9"],
+body.dark-mode [style*="background: #1a3a2a"],
+body.dark-mode [style*="background-color: #1a3a2a"],
+body.dark-mode [style*="background: #e3f2fd"],
+body.dark-mode [style*="background-color: #e3f2fd"] {
+    background-color: #2a2a2a !important;
+}
     </style>
 </head>
 <body>
@@ -1915,7 +1942,7 @@ Result: Mass unemployment, wasted careers, especially devastating for employees 
                     <p style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0;">The Sinking News violates every principle. Without radical change, closure is not a possibility but a certainty.</p>
                 </div>
 
-                <div style="margin-top: 3rem; padding: 1.5rem; background: var(--info-box, #e3f2fd); border-radius: 6px;">
+               <div class="sources-box" style="margin-top: 3rem; padding: 1.5rem; border-radius: 6px;">
                     <p><strong>Sources:</strong></p>
                     <ul style="margin: 0.5rem 0 0 0;">
                         <li>Reuters Institute for the Study of Journalism (2026). "Journalism and Technology Trends and Predictions 2026"</li>
@@ -1996,4 +2023,5 @@ Result: Mass unemployment, wasted careers, especially devastating for employees 
 </body>
 
 </html>
+
 
