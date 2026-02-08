@@ -538,6 +538,16 @@ body.dark-mode [style*="background: #fff3cd"],
 body.dark-mode [style*="background-color: #fff3cd"] {
     background-color: #1a3a2a !important; /* ダークモード: 濃い緑 */
 }
+        /* ピンク背景のダークモード対応 */
+[style*="background: #f8d7da"],
+[style*="background-color: #f8d7da"] {
+    background-color: #f8d7da; /* ライトモード: そのまま */
+}
+
+body.dark-mode [style*="background: #f8d7da"],
+body.dark-mode [style*="background-color: #f8d7da"] {
+    background-color: #3a1a1a !important; /* ダークモード: 濃い赤茶色 */
+}
         
     </style>
 </head>
