@@ -528,6 +528,17 @@
         em {
             font-style: italic;
         }
+        /* 黄色背景の上書き */
+[style*="background: #fff3cd"],
+[style*="background-color: #fff3cd"] {
+    background-color: #e8f5e9 !important; /* ライトモード: 薄い緑 */
+}
+
+body.dark-mode [style*="background: #fff3cd"],
+body.dark-mode [style*="background-color: #fff3cd"] {
+    background-color: #1a3a2a !important; /* ダークモード: 濃い緑 */
+}
+        
     </style>
 </head>
 <body>
