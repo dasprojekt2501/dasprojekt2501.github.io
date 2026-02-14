@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music - dasprojekt2501</title>
+    <title>Music - Your Name</title>
     <style>
         * {
             margin: 0;
@@ -12,46 +12,116 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #000;
-            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
             line-height: 1.6;
-            padding: 20px;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
+            padding: 60px 20px;
         }
 
         header {
             margin-bottom: 60px;
-            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+            position: relative;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
         }
 
         h1 {
-            font-size: 2.5em;
-            font-weight: 300;
+            font-size: 2em;
             margin-bottom: 10px;
-            letter-spacing: 2px;
+            font-weight: 600;
         }
 
         .subtitle {
-            font-size: 1em;
-            color: #888;
-            font-weight: 300;
+            color: #666;
+            font-size: 1.1em;
         }
 
-        /* プレイヤーセクション */
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        /* 音楽プレイヤー */
         .player-section {
-            margin-bottom: 60px;
+            margin-top: 40px;
         }
 
         .current-track {
-            background: #111;
-            border: 1px solid #333;
-            padding: 30px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .track-info {
@@ -61,12 +131,16 @@
         }
 
         .album-art {
-            width: 120px;
-            height: 120px;
-            background: #222;
-            border: 1px solid #333;
+            width: 150px;
+            height: 150px;
+            background: #e8e4dd;
             flex-shrink: 0;
             overflow: hidden;
+            border-radius: 4px;
+        }
+
+        body.dark-mode .album-art {
+            background: #2a2a2a;
         }
 
         .album-art img {
@@ -83,15 +157,24 @@
         }
 
         .track-title {
-            font-size: 1.5em;
-            margin-bottom: 5px;
-            font-weight: 400;
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        body.dark-mode .track-title {
+            color: #e0e0e0;
         }
 
         .track-description {
-            color: #888;
-            font-size: 0.9em;
-            line-height: 1.5;
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.7;
+        }
+
+        body.dark-mode .track-description {
+            color: #999;
         }
 
         /* プログレスバー */
@@ -103,180 +186,114 @@
             display: flex;
             justify-content: space-between;
             font-size: 0.85em;
-            color: #888;
+            color: #999;
             margin-bottom: 8px;
         }
 
         .progress-bar {
             width: 100%;
             height: 4px;
-            background: #333;
+            background: #e0e0e0;
             cursor: pointer;
             position: relative;
+            border-radius: 2px;
+        }
+
+        body.dark-mode .progress-bar {
+            background: #333;
         }
 
         .progress-fill {
             height: 100%;
-            background: #fff;
+            background: #0066cc;
             width: 0%;
             transition: width 0.1s linear;
+            border-radius: 2px;
+        }
+
+        body.dark-mode .progress-fill {
+            background: #4a9eff;
         }
 
         /* コントロールボタン */
         .controls {
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
+            gap: 15px;
         }
 
         .control-btn {
             background: none;
-            border: 1px solid #fff;
-            color: #fff;
-            width: 50px;
-            height: 50px;
+            border: none;
+            color: #666;
             cursor: pointer;
-            font-size: 1.2em;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 1.4em;
+            transition: color 0.3s;
+            padding: 8px;
+        }
+
+        body.dark-mode .control-btn {
+            color: #999;
         }
 
         .control-btn:hover {
-            background: #fff;
-            color: #000;
+            color: #0066cc;
         }
 
-        .control-btn.play {
-            width: 60px;
-            height: 60px;
-            font-size: 1.5em;
-        }
-
-        .control-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
+        body.dark-mode .control-btn:hover {
+            color: #4a9eff;
         }
 
         /* シェアボタン */
         .share-btn {
             background: none;
-            border: 1px solid #888;
-            color: #888;
-            padding: 8px 16px;
+            border: none;
+            color: #0066cc;
             cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s;
+            transition: opacity 0.3s;
             text-decoration: none;
-            display: inline-block;
-        }
-
-        .share-btn:hover {
-            border-color: #fff;
-            color: #fff;
-        }
-
-        /* プレイリスト */
-        .playlist {
-            border-top: 1px solid #333;
-        }
-
-        .playlist-item {
-            display: flex;
-            gap: 15px;
-            padding: 20px 0;
-            border-bottom: 1px solid #333;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .playlist-item:hover {
-            background: #111;
-        }
-
-        .playlist-item.active {
-            background: #1a1a1a;
-        }
-
-        .playlist-album-art {
-            width: 60px;
-            height: 60px;
-            background: #222;
-            border: 1px solid #333;
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-
-        .playlist-album-art img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .playlist-details {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .playlist-title {
-            font-size: 1.1em;
-            margin-bottom: 3px;
-        }
-
-        .playlist-description {
-            color: #888;
-            font-size: 0.85em;
-        }
-
-        .playlist-number {
+            margin-left: auto;
+            padding: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 30px;
-            color: #888;
-            font-size: 0.9em;
         }
 
-        /* ナビゲーション */
-        nav {
-            margin-top: 60px;
-            text-align: center;
+        body.dark-mode .share-btn {
+            color: #4a9eff;
+        }
+
+        .share-btn:hover {
+            opacity: 0.7;
+        }
+
+        .share-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        footer {
+            margin-top: 80px;
             padding-top: 30px;
-            border-top: 1px solid #333;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
         }
 
-        nav a {
-            color: #888;
-            text-decoration: none;
-            margin: 0 15px;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: #fff;
+        body.dark-mode footer {
+            border-top-color: #333;
         }
 
         /* レスポンシブ */
         @media (max-width: 600px) {
-            h1 {
-                font-size: 2em;
-            }
-
             .track-info {
                 flex-direction: column;
             }
 
             .album-art {
                 width: 100%;
-                height: 200px;
-            }
-
-            .controls {
-                justify-content: center;
+                height: 250px;
             }
         }
     </style>
@@ -284,24 +301,32 @@
 <body>
     <div class="container">
         <header>
-            <h1>MUSIC</h1>
-            <p class="subtitle">dasprojekt2501</p>
+            <h1>Your Name</h1>
+            <p class="subtitle">Music</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="index.html">Home</a>
+                    <a href="music.html">Music</a>
+                    <a href="about.html">About</a>
+                </nav>
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                    <div class="toggle-circle"></div>
+                </button>
+            </div>
         </header>
 
-        <section class="player-section">
-            <!-- 現在再生中のトラック -->
+        <main class="player-section">
             <div class="current-track">
                 <div class="track-info">
                     <div class="album-art" id="currentAlbumArt">
                         <img src="" alt="Album Art" id="currentAlbumImg">
                     </div>
                     <div class="track-details">
-                        <div class="track-title" id="currentTitle">曲を選択してください</div>
-                        <div class="track-description" id="currentDescription"></div>
+                        <div class="track-title" id="currentTitle">Song Title</div>
+                        <div class="track-description" id="currentDescription">曲の説明や制作年、コンセプトなど</div>
                     </div>
                 </div>
 
-                <!-- プログレスバー -->
                 <div class="progress-container">
                     <div class="time-display">
                         <span id="currentTime">0:00</span>
@@ -312,58 +337,48 @@
                     </div>
                 </div>
 
-                <!-- コントロール -->
                 <div class="controls">
-                    <button class="control-btn" id="prevBtn" disabled>⏮</button>
-                    <button class="control-btn play" id="playBtn">▶</button>
-                    <button class="control-btn" id="nextBtn" disabled>⏭</button>
-                    <button class="share-btn" id="shareBtn" style="margin-left: auto;">Blueskyでシェア</button>
+                    <button class="control-btn" id="playBtn">▶</button>
+                    <button class="share-btn" id="shareBtn" title="Blueskyでシェア">
+                        <svg viewBox="0 0 600 530" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
+        </main>
 
-            <!-- プレイリスト -->
-            <div class="playlist" id="playlist">
-                <!-- JavaScriptで生成 -->
-            </div>
-        </section>
-
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="music.html">Music</a>
-        </nav>
+        <footer>
+            <p>&copy; 2026 Your Name. All rights reserved.</p>
+        </footer>
     </div>
 
-    <!-- オーディオ要素（非表示） -->
     <audio id="audioPlayer"></audio>
 
     <script>
+        // ダークモード設定
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+
         // 曲のデータ（ここを編集してください）
-        const tracks = [
-            {
-                title: "Voice",
-                description: "ボーカルだけ抽出",
-                audioFile: "music/song1.mp3",  // 実際のファイルパスに変更
-                albumArt: "music/cover1.jpg"    // 実際のジャケット画像パスに変更
-            },
-            {
-                title: "Song Title 2",
-                description: "曲の説明や制作年、コンセプトなど",
-                audioFile: "music/song2.mp3",
-                albumArt: "music/cover2.jpg"
-            },
-            {
-                title: "Song Title 3",
-                description: "曲の説明や制作年、コンセプトなど",
-                audioFile: "music/song3.mp3",
-                albumArt: "music/cover3.jpg"
-            }
-        ];
+        const track = {
+            title: "Voice",
+            description: "ボーカルだけ抽出した",
+            audioFile: "music/song1.mp3",  // 実際のファイルパスに変更
+            albumArt: "music/cover1.jpg"    // 実際のジャケット画像パスに変更
+        };
 
         // 要素の取得
         const audioPlayer = document.getElementById('audioPlayer');
         const playBtn = document.getElementById('playBtn');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
         const shareBtn = document.getElementById('shareBtn');
         const progressBar = document.getElementById('progressBar');
         const progressFill = document.getElementById('progressFill');
@@ -372,61 +387,19 @@
         const currentTitle = document.getElementById('currentTitle');
         const currentDescription = document.getElementById('currentDescription');
         const currentAlbumImg = document.getElementById('currentAlbumImg');
-        const playlistContainer = document.getElementById('playlist');
 
-        let currentTrackIndex = -1;
         let isPlaying = false;
 
-        // プレイリストを生成
-        function renderPlaylist() {
-            playlistContainer.innerHTML = '';
-            tracks.forEach((track, index) => {
-                const item = document.createElement('div');
-                item.className = 'playlist-item';
-                if (index === currentTrackIndex) {
-                    item.classList.add('active');
-                }
-                item.innerHTML = `
-                    <div class="playlist-number">${index + 1}</div>
-                    <div class="playlist-album-art">
-                        <img src="${track.albumArt}" alt="${track.title}">
-                    </div>
-                    <div class="playlist-details">
-                        <div class="playlist-title">${track.title}</div>
-                        <div class="playlist-description">${track.description}</div>
-                    </div>
-                `;
-                item.addEventListener('click', () => loadTrack(index));
-                playlistContainer.appendChild(item);
-            });
-        }
-
         // 曲を読み込む
-        function loadTrack(index) {
-            if (index < 0 || index >= tracks.length) return;
-            
-            currentTrackIndex = index;
-            const track = tracks[index];
-            
+        function loadTrack() {
             audioPlayer.src = track.audioFile;
             currentTitle.textContent = track.title;
             currentDescription.textContent = track.description;
             currentAlbumImg.src = track.albumArt;
-            
-            renderPlaylist();
-            updateButtons();
-            
-            if (isPlaying) {
-                audioPlayer.play();
-            }
         }
 
         // 再生/停止
         function togglePlay() {
-            if (currentTrackIndex === -1) {
-                loadTrack(0);
-            }
-            
             if (isPlaying) {
                 audioPlayer.pause();
                 playBtn.textContent = '▶';
@@ -438,30 +411,9 @@
             }
         }
 
-        // 前の曲
-        function prevTrack() {
-            if (currentTrackIndex > 0) {
-                loadTrack(currentTrackIndex - 1);
-                if (isPlaying) audioPlayer.play();
-            }
-        }
-
-        // 次の曲
-        function nextTrack() {
-            if (currentTrackIndex < tracks.length - 1) {
-                loadTrack(currentTrackIndex + 1);
-                if (isPlaying) audioPlayer.play();
-            }
-        }
-
-        // ボタンの有効/無効を更新
-        function updateButtons() {
-            prevBtn.disabled = currentTrackIndex <= 0;
-            nextBtn.disabled = currentTrackIndex >= tracks.length - 1;
-        }
-
         // 時間のフォーマット
         function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
             const mins = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60);
             return `${mins}:${secs.toString().padStart(2, '0')}`;
@@ -483,11 +435,6 @@
 
         // Blueskyシェア
         shareBtn.addEventListener('click', () => {
-            if (currentTrackIndex === -1) {
-                alert('曲を選択してください');
-                return;
-            }
-            const track = tracks[currentTrackIndex];
             const url = window.location.href;
             const text = `🎵 "${track.title}" を聴いています`;
             const blueskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text + '\n' + url)}`;
@@ -496,23 +443,19 @@
 
         // イベントリスナー
         playBtn.addEventListener('click', togglePlay);
-        prevBtn.addEventListener('click', prevTrack);
-        nextBtn.addEventListener('click', nextTrack);
         audioPlayer.addEventListener('timeupdate', updateProgress);
         audioPlayer.addEventListener('loadedmetadata', () => {
             duration.textContent = formatTime(audioPlayer.duration);
         });
         audioPlayer.addEventListener('ended', () => {
-            if (currentTrackIndex < tracks.length - 1) {
-                nextTrack();
-            } else {
-                playBtn.textContent = '▶';
-                isPlaying = false;
-            }
+            playBtn.textContent = '▶';
+            isPlaying = false;
+            progressFill.style.width = '0%';
+            currentTime.textContent = '0:00';
         });
 
         // 初期化
-        renderPlaylist();
+        loadTrack();
     </script>
 </body>
 </html>
