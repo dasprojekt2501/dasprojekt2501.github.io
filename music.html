@@ -272,6 +272,113 @@
             height: 22px;
         }
 
+        /* プレイリスト */
+        .playlist {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .playlist {
+            border-top-color: #333;
+        }
+
+        .playlist-title {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        body.dark-mode .playlist-title {
+            color: #999;
+        }
+
+        .playlist-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        body.dark-mode .playlist-item {
+            border-bottom-color: #2a2a2a;
+        }
+
+        .playlist-item:hover {
+            opacity: 0.7;
+        }
+
+        .playlist-item.active {
+            opacity: 1;
+        }
+
+        .playlist-item.active .playlist-track-title {
+            color: #0066cc;
+        }
+
+        body.dark-mode .playlist-item.active .playlist-track-title {
+            color: #4a9eff;
+        }
+
+        .playlist-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            color: #999;
+            font-size: 0.9em;
+            flex-shrink: 0;
+        }
+
+        .playlist-album-art {
+            width: 50px;
+            height: 50px;
+            background: #e8e4dd;
+            flex-shrink: 0;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        body.dark-mode .playlist-album-art {
+            background: #2a2a2a;
+        }
+
+        .playlist-album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .playlist-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .playlist-track-title {
+            font-size: 1em;
+            margin-bottom: 3px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        body.dark-mode .playlist-track-title {
+            color: #e0e0e0;
+        }
+
+        .playlist-track-description {
+            color: #999;
+            font-size: 0.85em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         footer {
             margin-top: 80px;
             padding-top: 30px;
@@ -346,6 +453,14 @@
                     </button>
                 </div>
             </div>
+
+            <!-- プレイリスト -->
+            <div class="playlist">
+                <h2 class="playlist-title">All Tracks</h2>
+                <div id="playlistContainer">
+                    <!-- JavaScriptで生成 -->
+                </div>
+            </div>
         </main>
 
         <footer>
@@ -369,12 +484,26 @@
         }
 
         // 曲のデータ（ここを編集してください）
-        const track = {
-            title: "Voice",
-            description: "ボーカルだけ抽出した",
-            audioFile: "music/song1.mp3",  // 実際のファイルパスに変更
-            albumArt: "music/cover1.jpg"    // 実際のジャケット画像パスに変更
-        };
+        const tracks = [
+            {
+                title: "voice",
+                description: "ボーカル部分だけ抽出",
+                audioFile: "music/song1.mp3",  // 実際のファイルパスに変更
+                albumArt: "music/cover1.jpg"    // 実際のジャケット画像パスに変更
+            },
+            {
+                title: "Song Title 2",
+                description: "2曲目の説明や制作年、コンセプトなど",
+                audioFile: "music/song2.mp3",
+                albumArt: "music/cover2.jpg"
+            },
+            {
+                title: "Song Title 3",
+                description: "3曲目の説明や制作年、コンセプトなど",
+                audioFile: "music/song3.mp3",
+                albumArt: "music/cover3.jpg"
+            }
+        ];
 
         // 要素の取得
         const audioPlayer = document.getElementById('audioPlayer');
@@ -387,15 +516,52 @@
         const currentTitle = document.getElementById('currentTitle');
         const currentDescription = document.getElementById('currentDescription');
         const currentAlbumImg = document.getElementById('currentAlbumImg');
+        const playlistContainer = document.getElementById('playlistContainer');
 
+        let currentTrackIndex = 0;
         let isPlaying = false;
 
+        // プレイリストを生成
+        function renderPlaylist() {
+            playlistContainer.innerHTML = '';
+            tracks.forEach((track, index) => {
+                const item = document.createElement('div');
+                item.className = 'playlist-item';
+                if (index === currentTrackIndex) {
+                    item.classList.add('active');
+                }
+                item.innerHTML = `
+                    <div class="playlist-number">${index + 1}</div>
+                    <div class="playlist-album-art">
+                        <img src="${track.albumArt}" alt="${track.title}">
+                    </div>
+                    <div class="playlist-details">
+                        <div class="playlist-track-title">${track.title}</div>
+                        <div class="playlist-track-description">${track.description}</div>
+                    </div>
+                `;
+                item.addEventListener('click', () => loadTrack(index));
+                playlistContainer.appendChild(item);
+            });
+        }
+
         // 曲を読み込む
-        function loadTrack() {
+        function loadTrack(index) {
+            if (index < 0 || index >= tracks.length) return;
+            
+            currentTrackIndex = index;
+            const track = tracks[index];
+            
             audioPlayer.src = track.audioFile;
             currentTitle.textContent = track.title;
             currentDescription.textContent = track.description;
             currentAlbumImg.src = track.albumArt;
+            
+            renderPlaylist();
+            
+            if (isPlaying) {
+                audioPlayer.play();
+            }
         }
 
         // 再生/停止
@@ -435,6 +601,7 @@
 
         // Blueskyシェア
         shareBtn.addEventListener('click', () => {
+            const track = tracks[currentTrackIndex];
             const url = window.location.href;
             const text = `🎵 "${track.title}" を聴いています`;
             const blueskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text + '\n' + url)}`;
@@ -448,14 +615,21 @@
             duration.textContent = formatTime(audioPlayer.duration);
         });
         audioPlayer.addEventListener('ended', () => {
-            playBtn.textContent = '▶';
-            isPlaying = false;
-            progressFill.style.width = '0%';
-            currentTime.textContent = '0:00';
+            // 次の曲があれば自動再生
+            if (currentTrackIndex < tracks.length - 1) {
+                loadTrack(currentTrackIndex + 1);
+                audioPlayer.play();
+            } else {
+                playBtn.textContent = '▶';
+                isPlaying = false;
+                progressFill.style.width = '0%';
+                currentTime.textContent = '0:00';
+            }
         });
 
         // 初期化
-        loadTrack();
+        loadTrack(0);
+        renderPlaylist();
     </script>
 </body>
 </html>
