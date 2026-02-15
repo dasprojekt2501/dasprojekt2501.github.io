@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music - PROJEKT2501</title>
+    <title>Music - Your Name</title>
     <style>
         * {
             margin: 0;
@@ -422,7 +422,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>PROJEKT2501</h1>
+            <h1>Your Name</h1>
             <p class="subtitle">Music</p>
             <div class="header-controls">
                 <nav>
@@ -486,7 +486,7 @@
         </main>
 
         <footer>
-            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+            <p>&copy; 2026 Your Name. All rights reserved.</p>
         </footer>
     </div>
 
@@ -607,12 +607,24 @@
         // リピートのオン/オフ
         function toggleRepeat() {
             isRepeat = !isRepeat;
+            console.log('toggleRepeat called, new state:', isRepeat);
+            
             if (isRepeat) {
                 repeatBtn.classList.add('repeat-active');
+                console.log('Added repeat-active class');
             } else {
                 repeatBtn.classList.remove('repeat-active');
+                console.log('Removed repeat-active class');
             }
-            console.log('Repeat:', isRepeat); // デバッグ用
+            
+            // 状態を強制的に再適用
+            setTimeout(() => {
+                if (isRepeat) {
+                    repeatBtn.classList.add('repeat-active');
+                } else {
+                    repeatBtn.classList.remove('repeat-active');
+                }
+            }, 10);
         }
 
         // 時間のフォーマット
@@ -649,11 +661,20 @@
         // イベントリスナー
         playBtn.addEventListener('click', togglePlay);
         
-        // リピートボタン：clickとtouchstartの両方で対応
-        repeatBtn.addEventListener('click', toggleRepeat);
-        repeatBtn.addEventListener('touchstart', (e) => {
+        // リピートボタン：タッチデバイスとマウスの両方に対応
+        let repeatTouchHandled = false;
+        
+        repeatBtn.addEventListener('touchend', (e) => {
             e.preventDefault();
+            repeatTouchHandled = true;
             toggleRepeat();
+            setTimeout(() => { repeatTouchHandled = false; }, 300);
+        });
+        
+        repeatBtn.addEventListener('click', (e) => {
+            if (!repeatTouchHandled) {
+                toggleRepeat();
+            }
         });
         
         audioPlayer.addEventListener('timeupdate', updateProgress);
