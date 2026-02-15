@@ -505,7 +505,7 @@
             localStorage.setItem('theme', theme);
         }
 
-        // 曲のデータ（ここを編集してください）
+       // 曲のデータ（ここを編集してください）
         const tracks = [
             {
                 title: "おじさんの唄",
@@ -607,14 +607,12 @@
         // リピートのオン/オフ
         function toggleRepeat() {
             isRepeat = !isRepeat;
-            console.log('toggleRepeat called, new state:', isRepeat);
+            alert('リピート: ' + (isRepeat ? 'ON' : 'OFF')); // デバッグ用
             
             if (isRepeat) {
                 repeatBtn.classList.add('repeat-active');
-                console.log('Added repeat-active class');
             } else {
                 repeatBtn.classList.remove('repeat-active');
-                console.log('Removed repeat-active class');
             }
             
             // 状態を強制的に再適用
