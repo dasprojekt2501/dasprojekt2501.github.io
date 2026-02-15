@@ -290,6 +290,137 @@
             height: 22px;
         }
 
+        /* 歌詞ボタン */
+        .lyrics-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: color 0.3s;
+            padding: 8px;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body.dark-mode .lyrics-btn {
+            color: #999;
+        }
+
+        .lyrics-btn:hover {
+            color: #0066cc;
+        }
+
+        body.dark-mode .lyrics-btn:hover {
+            color: #4a9eff;
+        }
+
+        /* モーダル背景 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        body.dark-mode .modal-overlay {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        /* モーダルコンテンツ */
+        .modal-content {
+            background: #faf8f5;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .modal-content {
+            background: #1a1a1a;
+        }
+
+        /* モーダルヘッダー */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .modal-header {
+            border-bottom-color: #333;
+        }
+
+        .modal-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        body.dark-mode .modal-title {
+            color: #e0e0e0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            color: #666;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .modal-close {
+            color: #999;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        body.dark-mode .modal-close:hover {
+            color: #e0e0e0;
+        }
+
+        /* モーダルボディ */
+        .modal-body {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: calc(80vh - 80px);
+            line-height: 2;
+            color: #333;
+        }
+
+        body.dark-mode .modal-body {
+            color: #e0e0e0;
+        }
+
+        .modal-body p {
+            margin-bottom: 1em;
+            white-space: pre-wrap;
+        }
+
         /* プレイリスト */
         .playlist {
             margin-top: 60px;
@@ -469,6 +600,15 @@
                         </svg>
                         <span id="repeatOne" style="position: absolute; bottom: 2px; right: 2px; font-size: 10px; font-weight: bold; display: none;">1</span>
                     </button>
+                    <button class="lyrics-btn" id="lyricsBtn" title="歌詞">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                    </button>
                     <button class="share-btn" id="shareBtn" title="Blueskyでシェア">
                         <svg viewBox="0 0 600 530" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/>
@@ -489,6 +629,19 @@
         <footer>
             <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
         </footer>
+    </div>
+
+    <!-- 歌詞モーダル -->
+    <div class="modal-overlay" id="lyricsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">歌詞</h3>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 歌詞がここに表示されます -->
+            </div>
+        </div>
     </div>
 
     <audio id="audioPlayer"></audio>
@@ -516,18 +669,31 @@
                 description: "沈みゆく新聞社で働くおじさんのための応援歌",
                 audioFile: "music/ojisan song.mp3",  // 実際のファイルパスに変更
                 albumArt: "music/cover ojisan song.png"    // 実際のジャケット画像パスに変更
+                lyrics: 
+        `1行目のおじさんの唄の歌詞
+        2行目の歌詞
+        3行目の歌詞
+
+        サビの部分
+        もっと歌詞
+        ...`
             },
             {
                 title: "The Yomiuri Blues",
                 description: "沈みゆく新聞社の中で起こっていることを歌う",
                 audioFile: "music/The Yomiuri Blues.mp3",
-                albumArt: "music/cover The Yomiuri Blues.png"
+                albumArt: "music/cover The Yomiuri Blues.png",
+                lyrics: `2曲目の歌詞1行目
+2曲目の歌詞2行目
+...`
             },
             {
-                title: "voice",
+                 title: "voice",
                 description: "ボーカル部分だけ抽出",
                 audioFile: "music/voice.mp3",
-                albumArt: "music/cover voice.png"
+                albumArt: "music/cover voice.png",
+                lyrics: `3曲目の歌詞
+...`
             }
         ];
 
@@ -536,6 +702,7 @@
         const playBtn = document.getElementById('playBtn');
         const repeatBtn = document.getElementById('repeatBtn');
         const repeatOne = document.getElementById('repeatOne');
+        const lyricsBtn = document.getElementById('lyricsBtn');
         const shareBtn = document.getElementById('shareBtn');
         const progressBar = document.getElementById('progressBar');
         const progressFill = document.getElementById('progressFill');
@@ -545,6 +712,10 @@
         const currentDescription = document.getElementById('currentDescription');
         const currentAlbumImg = document.getElementById('currentAlbumImg');
         const playlistContainer = document.getElementById('playlistContainer');
+        const lyricsModal = document.getElementById('lyricsModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const modalClose = document.getElementById('modalClose');
 
         let currentTrackIndex = 0;
         let isPlaying = false;
@@ -672,6 +843,46 @@
             const text = `🎵 "${track.title}" を聴いています`;
             const blueskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text + '\n' + url)}`;
             window.open(blueskyUrl, '_blank');
+        });
+
+        // 歌詞モーダルを開く
+        function openLyricsModal() {
+            const track = tracks[currentTrackIndex];
+            modalTitle.textContent = track.title;
+            modalBody.innerHTML = `<p>${track.lyrics.replace(/\n/g, '<br>')}</p>`;
+            lyricsModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // スクロール防止
+        }
+
+        // 歌詞モーダルを閉じる
+        function closeLyricsModal() {
+            lyricsModal.classList.remove('active');
+            document.body.style.overflow = ''; // スクロール復元
+        }
+
+        // 歌詞ボタンのイベント
+        let lyricsTouchHandled = false;
+        
+        lyricsBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            lyricsTouchHandled = true;
+            openLyricsModal();
+            setTimeout(() => { lyricsTouchHandled = false; }, 300);
+        });
+        
+        lyricsBtn.addEventListener('click', (e) => {
+            if (!lyricsTouchHandled) {
+                openLyricsModal();
+            }
+        });
+
+        // モーダルを閉じるイベント
+        modalClose.addEventListener('click', closeLyricsModal);
+        
+        lyricsModal.addEventListener('click', (e) => {
+            if (e.target === lyricsModal) {
+                closeLyricsModal();
+            }
         });
 
         // イベントリスナー
