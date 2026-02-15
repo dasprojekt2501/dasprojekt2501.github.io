@@ -503,9 +503,16 @@
             document.body.classList.toggle('dark-mode');
             const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
             localStorage.setItem('theme', theme);
+            
+            // リピートボタンの色も更新
+            if (isRepeat) {
+                repeatBtn.style.color = theme === 'dark' ? '#4a9eff' : '#0066cc';
+            } else {
+                repeatBtn.style.color = theme === 'dark' ? '#999' : '#666';
+            }
         }
 
-       // 曲のデータ（ここを編集してください）
+        // 曲のデータ（ここを編集してください）
         const tracks = [
             {
                 title: "おじさんの唄",
@@ -607,22 +614,14 @@
         // リピートのオン/オフ
         function toggleRepeat() {
             isRepeat = !isRepeat;
-            alert('リピート: ' + (isRepeat ? 'ON' : 'OFF')); // デバッグ用
             
             if (isRepeat) {
-                repeatBtn.classList.add('repeat-active');
+                // ONの場合：青色
+                repeatBtn.style.color = document.body.classList.contains('dark-mode') ? '#4a9eff' : '#0066cc';
             } else {
-                repeatBtn.classList.remove('repeat-active');
+                // OFFの場合：グレー
+                repeatBtn.style.color = document.body.classList.contains('dark-mode') ? '#999' : '#666';
             }
-            
-            // 状態を強制的に再適用
-            setTimeout(() => {
-                if (isRepeat) {
-                    repeatBtn.classList.add('repeat-active');
-                } else {
-                    repeatBtn.classList.remove('repeat-active');
-                }
-            }, 10);
         }
 
         // 時間のフォーマット
