@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music - Your Name</title>
+    <title>Music - PROJEKT2501</title>
     <style>
         * {
             margin: 0;
@@ -422,7 +422,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Your Name</h1>
+            <h1>PROJEKT2501</h1>
             <p class="subtitle">Music</p>
             <div class="header-controls">
                 <nav>
@@ -460,13 +460,14 @@
 
                 <div class="controls">
                     <button class="control-btn" id="playBtn">▶</button>
-                    <button class="control-btn" id="repeatBtn" title="リピート">
+                    <button class="control-btn" id="repeatBtn" title="リピート" style="position: relative;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M17 1l4 4-4 4"/>
                             <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
                             <path d="M7 23l-4-4 4-4"/>
                             <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
                         </svg>
+                        <span id="repeatOne" style="position: absolute; bottom: 2px; right: 2px; font-size: 10px; font-weight: bold; display: none;">1</span>
                     </button>
                     <button class="share-btn" id="shareBtn" title="Blueskyでシェア">
                         <svg viewBox="0 0 600 530" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -486,7 +487,7 @@
         </main>
 
         <footer>
-            <p>&copy; 2026 Your Name. All rights reserved.</p>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
         </footer>
     </div>
 
@@ -505,11 +506,7 @@
             localStorage.setItem('theme', theme);
             
             // リピートボタンの色も更新
-            if (isRepeat) {
-                repeatBtn.style.color = theme === 'dark' ? '#4a9eff' : '#0066cc';
-            } else {
-                repeatBtn.style.color = theme === 'dark' ? '#999' : '#666';
-            }
+            updateRepeatButton();
         }
 
         // 曲のデータ（ここを編集してください）
@@ -538,6 +535,7 @@
         const audioPlayer = document.getElementById('audioPlayer');
         const playBtn = document.getElementById('playBtn');
         const repeatBtn = document.getElementById('repeatBtn');
+        const repeatOne = document.getElementById('repeatOne');
         const shareBtn = document.getElementById('shareBtn');
         const progressBar = document.getElementById('progressBar');
         const progressFill = document.getElementById('progressFill');
@@ -550,7 +548,7 @@
 
         let currentTrackIndex = 0;
         let isPlaying = false;
-        let isRepeat = false;
+        let repeatMode = 'off'; // 'off', 'all', 'one'
 
         // プレイリストを生成
         function renderPlaylist() {
@@ -611,16 +609,37 @@
             }
         }
 
-        // リピートのオン/オフ
+        // リピートのオン/オフ（3段階）
         function toggleRepeat() {
-            isRepeat = !isRepeat;
-            
-            if (isRepeat) {
-                // ONの場合：青色
-                repeatBtn.style.color = document.body.classList.contains('dark-mode') ? '#4a9eff' : '#0066cc';
+            // off → all → one → off
+            if (repeatMode === 'off') {
+                repeatMode = 'all';
+            } else if (repeatMode === 'all') {
+                repeatMode = 'one';
             } else {
-                // OFFの場合：グレー
-                repeatBtn.style.color = document.body.classList.contains('dark-mode') ? '#999' : '#666';
+                repeatMode = 'off';
+            }
+            
+            updateRepeatButton();
+        }
+        
+        // リピートボタンの表示を更新
+        function updateRepeatButton() {
+            const isDark = document.body.classList.contains('dark-mode');
+            
+            if (repeatMode === 'off') {
+                // オフ：グレー、1を非表示
+                repeatBtn.style.color = isDark ? '#999' : '#666';
+                repeatOne.style.display = 'none';
+            } else if (repeatMode === 'all') {
+                // 全体リピート：青色、1を非表示
+                repeatBtn.style.color = isDark ? '#4a9eff' : '#0066cc';
+                repeatOne.style.display = 'none';
+            } else if (repeatMode === 'one') {
+                // 1曲リピート：青色、1を表示
+                repeatBtn.style.color = isDark ? '#4a9eff' : '#0066cc';
+                repeatOne.style.display = 'block';
+                repeatOne.style.color = isDark ? '#4a9eff' : '#0066cc';
             }
         }
 
@@ -679,14 +698,18 @@
             duration.textContent = formatTime(audioPlayer.duration);
         });
         audioPlayer.addEventListener('ended', () => {
-            // 次の曲があれば自動再生
-            if (currentTrackIndex < tracks.length - 1) {
+            if (repeatMode === 'one') {
+                // 1曲リピート：同じ曲をもう一度再生
+                audioPlayer.currentTime = 0;
+                audioPlayer.play();
+            } else if (currentTrackIndex < tracks.length - 1) {
+                // 次の曲があれば自動再生
                 loadTrack(currentTrackIndex + 1);
                 audioPlayer.play();
             } else {
                 // 最後の曲が終わった場合
-                if (isRepeat) {
-                    // リピートONなら最初から
+                if (repeatMode === 'all') {
+                    // 全体リピートONなら最初から
                     loadTrack(0);
                     audioPlayer.play();
                 } else {
