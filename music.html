@@ -237,12 +237,13 @@
         }
 
         .control-btn:hover {
-            color: #0066cc;
-        }
+       .control-btn.repeat-active {
+    color: #0066cc;
+}
 
-        body.dark-mode .control-btn:hover {
-            color: #4a9eff;
-        }
+body.dark-mode .control-btn.repeat-active {
+    color: #4a9eff;
+}
 
         /* シェアボタン */
         .share-btn {
@@ -447,6 +448,14 @@
 
                 <div class="controls">
                     <button class="control-btn" id="playBtn">▶</button>
+                    <button class="control-btn" id="repeatBtn" title="リピート">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 1l4 4-4 4"/>
+        <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+        <path d="M7 23l-4-4 4-4"/>
+        <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+    </svg>
+</button>
                     <button class="share-btn" id="shareBtn" title="Blueskyでシェア">
                         <svg viewBox="0 0 600 530" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/>
@@ -509,6 +518,7 @@
         // 要素の取得
         const audioPlayer = document.getElementById('audioPlayer');
         const playBtn = document.getElementById('playBtn');
+        const repeatBtn = document.getElementById('repeatBtn'); // 追加
         const shareBtn = document.getElementById('shareBtn');
         const progressBar = document.getElementById('progressBar');
         const progressFill = document.getElementById('progressFill');
@@ -521,6 +531,7 @@
 
         let currentTrackIndex = 0;
         let isPlaying = false;
+        let isRepeat = false; // 追加
 
         // プレイリストを生成
         function renderPlaylist() {
@@ -577,7 +588,14 @@
                 isPlaying = true;
             }
         }
-
+        function toggleRepeat() {
+            isRepeat = !isRepeat;
+            if (isRepeat) {
+                repeatBtn.classList.add('repeat-active');
+            } else {
+                repeatBtn.classList.remove('repeat-active');
+            }
+        }
         // 時間のフォーマット
         function formatTime(seconds) {
             if (isNaN(seconds)) return '0:00';
@@ -611,22 +629,31 @@
 
         // イベントリスナー
         playBtn.addEventListener('click', togglePlay);
+        repeatBtn.addEventListener('click', toggleRepeat); // 追加
         audioPlayer.addEventListener('timeupdate', updateProgress);
         audioPlayer.addEventListener('loadedmetadata', () => {
             duration.textContent = formatTime(audioPlayer.duration);
         });
-        audioPlayer.addEventListener('ended', () => {
-            // 次の曲があれば自動再生
-            if (currentTrackIndex < tracks.length - 1) {
-                loadTrack(currentTrackIndex + 1);
-                audioPlayer.play();
-            } else {
-                playBtn.textContent = '▶';
-                isPlaying = false;
-                progressFill.style.width = '0%';
-                currentTime.textContent = '0:00';
-            }
-        });
+audioPlayer.addEventListener('ended', () => {
+    // 次の曲があれば自動再生
+    if (currentTrackIndex < tracks.length - 1) {
+        loadTrack(currentTrackIndex + 1);
+        audioPlayer.play();
+    } else {
+        // 最後の曲が終わった場合
+        if (isRepeat) {
+            // リピートONなら最初から
+            loadTrack(0);
+            audioPlayer.play();
+        } else {
+            // リピートOFFなら停止
+            playBtn.textContent = '▶';
+            isPlaying = false;
+            progressFill.style.width = '0%';
+            currentTime.textContent = '0:00';
+        }
+    }
+});
 
         // 初期化
         loadTrack(0);
