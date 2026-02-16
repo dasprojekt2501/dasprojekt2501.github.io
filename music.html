@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Musik - PROJEKT2501</title>
+    <title>Music - PROJEKT2501</title>
     <style>
         * {
             margin: 0;
@@ -323,7 +323,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -331,7 +331,7 @@
         }
 
         body.dark-mode .modal-overlay {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
         }
 
         .modal-overlay.active {
@@ -340,17 +340,19 @@
 
         /* モーダルコンテンツ */
         .modal-content {
-            background: #faf8f5;
+            background: rgba(250, 248, 245, 0.6);
             max-width: 600px;
             width: 100%;
             max-height: 80vh;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         body.dark-mode .modal-content {
-            background: #1a1a1a;
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* モーダルヘッダー */
@@ -756,7 +758,7 @@
                 albumArt: "music/cover The Yomiuri Blues.png",
                 lyrics:
                     `
-　　　(Intro – Haunting, Spoken or Sung Softly)
+　　　(Intro – Haunting, Sung Softly)
 Stroke your ego, feed the pride
 Throwing stones just to feel alive
                     
@@ -982,13 +984,12 @@ Now they vanish in the night
             modalTitle.textContent = track.title;
             modalBody.innerHTML = `<p>${track.lyrics.replace(/\n/g, '<br>')}</p>`;
             lyricsModal.classList.add('active');
-            document.body.style.overflow = 'hidden'; // スクロール防止
+            // スクロールは止めない（背景が透けて見えるように）
         }
 
         // 歌詞モーダルを閉じる
         function closeLyricsModal() {
             lyricsModal.classList.remove('active');
-            document.body.style.overflow = ''; // スクロール復元
         }
 
         // 歌詞ボタンのイベント
