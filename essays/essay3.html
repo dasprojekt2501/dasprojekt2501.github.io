@@ -74,9 +74,31 @@
             color: #4a9eff;
         }
 
-        nav a:hover {
-            text-decoration: underline;
-        }
+        .language-toggle {
+    display: flex;
+    gap: 10px;
+    margin-right: 15px;
+}
+
+.lang-btn {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 4px;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+    line-height: 1;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.lang-btn:hover {
+    opacity: 0.8;
+}
+
+.lang-btn.active {
+    opacity: 1;
+}
 
         .controls {
             display: flex;
@@ -595,14 +617,18 @@ body.dark-mode [style*="background-color: #e3f2fd"] {
             <h1>PROJEKT2501</h1>
             <p class="subtitle">Essays and Notes</p>
             <div class="header-controls">
-                <nav>
-                       <a href="../index.html">Home</a>
-                        <a href="../music.html">Music</a>
-                        <a href="../app.html">Apps</a>
-                        <a href="../about.html">About</a>
-                        <a href="essay3ja.html">Japanese</a>
-
-                </nav>
+    <nav>
+        <a href="../index.html">Home</a>
+        <a href="../music.html">Music</a>
+        <a href="../app.html">Apps</a>
+        <a href="../about.html">About</a>
+    </nav>
+    <div style="display: flex; align-items: center;">
+        <div class="language-toggle">
+            <button class="lang-btn" onclick="location.href='essay3ja.html'" title="日本語">🇯🇵</button>
+            <button class="lang-btn active" title="English">🇺🇸</button>
+        </div>
+    
                 <div class="controls">
                     <button class="toc-toggle" onclick="toggleTOC()" aria-label="Toggle table of contents">
                         <span class="hamburger-line"></span>
@@ -2026,6 +2052,7 @@ Result: Mass unemployment, wasted careers, especially devastating for employees 
 </body>
 
 </html>
+
 
 
 
