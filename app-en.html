@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apps - Your Name</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+            position: relative;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            line-height: 1;
+        }
+
+        .lang-btn:hover {
+            opacity: 0.8;
+        }
+
+        .lang-btn.active {
+            opacity: 1;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .apps {
+            margin-top: 40px;
+        }
+
+        .app-item {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        body.dark-mode .app-item {
+            border-bottom-color: #2a2a2a;
+        }
+
+        .app-item:last-child {
+            border-bottom: none;
+        }
+
+        .app-content {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background: #e8e4dd;
+            border-radius: 16px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+        }
+
+        body.dark-mode .app-icon {
+            background: #2a2a2a;
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            object-fit: cover;
+        }
+
+        .app-details {
+            flex: 1;
+        }
+
+        .app-title {
+            font-size: 1.4em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .app-title a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        body.dark-mode .app-title a {
+            color: #e0e0e0;
+        }
+
+        .app-title a:hover {
+            color: #0066cc;
+        }
+
+        body.dark-mode .app-title a:hover {
+            color: #4a9eff;
+        }
+
+        .app-description {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        body.dark-mode .app-description {
+            color: #999;
+        }
+
+        .app-platform {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .coming-soon {
+            color: #999;
+            font-style: italic;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Name</h1>
+            <p class="subtitle">Apps</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="index.html">Home</a>
+                    <a href="music.html">Music</a>
+                    <a href="app.html">Apps</a>
+                    <a href="about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn" onclick="location.href='app.html'" title="日本語">🇯🇵</button>
+                        <button class="lang-btn active" title="English">🇺🇸</button>
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="apps">
+            <article class="app-item">
+                <div class="app-content">
+                    <div class="app-icon">
+                        <!-- Icon image here -->
+                        🕯️
+                    </div>
+                    <div class="app-details">
+                        <h2 class="app-title">
+                            <a href="apps/app1-en.html">Memento Mori</a>
+                        </h2>
+                        <p class="app-description">
+                            Remember death. A simple app to stay mindful of your limited time.
+                        </p>
+                        <p class="app-platform">iOS</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="app-item">
+                <div class="app-content">
+                    <div class="app-icon">
+                        🔜
+                    </div>
+                    <div class="app-details">
+                        <h2 class="app-title">Coming Soon</h2>
+                        <p class="app-description coming-soon">
+                            New app in development...
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="app-item">
+                <div class="app-content">
+                    <div class="app-icon">
+                        🔜
+                    </div>
+                    <div class="app-details">
+                        <h2 class="app-title">Coming Soon</h2>
+                        <p class="app-description coming-soon">
+                            New app in development...
+                        </p>
+                    </div>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Your Name. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Dark mode settings
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+    </script>
+</body>
+</html>
