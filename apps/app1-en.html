@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apps - Your Name</title>
+    <title>Memento Mori - Your Name</title>
     <style>
         * {
             margin: 0;
@@ -34,7 +34,6 @@
             margin-bottom: 60px;
             border-bottom: 1px solid #e0e0e0;
             padding-bottom: 30px;
-            position: relative;
         }
 
         body.dark-mode header {
@@ -140,98 +139,194 @@
             background-color: #faf8f5;
         }
 
-        .apps {
-            margin-top: 40px;
+        /* App header */
+        .app-header {
+            text-align: center;
+            margin-bottom: 60px;
         }
 
-        .app-item {
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #f0f0f0;
+        .app-icon-large {
+            width: 120px;
+            height: 120px;
+            background: #e8e4dd;
+            border-radius: 24px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
         }
 
-        body.dark-mode .app-item {
-            border-bottom-color: #2a2a2a;
+        body.dark-mode .app-icon-large {
+            background: #2a2a2a;
         }
 
-        .app-item:last-child {
-            border-bottom: none;
+        .app-icon-large img {
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            object-fit: cover;
         }
 
-        .app-content {
+        .app-name {
+            font-size: 2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .app-tagline {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        body.dark-mode .app-tagline {
+            color: #999;
+        }
+
+        .download-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #0066cc;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+        body.dark-mode .download-button {
+            background: #4a9eff;
+        }
+
+        .download-button:hover {
+            opacity: 0.8;
+        }
+
+        .download-button.coming-soon {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        /* Screenshots */
+        .screenshots {
+            margin-bottom: 60px;
+        }
+
+        .screenshots h2 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .screenshot-container {
             display: flex;
             gap: 20px;
-            align-items: flex-start;
+            overflow-x: auto;
+            padding: 10px 0;
         }
 
-        .app-icon {
-            width: 80px;
-            height: 80px;
+        .screenshot {
+            width: 200px;
+            height: 400px;
             background: #e8e4dd;
-            border-radius: 16px;
+            border-radius: 12px;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2em;
+            color: #999;
         }
 
-        body.dark-mode .app-icon {
+        body.dark-mode .screenshot {
             background: #2a2a2a;
         }
 
-        .app-icon img {
+        .screenshot img {
             width: 100%;
             height: 100%;
-            border-radius: 16px;
+            border-radius: 12px;
             object-fit: cover;
         }
 
-        .app-details {
-            flex: 1;
+        /* Description section */
+        .description {
+            margin-bottom: 60px;
         }
 
-        .app-title {
+        .description h2 {
             font-size: 1.4em;
-            margin-bottom: 8px;
+            margin-bottom: 20px;
             font-weight: 600;
         }
 
-        .app-title a {
-            color: #333;
-            text-decoration: none;
+        .description p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 1em;
         }
 
-        body.dark-mode .app-title a {
-            color: #e0e0e0;
+        body.dark-mode .description p {
+            color: #999;
         }
 
-        .app-title a:hover {
+        /* Features list */
+        .features {
+            margin-bottom: 60px;
+        }
+
+        .features h2 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        body.dark-mode .features li {
+            color: #999;
+        }
+
+        .features li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
             color: #0066cc;
         }
 
-        body.dark-mode .app-title a:hover {
+        body.dark-mode .features li:before {
             color: #4a9eff;
         }
 
-        .app-description {
-            color: #666;
-            line-height: 1.7;
-            margin-bottom: 10px;
+        /* Privacy link */
+        .privacy-link {
+            text-align: center;
+            margin-top: 40px;
         }
 
-        body.dark-mode .app-description {
-            color: #999;
+        .privacy-link a {
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 0.95em;
         }
 
-        .app-platform {
-            color: #999;
-            font-size: 0.9em;
+        body.dark-mode .privacy-link a {
+            color: #4a9eff;
         }
 
-        .coming-soon {
-            color: #999;
-            font-style: italic;
+        .privacy-link a:hover {
+            text-decoration: underline;
         }
 
         footer {
@@ -246,6 +341,14 @@
         body.dark-mode footer {
             border-top-color: #333;
         }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .screenshot {
+                width: 150px;
+                height: 300px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -255,14 +358,14 @@
             <p class="subtitle">Apps</p>
             <div class="header-controls">
                 <nav>
-                    <a href="index.html">Home</a>
-                    <a href="music.html">Music</a>
-                    <a href="app.html">Apps</a>
-                    <a href="about.html">About</a>
+                    <a href="../index.html">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app.html">Apps</a>
+                    <a href="../about.html">About</a>
                 </nav>
                 <div style="display: flex; align-items: center;">
                     <div class="language-toggle">
-                        <button class="lang-btn" onclick="location.href='app.html'" title="日本語">🇯🇵</button>
+                        <button class="lang-btn" onclick="location.href='app1.html'" title="日本語">🇯🇵</button>
                         <button class="lang-btn active" title="English">🇺🇸</button>
                     </div>
                     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
@@ -272,53 +375,69 @@
             </div>
         </header>
 
-        <main class="apps">
-            <article class="app-item">
-                <div class="app-content">
-                    <div class="app-icon">
-                        <!-- Icon image here -->
-                        🕯️
-                    </div>
-                    <div class="app-details">
-                        <h2 class="app-title">
-                            <a href="apps/app1-en.html">Memento Mori</a>
-                        </h2>
-                        <p class="app-description">
-                            Remember death. A simple app to stay mindful of your limited time.
-                        </p>
-                        <p class="app-platform">iOS</p>
-                    </div>
-                </div>
-            </article>
+        <!-- App header -->
+        <div class="app-header">
+            <div class="app-icon-large">
+                <!-- Icon image: <img src="icon.png" alt="Memento Mori"> -->
+                🕯️
+            </div>
+            <h2 class="app-name">Memento Mori</h2>
+            <p class="app-tagline">
+                <!-- ★ Paste your tagline here ★ -->
+                Remember death. A simple app to stay mindful of your limited time.
+            </p>
+            <!-- If you have App Store link, change href; otherwise keep coming-soon class -->
+            <a href="#" class="download-button coming-soon">Coming Soon</a>
+        </div>
 
-            <article class="app-item">
-                <div class="app-content">
-                    <div class="app-icon">
-                        🔜
-                    </div>
-                    <div class="app-details">
-                        <h2 class="app-title">Coming Soon</h2>
-                        <p class="app-description coming-soon">
-                            New app in development...
-                        </p>
-                    </div>
+        <!-- Screenshots -->
+        <section class="screenshots">
+            <h2>Screenshots</h2>
+            <div class="screenshot-container">
+                <div class="screenshot">
+                    <!-- Image: <img src="screenshot1.png" alt="Screenshot 1"> -->
+                    Image 1
                 </div>
-            </article>
+                <div class="screenshot">
+                    <!-- Image: <img src="screenshot2.png" alt="Screenshot 2"> -->
+                    Image 2
+                </div>
+                <div class="screenshot">
+                    <!-- Image: <img src="screenshot3.png" alt="Screenshot 3"> -->
+                    Image 3
+                </div>
+            </div>
+        </section>
 
-            <article class="app-item">
-                <div class="app-content">
-                    <div class="app-icon">
-                        🔜
-                    </div>
-                    <div class="app-details">
-                        <h2 class="app-title">Coming Soon</h2>
-                        <p class="app-description coming-soon">
-                            New app in development...
-                        </p>
-                    </div>
-                </div>
-            </article>
-        </main>
+        <!-- App description -->
+        <section class="description">
+            <h2>About the App</h2>
+            <!-- ★ Paste your detailed app description here ★ -->
+            <p>
+                Paste your detailed app description here.
+                For multiple paragraphs, use &lt;p&gt; tags.
+            </p>
+            <p>
+                Example of a second paragraph. You can add as many paragraphs as needed.
+            </p>
+        </section>
+
+        <!-- Features -->
+        <section class="features">
+            <h2>Key Features</h2>
+            <!-- ★ Paste your feature list here ★ -->
+            <ul>
+                <li>Feature 1 description</li>
+                <li>Feature 2 description</li>
+                <li>Feature 3 description</li>
+                <li>Feature 4 description</li>
+            </ul>
+        </section>
+
+        <!-- Privacy Policy link -->
+        <div class="privacy-link">
+            <a href="app1-privacy-en.html">Privacy Policy</a>
+        </div>
 
         <footer>
             <p>&copy; 2026 Your Name. All rights reserved.</p>
