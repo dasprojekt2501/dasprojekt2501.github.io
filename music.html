@@ -998,7 +998,7 @@ Now they vanish in the night
         shareBtn.addEventListener('click', () => {
             const track = tracks[currentTrackIndex];
             const url = window.location.href;
-            const text = `🎵 "${track.title}" を聴いています`;
+            const text = `🎵 Listening to "${track.title}"`;
             const blueskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text + '\n' + url)}`;
             window.open(blueskyUrl, '_blank');
         });
