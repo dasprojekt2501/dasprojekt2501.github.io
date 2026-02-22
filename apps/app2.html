@@ -310,7 +310,7 @@
     <!-- ナビゲーションバー -->
     <div id="navbar">
         <a href="../app.html">← Apps</a>
-        <span class="game-title">ゲームタイトル（仮）</span>
+        <span class="game-title">新聞記者シューティング（仮）</span>
         <div></div>
     </div>
     
@@ -741,7 +741,7 @@
             if (isShooting && Math.random() < 0.25) shootBullet();
             
             if (!gameState.bossSpawned && gameState.time > 30) {
-                gameState.boss = { x: canvas.width/2, y: 100, health: 80, maxHealth: 80, moveDir: 1, shootTimer: 0 };
+                gameState.boss = { x: canvas.width/2, y: 160, health: 80, maxHealth: 80, moveDir: 1, shootTimer: 0 };
                 gameState.bossSpawned = true;
             }
             
