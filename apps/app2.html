@@ -336,8 +336,8 @@
                 <div class="character-label">HARD BOILED</div>
             </div>
             <div class="character-option" onclick="selectCharacter('female')" data-character="female">
-                <div class="character-icon">👩‍🎤</div>
-                <div class="character-label">CYBER AGENT</div>
+                <div class="character-icon">👩‍💼</div>
+                <div class="character-label">BUSINESS WOMAN</div>
             </div>
             <div class="character-option" onclick="selectCharacter('alien')" data-character="alien">
                 <div class="character-icon">👽</div>
@@ -466,18 +466,112 @@
         function drawFemalePlayer(x, y, walkCycle) {
             ctx.save();
             const legOffset = Math.sin(walkCycle * 0.4) * 4;
-            ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.beginPath(); ctx.ellipse(x, y + 15, 12, 4, 0, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = '#0a0f1d'; ctx.fillRect(x - 6, y - 5, 4, 18); ctx.fillRect(x + 2, y - 5 - legOffset, 4, 18 + legOffset);
-            ctx.fillStyle = '#fe0979'; ctx.fillRect(x - 6, y + 8, 4, 2); ctx.fillRect(x + 2, y + 8 - legOffset, 4, 2);
-            ctx.fillStyle = '#e2e8f0'; ctx.beginPath(); ctx.moveTo(x - 9, y - 28); ctx.lineTo(x + 9, y - 28); ctx.lineTo(x + 7, y); ctx.lineTo(x - 7, y); ctx.fill();
-            ctx.fillStyle = '#0a0f1d'; ctx.beginPath(); ctx.moveTo(x - 3, y - 28); ctx.lineTo(x + 3, y - 28); ctx.lineTo(x, y); ctx.fill();
-            ctx.fillStyle = '#ffd1a9'; ctx.beginPath(); ctx.arc(x, y - 34, 8, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = '#1a202c'; ctx.beginPath(); ctx.arc(x, y - 36, 9, Math.PI, 0); ctx.fill(); ctx.beginPath(); ctx.moveTo(x - 9, y - 36); ctx.lineTo(x - 11, y - 25); ctx.lineTo(x - 3, y - 32); ctx.fill();
-            ctx.fillStyle = '#00f2fe'; ctx.shadowColor = '#00f2fe'; ctx.shadowBlur = 8; ctx.fillRect(x - 8, y - 36, 16, 4);
-            ctx.fillStyle = '#fff'; ctx.fillRect(x + 4, y - 36, 4, 2); ctx.shadowBlur = 0;
-            ctx.fillStyle = '#cbd5e0'; ctx.beginPath(); ctx.moveTo(x - 5, y - 25); ctx.lineTo(x + 12, y - 18); ctx.lineTo(x + 8, y - 14); ctx.lineTo(x - 8, y - 18); ctx.fill();
-            ctx.fillStyle = '#fe0979'; ctx.shadowColor = '#fe0979'; ctx.shadowBlur = 10;
-            ctx.beginPath(); ctx.moveTo(x + 12, y - 17); ctx.lineTo(x + 24, y - 16); ctx.lineTo(x + 12, y - 15); ctx.fill(); ctx.shadowBlur = 0;
+            
+            // 影
+            ctx.fillStyle = 'rgba(0,0,0,0.5)'; 
+            ctx.beginPath(); 
+            ctx.ellipse(x, y + 15, 12, 4, 0, 0, Math.PI * 2); 
+            ctx.fill();
+            
+            // 足（パンツスーツ）
+            ctx.fillStyle = '#2d3748'; // ダークグレー
+            ctx.fillRect(x - 6, y - 5, 4, 18); 
+            ctx.fillRect(x + 2, y - 5 - legOffset, 4, 18 + legOffset);
+            
+            // 靴
+            ctx.fillStyle = '#1a202c';
+            ctx.fillRect(x - 6, y + 10, 5, 3); 
+            ctx.fillRect(x + 2, y + 10 - legOffset, 5, 3);
+            
+            // スーツジャケット（紺色）
+            ctx.fillStyle = '#1e3a8a'; // 紺色
+            ctx.beginPath(); 
+            ctx.moveTo(x - 10, y - 28); 
+            ctx.lineTo(x + 10, y - 28); 
+            ctx.lineTo(x + 8, y + 2); 
+            ctx.lineTo(x - 8, y + 2); 
+            ctx.fill();
+            
+            // ブラウス（白）
+            ctx.fillStyle = '#f8f9fa';
+            ctx.beginPath();
+            ctx.moveTo(x - 4, y - 28);
+            ctx.lineTo(x + 4, y - 28);
+            ctx.lineTo(x + 3, y - 5);
+            ctx.lineTo(x - 3, y - 5);
+            ctx.fill();
+            
+            // 顔
+            ctx.fillStyle = '#ffd1a9'; 
+            ctx.beginPath(); 
+            ctx.arc(x, y - 34, 8, 0, Math.PI * 2); 
+            ctx.fill();
+            
+            // 髪（ショートヘア - 茶色）
+            ctx.fillStyle = '#6b4423';
+            ctx.beginPath(); 
+            ctx.arc(x, y - 36, 9, Math.PI, 0); 
+            ctx.fill(); 
+            ctx.fillRect(x - 9, y - 36, 18, 3);
+            
+            // 前髪
+            ctx.beginPath();
+            ctx.moveTo(x - 8, y - 36);
+            ctx.lineTo(x - 6, y - 30);
+            ctx.lineTo(x - 3, y - 33);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(x + 8, y - 36);
+            ctx.lineTo(x + 6, y - 30);
+            ctx.lineTo(x + 3, y - 33);
+            ctx.fill();
+            
+            // 目
+            ctx.fillStyle = '#2d3748';
+            ctx.beginPath();
+            ctx.arc(x - 3, y - 33, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 3, y - 33, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // 口（微笑み）
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(x, y - 30, 3, 0, Math.PI);
+            ctx.stroke();
+            
+            // ノート（持ち物）
+            ctx.fillStyle = '#fff';
+            ctx.strokeStyle = '#cbd5e0';
+            ctx.lineWidth = 1;
+            ctx.fillRect(x - 8, y - 20, 7, 10);
+            ctx.strokeRect(x - 8, y - 20, 7, 10);
+            
+            // ノートの線
+            ctx.strokeStyle = '#a0aec0';
+            ctx.lineWidth = 0.5;
+            for(let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(x - 7, y - 17 + i * 3);
+                ctx.lineTo(x - 2, y - 17 + i * 3);
+                ctx.stroke();
+            }
+            
+            // 鉛筆（武器）
+            ctx.save();
+            ctx.shadowColor = '#ffd700';
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(x + 12, y - 17, 2, 8);
+            ctx.beginPath();
+            ctx.moveTo(x + 13, y - 17);
+            ctx.lineTo(x + 10, y - 20);
+            ctx.lineTo(x + 16, y - 20);
+            ctx.fill();
+            ctx.restore();
+            
             ctx.restore();
         }
         
@@ -497,9 +591,28 @@
 
         function drawBullet(bullet) {
             ctx.save();
-            ctx.fillStyle = '#00f2fe'; ctx.shadowColor = '#00f2fe'; ctx.shadowBlur = 10;
-            ctx.fillRect(bullet.x - 2, bullet.y - 10, 4, 15);
-            ctx.fillStyle = '#fff'; ctx.fillRect(bullet.x - 1, bullet.y - 8, 2, 10);
+            ctx.font = '18px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // キャラクターごとに異なる武器
+            if (bullet.character === 'male') {
+                // ハードボイルド: 黒ペン
+                ctx.shadowColor = '#00f2fe';
+                ctx.shadowBlur = 8;
+                ctx.fillText('🖊️', bullet.x, bullet.y);
+            } else if (bullet.character === 'female') {
+                // 女性会社員: 黄色い鉛筆
+                ctx.shadowColor = '#ffd700';
+                ctx.shadowBlur = 8;
+                ctx.fillText('✏️', bullet.x, bullet.y);
+            } else {
+                // ホログラム: 虹色ペン（仮）
+                ctx.shadowColor = '#00f2fe';
+                ctx.shadowBlur = 10;
+                ctx.fillText('🖊️', bullet.x, bullet.y);
+            }
+            
             ctx.restore();
         }
 
@@ -710,7 +823,7 @@
         }
 
         function shootBullet() {
-            gameState.bullets.push({ x: gameState.player.x, y: gameState.player.y - 20, speed: 10 });
+            gameState.bullets.push({ x: gameState.player.x, y: gameState.player.y - 20, speed: 10, character: gameState.player.character });
         }
 
         function createParticles(x, y, color, count=6) {
