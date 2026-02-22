@@ -310,7 +310,7 @@
     <!-- ナビゲーションバー -->
     <div id="navbar">
         <a href="../app.html">← Apps</a>
-        <span class="game-title">新聞記者シューティング（仮）</span>
+        <span class="game-title">ゲームタイトル（仮）</span>
         <div></div>
     </div>
     
@@ -325,9 +325,9 @@
         
         <div style="color: #a0aec0; font-size: 0.9em; margin-bottom: 20px; max-width: 320px; line-height: 1.8; position: relative; z-index: 1;">
             [ TARGET ]<br>
-            撃ち落とせ：デジタルデバイス<br>
-            獲得せよ：新聞購読者とボーナス<br>
-            <span style="color: #fe0979; font-weight: bold;">WARNING: 30秒後にボス襲来</span>
+            撃ち落とせ：💻📱 デジタルデバイス<br>
+            獲得せよ：📰 新聞購読者と 💰 ボーナス<br>
+            <span style="color: #fe0979; font-weight: bold;">WARNING: 20秒後にボス襲来</span>
         </div>
         
         <div class="character-select">
@@ -365,7 +365,7 @@
     </div>
     
     <div id="instructions">
-        📰 購読者獲得 | 💲 やる気回復
+        📰 購読者獲得 | 💰 やる気回復
     </div>
 
     <script>
@@ -580,8 +580,18 @@
             ctx.fillText(enemy.type === 'smartphone' ? '📱' : '💻', enemy.x-15, enemy.y+10);
         }
         function drawPowerup(powerup) {
-            ctx.font = powerup.type === 'subscriber' ? '28px Arial' : '20px Arial';
-            ctx.fillText(powerup.type === 'subscriber' ? '📰' : '💲', powerup.x-12, powerup.y+8);
+            if (powerup.type === 'subscriber') {
+                ctx.font = '28px Arial';
+                ctx.fillText('📰', powerup.x-12, powerup.y+8);
+            } else {
+                // ボーナス（💰）を光らせる
+                ctx.save();
+                ctx.shadowColor = '#ffd700';
+                ctx.shadowBlur = 15;
+                ctx.font = '24px Arial';
+                ctx.fillText('💰', powerup.x-12, powerup.y+8);
+                ctx.restore();
+            }
         }
 
         // ★ ボスの攻撃色を逆転（パワハラ＝青、セクハラ＝ピンク）
@@ -741,13 +751,17 @@
             if (isShooting && Math.random() < 0.25) shootBullet();
             
             if (!gameState.bossSpawned && gameState.time > 30) {
-                gameState.boss = { x: canvas.width/2, y: 160, health: 80, maxHealth: 80, moveDir: 1, shootTimer: 0 };
+                gameState.boss = { x: canvas.width/2, y: 160, health: 120, maxHealth: 120, moveDir: 1, shootTimer: 0 };
                 gameState.bossSpawned = true;
             }
             
+            // 敵の出現（ボス戦中は出現頻度を落とす）
+            enemySpawnTimer += deltaTime;
             if (!gameState.bossSpawned) {
-                enemySpawnTimer += deltaTime;
                 if (enemySpawnTimer > Math.max(400 - gameState.time*8, 150)) { spawnEnemy(); enemySpawnTimer = 0; }
+            } else {
+                // ボス戦中も敵が出現するが、頻度は半分に
+                if (enemySpawnTimer > 1200) { spawnEnemy(); enemySpawnTimer = 0; }
             }
             
             powerupSpawnTimer += deltaTime;
@@ -800,9 +814,9 @@
                         createFloatingText(p.x, p.y + 15, 'CIRCULATION UP!', '#00f2fe', false);
                     } else { 
                         gameState.player.health = Math.min(100, gameState.player.health+15); 
-                        createParticles(p.x, p.y, '#00ff00');
-                        createFloatingText(p.x, p.y, '💲', '#00ff00', true);
-                        createFloatingText(p.x, p.y + 15, 'MOTIVATION UP!', '#00ff00', false);
+                        createParticles(p.x, p.y, '#ffd700');
+                        createFloatingText(p.x, p.y, '💰', '#ffd700', true);
+                        createFloatingText(p.x, p.y + 15, 'MOTIVATION UP!', '#ffd700', false);
                     }
                     return false;
                 }
@@ -817,7 +831,7 @@
                     }
                 });
                 if (gameState.boss && checkCollision(b, gameState.boss, 4, 30)) {
-                    gameState.boss.health -= 1; gameState.bullets.splice(bIdx, 1); createParticles(gameState.boss.x, gameState.boss.y, '#00f2fe');
+                    gameState.boss.health -= 0.7; gameState.bullets.splice(bIdx, 1); createParticles(gameState.boss.x, gameState.boss.y, '#00f2fe');
                     if (gameState.boss.health <= 0) { showGameClear(); }
                 }
             });
