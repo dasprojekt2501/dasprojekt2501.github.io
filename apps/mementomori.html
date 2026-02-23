@@ -29,351 +29,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memento Mori - PROJEKT2501</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #faf8f5;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        body.dark-mode {
-            background-color: #1a1a1a;
-            color: #e0e0e0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
-
-        header {
-            margin-bottom: 60px;
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 30px;
-        }
-
-        body.dark-mode header {
-            border-bottom-color: #333;
-        }
-
-        h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        body.dark-mode .subtitle {
-            color: #999;
-        }
-
-        .header-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        nav a {
-            color: #0066cc;
-            text-decoration: none;
-            margin-right: 20px;
-            font-size: 0.95em;
-        }
-
-        body.dark-mode nav a {
-            color: #4a9eff;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        .language-toggle {
-            display: flex;
-            gap: 10px;
-            margin-right: 15px;
-        }
-
-        .lang-btn {
-            background: none;
-            border: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 4px;
-            opacity: 0.5;
-            transition: opacity 0.3s;
-            line-height: 1;
-            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-        }
-
-        .lang-btn:hover {
-            opacity: 0.8;
-        }
-
-        .lang-btn.active {
-            opacity: 1;
-        }
-
-        .theme-toggle {
-            position: relative;
-            width: 48px;
-            height: 24px;
-            background-color: #e8e4dd;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            padding: 0;
-        }
-
-        body.dark-mode .theme-toggle {
-            background-color: #2a2a2a;
-        }
-
-        .theme-toggle:hover {
-            opacity: 0.8;
-        }
-
-        .toggle-circle {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background-color: #333;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-        }
-
-        body.dark-mode .toggle-circle {
-            transform: translateX(24px);
-            background-color: #faf8f5;
-        }
-
-        /* アプリヘッダー */
-        .app-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .app-icon-large {
-            width: 120px;
-            height: 120px;
-            background: #e8e4dd;
-            border-radius: 24px;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4em;
-        }
-
-        body.dark-mode .app-icon-large {
-            background: #2a2a2a;
-        }
-
-        .app-icon-large img {
-            width: 100%;
-            height: 100%;
-            border-radius: 24px;
-            object-fit: cover;
-        }
-
-        .app-name {
-            font-size: 2em;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .app-tagline {
-            color: #666;
-            font-size: 1.2em;
-            margin-bottom: 30px;
-        }
-
-        body.dark-mode .app-tagline {
-            color: #999;
-        }
-
-        .download-button {
-            display: inline-block;
-            padding: 12px 30px;
-            background: #0066cc;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: opacity 0.3s;
-        }
-
-        body.dark-mode .download-button {
-            background: #4a9eff;
-        }
-
-        .download-button:hover {
-            opacity: 0.8;
-        }
-
-        .download-button.coming-soon {
-            background: #999;
-            cursor: not-allowed;
-        }
-
-        /* スクリーンショット */
-        .screenshots {
-            margin-bottom: 60px;
-        }
-
-        .screenshots h2 {
-            font-size: 1.4em;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .screenshot-container {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 10px 0;
-        }
-
-        .screenshot {
-            width: 200px;
-            height: 400px;
-            background: #e8e4dd;
-            border-radius: 12px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-        }
-
-        body.dark-mode .screenshot {
-            background: #2a2a2a;
-        }
-
-        .screenshot img {
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-            object-fit: cover;
-        }
-
-        /* 説明セクション */
-        .description {
-            margin-bottom: 60px;
-        }
-
-        .description h2 {
-            font-size: 1.4em;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .description p {
-            color: #666;
-            line-height: 1.8;
-            margin-bottom: 1em;
-        }
-
-        body.dark-mode .description p {
-            color: #999;
-        }
-
-        /* 機能リスト */
-        .features {
-            margin-bottom: 60px;
-        }
-
-        .features h2 {
-            font-size: 1.4em;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .features ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .features li {
-            color: #666;
-            line-height: 1.8;
-            margin-bottom: 10px;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        body.dark-mode .features li {
-            color: #999;
-        }
-
-        .features li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #0066cc;
-        }
-
-        body.dark-mode .features li:before {
-            color: #4a9eff;
-        }
-
-        /* プライバシーリンク */
-        .privacy-link {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .privacy-link a {
-            color: #0066cc;
-            text-decoration: none;
-            font-size: 0.95em;
-        }
-
-        body.dark-mode .privacy-link a {
-            color: #4a9eff;
-        }
-
-        .privacy-link a:hover {
-            text-decoration: underline;
-        }
-
-        footer {
-            margin-top: 80px;
-            padding-top: 30px;
-            border-top: 1px solid #e0e0e0;
-            color: #999;
-            font-size: 0.9em;
-            text-align: center;
-        }
-
-        body.dark-mode footer {
-            border-top-color: #333;
-        }
-
-        /* レスポンシブ */
-        @media (max-width: 600px) {
-            .screenshot {
-                width: 150px;
-                height: 300px;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; line-height: 1.6; color: #333; background-color: #faf8f5; transition: background-color 0.3s ease, color 0.3s ease; }
+        body.dark-mode { background-color: #1a1a1a; color: #e0e0e0; }
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        header { margin-bottom: 60px; border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; }
+        body.dark-mode header { border-bottom-color: #333; }
+        h1 { font-size: 2em; margin-bottom: 10px; font-weight: 600; }
+        .subtitle { color: #666; font-size: 1.1em; }
+        body.dark-mode .subtitle { color: #999; }
+        .header-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        nav a { color: #0066cc; text-decoration: none; margin-right: 20px; font-size: 0.95em; }
+        body.dark-mode nav a { color: #4a9eff; }
+        nav a:hover { text-decoration: underline; }
+        .language-toggle { display: flex; gap: 10px; margin-right: 15px; }
+        .lang-btn { background: none; border: none; font-size: 1.5em; cursor: pointer; padding: 4px; opacity: 0.5; transition: opacity 0.3s; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+        .lang-btn:hover { opacity: 0.8; }
+        .lang-btn.active { opacity: 1; }
+        .theme-toggle { position: relative; width: 48px; height: 24px; background-color: #e8e4dd; border: none; border-radius: 12px; cursor: pointer; transition: background-color 0.3s ease; padding: 0; }
+        body.dark-mode .theme-toggle { background-color: #2a2a2a; }
+        .theme-toggle:hover { opacity: 0.8; }
+        .toggle-circle { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background-color: #333; border-radius: 50%; transition: transform 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        body.dark-mode .toggle-circle { transform: translateX(24px); background-color: #faf8f5; }
+        .app-header { text-align: center; margin-bottom: 60px; }
+        .app-icon-large { width: 120px; height: 120px; background: #e8e4dd; border-radius: 24px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 4em; }
+        body.dark-mode .app-icon-large { background: #2a2a2a; }
+        .app-icon-large img { width: 100%; height: 100%; border-radius: 24px; object-fit: cover; }
+        .app-name { font-size: 2em; font-weight: 600; margin-bottom: 10px; }
+        .app-tagline { color: #666; font-size: 1.2em; margin-bottom: 30px; }
+        body.dark-mode .app-tagline { color: #999; }
+        .download-button { display: inline-block; padding: 12px 30px; background: #0066cc; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; transition: opacity 0.3s; }
+        body.dark-mode .download-button { background: #4a9eff; }
+        .download-button:hover { opacity: 0.8; }
+        .download-button.coming-soon { background: #999; cursor: not-allowed; }
+        .screenshots { margin-bottom: 60px; }
+        .screenshots h2 { font-size: 1.4em; margin-bottom: 20px; font-weight: 600; }
+        .screenshot-container { display: flex; gap: 20px; overflow-x: auto; padding: 10px 0; }
+        .screenshot { width: 200px; height: 400px; background: #e8e4dd; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #999; }
+        body.dark-mode .screenshot { background: #2a2a2a; }
+        .screenshot img { width: 100%; height: 100%; border-radius: 12px; object-fit: cover; }
+        .description { margin-bottom: 60px; }
+        .description h2 { font-size: 1.4em; margin-bottom: 20px; font-weight: 600; }
+        .description p { color: #666; line-height: 1.8; margin-bottom: 1em; }
+        body.dark-mode .description p { color: #999; }
+        .features { margin-bottom: 60px; }
+        .features h2 { font-size: 1.4em; margin-bottom: 20px; font-weight: 600; }
+        .features ul { list-style: none; padding: 0; }
+        .features li { color: #666; line-height: 1.8; margin-bottom: 10px; padding-left: 20px; position: relative; }
+        body.dark-mode .features li { color: #999; }
+        .features li:before { content: "•"; position: absolute; left: 0; color: #0066cc; }
+        body.dark-mode .features li:before { color: #4a9eff; }
+        .page-links { text-align: center; margin-top: 40px; }
+        .page-links a { color: #0066cc; text-decoration: none; font-size: 0.95em; margin: 0 15px; }
+        body.dark-mode .page-links a { color: #4a9eff; }
+        .page-links a:hover { text-decoration: underline; }
+        footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid #e0e0e0; color: #999; font-size: 0.9em; text-align: center; }
+        body.dark-mode footer { border-top-color: #333; }
+        @media (max-width: 600px) { .screenshot { width: 150px; height: 300px; } }
     </style>
 </head>
 <body>
@@ -391,7 +103,7 @@
                 <div style="display: flex; align-items: center;">
                     <div class="language-toggle">
                         <button class="lang-btn active" title="日本語">🇯🇵</button>
-                        <button class="lang-btn" onclick="location.href='app1-en.html'" title="English">🇺🇸</button>
+                        <button class="lang-btn" onclick="location.href='mementomori-en.html'" title="English">🇺🇸</button>
                     </div>
                     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
                         <div class="toggle-circle"></div>
@@ -403,15 +115,12 @@
         <!-- アプリヘッダー -->
         <div class="app-header">
             <div class="app-icon-large">
-                <!-- アイコン画像を配置: <img src="icon.png" alt="Memento Mori"> -->
                 🕯️
             </div>
             <h2 class="app-name">Memento Mori</h2>
             <p class="app-tagline">
-                <!-- ★ ここにキャッチコピーを貼り付け ★ -->
                 死を想え。限りある時間を意識するためのシンプルなアプリ。
             </p>
-            <!-- App Storeリンクがあればhrefを変更、なければcoming-soonクラスを追加 -->
             <a href="#" class="download-button coming-soon">Coming Soon</a>
         </div>
 
@@ -419,25 +128,15 @@
         <section class="screenshots">
             <h2>スクリーンショット</h2>
             <div class="screenshot-container">
-                <div class="screenshot">
-                    <!-- 画像を配置: <img src="screenshot1.png" alt="Screenshot 1"> -->
-                    画像1
-                </div>
-                <div class="screenshot">
-                    <!-- 画像を配置: <img src="screenshot2.png" alt="Screenshot 2"> -->
-                    画像2
-                </div>
-                <div class="screenshot">
-                    <!-- 画像を配置: <img src="screenshot3.png" alt="Screenshot 3"> -->
-                    画像3
-                </div>
+                <div class="screenshot">画像1</div>
+                <div class="screenshot">画像2</div>
+                <div class="screenshot">画像3</div>
             </div>
         </section>
 
         <!-- アプリ説明 -->
         <section class="description">
             <h2>アプリについて</h2>
-            <!-- ★ ここにアプリの説明文を貼り付け ★ -->
             <p>
                 ここにアプリの詳しい説明を貼り付けてください。
                 複数の段落がある場合は、&lt;p&gt;タグで囲んでください。
@@ -450,7 +149,6 @@
         <!-- 機能 -->
         <section class="features">
             <h2>主な機能</h2>
-            <!-- ★ ここに機能リストを貼り付け ★ -->
             <ul>
                 <li>機能1の説明</li>
                 <li>機能2の説明</li>
@@ -459,9 +157,10 @@
             </ul>
         </section>
 
-        <!-- プライバシーポリシーリンク -->
-        <div class="privacy-link">
-            <a href="app1-privacy.html">プライバシーポリシー</a>
+        <!-- プライバシーポリシー＆サポートリンク -->
+        <div class="page-links">
+            <a href="mementomori-support.html">サポート</a>
+            <a href="mementomori-privacy.html">プライバシーポリシー</a>
         </div>
 
         <footer>
@@ -470,12 +169,8 @@
     </div>
 
     <script>
-        // ダークモード設定
         const currentTheme = localStorage.getItem('theme') || 'light';
-        if (currentTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-        }
-
+        if (currentTheme === 'dark') { document.body.classList.add('dark-mode'); }
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
