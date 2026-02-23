@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+            <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+        <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
+        
+        <!-- OGP -->
+        <meta property="og:title" content="PROJEKT2501 - Essays, Music & Apps">
+        <meta property="og:description" content="A collection of essays, music, and apps by PROJEKT2501">
+        <meta property="og:image" content="https://dasprojekt2501.github.io/ogp.jpg">
+        <meta property="og:url" content="https://dasprojekt2501.github.io/">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="Your Name">
+        
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="PROJEKT2501 - Essays, Music & Apps">
+        <meta name="twitter:description" content="A collection of essays, music, and apps by PROJEKT2501">
+        <meta name="twitter:image" content="https://dasprojekt2501.github.io/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Memento Mori</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; background-color: #faf8f5; transition: background-color 0.3s ease, color 0.3s ease; }
+        body.dark-mode { background-color: #1a1a1a; color: #e0e0e0; }
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        header { margin-bottom: 60px; border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; }
+        body.dark-mode header { border-bottom-color: #333; }
+        h1 { font-size: 2em; margin-bottom: 10px; font-weight: 600; }
+        .subtitle { color: #666; font-size: 1.1em; }
+        body.dark-mode .subtitle { color: #999; }
+        .header-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        nav a { color: #0066cc; text-decoration: none; margin-right: 20px; font-size: 0.95em; }
+        body.dark-mode nav a { color: #4a9eff; }
+        nav a:hover { text-decoration: underline; }
+        .language-toggle { display: flex; gap: 10px; margin-right: 15px; }
+        .lang-btn { background: none; border: none; font-size: 1.5em; cursor: pointer; padding: 4px; opacity: 0.5; transition: opacity 0.3s; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+        .lang-btn:hover { opacity: 0.8; }
+        .lang-btn.active { opacity: 1; }
+        .theme-toggle { position: relative; width: 48px; height: 24px; background-color: #e8e4dd; border: none; border-radius: 12px; cursor: pointer; transition: background-color 0.3s ease; padding: 0; }
+        body.dark-mode .theme-toggle { background-color: #2a2a2a; }
+        .theme-toggle:hover { opacity: 0.8; }
+        .toggle-circle { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background-color: #333; border-radius: 50%; transition: transform 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        body.dark-mode .toggle-circle { transform: translateX(24px); background-color: #faf8f5; }
+        .policy-content { margin-top: 40px; }
+        .policy-content h2 { font-size: 1.4em; margin-top: 40px; margin-bottom: 20px; font-weight: 600; }
+        .policy-content p { color: #666; line-height: 1.8; margin-bottom: 1em; }
+        body.dark-mode .policy-content p { color: #999; }
+        .faq-item { margin-bottom: 30px; }
+        .faq-item h3 { font-size: 1.1em; font-weight: 600; margin-bottom: 8px; }
+        .faq-item p { color: #666; line-height: 1.8; }
+        body.dark-mode .faq-item p { color: #999; }
+        .contact-box { background: rgba(0,0,0,0.03); border-radius: 12px; padding: 24px; text-align: center; margin-top: 40px; }
+        body.dark-mode .contact-box { background: rgba(255,255,255,0.05); }
+        .contact-box a { color: #0066cc; text-decoration: none; }
+        body.dark-mode .contact-box a { color: #4a9eff; }
+        .contact-box a:hover { text-decoration: underline; }
+        footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid #e0e0e0; color: #999; font-size: 0.9em; text-align: center; }
+        body.dark-mode footer { border-top-color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Memento Mori</h1>
+            <p class="subtitle">Support</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html">Home</a>
+                    <a href="../app-en.html">Apps</a>
+                    <a href="mementomori-en.html">Back to App</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn" onclick="location.href='mementomori-support.html'" title="日本語">🇯🇵</button>
+                        <button class="lang-btn active" title="English">🇺🇸</button>
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="policy-content">
+            <p>Thank you for using "Memento Mori - 死を想え". Please check the FAQ below for common questions.</p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>🔒 Is my data safe?</h3>
+                <p>All data is stored exclusively on your device. Nothing is ever sent to external servers.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>📅 How do I change dates?</h3>
+                <p>Tap on the date display on the main screen to open the date picker and make changes.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>🔔 Notifications not working?</h3>
+                <p>Check Settings → Notifications → Memento Mori to ensure notifications are enabled. Also verify that "Daily Reminder" is turned on in the app's settings.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>🌐 How to switch languages?</h3>
+                <p>Tap the flag icon (🇺🇸 / 🇯🇵) at the top left of the screen to switch between Japanese and English.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>📊 Where does the life expectancy data come from?</h3>
+                <p>Based on 2024 data from Japan's Ministry of Health, Labour and Welfare (Male: 81 years, Female: 87 years).</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>📱 How to add widgets?</h3>
+                <p>Long press home screen → tap "+" button → search "Memento Mori" → select your preferred size. Lock screen widgets are also supported.</p>
+            </div>
+
+            <div class="contact-box">
+                <h2 style="margin-top: 0;">Contact</h2>
+                <p>If your question isn't answered above, please feel free to reach out.</p>
+                <p style="margin-top: 12px; font-size: 1.05em;">
+                    📧 <a href="mailto:peripheria.app@gmail.com">peripheria.app@gmail.com</a>
+                </p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') { document.body.classList.add('dark-mode'); }
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+    </script>
+</body>
+</html>

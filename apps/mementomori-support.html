@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+            <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+        <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
+        
+        <!-- OGP -->
+        <meta property="og:title" content="PROJEKT2501 - Essays, Music & Apps">
+        <meta property="og:description" content="A collection of essays, music, and apps by PROJEKT2501">
+        <meta property="og:image" content="https://dasprojekt2501.github.io/ogp.jpg">
+        <meta property="og:url" content="https://dasprojekt2501.github.io/">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="Your Name">
+        
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="PROJEKT2501 - Essays, Music & Apps">
+        <meta name="twitter:description" content="A collection of essays, music, and apps by PROJEKT2501">
+        <meta name="twitter:image" content="https://dasprojekt2501.github.io/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サポート - Memento Mori</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; line-height: 1.6; color: #333; background-color: #faf8f5; transition: background-color 0.3s ease, color 0.3s ease; }
+        body.dark-mode { background-color: #1a1a1a; color: #e0e0e0; }
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        header { margin-bottom: 60px; border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; }
+        body.dark-mode header { border-bottom-color: #333; }
+        h1 { font-size: 2em; margin-bottom: 10px; font-weight: 600; }
+        .subtitle { color: #666; font-size: 1.1em; }
+        body.dark-mode .subtitle { color: #999; }
+        .header-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        nav a { color: #0066cc; text-decoration: none; margin-right: 20px; font-size: 0.95em; }
+        body.dark-mode nav a { color: #4a9eff; }
+        nav a:hover { text-decoration: underline; }
+        .language-toggle { display: flex; gap: 10px; margin-right: 15px; }
+        .lang-btn { background: none; border: none; font-size: 1.5em; cursor: pointer; padding: 4px; opacity: 0.5; transition: opacity 0.3s; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+        .lang-btn:hover { opacity: 0.8; }
+        .lang-btn.active { opacity: 1; }
+        .theme-toggle { position: relative; width: 48px; height: 24px; background-color: #e8e4dd; border: none; border-radius: 12px; cursor: pointer; transition: background-color 0.3s ease; padding: 0; }
+        body.dark-mode .theme-toggle { background-color: #2a2a2a; }
+        .theme-toggle:hover { opacity: 0.8; }
+        .toggle-circle { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background-color: #333; border-radius: 50%; transition: transform 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        body.dark-mode .toggle-circle { transform: translateX(24px); background-color: #faf8f5; }
+        .policy-content { margin-top: 40px; }
+        .policy-content h2 { font-size: 1.4em; margin-top: 40px; margin-bottom: 20px; font-weight: 600; }
+        .policy-content p { color: #666; line-height: 1.8; margin-bottom: 1em; }
+        body.dark-mode .policy-content p { color: #999; }
+        .faq-item { margin-bottom: 30px; }
+        .faq-item h3 { font-size: 1.1em; font-weight: 600; margin-bottom: 8px; }
+        .faq-item p { color: #666; line-height: 1.8; }
+        body.dark-mode .faq-item p { color: #999; }
+        .contact-box { background: rgba(0,0,0,0.03); border-radius: 12px; padding: 24px; text-align: center; margin-top: 40px; }
+        body.dark-mode .contact-box { background: rgba(255,255,255,0.05); }
+        .contact-box a { color: #0066cc; text-decoration: none; }
+        body.dark-mode .contact-box a { color: #4a9eff; }
+        .contact-box a:hover { text-decoration: underline; }
+        footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid #e0e0e0; color: #999; font-size: 0.9em; text-align: center; }
+        body.dark-mode footer { border-top-color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Memento Mori</h1>
+            <p class="subtitle">サポート</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html">Home</a>
+                    <a href="../app.html">Apps</a>
+                    <a href="mementomori.html">アプリに戻る</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn active" title="日本語">🇯🇵</button>
+                        <button class="lang-btn" onclick="location.href='mementomori-support-en.html'" title="English">🇺🇸</button>
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="policy-content">
+            <p>「Memento Mori - 死を想え」をご利用いただきありがとうございます。ご不明な点がございましたら、以下のよくある質問をご確認ください。</p>
+
+            <h2>よくある質問</h2>
+
+            <div class="faq-item">
+                <h3>🔒 データは安全ですか？</h3>
+                <p>すべてのデータはお使いの端末内にのみ保存されます。外部サーバーへの送信は一切ありません。</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>📅 生年月日や終点日を変更するには？</h3>
+                <p>メイン画面の日付表示部分をタップするとDatePickerが表示されます。そこから変更できます。</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>🔔 通知が届かない場合</h3>
+                <p>端末の「設定」→「通知」→「Memento Mori」で通知が許可されているか確認してください。また、アプリ内の設定画面で「毎日のリマインダー」がオンになっていることも確認してください。</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>🌐 言語を切り替えるには？</h3>
+                <p>画面左上の国旗アイコン（🇺🇸 / 🇯🇵）をタップすると、日本語と英語を切り替えできます。</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>📊 平均寿命のデータはどこから？</h3>
+                <p>厚生労働省の2024年データに基づく日本人の平均寿命（男性81歳、女性87歳）を参考値として使用しています。</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>📱 ウィジェットの設定方法</h3>
+                <p>ホーム画面を長押し → 左上の「+」ボタン → 「Memento Mori」を検索 → お好みのサイズを選択して追加できます。ロック画面ウィジェットにも対応しています。</p>
+            </div>
+
+            <div class="contact-box">
+                <h2 style="margin-top: 0;">お問い合わせ</h2>
+                <p>上記で解決しない場合は、お気軽にお問い合わせください。</p>
+                <p style="margin-top: 12px; font-size: 1.05em;">
+                    📧 <a href="mailto:peripheria.app@gmail.com">peripheria.app@gmail.com</a>
+                </p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') { document.body.classList.add('dark-mode'); }
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+    </script>
+</body>
+</html>
