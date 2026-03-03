@@ -381,12 +381,6 @@
     </div>
 
 
-    <!-- iOS Safari haptics fallback -->
-    <div id="iosHapticHost" aria-hidden="true" style="position:fixed;left:-9999px;top:-9999px;opacity:0;pointer-events:none;">
-        <label for="iosHapticSwitch">Haptic</label>
-        <input id="iosHapticSwitch" type="checkbox" switch>
-    </div>
-
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -400,7 +394,6 @@
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
-        setupHaptics();
 
         let gameState = {
             player: { x: 187.5, y: 550, health: 100, walkCycle: 0, character: 'male' },
@@ -427,19 +420,15 @@
 
         const hapticState = {
             enabled: true,
-            iosPrepared: false,
             lastHitAt: 0,
             lastTouchAt: 0,
             lastPickupAt: 0,
             lastCelebrationAt: 0,
-            switchEl: null,
-            labelEl: null,
             iosTimerIds: []
         };
 
         function setupHaptics() {
-            hapticState.switchEl = document.getElementById('iosHapticSwitch');
-            hapticState.labelEl = document.querySelector('label[for="iosHapticSwitch"]');
+            // no-op: iOS Safari fallback creates ephemeral switch elements on demand
         }
 
         function isProbablyIOSSafari() {
@@ -460,17 +449,43 @@
         }
 
         function primeHaptics() {
-            hapticState.iosPrepared = true;
-            if (isProbablyIOSSafari()) {
-                triggerIOSHapticTap();
-            }
+            // Intentionally empty. iOS Safari uses per-trigger ephemeral switches.
         }
 
         function triggerIOSHapticTap() {
-            if (!hapticState.enabled || !hapticState.switchEl) return;
-            hapticState.switchEl.checked = !hapticState.switchEl.checked;
-            if (hapticState.labelEl) hapticState.labelEl.click();
-            else hapticState.switchEl.click();
+            if (!hapticState.enabled || !isProbablyIOSSafari()) return;
+
+            const host = document.createElement('div');
+            host.setAttribute('aria-hidden', 'true');
+            host.style.position = 'fixed';
+            host.style.left = '-9999px';
+            host.style.top = '-9999px';
+            host.style.width = '1px';
+            host.style.height = '1px';
+            host.style.overflow = 'hidden';
+            host.style.opacity = '0.001';
+
+            const input = document.createElement('input');
+            const id = `iosHapticSwitch-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+            input.type = 'checkbox';
+            input.setAttribute('switch', '');
+            input.id = id;
+
+            const label = document.createElement('label');
+            label.htmlFor = id;
+            label.textContent = 'Haptic';
+
+            host.appendChild(label);
+            host.appendChild(input);
+            document.body.appendChild(host);
+
+            try {
+                label.click();
+            } catch (error) {
+                // ignore
+            }
+
+            setTimeout(() => host.remove(), 120);
         }
 
         function scheduleIOSHapticTaps(pattern) {
@@ -488,14 +503,20 @@
         function vibratePattern(pattern) {
             if (!hapticState.enabled) return;
             if (supportsVibrateAPI()) {
-                navigator.vibrate(pattern);
+                try {
+                    navigator.vibrate?.(pattern);
+                } catch (error) {
+                    // ignore and fall through
+                }
                 return;
             }
-            if (isProbablyIOSSafari() && hapticState.iosPrepared) {
+            if (isProbablyIOSSafari()) {
                 if (Array.isArray(pattern)) scheduleIOSHapticTaps(pattern);
                 else triggerIOSHapticTap();
             }
         }
+
+        setupHaptics();
 
         function triggerHaptic(eventType) {
             const now = performance.now();
