@@ -6,778 +6,621 @@
 <title>PULSE // リズム × ハプティクス</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#0a0a0a;--fg:#e8e8e8;--accent:#00ff88;--miss:#ff3355;--dim:#444}
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--fg);font-family:'IBM Plex Mono',monospace;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s}
+  .screen.hidden{opacity:0;pointer-events:none}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* Title */
+  #title h1{font-size:2.6rem;font-weight:700;letter-spacing:.3em;margin-bottom:.15em}
+  .sub{font-size:.7rem;font-weight:300;letter-spacing:.5em;color:var(--dim);margin-bottom:2em;text-transform:uppercase}
+  .song-row{display:flex;gap:10px;margin-bottom:1.8em}
+  .sbtn{background:none;border:1px solid var(--dim);color:var(--dim);font-family:inherit;font-size:.65rem;letter-spacing:.1em;padding:9px 18px;cursor:pointer;transition:all .15s}
+  .sbtn.on{border-color:var(--accent);color:var(--accent)}
+  .go{background:none;border:1px solid var(--accent);color:var(--accent);font-family:inherit;font-size:.85rem;letter-spacing:.2em;padding:13px 44px;cursor:pointer}
+  .go:active{background:var(--accent);color:var(--bg)}
+  .info{margin-top:1.5em;font-size:.5rem;letter-spacing:.1em;color:var(--dim);text-align:center;line-height:1.8}
 
-  :root {
-    --bg: #0a0a0a;
-    --fg: #e8e8e8;
-    --accent: #00ff88;
-    --miss: #ff3355;
-    --dim: #333;
-  }
+  /* Haptic test */
+  .haptic-test{margin-top:1.2em;display:flex;gap:10px;align-items:center}
+  .test-btn{background:none;border:1px solid #666;color:#888;font-family:inherit;font-size:.6rem;letter-spacing:.08em;padding:8px 16px;cursor:pointer;transition:all .15s}
+  .test-btn:active{border-color:var(--accent);color:var(--accent)}
+  .test-status{font-size:.5rem;color:var(--dim);letter-spacing:.05em}
 
-  html, body {
-    width: 100%; height: 100%;
-    overflow: hidden;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: 'IBM Plex Mono', monospace;
-    touch-action: none;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-  }
+  /* Game HUD */
+  .hud{position:absolute;top:0;left:0;right:0;padding:14px 18px;display:flex;justify-content:space-between;z-index:10;pointer-events:none}
+  .hud-score{font-size:1.6rem;font-weight:700}
+  .hud-combo{font-size:.65rem;letter-spacing:.12em;color:var(--dim);margin-top:3px}
+  .hud-combo.hot{color:var(--accent)}
+  .hud-r{text-align:right}
+  .hud-song{font-size:.6rem;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
+  .hud-bar{width:70px;height:2px;background:#222;margin-top:6px;margin-left:auto}
+  .hud-fill{height:100%;background:var(--accent);width:0}
 
-  .screen {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.4s ease;
-  }
-  .screen.hidden { opacity: 0; pointer-events: none; }
+  /* Lanes */
+  .lanes{position:absolute;inset:0;display:flex;justify-content:center}
+  .lane{width:72px;height:100%;position:relative;border-left:1px solid #141414;border-right:1px solid #141414}
+  .hitline{position:absolute;bottom:110px;left:0;right:0;height:2px;background:var(--accent);opacity:.4;z-index:5;pointer-events:none}
+  .hitglow{position:absolute;bottom:86px;left:0;right:0;height:52px;background:linear-gradient(to bottom,transparent,rgba(0,255,136,.04),transparent);z-index:4;pointer-events:none}
+  .taptarget{position:absolute;bottom:0;left:0;right:0;height:220px;z-index:20}
 
-  /* ---- TITLE ---- */
-  #title-screen h1 {
-    font-size: 2.8rem;
-    font-weight: 700;
-    letter-spacing: 0.3em;
-    margin-bottom: 0.2em;
-  }
-  .subtitle {
-    font-size: 0.75rem;
-    font-weight: 300;
-    letter-spacing: 0.5em;
-    color: var(--dim);
-    margin-bottom: 2.5em;
-    text-transform: uppercase;
-  }
-  .song-select {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 2em;
-  }
-  .song-btn {
-    background: none;
-    border: 1px solid var(--dim);
-    color: var(--dim);
-    font-family: inherit;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .song-btn.selected {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  .start-btn {
-    background: none;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    font-family: inherit;
-    font-size: 0.9rem;
-    letter-spacing: 0.2em;
-    padding: 14px 48px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .start-btn:active {
-    background: var(--accent);
-    color: var(--bg);
-  }
-  .info-text {
-    margin-top: 2em;
-    font-size: 0.55rem;
-    letter-spacing: 0.1em;
-    color: var(--dim);
-    text-align: center;
-    line-height: 1.8;
-  }
-
-  /* ---- GAME ---- */
-  .game-hud {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    padding: 16px 20px;
-    display: flex;
-    justify-content: space-between;
-    z-index: 10;
-    pointer-events: none;
-  }
-  .hud-score {
-    font-size: 1.8rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-  }
-  .hud-combo {
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    color: var(--dim);
-    margin-top: 4px;
-  }
-  .hud-combo.active { color: var(--accent); }
-  .hud-song {
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    color: var(--dim);
-    text-transform: uppercase;
-    text-align: right;
-  }
-  .hud-progress {
-    width: 80px; height: 2px;
-    background: var(--dim);
-    margin-top: 8px;
-    margin-left: auto;
-  }
-  .hud-progress-bar {
-    height: 100%;
-    background: var(--accent);
-    width: 0%;
-  }
-
-  .lane-container {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-  }
-  .lane {
-    width: 72px;
-    height: 100%;
-    position: relative;
-    border-left: 1px solid #161616;
-    border-right: 1px solid #161616;
-  }
-
-  /* Hit zone line */
-  .hit-zone-line {
-    position: absolute;
-    bottom: 110px;
-    left: 0; right: 0;
-    height: 2px;
-    background: var(--accent);
-    opacity: 0.5;
-    z-index: 5;
-    pointer-events: none;
-  }
-  .hit-zone-glow {
-    position: absolute;
-    bottom: 88px;
-    left: 0; right: 0;
-    height: 48px;
-    background: linear-gradient(to bottom, transparent, rgba(0,255,136,0.04), transparent);
-    z-index: 4;
-    pointer-events: none;
-  }
-
-  /* Tap targets at bottom of each lane */
-  .tap-target {
-    position: absolute;
-    bottom: 0;
-    left: 0; right: 0;
-    height: 200px;
-    z-index: 20;
-  }
-
-  /* Notes falling */
-  .note {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 8px;
-    background: var(--fg);
-    border-radius: 1px;
-    z-index: 3;
-    pointer-events: none;
-    will-change: bottom;
-  }
+  /* Notes */
+  .note{position:absolute;left:50%;transform:translateX(-50%);width:42px;height:8px;border-radius:1px;z-index:3;pointer-events:none;will-change:bottom}
+  .note-kick{background:#fff}
+  .note-snare{background:#ff6644}
+  .note-hat{background:#66aaff}
+  .note-melody{background:var(--accent)}
 
   /* Effects */
-  .hit-flash {
-    position: absolute;
-    bottom: 90px;
-    left: 0; right: 0;
-    height: 50px;
-    z-index: 6;
-    pointer-events: none;
-    animation: flashOut 0.2s ease-out forwards;
-  }
-  .hit-flash.perfect { background: radial-gradient(ellipse at center bottom, rgba(0,255,136,0.25), transparent 70%); }
-  .hit-flash.good { background: radial-gradient(ellipse at center bottom, rgba(232,232,232,0.15), transparent 70%); }
-  .hit-flash.miss { background: radial-gradient(ellipse at center bottom, rgba(255,51,85,0.15), transparent 70%); }
+  .flash{position:absolute;bottom:88px;left:0;right:0;height:55px;z-index:6;pointer-events:none;animation:fo .2s ease-out forwards}
+  .flash.perfect{background:radial-gradient(ellipse at center bottom,rgba(0,255,136,.3),transparent 70%)}
+  .flash.good{background:radial-gradient(ellipse at center bottom,rgba(232,232,232,.2),transparent 70%)}
+  .flash.miss{background:radial-gradient(ellipse at center bottom,rgba(255,51,85,.2),transparent 70%)}
+  @keyframes fo{0%{opacity:1}100%{opacity:0}}
+  .judge{position:absolute;bottom:155px;left:0;right:0;text-align:center;font-size:.55rem;font-weight:700;letter-spacing:.2em;z-index:15;pointer-events:none;animation:ju .4s ease-out forwards}
+  .judge.perfect{color:var(--accent)}.judge.good{color:var(--fg)}.judge.miss{color:var(--miss)}
+  @keyframes ju{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-22px)}}
+  .bpm-lbl{position:absolute;bottom:14px;left:14px;font-size:.55rem;letter-spacing:.12em;color:var(--dim);z-index:10;pointer-events:none}
 
-  @keyframes flashOut {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-
-  .judge-text {
-    position: absolute;
-    bottom: 150px;
-    left: 0; right: 0;
-    text-align: center;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.25em;
-    z-index: 15;
-    pointer-events: none;
-    animation: judgeUp 0.4s ease-out forwards;
-  }
-  .judge-text.perfect { color: var(--accent); }
-  .judge-text.good { color: var(--fg); }
-  .judge-text.miss { color: var(--miss); }
-
-  @keyframes judgeUp {
-    0% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-25px); }
-  }
-
-  .bpm-label {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    color: var(--dim);
-    z-index: 10;
-    pointer-events: none;
-  }
-
-  /* ---- RESULT ---- */
-  .result-title {
-    font-size: 0.7rem;
-    letter-spacing: 0.5em;
-    color: var(--dim);
-    margin-bottom: 2em;
-    text-transform: uppercase;
-  }
-  .result-score {
-    font-size: 3.5rem;
-    font-weight: 700;
-    margin-bottom: 0.3em;
-  }
-  .result-grade {
-    font-size: 1.2rem;
-    letter-spacing: 0.3em;
-    margin-bottom: 2em;
-  }
-  .result-grade.s { color: var(--accent); }
-  .result-grade.a { color: #88ccff; }
-  .result-grade.b { color: var(--fg); }
-  .result-grade.c { color: var(--dim); }
-  .result-stats {
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 12px 36px;
-    margin-bottom: 3em;
-    font-size: 0.7rem;
-  }
-  .stat-label {
-    color: var(--dim);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    text-align: right;
-  }
-  .stat-value { font-weight: 700; }
-  .pf { color: var(--accent); }
-  .ms { color: var(--miss); }
+  /* Result */
+  .rtitle{font-size:.65rem;letter-spacing:.5em;color:var(--dim);margin-bottom:1.8em;text-transform:uppercase}
+  .rscore{font-size:3.2rem;font-weight:700;margin-bottom:.3em}
+  .rgrade{font-size:1.1rem;letter-spacing:.3em;margin-bottom:1.8em}
+  .rgrade.s{color:var(--accent)}.rgrade.a{color:#88ccff}.rgrade.b{color:var(--fg)}.rgrade.c{color:var(--dim)}
+  .rstats{display:grid;grid-template-columns:auto auto;gap:10px 32px;margin-bottom:2.5em;font-size:.65rem}
+  .sl{color:var(--dim);letter-spacing:.1em;text-transform:uppercase;text-align:right}
+  .sv{font-weight:700}
+  .pf{color:var(--accent)}.ms{color:var(--miss)}
 </style>
 </head>
 <body>
 
-<!-- ============ TITLE ============ -->
-<div id="title-screen" class="screen">
+<!-- Title -->
+<div id="title" class="screen">
   <h1>PULSE</h1>
-  <div class="subtitle">rhythm × haptics</div>
-  <div class="song-select" id="song-select"></div>
-  <button class="start-btn" id="start-btn">START</button>
-  <div class="info-text">
-    iOS 18 Safari でハプティクス対応<br>
-    サウンドON推奨（マナーモード解除）
+  <div class="sub">rhythm × haptics</div>
+  <div class="song-row" id="songrow"></div>
+  <button class="go" id="gobtn">START</button>
+  <div class="haptic-test">
+    <button class="test-btn" id="testbtn">振動テスト</button>
+    <span class="test-status" id="teststatus"></span>
   </div>
+  <div class="info">iOS 18+ Safari でハプティクス対応<br>サウンドON・マナーモード解除推奨</div>
 </div>
 
-<!-- ============ GAME ============ -->
-<div id="game-screen" class="screen hidden">
-  <div class="game-hud">
-    <div>
-      <div class="hud-score" id="hud-score">0</div>
-      <div class="hud-combo" id="hud-combo">0 COMBO</div>
-    </div>
-    <div>
-      <div class="hud-song" id="hud-song">PULSE</div>
-      <div class="hud-progress"><div class="hud-progress-bar" id="hud-progress"></div></div>
-    </div>
+<!-- Game -->
+<div id="game" class="screen hidden">
+  <div class="hud">
+    <div><div class="hud-score" id="hscore">0</div><div class="hud-combo" id="hcombo">0 COMBO</div></div>
+    <div class="hud-r"><div class="hud-song" id="hsong">PULSE</div><div class="hud-bar"><div class="hud-fill" id="hbar"></div></div></div>
   </div>
-  <div class="lane-container" id="lanes"></div>
-  <div class="bpm-label" id="bpm-label">120 BPM</div>
+  <div class="lanes" id="lanes"></div>
+  <div class="bpm-lbl" id="bpmlbl">120 BPM</div>
 </div>
 
-<!-- ============ RESULT ============ -->
-<div id="result-screen" class="screen hidden">
-  <div class="result-title">RESULT</div>
-  <div class="result-score" id="r-score">0</div>
-  <div class="result-grade" id="r-grade">-</div>
-  <div class="result-stats">
-    <div class="stat-label">PERFECT</div><div class="stat-value pf" id="r-perfect">0</div>
-    <div class="stat-label">GOOD</div><div class="stat-value" id="r-good">0</div>
-    <div class="stat-label">MISS</div><div class="stat-value ms" id="r-miss">0</div>
-    <div class="stat-label">MAX COMBO</div><div class="stat-value" id="r-combo">0</div>
+<!-- Result -->
+<div id="result" class="screen hidden">
+  <div class="rtitle">RESULT</div>
+  <div class="rscore" id="rscore">0</div>
+  <div class="rgrade" id="rgrade">-</div>
+  <div class="rstats">
+    <div class="sl">PERFECT</div><div class="sv pf" id="rpf">0</div>
+    <div class="sl">GOOD</div><div class="sv" id="rgd">0</div>
+    <div class="sl">MISS</div><div class="sv ms" id="rms">0</div>
+    <div class="sl">MAX COMBO</div><div class="sv" id="rmc">0</div>
   </div>
-  <button class="start-btn" id="retry-btn">RETRY</button>
+  <button class="go" id="retrybtn">RETRY</button>
 </div>
 
 <script>
-// ================================================================
-// HAPTIC ENGINE
-// ios-haptics pattern: create checkbox switch -> label click -> remove
-// ================================================================
+// ============================================================
+// HAPTIC: Multiple strategies
+// ============================================================
 const Haptic = {
   fire() {
+    // Strategy 1: Create switch checkbox, click it directly
     try {
-      const id = '_h' + Math.random().toString(36).slice(2, 8);
       const cb = document.createElement('input');
       cb.type = 'checkbox';
       cb.setAttribute('switch', '');
-      cb.id = id;
       cb.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;';
-
-      const label = document.createElement('label');
-      label.setAttribute('for', id);
-      label.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;';
-
       document.body.appendChild(cb);
-      document.body.appendChild(label);
+      cb.click();
+      requestAnimationFrame(() => cb.remove());
+    } catch(e) {}
 
-      label.click();
+    // Strategy 2: checkbox + label with for attribute
+    try {
+      const id = '_hx' + Math.random().toString(36).slice(2,8);
+      const cb2 = document.createElement('input');
+      cb2.type = 'checkbox';
+      cb2.setAttribute('switch', '');
+      cb2.id = id;
+      cb2.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;';
+      const lbl = document.createElement('label');
+      lbl.setAttribute('for', id);
+      lbl.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;';
+      document.body.appendChild(cb2);
+      document.body.appendChild(lbl);
+      lbl.click();
+      requestAnimationFrame(() => { cb2.remove(); lbl.remove(); });
+    } catch(e) {}
 
-      // Also try navigator.vibrate for Android
-      if (navigator.vibrate) {
-        navigator.vibrate(30);
-      }
-
-      requestAnimationFrame(() => {
-        cb.remove();
-        label.remove();
-      });
-    } catch(e) {
-      // Silently fail on unsupported devices
-    }
+    // Strategy 3: navigator.vibrate (Android, some browsers)
+    try { if (navigator.vibrate) navigator.vibrate(25); } catch(e) {}
   }
 };
 
-// ================================================================
-// AUDIO ENGINE
-// ================================================================
-let audioCtx = null;
-let masterGain = null;
+// ============================================================
+// AUDIO ENGINE - MUCH LOUDER, MUSICAL
+// ============================================================
+let ctx = null, master = null;
 
-function ensureAudio() {
-  if (audioCtx) {
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
-    return;
-  }
+function initAudio() {
+  if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
   try {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0.4;
-    masterGain.connect(audioCtx.destination);
-    // Play a silent buffer to unlock audio on iOS
-    const buf = audioCtx.createBuffer(1, 1, 22050);
-    const src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    src.connect(audioCtx.destination);
-    src.start(0);
-  } catch(e) {
-    console.error('Audio init failed:', e);
-  }
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain();
+    master.gain.value = 1.0; // Full volume!
+    master.connect(ctx.destination);
+    // iOS unlock: play silent buffer
+    const b = ctx.createBuffer(1, 1, 22050);
+    const s = ctx.createBufferSource();
+    s.buffer = b; s.connect(ctx.destination); s.start(0);
+  } catch(e) { console.error('Audio fail:', e); }
 }
 
-function playSound(type) {
-  if (!audioCtx || audioCtx.state !== 'running') return;
-  const t = audioCtx.currentTime;
-  try {
-    if (type === 'perfect') {
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = 'sine';
-      o.frequency.setValueAtTime(880, t);
-      o.frequency.exponentialRampToValueAtTime(1320, t + 0.04);
-      g.gain.setValueAtTime(0.2, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
-      o.connect(g); g.connect(masterGain);
-      o.start(t); o.stop(t + 0.13);
-    } else if (type === 'good') {
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = 'sine';
-      o.frequency.value = 660;
-      g.gain.setValueAtTime(0.12, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
-      o.connect(g); g.connect(masterGain);
-      o.start(t); o.stop(t + 0.09);
-    } else if (type === 'miss') {
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = 'sawtooth';
-      o.frequency.value = 110;
-      g.gain.setValueAtTime(0.08, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
-      o.connect(g); g.connect(masterGain);
-      o.start(t); o.stop(t + 0.16);
-    } else if (type === 'tick') {
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = 'sine';
-      o.frequency.value = 220;
-      g.gain.setValueAtTime(0.05, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
-      o.connect(g); g.connect(masterGain);
-      o.start(t); o.stop(t + 0.05);
-    } else if (type === 'tick-hi') {
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = 'sine';
-      o.frequency.value = 440;
-      g.gain.setValueAtTime(0.07, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
-      o.connect(g); g.connect(masterGain);
-      o.start(t); o.stop(t + 0.05);
-    }
-  } catch(e) {}
+// Musical note frequencies
+const NOTES = {
+  C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00,
+  A4: 440.00, B4: 493.88, C5: 523.25, E5: 659.25, G5: 784.00
+};
+
+function synth(freq, type, vol, attack, decay, when) {
+  if (!ctx || ctx.state !== 'running') return;
+  const t = when || ctx.currentTime;
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(freq, t);
+  g.gain.setValueAtTime(0.001, t);
+  g.gain.linearRampToValueAtTime(vol, t + attack);
+  g.gain.exponentialRampToValueAtTime(0.001, t + attack + decay);
+  o.connect(g); g.connect(master);
+  o.start(t); o.stop(t + attack + decay + 0.01);
 }
 
-// ================================================================
-// SONG DATA
-// ================================================================
+function noise(vol, dur, when) {
+  if (!ctx || ctx.state !== 'running') return;
+  const t = when || ctx.currentTime;
+  const len = ctx.sampleRate * dur;
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1);
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  const hp = ctx.createBiquadFilter();
+  hp.type = 'highpass'; hp.frequency.value = 7000;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(vol, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  src.connect(hp); hp.connect(g); g.connect(master);
+  src.start(t); src.stop(t + dur + 0.01);
+}
+
+// Instrument sounds
+function playKick() {
+  if (!ctx || ctx.state !== 'running') return;
+  const t = ctx.currentTime;
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(150, t);
+  o.frequency.exponentialRampToValueAtTime(40, t + 0.12);
+  g.gain.setValueAtTime(0.9, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+  o.connect(g); g.connect(master);
+  o.start(t); o.stop(t + 0.26);
+  // Click transient
+  const o2 = ctx.createOscillator();
+  const g2 = ctx.createGain();
+  o2.type = 'square';
+  o2.frequency.setValueAtTime(800, t);
+  g2.gain.setValueAtTime(0.3, t);
+  g2.gain.exponentialRampToValueAtTime(0.001, t + 0.02);
+  o2.connect(g2); g2.connect(master);
+  o2.start(t); o2.stop(t + 0.03);
+}
+
+function playSnare() {
+  if (!ctx || ctx.state !== 'running') return;
+  const t = ctx.currentTime;
+  // Body
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = 'triangle';
+  o.frequency.setValueAtTime(200, t);
+  o.frequency.exponentialRampToValueAtTime(120, t + 0.05);
+  g.gain.setValueAtTime(0.6, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+  o.connect(g); g.connect(master);
+  o.start(t); o.stop(t + 0.11);
+  // Noise
+  noise(0.5, 0.12);
+}
+
+function playHihat() {
+  noise(0.25, 0.05);
+}
+
+function playMelody(noteFreq) {
+  synth(noteFreq, 'sine', 0.35, 0.01, 0.25);
+  synth(noteFreq * 2, 'sine', 0.08, 0.01, 0.15); // overtone
+}
+
+function playBass(noteFreq) {
+  synth(noteFreq / 2, 'sine', 0.4, 0.01, 0.3);
+  synth(noteFreq / 2, 'triangle', 0.15, 0.01, 0.2);
+}
+
+// Sound map for note types
+function playNoteSound(noteType) {
+  if (noteType === 'kick') playKick();
+  else if (noteType === 'snare') playSnare();
+  else if (noteType === 'hat') playHihat();
+  else if (noteType === 'melody') playMelody(noteType.freq || NOTES.E5);
+}
+
+// Hit feedback sounds
+function playHitSound(type) {
+  if (type === 'perfect') synth(NOTES.C5, 'sine', 0.25, 0.005, 0.08);
+  else if (type === 'good') synth(NOTES.G4, 'sine', 0.15, 0.005, 0.06);
+}
+
+function playMissSound() {
+  synth(80, 'sawtooth', 0.15, 0.005, 0.12);
+}
+
+// Metronome (quiet background pulse)
+function playTick(accent) {
+  synth(accent ? 900 : 600, 'sine', accent ? 0.08 : 0.04, 0.002, 0.03);
+}
+
+// ============================================================
+// SONG DATA - Musical patterns!
+// ============================================================
+// noteType: 'kick'|'snare'|'hat'|'melody'
+// lane: 0-3 (kick=lane1, snare=lane2, hat=lane0, melody=lane3)
+// Each song has a musical structure
+
+function songPulse() {
+  const n = [];
+  const melodySeq = [NOTES.E4, NOTES.G4, NOTES.A4, NOTES.G4, NOTES.C5, NOTES.B4, NOTES.A4, NOTES.E4];
+  let mi = 0;
+  for (let bar = 0; bar < 8; bar++) {
+    const b = bar * 4;
+    // Kick: beats 1, 3
+    n.push([b, 1, 'kick']);
+    n.push([b + 2, 1, 'kick']);
+    // Snare: beats 2, 4
+    n.push([b + 1, 2, 'snare']);
+    n.push([b + 3, 2, 'snare']);
+    // Hihats: every beat + offbeats for bars 2+
+    for (let i = 0; i < 4; i++) {
+      n.push([b + i, 0, 'hat']);
+      if (bar >= 2) n.push([b + i + 0.5, 0, 'hat']);
+    }
+    // Melody: on beat 1 and 3 of each bar, ascending pattern
+    n.push([b, 3, 'melody', melodySeq[mi % melodySeq.length]]);
+    mi++;
+    if (bar >= 4) {
+      n.push([b + 2, 3, 'melody', melodySeq[mi % melodySeq.length]]);
+      mi++;
+    }
+  }
+  return n;
+}
+
+function songGrid() {
+  const n = [];
+  const bassNotes = [NOTES.C4, NOTES.E4, NOTES.G4, NOTES.C4];
+  for (let bar = 0; bar < 9; bar++) {
+    const b = bar * 4;
+    // Four-on-the-floor kick
+    for (let i = 0; i < 4; i++) n.push([b + i, 1, 'kick']);
+    // Offbeat hihats
+    for (let i = 0; i < 4; i++) n.push([b + i + 0.5, 0, 'hat']);
+    // Snare on 2 and 4
+    n.push([b + 1, 2, 'snare']);
+    n.push([b + 3, 2, 'snare']);
+    // Bass melody every bar
+    n.push([b, 3, 'melody', bassNotes[bar % 4]]);
+    n.push([b + 2.5, 3, 'melody', bassNotes[(bar + 1) % 4]]);
+    // Extra fills in later bars
+    if (bar >= 5) {
+      n.push([b + 1.5, 2, 'snare']);
+      n.push([b + 3.5, 0, 'hat']);
+    }
+  }
+  return n;
+}
+
+function songSine() {
+  const n = [];
+  const scale = [NOTES.C4, NOTES.D4, NOTES.E4, NOTES.G4, NOTES.A4, NOTES.C5, NOTES.E5];
+  for (let bar = 0; bar < 7; bar++) {
+    const b = bar * 4;
+    // Sparse kick
+    n.push([b, 1, 'kick']);
+    if (bar % 2 === 1) n.push([b + 2, 1, 'kick']);
+    // Gentle snare
+    n.push([b + 2, 2, 'snare']);
+    // Hihats: triplet feel
+    for (let i = 0; i < 4; i++) {
+      n.push([b + i, 0, 'hat']);
+    }
+    // Melody: wave up the scale
+    const idx = bar % scale.length;
+    n.push([b, 3, 'melody', scale[idx]]);
+    n.push([b + 1.5, 3, 'melody', scale[(idx + 2) % scale.length]]);
+    n.push([b + 3, 3, 'melody', scale[(idx + 4) % scale.length]]);
+  }
+  return n;
+}
+
 const SONGS = {
-  pulse: {
-    name: 'PULSE', bpm: 120,
-    notes: (() => {
-      const n = [];
-      for (let b = 0; b < 32; b++) {
-        if (b % 2 === 0) n.push([b, 1]);
-        if (b % 2 === 1) n.push([b, 2]);
-        if (b % 4 === 0) n.push([b, 0]);
-        if (b % 4 === 3) n.push([b, 3]);
-        if (b % 8 === 6) { n.push([b, 0]); n.push([b, 3]); }
-      }
-      return n.sort((a, b) => a[0] - b[0]);
-    })()
-  },
-  grid: {
-    name: 'GRID', bpm: 140,
-    notes: (() => {
-      const n = [];
-      for (let b = 0; b < 36; b++) {
-        n.push([b, b % 4]);
-        if (b % 2 === 0) n.push([b, (b + 2) % 4]);
-        if (b % 4 === 0) { n.push([b, 0]); n.push([b, 3]); }
-      }
-      return n.sort((a, b) => a[0] - b[0]);
-    })()
-  },
-  sine: {
-    name: 'SINE', bpm: 100,
-    notes: (() => {
-      const n = [];
-      for (let b = 0; b < 28; b++) {
-        const lane = Math.round(1.5 + 1.5 * Math.sin(b * 0.4));
-        n.push([b, lane]);
-        if (b % 3 === 0) n.push([b, (lane + 2) % 4]);
-      }
-      return n.sort((a, b) => a[0] - b[0]);
-    })()
-  }
+  pulse: { name: 'PULSE', bpm: 118, gen: songPulse },
+  grid:  { name: 'GRID',  bpm: 128, gen: songGrid },
+  sine:  { name: 'SINE',  bpm: 90,  gen: songSine }
 };
 
-const LANE_COUNT = 4;
-const HIT_Y = 110;
-const PERFECT_MS = 60;
-const GOOD_MS = 130;
-const NOTE_SPEED = 450;
+const LANE_N = 4, HIT_Y = 110, PERF_MS = 65, GOOD_MS = 135, SPEED = 420;
+const NOTE_CLASS = ['note-hat','note-kick','note-snare','note-melody'];
 
-// ================================================================
+// ============================================================
 // STATE
-// ================================================================
-let selectedSong = 'pulse';
-let score = 0, combo = 0, maxCombo = 0;
-let perfects = 0, goods = 0, misses = 0;
-let notes = [];
-let startTime = 0, songDuration = 0, beatMs = 0, lastBeat = -1;
-let running = false, rafId = null;
+// ============================================================
+let sel = 'pulse', score = 0, combo = 0, maxC = 0, pf = 0, gd = 0, ms = 0;
+let notes = [], t0 = 0, dur = 0, beatMs = 0, lastBeat = -1, run = false, raf = null;
 
-// ================================================================
-// DOM
-// ================================================================
 const $ = id => document.getElementById(id);
-const screens = { title: $('title-screen'), game: $('game-screen'), result: $('result-screen') };
-const lanesEl = $('lanes');
+const scr = { title: $('title'), game: $('game'), result: $('result') };
+function show(name) { Object.entries(scr).forEach(([k,el]) => el.classList.toggle('hidden', k !== name)); }
 
-function showScreen(name) {
-  Object.entries(screens).forEach(([k, el]) => el.classList.toggle('hidden', k !== name));
-}
-
-// Song buttons
-const songSelectEl = $('song-select');
-Object.keys(SONGS).forEach(key => {
-  const btn = document.createElement('button');
-  btn.className = 'song-btn' + (key === selectedSong ? ' selected' : '');
-  btn.textContent = SONGS[key].name;
-  btn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    ensureAudio();
-    selectedSong = key;
-    document.querySelectorAll('.song-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
+// ============================================================
+// SONG BUTTONS
+// ============================================================
+const sr = $('songrow');
+Object.keys(SONGS).forEach(k => {
+  const b = document.createElement('button');
+  b.className = 'sbtn' + (k === sel ? ' on' : '');
+  b.textContent = SONGS[k].name;
+  b.addEventListener('touchstart', e => {
+    e.preventDefault(); initAudio();
+    sel = k;
+    sr.querySelectorAll('.sbtn').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
     Haptic.fire();
-    playSound('perfect');
-  }, { passive: false });
-  btn.addEventListener('click', () => {
-    ensureAudio();
-    selectedSong = key;
-    document.querySelectorAll('.song-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-  });
-  songSelectEl.appendChild(btn);
+    playHihat(); // audio feedback on select
+  }, {passive:false});
+  b.addEventListener('click', () => { initAudio(); sel = k; sr.querySelectorAll('.sbtn').forEach(x => x.classList.remove('on')); b.classList.add('on'); });
+  sr.appendChild(b);
 });
 
-// ================================================================
+// ============================================================
+// HAPTIC TEST BUTTON
+// ============================================================
+$('testbtn').addEventListener('touchstart', e => {
+  e.preventDefault();
+  initAudio();
+  Haptic.fire();
+  playKick();
+  $('teststatus').textContent = '← 振動を感じましたか？';
+}, {passive:false});
+$('testbtn').addEventListener('click', () => {
+  initAudio(); Haptic.fire(); playKick();
+  $('teststatus').textContent = '← 振動を感じましたか？';
+});
+
+// ============================================================
 // LANES
-// ================================================================
+// ============================================================
+const lanesEl = $('lanes');
 function setupLanes() {
   lanesEl.innerHTML = '';
-  for (let i = 0; i < LANE_COUNT; i++) {
-    const lane = document.createElement('div');
-    lane.className = 'lane';
-
-    const hitLine = document.createElement('div');
-    hitLine.className = 'hit-zone-line';
-    lane.appendChild(hitLine);
-
-    const glow = document.createElement('div');
-    glow.className = 'hit-zone-glow';
-    lane.appendChild(glow);
-
-    const tap = document.createElement('div');
-    tap.className = 'tap-target';
-    tap.dataset.lane = i;
-    lane.appendChild(tap);
-
-    lanesEl.appendChild(lane);
+  for (let i = 0; i < LANE_N; i++) {
+    const l = document.createElement('div');
+    l.className = 'lane';
+    l.innerHTML = '<div class="hitline"></div><div class="hitglow"></div>';
+    const t = document.createElement('div');
+    t.className = 'taptarget';
+    t.dataset.lane = i;
+    l.appendChild(t);
+    lanesEl.appendChild(l);
   }
 }
 
-// ================================================================
-// EFFECTS
-// ================================================================
-function showEffect(laneIdx, type) {
-  const lane = lanesEl.children[laneIdx];
-  if (!lane) return;
-
-  const flash = document.createElement('div');
-  flash.className = 'hit-flash ' + type;
-  lane.appendChild(flash);
-  setTimeout(() => flash.remove(), 200);
-
-  const txt = document.createElement('div');
-  txt.className = 'judge-text ' + type;
-  txt.textContent = type.toUpperCase();
-  lane.appendChild(txt);
-  setTimeout(() => txt.remove(), 400);
+function fx(lane, type) {
+  const l = lanesEl.children[lane];
+  if (!l) return;
+  const f = document.createElement('div');
+  f.className = 'flash ' + type;
+  l.appendChild(f);
+  setTimeout(() => f.remove(), 200);
+  const j = document.createElement('div');
+  j.className = 'judge ' + type;
+  j.textContent = type.toUpperCase();
+  l.appendChild(j);
+  setTimeout(() => j.remove(), 400);
 }
 
-function updateHUD() {
-  $('hud-score').textContent = Math.floor(score);
-  const c = $('hud-combo');
+function updHUD() {
+  $('hscore').textContent = Math.floor(score);
+  const c = $('hcombo');
   c.textContent = combo + ' COMBO';
-  c.className = 'hud-combo' + (combo >= 5 ? ' active' : '');
+  c.className = 'hud-combo' + (combo >= 5 ? ' hot' : '');
 }
 
-// ================================================================
-// GAME START
-// ================================================================
+// ============================================================
+// START
+// ============================================================
 function startGame() {
-  const song = SONGS[selectedSong];
-  score = 0; combo = 0; maxCombo = 0;
-  perfects = 0; goods = 0; misses = 0;
+  const song = SONGS[sel];
+  score = 0; combo = 0; maxC = 0; pf = 0; gd = 0; ms = 0;
   notes = []; lastBeat = -1;
-
   beatMs = 60000 / song.bpm;
-  songDuration = (Math.max(...song.notes.map(n => n[0])) + 4) * beatMs;
+  const raw = song.gen();
+  const maxBeat = Math.max(...raw.map(n => n[0]));
+  dur = (maxBeat + 4) * beatMs;
 
-  setupLanes();
-  updateHUD();
-  $('hud-song').textContent = song.name;
-  $('bpm-label').textContent = song.bpm + ' BPM';
-  showScreen('game');
+  setupLanes(); updHUD();
+  $('hsong').textContent = song.name;
+  $('bpmlbl').textContent = song.bpm + ' BPM';
+  show('game');
 
-  startTime = performance.now() + 1500;
-  running = true;
+  t0 = performance.now() + 2000; // 2s lead-in
+  run = true;
 
-  song.notes.forEach(([beat, lane]) => {
+  raw.forEach(([beat, lane, type, freq]) => {
     const el = document.createElement('div');
-    el.className = 'note';
+    el.className = 'note ' + NOTE_CLASS[lane];
     lanesEl.children[lane].appendChild(el);
-    notes.push({ el, lane, targetTime: startTime + beat * beatMs, hit: false, missed: false });
+    notes.push({ el, lane, type, freq, targetTime: t0 + beat * beatMs, hit: false, missed: false });
   });
 
-  if (rafId) cancelAnimationFrame(rafId);
-  rafId = requestAnimationFrame(gameLoop);
+  if (raf) cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(loop);
 }
 
-// ================================================================
+// ============================================================
 // GAME LOOP
-// ================================================================
-function gameLoop(now) {
-  if (!running) return;
+// ============================================================
+function loop(now) {
+  if (!run) return;
+  const elapsed = now - t0;
+  $('hbar').style.width = Math.max(0, Math.min(100, elapsed / dur * 100)) + '%';
 
-  const elapsed = now - startTime;
-  $('hud-progress').style.width = Math.max(0, Math.min(100, elapsed / songDuration * 100)) + '%';
-
-  // Metronome
-  const curBeat = Math.floor(elapsed / beatMs);
-  if (curBeat >= 0 && curBeat !== lastBeat) {
-    lastBeat = curBeat;
-    playSound(curBeat % 4 === 0 ? 'tick-hi' : 'tick');
+  // Metronome tick
+  const cb = Math.floor(elapsed / beatMs);
+  if (cb >= 0 && cb !== lastBeat) {
+    lastBeat = cb;
+    playTick(cb % 4 === 0);
   }
 
-  // Update notes
-  const screenH = window.innerHeight;
-  const travelMs = (screenH - HIT_Y) / NOTE_SPEED * 1000;
+  // Notes
+  const sH = window.innerHeight;
+  const tMs = (sH - HIT_Y) / SPEED * 1000;
 
-  for (const note of notes) {
-    if (note.hit || note.missed) continue;
-    const timeUntil = note.targetTime - now;
-    const bottomPx = HIT_Y + (timeUntil / travelMs) * (screenH - HIT_Y);
-
-    if (bottomPx < -40) {
-      note.missed = true;
-      note.el.style.display = 'none';
-      misses++; combo = 0;
-      showEffect(note.lane, 'miss');
-      updateHUD();
+  for (const n of notes) {
+    if (n.hit || n.missed) continue;
+    const dt = n.targetTime - now;
+    const bottom = HIT_Y + (dt / tMs) * (sH - HIT_Y);
+    if (bottom < -30) {
+      n.missed = true; n.el.style.display = 'none';
+      ms++; combo = 0;
+      fx(n.lane, 'miss'); playMissSound(); updHUD();
       continue;
     }
-    note.el.style.bottom = bottomPx + 'px';
+    n.el.style.bottom = bottom + 'px';
   }
 
-  if (elapsed > songDuration + 1500) { endGame(); return; }
-  rafId = requestAnimationFrame(gameLoop);
+  if (elapsed > dur + 1500) { endGame(); return; }
+  raf = requestAnimationFrame(loop);
 }
 
-// ================================================================
-// TAP HANDLING
-// ================================================================
-function handleTap(laneIdx, now) {
-  let best = null, bestDiff = Infinity;
-  for (const note of notes) {
-    if (note.hit || note.missed || note.lane !== laneIdx) continue;
-    const diff = Math.abs(note.targetTime - now);
-    if (diff < bestDiff) { bestDiff = diff; best = note; }
+// ============================================================
+// TAP
+// ============================================================
+function tap(lane, now) {
+  let best = null, bestD = Infinity;
+  for (const n of notes) {
+    if (n.hit || n.missed || n.lane !== lane) continue;
+    const d = Math.abs(n.targetTime - now);
+    if (d < bestD) { bestD = d; best = n; }
   }
-  if (!best || bestDiff > GOOD_MS * 1.5) return;
+  if (!best || bestD > GOOD_MS * 1.5) return;
 
-  best.hit = true;
-  best.el.style.display = 'none';
+  best.hit = true; best.el.style.display = 'none';
 
   let type;
-  if (bestDiff <= PERFECT_MS) {
-    type = 'perfect'; perfects++;
-    score += 100 * (1 + combo * 0.02); combo++;
-  } else if (bestDiff <= GOOD_MS) {
-    type = 'good'; goods++;
-    score += 50 * (1 + combo * 0.01); combo++;
+  if (bestD <= PERF_MS) {
+    type = 'perfect'; pf++;
+    score += 100 * (1 + combo * 0.03); combo++;
+    // Play the actual instrument sound on PERFECT!
+    if (best.type === 'kick') playKick();
+    else if (best.type === 'snare') playSnare();
+    else if (best.type === 'hat') playHihat();
+    else if (best.type === 'melody') playMelody(best.freq || NOTES.E5);
+    playHitSound('perfect');
+  } else if (bestD <= GOOD_MS) {
+    type = 'good'; gd++;
+    score += 50 * (1 + combo * 0.015); combo++;
+    // Quieter instrument sound on GOOD
+    if (best.type === 'kick') { playKick(); }
+    else if (best.type === 'snare') { playSnare(); }
+    else if (best.type === 'hat') { playHihat(); }
+    else if (best.type === 'melody') { playMelody(best.freq || NOTES.E5); }
+    playHitSound('good');
   } else {
-    type = 'miss'; misses++; combo = 0;
+    type = 'miss'; ms++; combo = 0;
+    playMissSound();
   }
-  if (combo > maxCombo) maxCombo = combo;
+  if (combo > maxC) maxC = combo;
+  fx(best.lane, type);
+  updHUD();
 
-  showEffect(laneIdx, type);
-  playSound(type);
-  updateHUD();
-
-  // HAPTIC - directly in touchstart chain!
+  // HAPTIC
   if (type !== 'miss') Haptic.fire();
 }
 
-// ================================================================
+// ============================================================
 // EVENTS
-// ================================================================
-lanesEl.addEventListener('touchstart', (e) => {
+// ============================================================
+lanesEl.addEventListener('touchstart', e => {
   e.preventDefault();
   const now = performance.now();
-  for (const touch of e.changedTouches) {
-    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+  for (const t of e.changedTouches) {
+    const el = document.elementFromPoint(t.clientX, t.clientY);
     if (!el) continue;
-    const target = el.closest('.tap-target');
-    if (target) {
-      handleTap(parseInt(target.dataset.lane), now);
-    }
+    const tg = el.closest('.taptarget');
+    if (tg) tap(parseInt(tg.dataset.lane), now);
   }
-}, { passive: false });
+}, {passive:false});
 
-lanesEl.addEventListener('mousedown', (e) => {
-  const target = e.target.closest('.tap-target');
-  if (target) handleTap(parseInt(target.dataset.lane), performance.now());
+lanesEl.addEventListener('mousedown', e => {
+  const tg = e.target.closest('.taptarget');
+  if (tg) tap(parseInt(tg.dataset.lane), performance.now());
 });
 
-document.addEventListener('touchend', (e) => {
-  if (running) e.preventDefault();
-}, { passive: false });
+document.addEventListener('touchend', e => { if (run) e.preventDefault(); }, {passive:false});
 
-// ================================================================
-// END GAME
-// ================================================================
+// ============================================================
+// END
+// ============================================================
 function endGame() {
-  running = false;
-  if (rafId) cancelAnimationFrame(rafId);
-
-  const total = perfects + goods + misses;
-  const acc = total > 0 ? (perfects + goods * 0.5) / total : 0;
+  run = false; if (raf) cancelAnimationFrame(raf);
+  const tot = pf + gd + ms;
+  const acc = tot > 0 ? (pf + gd * 0.5) / tot : 0;
   let grade, cls;
-  if (acc >= 0.95 && misses === 0) { grade = 'S'; cls = 's'; }
-  else if (acc >= 0.85) { grade = 'A'; cls = 'a'; }
-  else if (acc >= 0.7) { grade = 'B'; cls = 'b'; }
-  else { grade = 'C'; cls = 'c'; }
-
-  $('r-score').textContent = Math.floor(score);
-  const g = $('r-grade');
-  g.textContent = 'GRADE ' + grade;
-  g.className = 'result-grade ' + cls;
-  $('r-perfect').textContent = perfects;
-  $('r-good').textContent = goods;
-  $('r-miss').textContent = misses;
-  $('r-combo').textContent = maxCombo;
-  showScreen('result');
+  if (acc >= .95 && ms === 0) { grade='S'; cls='s'; }
+  else if (acc >= .85) { grade='A'; cls='a'; }
+  else if (acc >= .7) { grade='B'; cls='b'; }
+  else { grade='C'; cls='c'; }
+  $('rscore').textContent = Math.floor(score);
+  const g = $('rgrade'); g.textContent = 'GRADE ' + grade; g.className = 'rgrade ' + cls;
+  $('rpf').textContent = pf; $('rgd').textContent = gd;
+  $('rms').textContent = ms; $('rmc').textContent = maxC;
+  show('result');
 }
 
-// ================================================================
+// ============================================================
 // BUTTONS
-// ================================================================
-$('start-btn').addEventListener('touchstart', (e) => {
-  e.preventDefault();
-  ensureAudio();
-  Haptic.fire();
-  startGame();
-}, { passive: false });
-$('start-btn').addEventListener('click', () => { ensureAudio(); startGame(); });
-
-$('retry-btn').addEventListener('touchstart', (e) => {
-  e.preventDefault();
-  ensureAudio();
-  Haptic.fire();
-  startGame();
-}, { passive: false });
-$('retry-btn').addEventListener('click', () => { ensureAudio(); startGame(); });
+// ============================================================
+$('gobtn').addEventListener('touchstart', e => { e.preventDefault(); initAudio(); Haptic.fire(); startGame(); }, {passive:false});
+$('gobtn').addEventListener('click', () => { initAudio(); startGame(); });
+$('retrybtn').addEventListener('touchstart', e => { e.preventDefault(); initAudio(); Haptic.fire(); startGame(); }, {passive:false});
+$('retrybtn').addEventListener('click', () => { initAudio(); startGame(); });
 </script>
 </body>
 </html>
