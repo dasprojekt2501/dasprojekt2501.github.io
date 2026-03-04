@@ -8,36 +8,32 @@
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;700&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
   :root{--bg:#0a0a0a;--fg:#e8e8e8;--accent:#00ff88;--miss:#ff3355;--dim:#444}
-  html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--fg);font-family:'IBM Plex Mono',monospace;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  html,body{
+    width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--fg);
+    font-family:'IBM Plex Mono',monospace;
+    /* Use touch-action instead of preventDefault to block zoom/scroll */
+    touch-action:manipulation;
+    -webkit-user-select:none;user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
 
   .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s}
   .screen.hidden{opacity:0;pointer-events:none}
-
-  /* Hidden switch checkboxes - the key to haptics! */
   .haptic-switch{position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none}
 
-  /* Title */
   #title h1{font-size:2.6rem;font-weight:700;letter-spacing:.3em;margin-bottom:.15em}
   .sub{font-size:.7rem;font-weight:300;letter-spacing:.5em;color:var(--dim);margin-bottom:2em;text-transform:uppercase}
   .song-row{display:flex;gap:10px;margin-bottom:1.8em}
-
-  /* Song buttons are <label> elements pointing to hidden switches */
   .sbtn{background:none;border:1px solid var(--dim);color:var(--dim);font-family:inherit;font-size:.65rem;letter-spacing:.1em;padding:9px 18px;cursor:pointer;transition:all .15s;display:inline-block}
   .sbtn.on{border-color:var(--accent);color:var(--accent)}
-
-  /* Start/retry are also <label> elements */
   .go{background:none;border:1px solid var(--accent);color:var(--accent);font-family:inherit;font-size:.85rem;letter-spacing:.2em;padding:13px 44px;cursor:pointer;display:inline-block}
   .go:active{background:var(--accent);color:var(--bg)}
-
   .info{margin-top:1.5em;font-size:.5rem;letter-spacing:.1em;color:var(--dim);text-align:center;line-height:1.8}
-
-  /* Haptic test area */
   .test-area{margin-top:1.4em;display:flex;flex-direction:column;align-items:center;gap:10px}
   .test-label{background:none;border:1px solid #666;color:#999;font-family:inherit;font-size:.6rem;letter-spacing:.08em;padding:10px 20px;cursor:pointer;display:inline-block}
   .test-label:active{border-color:var(--accent);color:var(--accent)}
   .test-msg{font-size:.5rem;color:var(--dim);letter-spacing:.05em;min-height:1.2em}
 
-  /* Game */
   .hud{position:absolute;top:0;left:0;right:0;padding:14px 18px;display:flex;justify-content:space-between;z-index:10;pointer-events:none}
   .hud-score{font-size:1.6rem;font-weight:700}
   .hud-combo{font-size:.65rem;letter-spacing:.12em;color:var(--dim);margin-top:3px}
@@ -52,8 +48,11 @@
   .hitline{position:absolute;bottom:110px;left:0;right:0;height:2px;background:var(--accent);opacity:.4;z-index:5;pointer-events:none}
   .hitglow{position:absolute;bottom:86px;left:0;right:0;height:52px;background:linear-gradient(to bottom,transparent,rgba(0,255,136,.04),transparent);z-index:4;pointer-events:none}
 
-  /* THE KEY: tap targets are <label> elements for hidden switches */
-  .taplabel{position:absolute;bottom:0;left:0;right:0;height:220px;z-index:20;display:block;cursor:pointer}
+  .taplabel{
+    position:absolute;bottom:0;left:0;right:0;height:220px;z-index:20;display:block;cursor:pointer;
+    /* Ensure this element doesn't block native label behavior */
+    touch-action:manipulation;
+  }
 
   .note{position:absolute;left:50%;transform:translateX(-50%);width:42px;height:8px;border-radius:1px;z-index:3;pointer-events:none;will-change:bottom}
   .note-hat{background:#66aaff}
@@ -82,28 +81,20 @@
 </head>
 <body>
 
-<!--
-  HAPTIC STRATEGY: Every tappable element is a <label for="switchN">.
-  Each label points to a hidden <input type="checkbox" switch>.
-  When user taps label → Safari toggles switch → haptic fires.
-  This is the SAME mechanism as haptics.lochie.me.
--->
-
-<!-- Hidden switches for title screen buttons -->
+<!-- Hidden switches -->
 <input type="checkbox" switch id="sw-test" class="haptic-switch">
 <input type="checkbox" switch id="sw-start" class="haptic-switch">
 <input type="checkbox" switch id="sw-retry" class="haptic-switch">
 <input type="checkbox" switch id="sw-s1" class="haptic-switch">
 <input type="checkbox" switch id="sw-s2" class="haptic-switch">
 <input type="checkbox" switch id="sw-s3" class="haptic-switch">
-
-<!-- Hidden switches for 4 game lanes -->
+<!-- Lane switches -->
 <input type="checkbox" switch id="sw-lane0" class="haptic-switch">
 <input type="checkbox" switch id="sw-lane1" class="haptic-switch">
 <input type="checkbox" switch id="sw-lane2" class="haptic-switch">
 <input type="checkbox" switch id="sw-lane3" class="haptic-switch">
 
-<!-- ============ TITLE ============ -->
+<!-- TITLE -->
 <div id="title" class="screen">
   <h1>PULSE</h1>
   <div class="sub">rhythm × haptics</div>
@@ -120,7 +111,7 @@
   <div class="info">iOS 18+ Safari でハプティクス対応<br>サウンドON・マナーモード解除推奨</div>
 </div>
 
-<!-- ============ GAME ============ -->
+<!-- GAME -->
 <div id="game" class="screen hidden">
   <div class="hud">
     <div><div class="hud-score" id="hscore">0</div><div class="hud-combo" id="hcombo">0 COMBO</div></div>
@@ -130,7 +121,7 @@
   <div class="bpm-lbl" id="bpmlbl">120 BPM</div>
 </div>
 
-<!-- ============ RESULT ============ -->
+<!-- RESULT -->
 <div id="result" class="screen hidden">
   <div class="rtitle">RESULT</div>
   <div class="rscore" id="rscore">0</div>
@@ -145,40 +136,33 @@
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
 // ============================================================
-// AUDIO ENGINE - LOUD + MUSICAL
+// AUDIO
 // ============================================================
-let ctx = null, master = null;
-function initAudio() {
-  if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
-  try {
-    ctx = new (window.AudioContext || window.webkitAudioContext)();
-    master = ctx.createGain();
-    master.gain.value = 1.0;
-    master.connect(ctx.destination);
-    const b = ctx.createBuffer(1, 1, 22050);
-    const s = ctx.createBufferSource();
-    s.buffer = b; s.connect(ctx.destination); s.start(0);
-  } catch(e) {}
+let ctx=null,master=null;
+function initAudio(){
+  if(ctx){if(ctx.state==='suspended')ctx.resume();return;}
+  try{
+    ctx=new(window.AudioContext||window.webkitAudioContext)();
+    master=ctx.createGain();master.gain.value=1.0;master.connect(ctx.destination);
+    const b=ctx.createBuffer(1,1,22050),s=ctx.createBufferSource();
+    s.buffer=b;s.connect(ctx.destination);s.start(0);
+  }catch(e){}
 }
+const NT={C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,C5:523.25,E5:659.25,G5:784};
 
-const NOTES = {C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,C5:523.25,E5:659.25,G5:784};
-
-function synth(freq,type,vol,atk,dec,when){
-  if(!ctx||ctx.state!=='running')return;
-  const t=when||ctx.currentTime;
+function synth(freq,type,vol,atk,dec){
+  if(!ctx||ctx.state!=='running')return;const t=ctx.currentTime;
   const o=ctx.createOscillator(),g=ctx.createGain();
   o.type=type;o.frequency.setValueAtTime(freq,t);
-  g.gain.setValueAtTime(.001,t);
-  g.gain.linearRampToValueAtTime(vol,t+atk);
+  g.gain.setValueAtTime(.001,t);g.gain.linearRampToValueAtTime(vol,t+atk);
   g.gain.exponentialRampToValueAtTime(.001,t+atk+dec);
   o.connect(g);g.connect(master);o.start(t);o.stop(t+atk+dec+.01);
 }
 function noise(vol,dur){
-  if(!ctx||ctx.state!=='running')return;
-  const t=ctx.currentTime,len=ctx.sampleRate*dur;
+  if(!ctx||ctx.state!=='running')return;const t=ctx.currentTime,len=ctx.sampleRate*dur|0;
   const buf=ctx.createBuffer(1,len,ctx.sampleRate),d=buf.getChannelData(0);
   for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
   const src=ctx.createBufferSource();src.buffer=buf;
@@ -188,14 +172,14 @@ function noise(vol,dur){
 }
 function playKick(){
   if(!ctx||ctx.state!=='running')return;const t=ctx.currentTime;
-  const o=ctx.createOscillator(),g=ctx.createGain();
+  let o=ctx.createOscillator(),g=ctx.createGain();
   o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(40,t+.12);
   g.gain.setValueAtTime(.9,t);g.gain.exponentialRampToValueAtTime(.001,t+.25);
   o.connect(g);g.connect(master);o.start(t);o.stop(t+.26);
-  const o2=ctx.createOscillator(),g2=ctx.createGain();
-  o2.type='square';o2.frequency.setValueAtTime(800,t);
-  g2.gain.setValueAtTime(.3,t);g2.gain.exponentialRampToValueAtTime(.001,t+.02);
-  o2.connect(g2);g2.connect(master);o2.start(t);o2.stop(t+.03);
+  o=ctx.createOscillator();g=ctx.createGain();
+  o.type='square';o.frequency.setValueAtTime(800,t);
+  g.gain.setValueAtTime(.3,t);g.gain.exponentialRampToValueAtTime(.001,t+.02);
+  o.connect(g);g.connect(master);o.start(t);o.stop(t+.03);
 }
 function playSnare(){
   if(!ctx||ctx.state!=='running')return;const t=ctx.currentTime;
@@ -205,66 +189,47 @@ function playSnare(){
   o.connect(g);g.connect(master);o.start(t);o.stop(t+.11);
   noise(.5,.12);
 }
-function playHihat(){ noise(.25,.05); }
-function playMelody(freq){
-  synth(freq,'sine',.35,.01,.25);
-  synth(freq*2,'sine',.08,.01,.15);
-}
-function playTick(accent){ synth(accent?900:600,'sine',accent?.08:.04,.002,.03); }
-function playMissSound(){ synth(80,'sawtooth',.15,.005,.12); }
+function playHihat(){noise(.25,.05);}
+function playMelody(freq){synth(freq,'sine',.35,.01,.25);synth(freq*2,'sine',.08,.01,.15);}
+function playTick(acc){synth(acc?900:600,'sine',acc?.08:.04,.002,.03);}
+function playMissSound(){synth(80,'sawtooth',.15,.005,.12);}
 function playHitFx(type){
-  if(type==='perfect') synth(NOTES.C5,'sine',.2,.005,.06);
-  else if(type==='good') synth(NOTES.G4,'sine',.12,.005,.05);
+  if(type==='perfect')synth(NT.C5,'sine',.2,.005,.06);
+  else if(type==='good')synth(NT.G4,'sine',.12,.005,.05);
 }
 
 // ============================================================
 // SONGS
 // ============================================================
 function songPulse(){
-  const n=[];
-  const mel=[NOTES.E4,NOTES.G4,NOTES.A4,NOTES.G4,NOTES.C5,NOTES.B4,NOTES.A4,NOTES.E4];
-  let mi=0;
-  for(let bar=0;bar<8;bar++){
-    const b=bar*4;
-    n.push([b,1,'kick']);n.push([b+2,1,'kick']);
-    n.push([b+1,2,'snare']);n.push([b+3,2,'snare']);
+  const n=[],mel=[NT.E4,NT.G4,NT.A4,NT.G4,NT.C5,NT.B4,NT.A4,NT.E4];let mi=0;
+  for(let bar=0;bar<8;bar++){const b=bar*4;
+    n.push([b,1,'kick'],[b+2,1,'kick'],[b+1,2,'snare'],[b+3,2,'snare']);
     for(let i=0;i<4;i++){n.push([b+i,0,'hat']);if(bar>=2)n.push([b+i+.5,0,'hat']);}
-    n.push([b,3,'melody',mel[mi%mel.length]]);mi++;
-    if(bar>=4){n.push([b+2,3,'melody',mel[mi%mel.length]]);mi++;}
-  }
-  return n.sort((a,b)=>a[0]-b[0]);
+    n.push([b,3,'melody',mel[mi++%mel.length]]);
+    if(bar>=4)n.push([b+2,3,'melody',mel[mi++%mel.length]]);
+  }return n.sort((a,b)=>a[0]-b[0]);
 }
 function songGrid(){
-  const n=[];const bass=[NOTES.C4,NOTES.E4,NOTES.G4,NOTES.C4];
-  for(let bar=0;bar<9;bar++){
-    const b=bar*4;
+  const n=[],bass=[NT.C4,NT.E4,NT.G4,NT.C4];
+  for(let bar=0;bar<9;bar++){const b=bar*4;
     for(let i=0;i<4;i++)n.push([b+i,1,'kick']);
     for(let i=0;i<4;i++)n.push([b+i+.5,0,'hat']);
-    n.push([b+1,2,'snare']);n.push([b+3,2,'snare']);
-    n.push([b,3,'melody',bass[bar%4]]);n.push([b+2.5,3,'melody',bass[(bar+1)%4]]);
-    if(bar>=5){n.push([b+1.5,2,'snare']);n.push([b+3.5,0,'hat']);}
-  }
-  return n.sort((a,b)=>a[0]-b[0]);
+    n.push([b+1,2,'snare'],[b+3,2,'snare']);
+    n.push([b,3,'melody',bass[bar%4]],[b+2.5,3,'melody',bass[(bar+1)%4]]);
+    if(bar>=5)n.push([b+1.5,2,'snare'],[b+3.5,0,'hat']);
+  }return n.sort((a,b)=>a[0]-b[0]);
 }
 function songSine(){
-  const n=[];const sc=[NOTES.C4,NOTES.D4,NOTES.E4,NOTES.G4,NOTES.A4,NOTES.C5,NOTES.E5];
-  for(let bar=0;bar<7;bar++){
-    const b=bar*4;const idx=bar%sc.length;
+  const n=[],sc=[NT.C4,NT.D4,NT.E4,NT.G4,NT.A4,NT.C5,NT.E5];
+  for(let bar=0;bar<7;bar++){const b=bar*4,idx=bar%sc.length;
     n.push([b,1,'kick']);if(bar%2===1)n.push([b+2,1,'kick']);
     n.push([b+2,2,'snare']);
     for(let i=0;i<4;i++)n.push([b+i,0,'hat']);
-    n.push([b,3,'melody',sc[idx]]);
-    n.push([b+1.5,3,'melody',sc[(idx+2)%sc.length]]);
-    n.push([b+3,3,'melody',sc[(idx+4)%sc.length]]);
-  }
-  return n.sort((a,b)=>a[0]-b[0]);
+    n.push([b,3,'melody',sc[idx]],[b+1.5,3,'melody',sc[(idx+2)%sc.length]],[b+3,3,'melody',sc[(idx+4)%sc.length]]);
+  }return n.sort((a,b)=>a[0]-b[0]);
 }
-
-const SONGS={
-  pulse:{name:'PULSE',bpm:118,gen:songPulse},
-  grid:{name:'GRID',bpm:128,gen:songGrid},
-  sine:{name:'SINE',bpm:90,gen:songSine}
-};
+const SONGS={pulse:{name:'PULSE',bpm:118,gen:songPulse},grid:{name:'GRID',bpm:128,gen:songGrid},sine:{name:'SINE',bpm:90,gen:songSine}};
 const LANE_N=4,HIT_Y=110,PERF_MS=65,GOOD_MS=135,SPEED=420;
 const NOTE_CLS=['note-hat','note-kick','note-snare','note-melody'];
 
@@ -273,46 +238,29 @@ const NOTE_CLS=['note-hat','note-kick','note-snare','note-melody'];
 // ============================================================
 let sel='pulse',score=0,combo=0,maxC=0,pf=0,gd=0,ms=0;
 let notes=[],t0=0,dur=0,beatMs=0,lastBeat=-1,run=false,raf=null;
-
 const scr={title:$('title'),game:$('game'),result:$('result')};
 function show(name){Object.entries(scr).forEach(([k,el])=>el.classList.toggle('hidden',k!==name));}
 
 // ============================================================
-// TITLE SCREEN INTERACTIONS
+// TITLE
 // ============================================================
-// Test button
-$('sw-test').addEventListener('change', () => {
-  initAudio(); playKick();
-  $('testmsg').textContent = '振動を感じましたか？感じない場合は設定→サウンドと触覚→システムの触覚をONに';
+$('sw-test').addEventListener('change',()=>{initAudio();playKick();$('testmsg').textContent='振動を感じましたか？';});
+const songBtns=[$('btn-pulse'),$('btn-grid'),$('btn-sine')];
+['sw-s1','sw-s2','sw-s3'].forEach((id,i)=>{
+  $(id).addEventListener('change',()=>{initAudio();playHihat();sel=songBtns[i].dataset.song;songBtns.forEach(b=>b.classList.remove('on'));songBtns[i].classList.add('on');});
 });
-
-// Song select
-const songBtns = [$('btn-pulse'),$('btn-grid'),$('btn-sine')];
-['sw-s1','sw-s2','sw-s3'].forEach((swId, i) => {
-  $(swId).addEventListener('change', () => {
-    initAudio(); playHihat();
-    sel = songBtns[i].dataset.song;
-    songBtns.forEach(b => b.classList.remove('on'));
-    songBtns[i].classList.add('on');
-  });
-});
-
-// Start
-$('sw-start').addEventListener('change', () => { initAudio(); startGame(); });
-// Retry
-$('sw-retry').addEventListener('change', () => { initAudio(); startGame(); });
+$('sw-start').addEventListener('change',()=>{initAudio();startGame();});
+$('sw-retry').addEventListener('change',()=>{initAudio();startGame();});
 
 // ============================================================
-// LANES: each lane's tap target is a <label for="sw-laneN">
+// LANES
 // ============================================================
-const lanesEl = $('lanes');
+const lanesEl=$('lanes');
 function setupLanes(){
   lanesEl.innerHTML='';
   for(let i=0;i<LANE_N;i++){
-    const l=document.createElement('div');
-    l.className='lane';
+    const l=document.createElement('div');l.className='lane';
     l.innerHTML='<div class="hitline"></div><div class="hitglow"></div>';
-    // Tap target = label for hidden switch
     const lbl=document.createElement('label');
     lbl.className='taplabel';
     lbl.setAttribute('for','sw-lane'+i);
@@ -338,22 +286,17 @@ function updHUD(){
 function startGame(){
   const song=SONGS[sel];
   score=0;combo=0;maxC=0;pf=0;gd=0;ms=0;notes=[];lastBeat=-1;
-  beatMs=60000/song.bpm;
-  const raw=song.gen();
+  beatMs=60000/song.bpm;const raw=song.gen();
   dur=(Math.max(...raw.map(n=>n[0]))+4)*beatMs;
   setupLanes();updHUD();
-  $('hsong').textContent=song.name;
-  $('bpmlbl').textContent=song.bpm+' BPM';
-  show('game');
-  t0=performance.now()+2000;run=true;
+  $('hsong').textContent=song.name;$('bpmlbl').textContent=song.bpm+' BPM';
+  show('game');t0=performance.now()+2000;run=true;
   raw.forEach(([beat,lane,type,freq])=>{
-    const el=document.createElement('div');
-    el.className='note '+NOTE_CLS[lane];
+    const el=document.createElement('div');el.className='note '+NOTE_CLS[lane];
     lanesEl.children[lane].appendChild(el);
     notes.push({el,lane,type,freq,targetTime:t0+beat*beatMs,hit:false,missed:false});
   });
-  if(raf)cancelAnimationFrame(raf);
-  raf=requestAnimationFrame(loop);
+  if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);
 }
 
 function loop(now){
@@ -373,12 +316,14 @@ function loop(now){
   raf=requestAnimationFrame(loop);
 }
 
-function tap(lane,now){
+// ============================================================
+// TAP HANDLING
+// ============================================================
+function doTap(lane,now){
   let best=null,bestD=Infinity;
   for(const n of notes){
     if(n.hit||n.missed||n.lane!==lane)continue;
-    const d=Math.abs(n.targetTime-now);
-    if(d<bestD){bestD=d;best=n;}
+    const d=Math.abs(n.targetTime-now);if(d<bestD){bestD=d;best=n;}
   }
   if(!best||bestD>GOOD_MS*1.5)return;
   best.hit=true;best.el.style.display='none';
@@ -386,40 +331,47 @@ function tap(lane,now){
   if(bestD<=PERF_MS){
     type='perfect';pf++;score+=100*(1+combo*.03);combo++;
     if(best.type==='kick')playKick();else if(best.type==='snare')playSnare();
-    else if(best.type==='hat')playHihat();else if(best.type==='melody')playMelody(best.freq||NOTES.E5);
+    else if(best.type==='hat')playHihat();else if(best.type==='melody')playMelody(best.freq||NT.E5);
     playHitFx('perfect');
   }else if(bestD<=GOOD_MS){
     type='good';gd++;score+=50*(1+combo*.015);combo++;
     if(best.type==='kick')playKick();else if(best.type==='snare')playSnare();
-    else if(best.type==='hat')playHihat();else if(best.type==='melody')playMelody(best.freq||NOTES.E5);
+    else if(best.type==='hat')playHihat();else if(best.type==='melody')playMelody(best.freq||NT.E5);
     playHitFx('good');
   }else{type='miss';ms++;combo=0;playMissSound();}
-  if(combo>maxC)maxC=combo;
-  fx(best.lane,type);updHUD();
+  if(combo>maxC)maxC=combo;fx(best.lane,type);updHUD();
 }
 
-// Lane tap events: listen on the switch change events!
-// When user taps <label for="sw-laneN"> → switch toggles → change fires → we process the tap
-['sw-lane0','sw-lane1','sw-lane2','sw-lane3'].forEach((id,i) => {
-  $(id).addEventListener('change', () => {
-    tap(i, performance.now());
+// CRITICAL: Use the switch 'change' events for haptic-linked taps
+// This fires AFTER Safari has toggled the switch (and triggered haptics)
+['sw-lane0','sw-lane1','sw-lane2','sw-lane3'].forEach((id,i)=>{
+  $(id).addEventListener('change',()=>{
+    doTap(i,performance.now());
   });
 });
 
-// Also handle touchstart directly for more responsive timing
-lanesEl.addEventListener('touchstart', e => {
-  e.preventDefault();
+// ALSO: Use touchstart for precise timing (no preventDefault!)
+// We do NOT call preventDefault() so the label→switch toggle happens naturally
+lanesEl.addEventListener('touchstart',e=>{
+  // DO NOT call e.preventDefault() - let the label toggle the switch for haptics!
   const now=performance.now();
   for(const t of e.changedTouches){
     const el=document.elementFromPoint(t.clientX,t.clientY);
     if(!el)continue;
     const tg=el.closest('.taplabel');
-    if(tg) tap(parseInt(tg.dataset.lane),now);
+    if(tg)doTap(parseInt(tg.dataset.lane),now);
   }
-},{passive:false});
+},{passive:true}); // passive:true = we promise not to preventDefault
 
-document.addEventListener('touchend',e=>{if(run)e.preventDefault();},{passive:false});
+// Mouse fallback
+lanesEl.addEventListener('mousedown',e=>{
+  const tg=e.target.closest('.taplabel');
+  if(tg)doTap(parseInt(tg.dataset.lane),performance.now());
+});
 
+// ============================================================
+// END
+// ============================================================
 function endGame(){
   run=false;if(raf)cancelAnimationFrame(raf);
   const tot=pf+gd+ms,acc=tot>0?(pf+gd*.5)/tot:0;
@@ -430,8 +382,7 @@ function endGame(){
   else{grade='C';cls='c';}
   $('rscore').textContent=Math.floor(score);
   const g=$('rgrade');g.textContent='GRADE '+grade;g.className='rgrade '+cls;
-  $('rpf').textContent=pf;$('rgd').textContent=gd;
-  $('rms').textContent=ms;$('rmc').textContent=maxC;
+  $('rpf').textContent=pf;$('rgd').textContent=gd;$('rms').textContent=ms;$('rmc').textContent=maxC;
   show('result');
 }
 </script>
