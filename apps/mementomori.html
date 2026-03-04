@@ -11,18 +11,18 @@
         <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
         
         <!-- OGP -->
-        <meta property="og:title" content="PROJEKT2501 - Essays, Music & Apps">
-        <meta property="og:description" content="A collection of essays, music, and apps by PROJEKT2501">
-        <meta property="og:image" content="https://dasprojekt2501.github.io/ogp.jpg">
-        <meta property="og:url" content="https://dasprojekt2501.github.io/">
+        <meta property="og:title" content="Memento Mori - 死を想え">
+        <meta property="og:description" content="死を想え。限りある時間を意識するためのシンプルなアプリ。">
+        <meta property="og:image" content="https://dasprojekt2501.github.io/apps/mementomori-ogp.png">
+        <meta property="og:url" content="https://dasprojekt2501.github.io/apps/mementomori.html">
         <meta property="og:type" content="website">
-        <meta property="og:site_name" content="Your Name">
+        <meta property="og:site_name" content="PROJEKT2501">
         
         <!-- Twitter Card -->
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="PROJEKT2501 - Essays, Music & Apps">
-        <meta name="twitter:description" content="A collection of essays, music, and apps by PROJEKT2501">
-        <meta name="twitter:image" content="https://dasprojekt2501.github.io/ogp.jpg">
+        <meta name="twitter:title" content="Memento Mori - 死を想え">
+        <meta name="twitter:description" content="死を想え。限りある時間を意識するためのシンプルなアプリ。">
+        <meta name="twitter:image" content="https://dasprojekt2501.github.io/apps/mementomori-ogp.png">
 
     
     <meta charset="UTF-8">
@@ -85,6 +85,13 @@
         .page-links a:hover { text-decoration: underline; }
         footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid #e0e0e0; color: #999; font-size: 0.9em; text-align: center; }
         body.dark-mode footer { border-top-color: #333; }
+
+        /* Bluesky share button */
+        .bluesky-share-btn { display: inline-flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; padding: 4px; text-decoration: none; transition: opacity 0.3s; line-height: 1; }
+        .bluesky-share-btn:hover { opacity: 0.7; }
+        .bluesky-share-btn svg { width: 1.5em; height: 1.5em; fill: #0066cc; }
+        body.dark-mode .bluesky-share-btn svg { fill: #4a9eff; }
+
         @media (max-width: 600px) { .screenshot { width: 150px; height: 300px; } }
     </style>
 </head>
@@ -105,6 +112,11 @@
                         <button class="lang-btn active" title="日本語">🇯🇵</button>
                         <button class="lang-btn" onclick="location.href='mementomori-en.html'" title="English">🇺🇸</button>
                     </div>
+                    <a class="bluesky-share-btn" href="https://bsky.app/intent/compose?text=Memento%20Mori%20%E2%80%94%20%E6%AD%BB%E3%82%92%E6%83%B3%E3%81%88%E3%80%82%E9%99%90%E3%82%8A%E3%81%82%E3%82%8B%E6%99%82%E9%96%93%E3%82%92%E6%84%8F%E8%AD%98%E3%81%99%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AE%E3%82%A2%E3%83%97%E3%83%AA%E3%80%82%0Ahttps%3A%2F%2Fdasprojekt2501.github.io%2Fapps%2Fmementomori.html" target="_blank" rel="noopener" title="Blueskyでシェア" style="margin-right: 10px;">
+                        <svg viewBox="0 0 600 530" xmlns="http://www.w3.org/2000/svg">
+                            <path d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/>
+                        </svg>
+                    </a>
                     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
                         <div class="toggle-circle"></div>
                     </button>
