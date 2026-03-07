@@ -1,58 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
 
-            <!-- Favicon -->
-        <link rel="icon" type="image/x-icon" href="/favicon.ico">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
-        <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
-        
-        <!-- OGP -->
-        <meta property="og:title" content="PROJEKT2501 - Essays, Music & Apps">
-        <meta property="og:description" content="A collection of essays, music, and apps by PROJEKT2501">
-        <meta property="og:image" content="https://dasprojekt2501.github.io/ogp.jpg">
-        <meta property="og:url" content="https://dasprojekt2501.github.io/">
-        <meta property="og:type" content="website">
-        <meta property="og:site_name" content="Your Name">
-        
-        <!-- Twitter Card -->
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="PROJEKT2501 - Essays, Music & Apps">
-        <meta name="twitter:description" content="A collection of essays, music, and apps by PROJEKT2501">
-        <meta name="twitter:image" content="https://dasprojekt2501.github.io/ogp.jpg">
+    <!-- OGP -->
+    <meta property="og:title" content="PROJEKT2501 - Essays, Music & Apps">
+    <meta property="og:description" content="A collection of essays, music, and apps by PROJEKT2501">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/app-en.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PROJEKT2501">
 
-    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PROJEKT2501 - Essays, Music & Apps">
+    <meta name="twitter:description" content="A collection of essays, music, and apps by PROJEKT2501">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/ogp.jpg">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apps - PROJEKT2501</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
             line-height: 1.6;
             color: #333;
             background-color: #faf8f5;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
+        body.dark-mode { background-color: #1a1a1a; color: #e0e0e0; }
 
-        body.dark-mode {
-            background-color: #1a1a1a;
-            color: #e0e0e0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
 
         header {
             margin-bottom: 60px;
@@ -60,217 +46,88 @@
             padding-bottom: 30px;
             position: relative;
         }
+        body.dark-mode header { border-bottom-color: #333; }
 
-        body.dark-mode header {
-            border-bottom-color: #333;
-        }
+        h1 { font-size: 2em; margin-bottom: 10px; font-weight: 600; }
+        .subtitle { color: #666; font-size: 1.1em; }
+        body.dark-mode .subtitle { color: #999; }
 
-        h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        body.dark-mode .subtitle {
-            color: #999;
-        }
-
-        .header-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
+        .header-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
 
         nav a {
-            color: #0066cc;
-            text-decoration: none;
-            margin-right: 20px;
-            font-size: 0.95em;
+            color: #0066cc; text-decoration: none;
+            margin-right: 20px; font-size: 0.95em;
         }
+        body.dark-mode nav a { color: #4a9eff; }
+        nav a:hover { text-decoration: underline; }
 
-        body.dark-mode nav a {
-            color: #4a9eff;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        .language-toggle {
-            display: flex;
-            gap: 10px;
-            margin-right: 15px;
-        }
-
+        .language-toggle { display: flex; gap: 10px; margin-right: 15px; }
         .lang-btn {
-            background: none;
-            border: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 4px;
-            opacity: 0.5;
-            transition: opacity 0.3s;
-            line-height: 1;
+            background: none; border: none; font-size: 1.5em;
+            cursor: pointer; padding: 4px; opacity: 0.5;
+            transition: opacity 0.3s; line-height: 1;
             font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
         }
-
-        .lang-btn:hover {
-            opacity: 0.8;
-        }
-
-        .lang-btn.active {
-            opacity: 1;
-        }
+        .lang-btn:hover { opacity: 0.8; }
+        .lang-btn.active { opacity: 1; }
 
         .theme-toggle {
-            position: relative;
-            width: 48px;
-            height: 24px;
-            background-color: #e8e4dd;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            padding: 0;
+            position: relative; width: 48px; height: 24px;
+            background-color: #e8e4dd; border: none;
+            border-radius: 12px; cursor: pointer;
+            transition: background-color 0.3s ease; padding: 0;
         }
-
-        body.dark-mode .theme-toggle {
-            background-color: #2a2a2a;
-        }
-
-        .theme-toggle:hover {
-            opacity: 0.8;
-        }
-
+        body.dark-mode .theme-toggle { background-color: #2a2a2a; }
         .toggle-circle {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background-color: #333;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            position: absolute; top: 2px; left: 2px;
+            width: 20px; height: 20px; background-color: #333;
+            border-radius: 50%; transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
+        body.dark-mode .toggle-circle { transform: translateX(24px); background-color: #faf8f5; }
 
-        body.dark-mode .toggle-circle {
-            transform: translateX(24px);
-            background-color: #faf8f5;
-        }
-
-        .apps {
-            margin-top: 40px;
-        }
+        .apps { margin-top: 40px; }
 
         .app-item {
             margin-bottom: 40px;
             padding-bottom: 30px;
             border-bottom: 1px solid #f0f0f0;
         }
+        body.dark-mode .app-item { border-bottom-color: #2a2a2a; }
+        .app-item:last-child { border-bottom: none; }
 
-        body.dark-mode .app-item {
-            border-bottom-color: #2a2a2a;
-        }
-
-        .app-item:last-child {
-            border-bottom: none;
-        }
-
-        .app-content {
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-        }
+        .app-content { display: flex; gap: 20px; align-items: flex-start; }
 
         .app-icon {
-            width: 80px;
-            height: 80px;
-            background: #e8e4dd;
-            border-radius: 16px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
+            width: 80px; height: 80px;
+            background: #e8e4dd; border-radius: 16px;
+            flex-shrink: 0; display: flex;
+            align-items: center; justify-content: center; font-size: 2em;
         }
+        body.dark-mode .app-icon { background: #2a2a2a; }
+        .app-icon img { width: 100%; height: 100%; border-radius: 16px; object-fit: cover; }
 
-        body.dark-mode .app-icon {
-            background: #2a2a2a;
-        }
+        .app-details { flex: 1; }
 
-        .app-icon img {
-            width: 100%;
-            height: 100%;
-            border-radius: 16px;
-            object-fit: cover;
-        }
+        .app-title { font-size: 1.4em; margin-bottom: 8px; font-weight: 600; }
+        .app-title a { color: #333; text-decoration: none; }
+        body.dark-mode .app-title a { color: #e0e0e0; }
+        .app-title a:hover { color: #0066cc; }
+        body.dark-mode .app-title a:hover { color: #4a9eff; }
 
-        .app-details {
-            flex: 1;
-        }
+        .app-description { color: #666; line-height: 1.7; margin-bottom: 10px; }
+        body.dark-mode .app-description { color: #999; }
 
-        .app-title {
-            font-size: 1.4em;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
+        .app-platform { color: #999; font-size: 0.9em; }
 
-        .app-title a {
-            color: #333;
-            text-decoration: none;
-        }
-
-        body.dark-mode .app-title a {
-            color: #e0e0e0;
-        }
-
-        .app-title a:hover {
-            color: #0066cc;
-        }
-
-        body.dark-mode .app-title a:hover {
-            color: #4a9eff;
-        }
-
-        .app-description {
-            color: #666;
-            line-height: 1.7;
-            margin-bottom: 10px;
-        }
-
-        body.dark-mode .app-description {
-            color: #999;
-        }
-
-        .app-platform {
-            color: #999;
-            font-size: 0.9em;
-        }
-
-        .coming-soon {
-            color: #999;
-            font-style: italic;
-        }
+        .coming-soon { color: #999; font-style: italic; }
 
         footer {
-            margin-top: 80px;
-            padding-top: 30px;
+            margin-top: 80px; padding-top: 30px;
             border-top: 1px solid #e0e0e0;
-            color: #999;
-            font-size: 0.9em;
-            text-align: center;
+            color: #999; font-size: 0.9em; text-align: center;
         }
-
-        body.dark-mode footer {
-            border-top-color: #333;
-        }
+        body.dark-mode footer { border-top-color: #333; }
     </style>
 </head>
 <body>
@@ -282,7 +139,7 @@
                 <nav>
                     <a href="index.html">Home</a>
                     <a href="music.html">Music</a>
-                    <a href="app.html">Apps</a>
+                    <a href="app-en.html">Apps</a>
                     <a href="about.html">About</a>
                 </nav>
                 <div style="display: flex; align-items: center;">
@@ -298,53 +155,68 @@
         </header>
 
         <main class="apps">
+
+            <!-- Memento Mori -->
             <article class="app-item">
                 <div class="app-content">
-                    <div class="app-icon">
-                            🕯️
-                    </div> 
+                    <div class="app-icon">🕯️</div>
                     <div class="app-details">
                         <h2 class="app-title">
-                            <a href="apps/mementomori-en.html">Memento Mori</a>
+                            <a href="apps/mementomori.html">Memento Mori</a>
                         </h2>
                         <p class="app-description">
-                            Remember death. A simple app to stay mindful of your finite time.
+                            Remember death. A simple app to keep you aware of your finite time.
                         </p>
                         <p class="app-platform">iOS</p>
                     </div>
                 </div>
             </article>
 
-                        <article class="app-item">
+            <!-- Journalist Shooting -->
+            <article class="app-item">
                 <div class="app-content">
                     <div class="app-icon">
-                            <img src="apps/journalistshooting.webp" alt="新聞記者シューティング">
+                        <img src="apps/journalistshooting.webp" alt="Journalist Shooting">
                     </div>
                     <div class="app-details">
                         <h2 class="app-title">
-                            <a href="apps/journalistshooting.html">Journalist Shooter</a>
+                            <a href="apps/journalistshooting.html">Journalist Shooting (tentative)</a>
                         </h2>
                         <p class="app-description">
-                           Survive the digital era. A browser-based shooting game.
+                            Survive the digital age! Take down the workplace bullies! A browser-based shooting game.
                         </p>
                         <p class="app-platform">Web Browser</p>
                     </div>
                 </div>
             </article>
 
+            <!-- PDF Toolkit -->
             <article class="app-item">
                 <div class="app-content">
-                    <div class="app-icon">
-                        🔜
-                    </div>
+                    <div class="app-icon">📄</div>
                     <div class="app-details">
-                        <h2 class="app-title">Coming Soon</h2>
-                        <p class="app-description coming-soon">
-                            New app in development...
+                        <h2 class="app-title">
+                            <a href="apps/pdf-toolkit-intro-en.html">PDF Toolkit</a>
+                        </h2>
+                        <p class="app-description">
+                            Split, merge, extract, rotate, reorder, and compress PDFs — all in your browser. Your files never leave your device.
                         </p>
+                        <p class="app-platform">Web Browser or Download</p>
                     </div>
                 </div>
             </article>
+
+            <!-- Coming Soon -->
+            <article class="app-item">
+                <div class="app-content">
+                    <div class="app-icon">🔜</div>
+                    <div class="app-details">
+                        <h2 class="app-title">Coming Soon</h2>
+                        <p class="app-description coming-soon">Something new in the works...</p>
+                    </div>
+                </div>
+            </article>
+
         </main>
 
         <footer>
@@ -353,16 +225,11 @@
     </div>
 
     <script>
-        // Dark mode settings
         const currentTheme = localStorage.getItem('theme') || 'light';
-        if (currentTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-        }
-
+        if (currentTheme === 'dark') document.body.classList.add('dark-mode');
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
-            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-            localStorage.setItem('theme', theme);
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         }
     </script>
 </body>
