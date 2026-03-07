@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Toolkit</title>
+<link rel="icon" id="favicon" type="image/png">
+<script>
+function drawPdfIcon(canvas){
+  var s=canvas.width,c=canvas,x=c.getContext('2d');
+  var r=5, bx=8, by=2, bw=48, bh=60, fold=14;
+  var sc=s/64;
+  x.save();x.scale(sc,sc);
+  x.beginPath();
+  x.moveTo(bx+r, by);
+  x.lineTo(bx+bw-fold, by);
+  x.lineTo(bx+bw, by+fold);
+  x.lineTo(bx+bw, by+bh-r);
+  x.arcTo(bx+bw, by+bh, bx+bw-r, by+bh, r);
+  x.lineTo(bx+r, by+bh);
+  x.arcTo(bx, by+bh, bx, by+bh-r, r);
+  x.lineTo(bx, by+r);
+  x.arcTo(bx, by, bx+r, by, r);
+  x.closePath();
+  var g=x.createLinearGradient(0,0,0,64);
+  g.addColorStop(0,'#ff4444');
+  g.addColorStop(1,'#cc2233');
+  x.fillStyle=g;x.fill();
+  x.beginPath();
+  x.moveTo(bx+bw-fold, by);
+  x.lineTo(bx+bw-fold, by+fold);
+  x.lineTo(bx+bw, by+fold);
+  x.closePath();
+  x.fillStyle='rgba(0,0,0,0.15)';x.fill();
+  x.fillStyle='#fff';
+  x.font='bold 20px Arial,sans-serif';
+  x.textAlign='center';x.textBaseline='middle';
+  x.fillText('PDF',bx+bw/2, by+bh/2+4);
+  x.restore();
+}
+(function(){
+  var fc=document.createElement('canvas');fc.width=64;fc.height=64;
+  drawPdfIcon(fc);
+  document.getElementById('favicon').href=fc.toDataURL('image/png');
+})();
+document.addEventListener('DOMContentLoaded',function(){
+  var hc=document.getElementById('headerLogo');
+  if(hc) drawPdfIcon(hc);
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #232735;
+    --border: #2e3344;
+    --text: #e4e6ef;
+    --text-dim: #8b8fa3;
+    --accent: #4a7cff;
+    --accent-glow: rgba(74,124,255,0.15);
+    --accent2: #ff6b6b;
+    --accent3: #50d890;
+    --radius: 12px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  .app-header {
+    padding: 24px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(180deg, rgba(74,124,255,0.04) 0%, transparent 100%);
+  }
+
+  .app-header .logo { width: 40px; height: 40px; flex-shrink: 0; }
+  .app-header .logo canvas { width: 40px; height: 40px; }
+  .app-header h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+  .app-header p { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 40px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    padding: 13px 22px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 40px 80px;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 44px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    background: var(--surface);
+    position: relative;
+  }
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+  }
+  .drop-zone .icon { font-size: 36px; margin-bottom: 10px; opacity: 0.5; }
+  .drop-zone .label { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .drop-zone .sub { font-size: 13px; color: var(--text-dim); }
+  .drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+  .file-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-top: 14px;
+  }
+  .file-info .fi-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent2), #ff8e53);
+    border-radius: 8px;
+    display: grid; place-items: center;
+    font-size: 13px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+  .file-info .fi-name { font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-info .fi-meta { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+  .file-info .fi-remove {
+    margin-left: auto;
+    background: none; border: none;
+    color: var(--text-dim); cursor: pointer;
+    font-size: 18px; padding: 4px 8px;
+    border-radius: 6px; transition: all 0.15s;
+  }
+  .file-info .fi-remove:hover { background: rgba(255,107,107,0.15); color: var(--accent2); }
+
+  .section { margin-top: 24px; }
+  .section-title {
+    font-size: 14px; font-weight: 600; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .badge {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .hint {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    background: var(--accent-glow);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .page-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .page-chip {
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s;
+    position: relative;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  .page-chip:hover { border-color: var(--accent); color: var(--text); }
+  .page-chip.split-after {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: rgba(255,107,107,0.1);
+  }
+  .page-chip.split-after::after {
+    content: '\2702';
+    position: absolute;
+    right: -10px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px; z-index: 2;
+  }
+  .page-chip.selected {
+    border-color: var(--accent3);
+    color: var(--accent3);
+    background: rgba(80,216,144,0.1);
+  }
+
+  .split-preview {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .split-chunk {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .split-chunk .chunk-label { font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); }
+  .split-chunk .chunk-pages { color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+  .merge-list { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+
+  .merge-item, .reorder-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: grab;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .merge-item:active, .reorder-item:active { cursor: grabbing; }
+  .merge-item:hover, .reorder-item:hover { border-color: var(--accent); }
+  .merge-item.dragging, .reorder-item.dragging { opacity: 0.4; border-color: var(--accent); }
+  .merge-item.drag-over, .reorder-item.drag-over { border-color: var(--accent3); background: rgba(80,216,144,0.06); transform: scale(1.01); }
+
+  .order-num {
+    width: 28px; height: 28px;
+    background: var(--surface2);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .grip { color: var(--text-dim); font-size: 16px; flex-shrink: 0; cursor: grab; }
+  .mi-name { font-size: 13px; font-weight: 500; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mi-pages { font-size: 12px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
+  .mi-remove {
+    background: none; border: none;
+    color: var(--text-dim); cursor: pointer;
+    font-size: 16px; padding: 2px 6px;
+    border-radius: 4px; transition: all 0.15s;
+  }
+  .mi-remove:hover { background: rgba(255,107,107,0.15); color: var(--accent2); }
+
+  .rotate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 10px;
+    padding: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .rotate-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s;
+  }
+  .rotate-card:hover { border-color: var(--accent); }
+  .rc-page { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text-dim); }
+  .rc-preview {
+    width: 48px; height: 64px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    display: flex; align-items: flex-start; justify-content: center; padding-top: 8px;
+    font-size: 9px; color: var(--text-dim);
+    transition: transform 0.3s;
+    background: var(--bg);
+    position: relative; overflow: hidden;
+  }
+  .rc-preview::before {
+    content: ''; position: absolute; top: 20px; left: 6px; right: 6px;
+    height: 2px; background: var(--border); border-radius: 1px;
+  }
+  .rc-preview::after {
+    content: ''; position: absolute; top: 26px; left: 6px; right: 10px;
+    height: 2px; background: var(--border); border-radius: 1px;
+  }
+  .rc-angle { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); min-height: 18px; }
+  .rc-btns { display: flex; gap: 6px; }
+  .rc-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); width: 32px; height: 32px;
+    border-radius: 6px; cursor: pointer; font-size: 16px;
+    display: grid; place-items: center; transition: all 0.15s;
+  }
+  .rc-btn:hover { border-color: var(--accent); background: var(--accent-glow); }
+
+  .reorder-list {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 14px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: var(--radius);
+  }
+  .reorder-item .ri-grip { color: var(--text-dim); font-size: 14px; flex-shrink: 0; }
+  .reorder-item .ri-num {
+    width: 32px; height: 32px; background: var(--bg);
+    border-radius: 6px; display: grid; place-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;
+    color: var(--accent); flex-shrink: 0;
+  }
+  .reorder-item .ri-label { font-size: 13px; color: var(--text-dim); }
+  .reorder-item .ri-orig { margin-left: auto; font-size: 11px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; opacity: 0.6; }
+
+  /* ===== COMPRESS PANEL STYLES ===== */
+  .compress-settings {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-top: 16px;
+  }
+  .setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .setting-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .setting-row:first-child { padding-top: 0; }
+  .setting-label { font-size: 14px; font-weight: 600; }
+  .setting-desc { font-size: 12px; color: var(--text-dim); margin-top: 3px; }
+  .setting-badge {
+    font-size: 10px; color: var(--accent3);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 3px; display: none;
+  }
+
+  .slider-wrap { display: flex; align-items: center; gap: 12px; flex: 0 0 auto; width: 220px; }
+  input[type="range"] {
+    -webkit-appearance: none; flex: 1; height: 4px;
+    background: var(--border); border-radius: 2px; outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px;
+    background: var(--accent); border-radius: 50%; cursor: pointer;
+    box-shadow: 0 0 8px rgba(74,124,255,0.5); transition: transform 0.2s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+  .slider-val {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--accent); min-width: 60px; text-align: right;
+  }
+
+  .target-wrap { display: flex; align-items: center; gap: 8px; }
+  .target-input {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text);
+    font-family: 'JetBrains Mono', monospace; font-size: 14px;
+    padding: 6px 12px; width: 80px; text-align: center; outline: none;
+    transition: border-color 0.2s;
+  }
+  .target-input:focus { border-color: var(--accent); }
+  .target-unit { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-dim); }
+
+  .toggle { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-track {
+    position: absolute; inset: 0;
+    background: var(--border); border-radius: 12px; cursor: pointer; transition: background 0.3s;
+  }
+  .toggle input:checked + .toggle-track { background: var(--accent); }
+  .toggle-track::after {
+    content: ''; position: absolute; left: 3px; top: 3px;
+    width: 18px; height: 18px; background: white; border-radius: 50%; transition: transform 0.3s;
+  }
+  .toggle input:checked + .toggle-track::after { transform: translateX(20px); }
+
+  .calib-bar {
+    display: none; align-items: center; gap: 10px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(74,124,255,0.25);
+    border-radius: 8px; padding: 10px 14px; margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent);
+  }
+  .calib-spinner {
+    width: 12px; height: 12px; flex-shrink: 0;
+    border: 2px solid rgba(74,124,255,0.3); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+  }
+  .calib-done { background: rgba(80,216,144,0.08); border-color: rgba(80,216,144,0.25); color: var(--accent3); }
+  .calib-done .calib-spinner { display: none; }
+
+  .compress-result {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-top: 16px;
+    display: none;
+  }
+  .result-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg); border-radius: 10px; padding: 14px; text-align: center; border: 1px solid var(--border); }
+  .stat-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .stat-val { font-size: 20px; font-weight: 700; }
+  .stat-val.before { color: #fcb05c; }
+  .stat-val.after { color: var(--accent3); }
+  .stat-val.ratio { color: var(--accent); }
+
+  .result-warn {
+    display: none; font-size: 12px; color: #fcb05c;
+    padding: 10px 14px; margin-bottom: 14px;
+    background: rgba(252,176,92,0.08); border: 1px solid rgba(252,176,92,0.25);
+    border-radius: 8px; font-family: 'JetBrains Mono', monospace;
+  }
+  .result-note {
+    font-size: 12px; color: var(--text-dim); margin-top: 14px;
+    padding: 10px 14px;
+    background: var(--surface2); border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace; line-height: 1.7;
+  }
+
+  /* ===== SHARED BUTTON & UTILITY STYLES ===== */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 22px; font-size: 14px; font-weight: 600;
+    font-family: 'Noto Sans JP', sans-serif;
+    border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #5c8aff);
+    color: #fff; box-shadow: 0 4px 16px rgba(74,124,255,0.3);
+  }
+  .btn-primary:hover { box-shadow: 0 6px 24px rgba(74,124,255,0.45); transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--accent); }
+  .btn-small { padding: 6px 14px; font-size: 12px; }
+  .btn-download {
+    width: 100%; padding: 13px; background: transparent;
+    border: 1px solid var(--accent3); border-radius: 10px; color: var(--accent3);
+    font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-download:hover { background: rgba(80,216,144,0.1); transform: translateY(-1px); }
+
+  .action-bar { margin-top: 22px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .status { font-size: 13px; color: var(--accent3); margin-left: 4px; }
+
+  .progress-bar { width: 100%; height: 4px; background: var(--surface2); border-radius: 2px; margin-top: 14px; overflow: hidden; display: none; }
+  .progress-bar.active { display: block; }
+  .progress-bar .fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent3)); border-radius: 2px; transition: width 0.3s; }
+
+  .compress-progress-wrap { margin-top: 14px; display: none; }
+  .compress-progress-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .compress-progress-bar { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  .compress-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent3)); border-radius: 2px; width: 0%; transition: width 0.3s ease; }
+
+  .quick-btns { margin-bottom: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .hidden { display: none !important; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+    vertical-align: middle; margin-right: 6px;
+  }
+
+  @media (max-width: 640px) {
+    .app-header, .main { padding-left: 16px; padding-right: 16px; }
+    .tabs { padding: 0 16px; }
+    .tab { padding: 12px 14px; font-size: 12px; }
+    .drop-zone { padding: 28px 16px; }
+    .page-chip { width: 38px; height: 38px; font-size: 12px; }
+    .rotate-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+    .result-stats { grid-template-columns: 1fr 1fr; }
+    .slider-wrap { width: 160px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="logo"><canvas id="headerLogo" width="64" height="64"></canvas></div>
+  <div>
+    <h1>PDF Toolkit</h1>
+    <p>分割・結合・抽出・回転・並べ替え・圧縮</p>
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" data-tab="split"   onclick="switchTab('split')">✂️ 分割</div>
+  <div class="tab" data-tab="merge"          onclick="switchTab('merge')">📎 結合</div>
+  <div class="tab" data-tab="extract"        onclick="switchTab('extract')">📋 抽出</div>
+  <div class="tab" data-tab="rotate"         onclick="switchTab('rotate')">🔄 回転</div>
+  <div class="tab" data-tab="reorder"        onclick="switchTab('reorder')">↕️ 並べ替え</div>
+  <div class="tab" data-tab="compress"       onclick="switchTab('compress')">🗜️ 圧縮</div>
+</div>
+
+<div class="main">
+
+  <!-- SPLIT -->
+  <div class="panel active" id="panel-split">
+    <div class="drop-zone" id="split-drop">
+      <div class="icon">📄</div>
+      <div class="label">PDFファイルをドロップ or クリック</div>
+      <div class="sub">分割したいPDFを1つ選んでください</div>
+      <input type="file" accept=".pdf" id="split-file-input">
+    </div>
+    <div id="split-file-info"></div>
+    <div id="split-controls" class="hidden">
+      <div class="section">
+        <div class="section-title">分割位置を指定 <span class="badge" id="split-count">0箇所</span></div>
+        <div class="hint">ページ番号をクリック → そのページの後ろで分割。もう一度クリックで解除。</div>
+        <div class="page-grid" id="split-grid"></div>
+      </div>
+      <div class="section">
+        <div class="section-title">分割プレビュー</div>
+        <div class="split-preview" id="split-preview"></div>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-primary" id="split-btn" onclick="executeSplit()" disabled>✂️ 分割してダウンロード</button>
+        <button class="btn btn-secondary" onclick="resetSplit()">リセット</button>
+        <span class="status" id="split-status"></span>
+      </div>
+      <div class="progress-bar" id="split-progress"><div class="fill"></div></div>
+    </div>
+  </div>
+
+  <!-- MERGE -->
+  <div class="panel" id="panel-merge">
+    <div class="drop-zone" id="merge-drop">
+      <div class="icon">📑</div>
+      <div class="label">PDFファイルをドロップ or クリック</div>
+      <div class="sub">結合したいPDFを複数選んでください（追加も可能）</div>
+      <input type="file" accept=".pdf" multiple id="merge-file-input">
+    </div>
+    <div id="merge-list" class="merge-list"></div>
+    <div id="merge-controls" class="hidden">
+      <div class="hint">ドラッグ＆ドロップでファイルの順番を入れ替えられます。</div>
+      <div class="action-bar">
+        <button class="btn btn-primary" id="merge-btn" onclick="executeMerge()">📎 結合してダウンロード</button>
+        <button class="btn btn-secondary" onclick="resetMerge()">リセット</button>
+        <span class="status" id="merge-status"></span>
+      </div>
+      <div class="progress-bar" id="merge-progress"><div class="fill"></div></div>
+    </div>
+  </div>
+
+  <!-- EXTRACT -->
+  <div class="panel" id="panel-extract">
+    <div class="drop-zone" id="extract-drop">
+      <div class="icon">📋</div>
+      <div class="label">PDFファイルをドロップ or クリック</div>
+      <div class="sub">ページを抽出したいPDFを1つ選んでください</div>
+      <input type="file" accept=".pdf" id="extract-file-input">
+    </div>
+    <div id="extract-file-info"></div>
+    <div id="extract-controls" class="hidden">
+      <div class="section">
+        <div class="section-title">抽出するページを選択 <span class="badge" id="extract-count">0ページ</span></div>
+        <div class="hint">ほしいページをクリックして選択。飛び飛びでもOKです。</div>
+        <div class="quick-btns">
+          <button class="btn btn-secondary btn-small" onclick="extractSelectAll()">全選択</button>
+          <button class="btn btn-secondary btn-small" onclick="extractDeselectAll()">全解除</button>
+        </div>
+        <div class="page-grid" id="extract-grid"></div>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-primary" id="extract-btn" onclick="executeExtract()" disabled>📋 抽出してダウンロード</button>
+        <button class="btn btn-secondary" onclick="resetExtract()">リセット</button>
+        <span class="status" id="extract-status"></span>
+      </div>
+      <div class="progress-bar" id="extract-progress"><div class="fill"></div></div>
+    </div>
+  </div>
+
+  <!-- ROTATE -->
+  <div class="panel" id="panel-rotate">
+    <div class="drop-zone" id="rotate-drop">
+      <div class="icon">🔄</div>
+      <div class="label">PDFファイルをドロップ or クリック</div>
+      <div class="sub">ページを回転させたいPDFを1つ選んでください</div>
+      <input type="file" accept=".pdf" id="rotate-file-input">
+    </div>
+    <div id="rotate-file-info"></div>
+    <div id="rotate-controls" class="hidden">
+      <div class="section">
+        <div class="section-title">ページごとに回転角度を設定</div>
+        <div class="hint">各ページの ↶ ↷ ボタンで90°ずつ回転を設定できます。</div>
+        <div class="quick-btns">
+          <button class="btn btn-secondary btn-small" onclick="rotateAllPages(90)">全ページ +90°</button>
+          <button class="btn btn-secondary btn-small" onclick="rotateAllPages(180)">全ページ 180°</button>
+          <button class="btn btn-secondary btn-small" onclick="rotateAllPages(0)">全リセット</button>
+        </div>
+        <div class="rotate-grid" id="rotate-grid"></div>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-primary" id="rotate-btn" onclick="executeRotate()" disabled>🔄 回転してダウンロード</button>
+        <button class="btn btn-secondary" onclick="resetRotate()">リセット</button>
+        <span class="status" id="rotate-status"></span>
+      </div>
+      <div class="progress-bar" id="rotate-progress"><div class="fill"></div></div>
+    </div>
+  </div>
+
+  <!-- REORDER -->
+  <div class="panel" id="panel-reorder">
+    <div class="drop-zone" id="reorder-drop">
+      <div class="icon">↕️</div>
+      <div class="label">PDFファイルをドロップ or クリック</div>
+      <div class="sub">ページの順番を入れ替えたいPDFを1つ選んでください</div>
+      <input type="file" accept=".pdf" id="reorder-file-input">
+    </div>
+    <div id="reorder-file-info"></div>
+    <div id="reorder-controls" class="hidden">
+      <div class="section">
+        <div class="section-title">ドラッグでページ順を変更</div>
+        <div class="hint">⋮⋮ を掴んでドラッグ＆ドロップで順番を入れ替えてください。</div>
+        <div class="quick-btns">
+          <button class="btn btn-secondary btn-small" onclick="reverseReorder()">逆順にする</button>
+          <button class="btn btn-secondary btn-small" onclick="resetReorderOrder()">元の順番に戻す</button>
+        </div>
+        <div class="reorder-list" id="reorder-list"></div>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-primary" id="reorder-btn" onclick="executeReorder()">↕️ 並べ替えてダウンロード</button>
+        <button class="btn btn-secondary" onclick="resetReorder()">リセット</button>
+        <span class="status" id="reorder-status"></span>
+      </div>
+      <div class="progress-bar" id="reorder-progress"><div class="fill"></div></div>
+    </div>
+  </div>
+
+  <!-- COMPRESS -->
+  <div class="panel" id="panel-compress">
+    <div class="drop-zone" id="compress-drop">
+      <div class="icon">🗜️</div>
+      <div class="label">PDFファイルをドロップ or クリック</div>
+      <div class="sub">圧縮したいPDFを1つ選んでください</div>
+      <input type="file" accept=".pdf" id="compress-file-input">
+    </div>
+    <div id="compress-file-info"></div>
+
+    <!-- キャリブレーション表示 -->
+    <div class="calib-bar" id="calib-bar">
+      <div class="calib-spinner"></div>
+      <span id="calib-msg">最適な設定を自動で探しています...</span>
+    </div>
+
+    <div class="compress-settings">
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">目標ファイルサイズ</div>
+          <div class="setting-desc">この値以下を目標に圧縮します</div>
+        </div>
+        <div class="target-wrap">
+          <input type="number" class="target-input" id="compress-target" value="10" min="1" max="200">
+          <span class="target-unit">MB</span>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">画像品質</div>
+          <div class="setting-desc">低いほどファイルサイズが小さくなります</div>
+          <div class="setting-badge" id="quality-badge">✦ 自動設定済み</div>
+        </div>
+        <div class="slider-wrap">
+          <input type="range" id="compress-quality" min="10" max="95" value="70">
+          <span class="slider-val" id="compress-quality-val">70%</span>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">レンダリング解像度</div>
+          <div class="setting-desc">低いほど小さくなります（72〜300 DPI）</div>
+          <div class="setting-badge" id="dpi-badge">✦ 自動設定済み</div>
+        </div>
+        <div class="slider-wrap">
+          <input type="range" id="compress-dpi" min="72" max="300" value="150" step="6">
+          <span class="slider-val" id="compress-dpi-val">150 DPI</span>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">メタデータを削除</div>
+          <div class="setting-desc">作成者情報などを取り除きます</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="compress-meta" checked>
+          <div class="toggle-track"></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn btn-primary" id="compress-btn" onclick="executeCompress()" disabled>🗜️ 圧縮してダウンロード</button>
+      <button class="btn btn-secondary" onclick="resetCompress()">リセット</button>
+      <span class="status" id="compress-status"></span>
+    </div>
+
+    <div class="compress-progress-wrap" id="compress-progress-wrap">
+      <div class="compress-progress-label">
+        <span id="compress-progress-text">処理中...</span>
+        <span id="compress-progress-pct">0%</span>
+      </div>
+      <div class="compress-progress-bar">
+        <div class="compress-progress-fill" id="compress-progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="compress-result" id="compress-result">
+      <div class="section-title" style="margin-bottom:14px;">圧縮結果</div>
+      <div class="result-stats">
+        <div class="stat-box"><div class="stat-label">元のサイズ</div><div class="stat-val before" id="compress-stat-before">—</div></div>
+        <div class="stat-box"><div class="stat-label">圧縮後</div><div class="stat-val after" id="compress-stat-after">—</div></div>
+        <div class="stat-box"><div class="stat-label">圧縮率</div><div class="stat-val ratio" id="compress-stat-ratio">—</div></div>
+      </div>
+      <div class="result-warn" id="compress-warn"></div>
+      <button class="btn-download" id="compress-download-btn">⬇ 圧縮済みPDFをダウンロード</button>
+      <div class="result-note">
+        ※ 各ページを画像として再レンダリングするため、圧縮後のPDFはテキスト検索・コピーが無効になります。<br>
+        全ての処理はブラウザ内で完結します。ファイルは外部サーバーへ送信されません。
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const { PDFDocument, degrees } = PDFLib;
+
+// ===== TAB =====
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tab));
+}
+
+// ===== UTILS =====
+function downloadBlob(bytes, name) {
+  const blob = new Blob([bytes], { type: 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function formatSize(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(2) + ' MB';
+}
+function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function setupDrop(dropId, inputId, handler, multi) {
+  const drop = document.getElementById(dropId), input = document.getElementById(inputId);
+  input.addEventListener('change', e => {
+    if (multi) { for (const f of e.target.files) handler(f); input.value = ''; }
+    else if (e.target.files[0]) handler(e.target.files[0]);
+  });
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+  drop.addEventListener('drop', e => {
+    e.preventDefault(); drop.classList.remove('dragover');
+    if (multi) { for (const f of e.dataTransfer.files) if (f.name.endsWith('.pdf')) handler(f); }
+    else if (e.dataTransfer.files[0]) handler(e.dataTransfer.files[0]);
+  });
+}
+
+function showFileInfo(elId, name, pages, size, resetFn) {
+  document.getElementById(elId).innerHTML = `<div class="file-info">
+    <div class="fi-icon">PDF</div>
+    <div><div class="fi-name">${escHtml(name)}</div><div class="fi-meta">${pages !== null ? pages + 'ページ ・ ' : ''}${formatSize(size)}</div></div>
+    <button class="fi-remove" onclick="${resetFn}()" title="削除">×</button>
+  </div>`;
+}
+
+// ===== SPLIT =====
+let splitBytes = null, splitPageCount = 0, splitPoints = new Set(), splitFileName = '';
+setupDrop('split-drop', 'split-file-input', loadSplitFile);
+
+function baseName(fname) { return fname.replace(/\.pdf$/i, ''); }
+
+async function loadSplitFile(file) {
+  splitBytes = await file.arrayBuffer();
+  splitFileName = baseName(file.name);
+  const pdf = await PDFDocument.load(splitBytes);
+  splitPageCount = pdf.getPageCount();
+  splitPoints.clear();
+  showFileInfo('split-file-info', file.name, splitPageCount, file.size, 'resetSplit');
+  const grid = document.getElementById('split-grid'); grid.innerHTML = '';
+  for (let i = 1; i <= splitPageCount; i++) {
+    const chip = document.createElement('div');
+    chip.className = 'page-chip'; chip.textContent = i; chip.dataset.page = i;
+    if (i < splitPageCount) chip.addEventListener('click', () => { toggleSplit(i, chip); });
+    grid.appendChild(chip);
+  }
+  document.getElementById('split-controls').classList.remove('hidden');
+  updateSplitPreview();
+}
+function toggleSplit(p, chip) {
+  splitPoints.has(p) ? splitPoints.delete(p) : splitPoints.add(p);
+  chip.classList.toggle('split-after');
+  updateSplitPreview();
+}
+function updateSplitPreview() {
+  const sorted = [...splitPoints].sort((a,b) => a-b);
+  const chunks = []; let s = 1;
+  for (const sp of sorted) { chunks.push({start:s,end:sp}); s=sp+1; }
+  chunks.push({start:s,end:splitPageCount});
+  document.getElementById('split-count').textContent = `${splitPoints.size}箇所`;
+  document.getElementById('split-preview').innerHTML = chunks.map((c,i) =>
+    `<div class="split-chunk"><span class="chunk-label">ファイル${i+1}</span><span class="chunk-pages">p.${c.start}${c.start===c.end?'':`–${c.end}`}</span></div>`
+  ).join('');
+  document.getElementById('split-btn').disabled = splitPoints.size === 0;
+}
+async function executeSplit() {
+  const btn = document.getElementById('split-btn'), status = document.getElementById('split-status'), prog = document.getElementById('split-progress');
+  btn.disabled = true; status.textContent = '処理中…'; prog.classList.add('active'); prog.querySelector('.fill').style.width = '0%';
+  const sorted = [...splitPoints].sort((a,b) => a-b);
+  const ranges = []; let s = 0;
+  for (const sp of sorted) { ranges.push([s, sp-1]); s = sp; }
+  ranges.push([s, splitPageCount-1]);
+  for (let i = 0; i < ranges.length; i++) {
+    prog.querySelector('.fill').style.width = `${((i+1)/ranges.length)*100}%`;
+    const src = await PDFDocument.load(splitBytes);
+    const np = await PDFDocument.create();
+    const idx = []; for (let p = ranges[i][0]; p <= ranges[i][1]; p++) idx.push(p);
+    (await np.copyPages(src, idx)).forEach(pg => np.addPage(pg));
+    downloadBlob(await np.save(), `${splitFileName}_p${ranges[i][0]+1}-${ranges[i][1]+1}.pdf`);
+    await sleep(300);
+  }
+  status.textContent = `✓ ${ranges.length}ファイルをダウンロードしました`; btn.disabled = false;
+  setTimeout(() => prog.classList.remove('active'), 1000);
+}
+function resetSplit() {
+  splitBytes = null; splitPageCount = 0; splitPoints.clear();
+  document.getElementById('split-file-info').innerHTML = '';
+  document.getElementById('split-controls').classList.add('hidden');
+  document.getElementById('split-status').textContent = '';
+  document.getElementById('split-file-input').value = '';
+}
+
+// ===== MERGE =====
+let mergeFiles = [], mergeIdCtr = 0, mergeDragId = null;
+setupDrop('merge-drop', 'merge-file-input', addMergeFile, true);
+
+async function addMergeFile(file) {
+  const bytes = await file.arrayBuffer();
+  const pdf = await PDFDocument.load(bytes);
+  mergeFiles.push({ id:++mergeIdCtr, name:file.name, size:file.size, bytes, pageCount:pdf.getPageCount() });
+  renderMergeList();
+}
+function renderMergeList() {
+  const list = document.getElementById('merge-list'); list.innerHTML = '';
+  mergeFiles.forEach((f, idx) => {
+    const item = document.createElement('div');
+    item.className = 'merge-item'; item.draggable = true; item.dataset.id = f.id;
+    item.innerHTML = `<span class="grip">⋮⋮</span><span class="order-num">${idx+1}</span><span class="mi-name">${escHtml(f.name)}</span><span class="mi-pages">${f.pageCount}p</span><button class="mi-remove" onclick="removeMergeFile(${f.id})">×</button>`;
+    item.addEventListener('dragstart', e => { mergeDragId = f.id; item.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+    item.addEventListener('dragend', () => { item.classList.remove('dragging'); document.querySelectorAll('.merge-item.drag-over').forEach(el => el.classList.remove('drag-over')); mergeDragId = null; });
+    item.addEventListener('dragover', e => { e.preventDefault(); if (f.id !== mergeDragId) item.classList.add('drag-over'); });
+    item.addEventListener('dragleave', () => item.classList.remove('drag-over'));
+    item.addEventListener('drop', e => {
+      e.preventDefault(); item.classList.remove('drag-over');
+      if (!mergeDragId || mergeDragId === f.id) return;
+      const fi = mergeFiles.findIndex(x => x.id === mergeDragId), ti = mergeFiles.findIndex(x => x.id === f.id);
+      const [m] = mergeFiles.splice(fi, 1); mergeFiles.splice(ti, 0, m);
+      renderMergeList();
+    });
+    list.appendChild(item);
+  });
+  document.getElementById('merge-controls').classList.toggle('hidden', mergeFiles.length < 2);
+}
+function removeMergeFile(id) { mergeFiles = mergeFiles.filter(f => f.id !== id); renderMergeList(); }
+async function executeMerge() {
+  const btn = document.getElementById('merge-btn'), status = document.getElementById('merge-status'), prog = document.getElementById('merge-progress');
+  btn.disabled = true; status.textContent = '処理中…'; prog.classList.add('active'); prog.querySelector('.fill').style.width = '0%';
+  const merged = await PDFDocument.create();
+  for (let i = 0; i < mergeFiles.length; i++) {
+    prog.querySelector('.fill').style.width = `${((i+1)/mergeFiles.length)*100}%`;
+    const src = await PDFDocument.load(mergeFiles[i].bytes);
+    (await merged.copyPages(src, src.getPageIndices())).forEach(p => merged.addPage(p));
+    await sleep(100);
+  }
+  downloadBlob(await merged.save(), `${baseName(mergeFiles[0].name)}_merged.pdf`);
+  const tp = mergeFiles.reduce((s, f) => s + f.pageCount, 0);
+  status.textContent = `✓ ${mergeFiles.length}ファイル（計${tp}ページ）を結合しました`; btn.disabled = false;
+  setTimeout(() => prog.classList.remove('active'), 1000);
+}
+function resetMerge() { mergeFiles = []; mergeIdCtr = 0; renderMergeList(); document.getElementById('merge-status').textContent = ''; }
+
+// ===== EXTRACT =====
+let extractBytes = null, extractPageCount = 0, extractSelected = new Set(), extractFileName = '';
+setupDrop('extract-drop', 'extract-file-input', loadExtractFile);
+
+async function loadExtractFile(file) {
+  extractBytes = await file.arrayBuffer();
+  extractFileName = baseName(file.name);
+  const pdf = await PDFDocument.load(extractBytes);
+  extractPageCount = pdf.getPageCount();
+  extractSelected.clear();
+  showFileInfo('extract-file-info', file.name, extractPageCount, file.size, 'resetExtract');
+  const grid = document.getElementById('extract-grid'); grid.innerHTML = '';
+  for (let i = 1; i <= extractPageCount; i++) {
+    const chip = document.createElement('div');
+    chip.className = 'page-chip'; chip.textContent = i; chip.dataset.page = i;
+    chip.addEventListener('click', () => {
+      if (extractSelected.has(i)) { extractSelected.delete(i); chip.classList.remove('selected'); }
+      else { extractSelected.add(i); chip.classList.add('selected'); }
+      updateExtractCount();
+    });
+    grid.appendChild(chip);
+  }
+  document.getElementById('extract-controls').classList.remove('hidden');
+  updateExtractCount();
+}
+function updateExtractCount() {
+  document.getElementById('extract-count').textContent = `${extractSelected.size}ページ`;
+  document.getElementById('extract-btn').disabled = extractSelected.size === 0;
+}
+function extractSelectAll() {
+  extractSelected.clear();
+  document.querySelectorAll('#extract-grid .page-chip').forEach(c => { extractSelected.add(+c.dataset.page); c.classList.add('selected'); });
+  updateExtractCount();
+}
+function extractDeselectAll() {
+  extractSelected.clear();
+  document.querySelectorAll('#extract-grid .page-chip').forEach(c => c.classList.remove('selected'));
+  updateExtractCount();
+}
+async function executeExtract() {
+  const btn = document.getElementById('extract-btn'), status = document.getElementById('extract-status'), prog = document.getElementById('extract-progress');
+  btn.disabled = true; status.textContent = '処理中…'; prog.classList.add('active'); prog.querySelector('.fill').style.width = '50%';
+  const src = await PDFDocument.load(extractBytes);
+  const np = await PDFDocument.create();
+  const sorted = [...extractSelected].sort((a, b) => a - b);
+  (await np.copyPages(src, sorted.map(p => p - 1))).forEach(pg => np.addPage(pg));
+  const extName = sorted.length <= 4
+    ? `${extractFileName}_extracted_p${sorted.join('_p')}.pdf`
+    : `${extractFileName}_extracted_${sorted.length}pages.pdf`;
+  downloadBlob(await np.save(), extName);
+  prog.querySelector('.fill').style.width = '100%';
+  status.textContent = `✓ ${sorted.length}ページを抽出しました`; btn.disabled = false;
+  setTimeout(() => prog.classList.remove('active'), 1000);
+}
+function resetExtract() {
+  extractBytes = null; extractPageCount = 0; extractSelected.clear();
+  document.getElementById('extract-file-info').innerHTML = '';
+  document.getElementById('extract-controls').classList.add('hidden');
+  document.getElementById('extract-status').textContent = '';
+  document.getElementById('extract-file-input').value = '';
+}
+
+// ===== ROTATE =====
+let rotateBytes = null, rotatePageCount = 0, rotateAngles = [], rotateFileName = '';
+setupDrop('rotate-drop', 'rotate-file-input', loadRotateFile);
+
+async function loadRotateFile(file) {
+  rotateBytes = await file.arrayBuffer();
+  rotateFileName = baseName(file.name);
+  const pdf = await PDFDocument.load(rotateBytes);
+  rotatePageCount = pdf.getPageCount();
+  rotateAngles = new Array(rotatePageCount).fill(0);
+  showFileInfo('rotate-file-info', file.name, rotatePageCount, file.size, 'resetRotate');
+  renderRotateGrid();
+  document.getElementById('rotate-controls').classList.remove('hidden');
+  updateRotateBtn();
+}
+function renderRotateGrid() {
+  const grid = document.getElementById('rotate-grid'); grid.innerHTML = '';
+  for (let i = 0; i < rotatePageCount; i++) {
+    const card = document.createElement('div'); card.className = 'rotate-card';
+    card.innerHTML = `
+      <div class="rc-page">p.${i + 1}</div>
+      <div class="rc-preview" id="rc-prev-${i}" style="transform:rotate(${rotateAngles[i]}deg)">
+        <span style="font-size:10px;opacity:0.4;">A</span>
+      </div>
+      <div class="rc-angle" id="rc-angle-${i}">${rotateAngles[i] === 0 ? '' : rotateAngles[i] + '°'}</div>
+      <div class="rc-btns">
+        <button class="rc-btn" onclick="rotatePage(${i},-90)" title="-90°">↶</button>
+        <button class="rc-btn" onclick="rotatePage(${i},90)" title="+90°">↷</button>
+      </div>`;
+    grid.appendChild(card);
+  }
+}
+function rotatePage(idx, delta) {
+  rotateAngles[idx] = ((rotateAngles[idx] + delta) % 360 + 360) % 360;
+  document.getElementById(`rc-prev-${idx}`).style.transform = `rotate(${rotateAngles[idx]}deg)`;
+  document.getElementById(`rc-angle-${idx}`).textContent = rotateAngles[idx] === 0 ? '' : rotateAngles[idx] + '°';
+  updateRotateBtn();
+}
+function rotateAllPages(angle) {
+  for (let i = 0; i < rotatePageCount; i++) {
+    rotateAngles[i] = angle;
+    document.getElementById(`rc-prev-${i}`).style.transform = `rotate(${angle}deg)`;
+    document.getElementById(`rc-angle-${i}`).textContent = angle === 0 ? '' : angle + '°';
+  }
+  updateRotateBtn();
+}
+function updateRotateBtn() {
+  document.getElementById('rotate-btn').disabled = rotateAngles.every(a => a === 0);
+}
+async function executeRotate() {
+  const btn = document.getElementById('rotate-btn'), status = document.getElementById('rotate-status'), prog = document.getElementById('rotate-progress');
+  btn.disabled = true; status.textContent = '処理中…'; prog.classList.add('active'); prog.querySelector('.fill').style.width = '50%';
+  const pdf = await PDFDocument.load(rotateBytes);
+  for (let i = 0; i < rotatePageCount; i++) {
+    if (rotateAngles[i] !== 0) {
+      const page = pdf.getPage(i);
+      const cur = page.getRotation().angle;
+      page.setRotation(degrees((cur + rotateAngles[i]) % 360));
+    }
+  }
+  downloadBlob(await pdf.save(), `${rotateFileName}_rotated.pdf`);
+  prog.querySelector('.fill').style.width = '100%';
+  const changed = rotateAngles.filter(a => a !== 0).length;
+  status.textContent = `✓ ${changed}ページを回転しました`; btn.disabled = false;
+  setTimeout(() => prog.classList.remove('active'), 1000);
+}
+function resetRotate() {
+  rotateBytes = null; rotatePageCount = 0; rotateAngles = [];
+  document.getElementById('rotate-file-info').innerHTML = '';
+  document.getElementById('rotate-controls').classList.add('hidden');
+  document.getElementById('rotate-status').textContent = '';
+  document.getElementById('rotate-file-input').value = '';
+}
+
+// ===== REORDER =====
+let reorderBytes = null, reorderPageCount = 0, reorderOrder = [], reorderFileName = '';
+let reorderDragIdx = null;
+setupDrop('reorder-drop', 'reorder-file-input', loadReorderFile);
+
+async function loadReorderFile(file) {
+  reorderBytes = await file.arrayBuffer();
+  reorderFileName = baseName(file.name);
+  const pdf = await PDFDocument.load(reorderBytes);
+  reorderPageCount = pdf.getPageCount();
+  reorderOrder = Array.from({ length: reorderPageCount }, (_, i) => i);
+  showFileInfo('reorder-file-info', file.name, reorderPageCount, file.size, 'resetReorder');
+  renderReorderList();
+  document.getElementById('reorder-controls').classList.remove('hidden');
+}
+function renderReorderList() {
+  const list = document.getElementById('reorder-list'); list.innerHTML = '';
+  reorderOrder.forEach((origIdx, pos) => {
+    const item = document.createElement('div');
+    item.className = 'reorder-item'; item.draggable = true; item.dataset.pos = pos;
+    const moved = origIdx !== pos;
+    item.innerHTML = `
+      <span class="ri-grip">⋮⋮</span>
+      <span class="ri-num">${pos + 1}</span>
+      <span class="ri-label">ページ ${origIdx + 1}</span>
+      <span class="ri-orig">${moved ? `元: p.${origIdx + 1}` : ''}</span>`;
+    item.addEventListener('dragstart', e => { reorderDragIdx = pos; item.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+    item.addEventListener('dragend', () => { item.classList.remove('dragging'); document.querySelectorAll('.reorder-item.drag-over').forEach(el => el.classList.remove('drag-over')); reorderDragIdx = null; });
+    item.addEventListener('dragover', e => { e.preventDefault(); if (pos !== reorderDragIdx) item.classList.add('drag-over'); });
+    item.addEventListener('dragleave', () => item.classList.remove('drag-over'));
+    item.addEventListener('drop', e => {
+      e.preventDefault(); item.classList.remove('drag-over');
+      if (reorderDragIdx === null || reorderDragIdx === pos) return;
+      const [moved] = reorderOrder.splice(reorderDragIdx, 1);
+      reorderOrder.splice(pos, 0, moved);
+      renderReorderList();
+    });
+    list.appendChild(item);
+  });
+}
+function reverseReorder() { reorderOrder.reverse(); renderReorderList(); }
+function resetReorderOrder() { reorderOrder = Array.from({ length: reorderPageCount }, (_, i) => i); renderReorderList(); }
+async function executeReorder() {
+  const btn = document.getElementById('reorder-btn'), status = document.getElementById('reorder-status'), prog = document.getElementById('reorder-progress');
+  btn.disabled = true; status.textContent = '処理中…'; prog.classList.add('active'); prog.querySelector('.fill').style.width = '50%';
+  const src = await PDFDocument.load(reorderBytes);
+  const np = await PDFDocument.create();
+  (await np.copyPages(src, reorderOrder)).forEach(pg => np.addPage(pg));
+  downloadBlob(await np.save(), `${reorderFileName}_reordered.pdf`);
+  prog.querySelector('.fill').style.width = '100%';
+  status.textContent = '✓ 並べ替えたPDFをダウンロードしました'; btn.disabled = false;
+  setTimeout(() => prog.classList.remove('active'), 1000);
+}
+function resetReorder() {
+  reorderBytes = null; reorderPageCount = 0; reorderOrder = [];
+  document.getElementById('reorder-file-info').innerHTML = '';
+  document.getElementById('reorder-controls').classList.add('hidden');
+  document.getElementById('reorder-status').textContent = '';
+  document.getElementById('reorder-file-input').value = '';
+}
+
+// ===== COMPRESS =====
+let compressFile = null, compressedBytes = null;
+
+// Slider listeners
+document.getElementById('compress-quality').addEventListener('input', function() {
+  document.getElementById('compress-quality-val').textContent = this.value + '%';
+});
+document.getElementById('compress-dpi').addEventListener('input', function() {
+  document.getElementById('compress-dpi-val').textContent = this.value + ' DPI';
+});
+document.getElementById('compress-target').addEventListener('change', function() {
+  if (compressFile) calibrateCompress(compressFile);
+});
+
+setupDrop('compress-drop', 'compress-file-input', loadCompressFile);
+
+async function loadCompressFile(file) {
+  compressFile = file;
+  compressedBytes = null;
+  showFileInfo('compress-file-info', file.name, null, file.size, 'resetCompress');
+  document.getElementById('compress-btn').disabled = false;
+  document.getElementById('compress-result').style.display = 'none';
+  document.getElementById('compress-progress-wrap').style.display = 'none';
+  document.getElementById('compress-status').textContent = '';
+  document.getElementById('quality-badge').style.display = 'none';
+  document.getElementById('dpi-badge').style.display = 'none';
+  calibrateCompress(file);
+}
+
+async function calibrateCompress(file) {
+  const calibBar = document.getElementById('calib-bar');
+  const calibMsg = document.getElementById('calib-msg');
+  const targetMB = parseFloat(document.getElementById('compress-target').value) || 10;
+  const targetBytes = targetMB * 1024 * 1024;
+
+  calibBar.className = 'calib-bar';
+  calibBar.style.display = 'flex';
+  calibMsg.textContent = '最適な設定を自動で探しています...';
+
+  try {
+    const arrayBuf = await file.arrayBuffer();
+    const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuf.slice(0) }).promise;
+    const numPages = pdfDoc.numPages;
+
+    const buildPdfSize = async (dpi, quality) => {
+      const out = await PDFDocument.create();
+      const scale = dpi / 72;
+      for (let i = 1; i <= numPages; i++) {
+        const page = await pdfDoc.getPage(i);
+        const vp = page.getViewport({ scale });
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(vp.width);
+        canvas.height = Math.round(vp.height);
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+        const imgBytes = await new Promise(resolve => {
+          canvas.toBlob(blob => blob.arrayBuffer().then(b => resolve(new Uint8Array(b))), 'image/jpeg', quality / 100);
+        });
+        canvas.width = 0; canvas.height = 0;
+        const img = await out.embedJpg(imgBytes);
+        out.addPage([vp.width, vp.height]).drawImage(img, { x: 0, y: 0, width: vp.width, height: vp.height });
+      }
+      return (await out.save({ useObjectStreams: true })).byteLength;
+    };
+
+    calibMsg.textContent = '計測中 (1/2)...';
+    const size150q95 = await buildPdfSize(150, 95);
+    let bestQuality = 95, bestDpi = 150;
+
+    if (size150q95 <= targetBytes) {
+      const newDpi = Math.min(300, Math.round(150 * Math.sqrt(targetBytes / size150q95) / 6) * 6);
+      bestDpi = newDpi; bestQuality = 95;
+    } else {
+      calibMsg.textContent = '計測中 (2/2)...';
+      const size150q30 = await buildPdfSize(150, 30);
+      if (targetBytes >= size150q30) {
+        const t = (targetBytes - size150q30) / (size150q95 - size150q30);
+        bestQuality = Math.max(10, Math.min(95, Math.round(30 + t * 65)));
+        bestDpi = 150;
+      } else {
+        const newDpi = Math.max(72, Math.round(150 * Math.sqrt(targetBytes / size150q30) / 6) * 6);
+        bestQuality = 30; bestDpi = newDpi;
+      }
+    }
+
+    document.getElementById('compress-quality').value = bestQuality;
+    document.getElementById('compress-quality-val').textContent = bestQuality + '%';
+    document.getElementById('compress-dpi').value = bestDpi;
+    document.getElementById('compress-dpi-val').textContent = bestDpi + ' DPI';
+    document.getElementById('quality-badge').style.display = 'block';
+    document.getElementById('dpi-badge').style.display = 'block';
+
+    calibBar.className = 'calib-bar calib-done';
+    calibMsg.textContent = '✓ 自動設定完了 — スライダーを調整しました';
+
+  } catch(e) {
+    console.error('Calibration error:', e);
+    calibBar.style.display = 'none';
+  }
+}
+
+async function executeCompress() {
+  if (!compressFile) return;
+  const btn = document.getElementById('compress-btn');
+  const status = document.getElementById('compress-status');
+  const progWrap = document.getElementById('compress-progress-wrap');
+  const progFill = document.getElementById('compress-progress-fill');
+  const progText = document.getElementById('compress-progress-text');
+  const progPct  = document.getElementById('compress-progress-pct');
+
+  const targetMB = parseFloat(document.getElementById('compress-target').value) || 10;
+  const targetBytes = targetMB * 1024 * 1024;
+  const quality = parseInt(document.getElementById('compress-quality').value) / 100;
+  const dpi = parseInt(document.getElementById('compress-dpi').value);
+  const scale = dpi / 72;
+  const rmMeta = document.getElementById('compress-meta').checked;
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>圧縮中...';
+  progWrap.style.display = 'block';
+  document.getElementById('compress-result').style.display = 'none';
+  status.textContent = '';
+
+  const setProgress = (pct, label) => {
+    progFill.style.width = pct + '%';
+    progText.textContent = label;
+    progPct.textContent = pct + '%';
+  };
+
+  try {
+    const originalArray = await compressFile.arrayBuffer();
+    const originalSize = originalArray.byteLength;
+
+    setProgress(10, 'PDF解析中...');
+    const pdfDoc = await pdfjsLib.getDocument({ data: originalArray.slice(0) }).promise;
+    const numPages = pdfDoc.numPages;
+    const pageImages = [];
+
+    for (let i = 1; i <= numPages; i++) {
+      const pct = 10 + Math.round(((i - 1) / numPages) * 60);
+      setProgress(pct, `レンダリング中... (${i} / ${numPages} ページ)`);
+      const page = await pdfDoc.getPage(i);
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(viewport.width);
+      canvas.height = Math.round(viewport.height);
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+      const dataUrl = canvas.toDataURL('image/jpeg', quality);
+      pageImages.push({ dataUrl, width: canvas.width, height: canvas.height });
+      canvas.width = 0; canvas.height = 0;
+    }
+
+    setProgress(72, '新しいPDFを構築中...');
+    const outDoc = await PDFDocument.create();
+    for (let i = 0; i < pageImages.length; i++) {
+      const pct = 72 + Math.round((i / pageImages.length) * 22);
+      setProgress(pct, `PDF構築中... (${i + 1} / ${pageImages.length} ページ)`);
+      const { dataUrl, width, height } = pageImages[i];
+      const base64 = dataUrl.split(',')[1];
+      const imgBytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+      const img = await outDoc.embedJpg(imgBytes);
+      outDoc.addPage([width, height]).drawImage(img, { x: 0, y: 0, width, height });
+    }
+
+    if (rmMeta) {
+      try {
+        outDoc.setTitle(''); outDoc.setAuthor(''); outDoc.setSubject('');
+        outDoc.setKeywords([]); outDoc.setProducer(''); outDoc.setCreator('');
+      } catch(e) {}
+    }
+
+    setProgress(96, 'PDF出力中...');
+    const outBytes = await outDoc.save({ useObjectStreams: true });
+    setProgress(100, '完了！');
+    compressedBytes = outBytes;
+
+    const afterSize = outBytes.byteLength;
+    const ratio = Math.round((1 - afterSize / originalSize) * 100);
+
+    document.getElementById('compress-stat-before').textContent = formatSize(originalSize);
+    document.getElementById('compress-stat-after').textContent = formatSize(afterSize);
+    document.getElementById('compress-stat-ratio').textContent = (ratio >= 0 ? '-' : '+') + Math.abs(ratio) + '%';
+
+    const warnEl = document.getElementById('compress-warn');
+    if (afterSize > targetBytes) {
+      warnEl.style.display = 'block';
+      warnEl.textContent = `⚠ 目標 ${targetMB}MB を超えています（${formatSize(afterSize)}）。画像品質または解像度をさらに下げてみてください。`;
+    } else {
+      warnEl.style.display = 'none';
+    }
+
+    document.getElementById('compress-result').style.display = 'block';
+    status.textContent = `✓ 圧縮完了`;
+    setTimeout(() => document.getElementById('compress-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+
+  } catch(err) {
+    console.error(err);
+    status.textContent = 'エラーが発生しました: ' + err.message;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🗜️ 圧縮してダウンロード';
+    setTimeout(() => { progWrap.style.display = 'none'; }, 800);
+  }
+}
+
+document.getElementById('compress-download-btn').addEventListener('click', () => {
+  if (!compressedBytes || !compressFile) return;
+  downloadBlob(compressedBytes, baseName(compressFile.name) + '_compressed.pdf');
+});
+
+function resetCompress() {
+  compressFile = null; compressedBytes = null;
+  document.getElementById('compress-file-info').innerHTML = '';
+  document.getElementById('calib-bar').style.display = 'none';
+  document.getElementById('compress-btn').disabled = true;
+  document.getElementById('compress-result').style.display = 'none';
+  document.getElementById('compress-progress-wrap').style.display = 'none';
+  document.getElementById('compress-status').textContent = '';
+  document.getElementById('compress-file-input').value = '';
+  document.getElementById('quality-badge').style.display = 'none';
+  document.getElementById('dpi-badge').style.display = 'none';
+  document.getElementById('compress-quality').value = 70;
+  document.getElementById('compress-quality-val').textContent = '70%';
+  document.getElementById('compress-dpi').value = 150;
+  document.getElementById('compress-dpi-val').textContent = '150 DPI';
+}
+</script>
+</body>
+</html>
