@@ -3,983 +3,829 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Audio Compressor</title>
+<title>SoundPress</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap');
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0d0d0d;
-    --surface: #161616;
-    --surface2: #1e1e1e;
-    --border: rgba(255,255,255,0.07);
-    --border-hover: rgba(255,255,255,0.15);
-    --text: #f0f0ee;
-    --muted: #666;
-    --accent: #c8f564;
-    --accent-dim: rgba(200,245,100,0.12);
-    --accent-glow: rgba(200,245,100,0.2);
-    --danger: #ff6b6b;
-    --info: #64b5f6;
-    --mono: 'DM Mono', monospace;
-    --sans: 'DM Sans', sans-serif;
-  }
-
-  body {
-    font-family: var(--sans);
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 3rem 1.5rem;
-  }
-
-  header {
-    width: 100%;
-    max-width: 640px;
-    margin-bottom: 3rem;
-  }
-
-  .logo {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-
-  h1 {
-    font-size: clamp(2rem, 5vw, 2.8rem);
-    font-weight: 300;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-  }
-
-  h1 span {
-    color: var(--accent);
-  }
-
-  .subtitle {
-    margin-top: 0.6rem;
-    font-size: 14px;
-    color: var(--muted);
-    font-weight: 300;
-  }
-
-  main {
-    width: 100%;
-    max-width: 640px;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: 14px;
-    padding: 1.5rem;
-    transition: border-color 0.2s;
-  }
-
-  .card:hover {
-    border-color: var(--border-hover);
-  }
-
-  /* Drop Zone */
-  #drop-zone {
-    border: 1px dashed var(--border-hover);
-    border-radius: 14px;
-    padding: 3rem 2rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.25s;
-    position: relative;
-    background: var(--surface);
-  }
-
-  #drop-zone.dragover {
-    border-color: var(--accent);
-    background: var(--accent-dim);
-  }
-
-  #drop-zone.has-file {
-    border-style: solid;
-    border-color: var(--accent);
-    background: var(--accent-dim);
-  }
-
-  #drop-zone input[type="file"] {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-  }
-
-  .drop-icon {
-    width: 48px;
-    height: 48px;
-    margin: 0 auto 1rem;
-    opacity: 0.4;
-  }
-
-  .drop-title {
-    font-size: 15px;
-    font-weight: 400;
-    margin-bottom: 0.4rem;
-  }
-
-  .drop-hint {
-    font-size: 12px;
-    color: var(--muted);
-    font-family: var(--mono);
-  }
-
-  .file-info {
-    display: none;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .file-info.visible { display: flex; }
-
-  .file-icon {
-    width: 40px;
-    height: 40px;
-    background: var(--accent-dim);
-    border: 0.5px solid var(--accent);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .file-details { flex: 1; text-align: left; }
-  .file-name {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 300px;
-  }
-  .file-meta {
-    font-size: 12px;
-    color: var(--muted);
-    font-family: var(--mono);
-    margin-top: 2px;
-  }
-
-  .btn-clear {
-    background: none;
-    border: 0.5px solid var(--border-hover);
-    border-radius: 6px;
-    color: var(--muted);
-    padding: 4px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    font-family: var(--mono);
-    transition: all 0.15s;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 10;
-  }
-
-  .btn-clear:hover { color: var(--text); border-color: var(--text); }
-
-  /* Settings */
-  .settings-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
-  .setting-group { display: flex; flex-direction: column; gap: 8px; }
-
-  .setting-label {
-    font-size: 11px;
-    font-family: var(--mono);
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  select, input[type="number"] {
-    background: var(--surface2);
-    border: 0.5px solid var(--border-hover);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 14px;
-    padding: 10px 12px;
-    outline: none;
-    transition: border-color 0.2s;
-    width: 100%;
-  }
-
-  select:focus, input[type="number"]:focus {
-    border-color: var(--accent);
-  }
-
-  select option { background: #1e1e1e; }
-
-  /* Mode toggle */
-  .mode-toggle {
-    display: flex;
-    background: var(--surface2);
-    border: 0.5px solid var(--border);
-    border-radius: 8px;
-    padding: 3px;
-    gap: 2px;
-  }
-
-  .mode-btn {
-    flex: 1;
-    background: none;
-    border: none;
-    border-radius: 6px;
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    padding: 7px 4px;
-    cursor: pointer;
-    transition: all 0.18s;
-    text-transform: uppercase;
-  }
-
-  .mode-btn.active {
-    background: var(--accent);
-    color: #0d0d0d;
-    font-weight: 500;
-  }
-
-  /* Size target input */
-  .size-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .size-row input {
-    flex: 1;
-  }
-
-  .size-unit {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-
-  /* Bitrate slider */
-  .slider-wrap { display: flex; flex-direction: column; gap: 6px; }
-
-  .slider-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-
-  .slider-value {
-    font-family: var(--mono);
-    font-size: 16px;
-    font-weight: 300;
-    color: var(--accent);
-  }
-
-  input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 4px;
-    border-radius: 2px;
-    background: var(--surface2);
-    outline: none;
-    cursor: pointer;
-    border: none;
-    padding: 0;
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--accent);
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 0 0 3px var(--accent-glow);
-  }
-
-  input[type="range"]::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--accent);
-    cursor: pointer;
-    border: none;
-  }
-
-  /* Estimate */
-  .estimate-bar {
-    display: none;
-    background: var(--surface2);
-    border-radius: 8px;
-    padding: 0.875rem 1rem;
-    gap: 12px;
-    align-items: center;
-  }
-
-  .estimate-bar.visible { display: flex; }
-
-  .est-label {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-  }
-
-  .est-values {
-    display: flex;
-    gap: 16px;
-    flex: 1;
-    font-family: var(--mono);
-    font-size: 13px;
-  }
-
-  .est-item { display: flex; flex-direction: column; gap: 2px; }
-  .est-num { color: var(--text); }
-  .est-sub { font-size: 10px; color: var(--muted); }
-
-  .ratio-badge {
-    background: var(--accent-dim);
-    border: 0.5px solid var(--accent);
-    color: var(--accent);
-    border-radius: 6px;
-    padding: 2px 8px;
-    font-family: var(--mono);
-    font-size: 11px;
-    white-space: nowrap;
-  }
-
-  /* Progress */
-  #progress-section {
-    display: none;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  #progress-section.visible { display: flex; }
-
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .progress-track {
-    height: 3px;
-    background: var(--surface2);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 2px;
-    width: 0%;
-    transition: width 0.3s ease;
-  }
-
-  .progress-fill.indeterminate {
-    width: 40%;
-    animation: slide 1.2s ease-in-out infinite;
-  }
-
-  @keyframes slide {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(350%); }
-  }
-
-  .log-output {
-    background: var(--surface2);
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--muted);
-    max-height: 80px;
-    overflow-y: auto;
-    line-height: 1.6;
-  }
-
-  /* Actions */
-  .btn-compress {
-    width: 100%;
-    background: var(--accent);
-    color: #0d0d0d;
-    border: none;
-    border-radius: 10px;
-    font-family: var(--mono);
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-compress:hover:not(:disabled) {
-    background: #d4f97a;
-    transform: translateY(-1px);
-  }
-
-  .btn-compress:active:not(:disabled) { transform: translateY(0); }
-
-  .btn-compress:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  /* Result */
-  #result-section {
-    display: none;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  #result-section.visible { display: flex; }
-
-  .result-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-
-  .stat-card {
-    background: var(--surface2);
-    border-radius: 10px;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .stat-num {
-    font-family: var(--mono);
-    font-size: 18px;
-    font-weight: 300;
-    color: var(--text);
-  }
-
-  .stat-num.accent { color: var(--accent); }
-
-  .stat-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .btn-download {
-    width: 100%;
-    background: none;
-    border: 0.5px solid var(--accent);
-    color: var(--accent);
-    border-radius: 10px;
-    font-family: var(--mono);
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .btn-download:hover {
-    background: var(--accent);
-    color: #0d0d0d;
-  }
-
-  .btn-reset {
-    background: none;
-    border: 0.5px solid var(--border-hover);
-    color: var(--muted);
-    border-radius: 10px;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    width: 100%;
-  }
-
-  .btn-reset:hover { color: var(--text); border-color: var(--text); }
-
-  /* Warning / info */
-  .notice {
-    background: rgba(100, 181, 246, 0.06);
-    border: 0.5px solid rgba(100, 181, 246, 0.2);
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
-    font-size: 12px;
-    color: var(--info);
-    font-family: var(--mono);
-    line-height: 1.6;
-  }
-
-  .loading-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 2rem;
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 12px;
-    text-align: center;
-  }
-
-  .spinner {
-    width: 24px;
-    height: 24px;
-    border: 2px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .hidden { display: none !important; }
-
-  @media (max-width: 480px) {
-    .settings-grid { grid-template-columns: 1fr; }
-    .result-stats { grid-template-columns: 1fr 1fr; }
-  }
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0d0d0d;--surface:#161616;--surface2:#1e1e1e;--surface3:#242424;
+  --border:rgba(255,255,255,0.07);--border-h:rgba(255,255,255,0.15);
+  --text:#f0f0ee;--muted:#666;--muted2:#444;
+  --accent:#c8f564;--accent-dim:rgba(200,245,100,0.12);--accent-glow:rgba(200,245,100,0.25);
+  --danger:#ff6b6b;--info:#64b5f6;
+  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+  --r:12px;--r-sm:8px;
+}
+
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:3rem 1.5rem 5rem}
+
+header{width:100%;max-width:720px;margin-bottom:2.5rem}
+.logo{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem}
+h1{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:300;letter-spacing:-.03em;line-height:1.1}
+h1 span{color:var(--accent)}
+.subtitle{margin-top:.5rem;font-size:13px;color:var(--muted);font-weight:300}
+
+main{width:100%;max-width:720px;display:flex;flex-direction:column;gap:1rem}
+
+.tab-bar{display:flex;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);padding:4px;gap:3px}
+.tab-btn{flex:1;background:none;border:none;border-radius:10px;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:10px 4px;cursor:pointer;transition:all .18s;text-transform:uppercase}
+.tab-btn.active{background:var(--accent);color:#0d0d0d;font-weight:500}
+
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);padding:1.25rem;transition:border-color .2s}
+.card:hover{border-color:var(--border-h)}
+
+#drop-zone{border:1px dashed var(--border-h);border-radius:var(--r);padding:2.5rem 2rem;text-align:center;cursor:pointer;transition:all .25s;position:relative;background:var(--surface)}
+#drop-zone.dragover{border-color:var(--accent);background:var(--accent-dim)}
+#drop-zone.has-file{border-style:solid;border-color:var(--accent);background:var(--accent-dim)}
+#drop-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-icon{width:40px;height:40px;margin:0 auto .75rem;opacity:.4}
+.drop-title{font-size:14px;font-weight:400;margin-bottom:.3rem}
+.drop-hint{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.file-info{display:none;align-items:center;gap:12px}
+.file-info.visible{display:flex}
+.file-icon{width:36px;height:36px;background:var(--accent-dim);border:0.5px solid var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.file-details{flex:1;text-align:left}
+.file-name{font-size:13px;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:360px}
+.file-meta{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+.btn-clear{background:none;border:0.5px solid var(--border-h);border-radius:6px;color:var(--muted);padding:4px 8px;font-size:11px;cursor:pointer;font-family:var(--mono);transition:all .15s;flex-shrink:0;position:relative;z-index:10}
+.btn-clear:hover{color:var(--text);border-color:var(--text)}
+
+.setting-label{font-size:11px;font-family:var(--mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.setting-group{display:flex;flex-direction:column;gap:7px}
+select,input[type="number"]{background:var(--surface2);border:0.5px solid var(--border-h);border-radius:var(--r-sm);color:var(--text);font-family:var(--mono);font-size:13px;padding:9px 11px;outline:none;transition:border-color .2s;width:100%}
+select:focus,input[type="number"]:focus{border-color:var(--accent)}
+select option{background:#1e1e1e}
+.mode-toggle{display:flex;background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--r-sm);padding:3px;gap:2px}
+.mode-btn{flex:1;background:none;border:none;border-radius:6px;color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:7px 4px;cursor:pointer;transition:all .18s;text-transform:uppercase}
+.mode-btn.active{background:var(--accent);color:#0d0d0d;font-weight:500}
+.size-row{display:flex;align-items:center;gap:7px}
+.size-row input{flex:1}
+.size-unit{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.slider-header{display:flex;justify-content:space-between;align-items:baseline}
+.slider-value{font-family:var(--mono);font-size:15px;font-weight:300;color:var(--accent)}
+input[type="range"]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:var(--surface2);outline:none;cursor:pointer;border:none;padding:0}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:none;box-shadow:0 0 0 3px var(--accent-glow)}
+input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:none}
+
+.estimate-bar{display:none;background:var(--surface2);border-radius:var(--r-sm);padding:.75rem 1rem;gap:12px;align-items:center}
+.estimate-bar.visible{display:flex}
+.est-label{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.est-values{display:flex;gap:16px;flex:1;font-family:var(--mono);font-size:12px}
+.est-item{display:flex;flex-direction:column;gap:1px}
+.est-num{color:var(--text)}
+.est-sub{font-size:10px;color:var(--muted)}
+.ratio-badge{background:var(--accent-dim);border:0.5px solid var(--accent);color:var(--accent);border-radius:5px;padding:2px 7px;font-family:var(--mono);font-size:10px;white-space:nowrap}
+
+.progress-label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:8px}
+.progress-track{height:3px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width .3s ease}
+.progress-fill.ind{width:40%;animation:slide 1.2s ease-in-out infinite}
+@keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(350%)}}
+.log-out{background:var(--surface2);border-radius:var(--r-sm);padding:.6rem .9rem;font-family:var(--mono);font-size:11px;color:var(--muted);max-height:56px;overflow-y:auto;line-height:1.6;margin-top:8px}
+
+.btn-primary{width:100%;background:var(--accent);color:#0d0d0d;border:none;border-radius:10px;font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:15px;cursor:pointer;transition:all .2s}
+.btn-primary:hover:not(:disabled){background:#d4f97a;transform:translateY(-1px)}
+.btn-primary:active:not(:disabled){transform:none}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed}
+.btn-outline{width:100%;background:none;border:0.5px solid var(--accent);color:var(--accent);border-radius:10px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-outline:hover{background:var(--accent);color:#0d0d0d}
+.btn-ghost{background:none;border:0.5px solid var(--border-h);color:var(--muted);border-radius:10px;font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;padding:11px;cursor:pointer;transition:all .2s;width:100%}
+.btn-ghost:hover{color:var(--text);border-color:var(--text)}
+
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:.75rem}
+.stat-card{background:var(--surface2);border-radius:10px;padding:.875rem;display:flex;flex-direction:column;gap:3px}
+.stat-num{font-family:var(--mono);font-size:17px;font-weight:300}
+.stat-num.accent{color:var(--accent)}
+.stat-lbl{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+
+.notice{background:rgba(100,181,246,.06);border:0.5px solid rgba(100,181,246,.2);border-radius:var(--r-sm);padding:.7rem 1rem;font-size:11px;color:var(--info);font-family:var(--mono);line-height:1.7}
+
+/* ===== SPLIT ===== */
+.waveform-wrap{position:relative;background:var(--surface2);border-radius:var(--r-sm);overflow:visible;user-select:none}
+#waveform-canvas{display:block;width:100%;height:110px;border-radius:var(--r-sm);cursor:crosshair}
+.waveform-overlay{position:absolute;top:0;left:0;right:0;height:110px;pointer-events:none}
+.playhead{position:absolute;top:0;height:110px;width:1.5px;background:var(--info);pointer-events:none;display:none;z-index:5}
+.playhead.vis{display:block}
+
+.split-marker{position:absolute;top:0;height:110px;width:2px;background:var(--accent);cursor:ew-resize;pointer-events:all;z-index:10;transform:translateX(-1px)}
+.split-marker::before{content:'';position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:9px;height:9px;background:var(--accent);border-radius:50%}
+.split-marker-label{position:absolute;top:4px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;color:#0d0d0d;background:var(--accent);padding:1px 4px;border-radius:3px;white-space:nowrap;pointer-events:none;z-index:11}
+
+.transport{display:flex;align-items:center;gap:10px;margin-top:10px}
+.btn-play{width:34px;height:34px;flex-shrink:0;background:var(--surface3);border:0.5px solid var(--border-h);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;color:var(--text)}
+.btn-play:hover{border-color:var(--accent);color:var(--accent)}
+.time-disp{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:110px}
+.t-spacer{flex:1}
+.btn-sm{background:var(--surface2);border:0.5px solid var(--border-h);border-radius:6px;color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-sm:hover{color:var(--text);border-color:var(--text)}
+.btn-sm.red:hover{color:var(--danger);border-color:var(--danger)}
+
+.smethod-bar{display:flex;gap:4px;margin-bottom:.9rem}
+.smb{flex:1;background:var(--surface2);border:0.5px solid var(--border);border-radius:6px;color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;padding:7px 3px;cursor:pointer;transition:all .15s;text-align:center}
+.smb.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.smp{display:none}.smp.show{display:block}
+
+.marker-list{display:flex;flex-direction:column;gap:5px;margin-top:.75rem}
+.marker-row{display:flex;align-items:center;gap:8px;background:var(--surface2);border-radius:6px;padding:6px 10px}
+.mi{font-family:var(--mono);font-size:10px;color:var(--accent);min-width:16px}
+.mti{background:var(--surface3);border:0.5px solid var(--border-h);border-radius:5px;color:var(--text);font-family:var(--mono);font-size:12px;padding:4px 7px;outline:none;width:82px;transition:border-color .15s}
+.mti:focus{border-color:var(--accent)}
+.ml{font-family:var(--mono);font-size:10px;color:var(--muted);flex:1}
+.btn-rm{background:none;border:none;color:var(--muted2);cursor:pointer;font-size:13px;padding:0 3px;transition:color .15s}
+.btn-rm:hover{color:var(--danger)}
+
+.silence-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.section-lbl{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+
+.seg-list{display:flex;flex-direction:column;gap:5px}
+.seg-item{display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:8px;padding:8px 12px}
+.seg-nm{font-family:var(--mono);font-size:12px;flex:1}
+.seg-dr{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.btn-dl-seg{background:none;border:0.5px solid var(--border-h);border-radius:5px;color:var(--muted);font-family:var(--mono);font-size:10px;padding:4px 8px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-dl-seg:hover{color:var(--accent);border-color:var(--accent)}
+.btn-dl-all{width:100%;background:none;border:0.5px solid var(--accent);color:var(--accent);border-radius:10px;font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;padding:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-dl-all:hover{background:var(--accent);color:#0d0d0d}
+
+.hidden{display:none!important}
+@media(max-width:500px){.settings-grid,.silence-grid{grid-template-columns:1fr}.result-stats{grid-template-columns:1fr 1fr}.smethod-bar{flex-wrap:wrap}}
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo">Audio Tools</div>
   <h1>Sound<span>Press</span></h1>
-  <p class="subtitle">ブラウザ上で完結する音声圧縮ツール — ファイルはサーバーへ送信されません</p>
+  <p class="subtitle">圧縮・分割をブラウザ内で完結 — ファイルは外部に送信されません</p>
 </header>
 
 <main>
 
-  <!-- FFmpeg loading -->
-  <div id="loading-screen" class="card loading-screen">
-    <div class="spinner"></div>
-    <span>FFmpeg を読み込み中...</span>
+<!-- Drop zone -->
+<div id="drop-zone">
+  <input type="file" id="file-input" accept=".mp3,.m4a,.aac,.wav,.ogg,.flac,.opus,.webm">
+  <div id="drop-ph">
+    <svg class="drop-icon" viewBox="0 0 48 48" fill="none">
+      <rect x="8" y="14" width="32" height="24" rx="3" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M24 10v14M18 18l6-6 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="24" cy="31" r="3" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M19 31h-4M33 31h-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <p class="drop-title">ファイルをドロップ、またはクリックして選択</p>
+    <p class="drop-hint">mp3 · m4a · aac · wav · ogg · flac · opus</p>
+  </div>
+  <div class="file-info" id="file-info">
+    <div class="file-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8f564" stroke-width="1.5">
+        <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+      </svg>
+    </div>
+    <div class="file-details">
+      <div class="file-name" id="fname"></div>
+      <div class="file-meta" id="fmeta"></div>
+    </div>
+    <button class="btn-clear" id="btn-clear" type="button">✕</button>
+  </div>
+</div>
+
+<!-- Tab bar -->
+<div class="tab-bar hidden" id="tab-bar">
+  <button class="tab-btn active" data-tab="compress">圧縮</button>
+  <button class="tab-btn" data-tab="split">分割</button>
+</div>
+
+<!-- ===== COMPRESS TAB ===== -->
+<div id="tab-compress">
+  <div class="card">
+    <div style="margin-bottom:1.1rem">
+      <div class="setting-label" style="margin-bottom:7px">圧縮モード</div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" data-mode="bitrate">ビットレート指定</button>
+        <button class="mode-btn" data-mode="size">サイズ目標</button>
+      </div>
+    </div>
+    <div class="settings-grid">
+      <div class="setting-group">
+        <label class="setting-label">出力フォーマット</label>
+        <select disabled style="opacity:.5"><option>MP3</option></select>
+      </div>
+      <div class="setting-group" id="size-group">
+        <label class="setting-label">目標サイズ</label>
+        <div class="size-row">
+          <input type="number" id="target-size" value="3" min="0.1" max="500" step="0.1">
+          <span class="size-unit">MB</span>
+        </div>
+      </div>
+      <div class="setting-group hidden" id="bitrate-group">
+        <label class="setting-label">ビットレート</label>
+        <input type="range" id="bitrate-slider" min="32" max="320" step="8" value="128">
+      </div>
+    </div>
+    <div id="bitrate-disp-row" class="hidden" style="margin-top:.75rem">
+      <div class="slider-header">
+        <span class="setting-label">選択中</span>
+        <span class="slider-value" id="bitrate-val">128 kbps</span>
+      </div>
+    </div>
+    <div class="estimate-bar" id="est-bar" style="margin-top:1.1rem">
+      <span class="est-label">概算</span>
+      <div class="est-values">
+        <div class="est-item"><span class="est-num" id="est-sz">—</span><span class="est-sub">出力サイズ</span></div>
+        <div class="est-item"><span class="est-num" id="est-dur">—</span><span class="est-sub">再生時間</span></div>
+      </div>
+      <span class="ratio-badge" id="est-ratio">—</span>
+    </div>
   </div>
 
-  <div id="app-content" class="hidden">
+  <div class="notice">処理はすべてブラウザ内で完結。入力: MP3/M4A/WAV/OGG/FLAC など → 出力: MP3</div>
 
-    <!-- File drop -->
-    <div id="drop-zone">
-      <input type="file" id="file-input" accept=".mp3,.m4a,.aac,.wav,.ogg,.flac,.opus,.weba,.webm">
+  <div class="card hidden" id="c-prog-card">
+    <div class="progress-label"><span id="c-prog-txt">処理中...</span><span id="c-prog-pct"></span></div>
+    <div class="progress-track"><div class="progress-fill" id="c-prog-fill"></div></div>
+    <div class="log-out" id="c-log"></div>
+  </div>
 
-      <div id="drop-placeholder">
-        <svg class="drop-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="8" y="14" width="32" height="24" rx="3" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M24 10v14M18 18l6-6 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="24" cy="31" r="3" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M19 31h-4M33 31h-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        <p class="drop-title">ファイルをドロップ、またはクリックして選択</p>
-        <p class="drop-hint">mp3 · m4a · aac · wav · ogg · flac · opus</p>
-      </div>
+  <button class="btn-primary" id="btn-compress" disabled>圧縮する</button>
 
-      <div class="file-info" id="file-info">
-        <div class="file-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8f564" stroke-width="1.5">
-            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-          </svg>
-        </div>
-        <div class="file-details">
-          <div class="file-name" id="file-name-display"></div>
-          <div class="file-meta" id="file-meta-display"></div>
-        </div>
-        <button class="btn-clear" id="btn-clear" type="button">✕ 削除</button>
-      </div>
+  <div id="c-result" class="hidden">
+    <div class="result-stats">
+      <div class="stat-card"><span class="stat-num" id="r-before">—</span><span class="stat-lbl">圧縮前</span></div>
+      <div class="stat-card"><span class="stat-num accent" id="r-after">—</span><span class="stat-lbl">圧縮後</span></div>
+      <div class="stat-card"><span class="stat-num accent" id="r-ratio">—</span><span class="stat-lbl">削減率</span></div>
     </div>
+    <button class="btn-outline" id="btn-dl-compress">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      ダウンロード
+    </button>
+  </div>
+</div>
 
-    <!-- Settings -->
-    <div class="card">
-      <div style="margin-bottom: 1.25rem;">
-        <div class="setting-label" style="margin-bottom: 8px;">圧縮モード</div>
-        <div class="mode-toggle">
-          <button class="mode-btn active" data-mode="bitrate">ビットレート指定</button>
-          <button class="mode-btn" data-mode="size">サイズ目標</button>
-        </div>
-      </div>
+<!-- ===== SPLIT TAB ===== -->
+<div id="tab-split" class="hidden">
 
-      <div class="settings-grid">
-
-        <!-- Format -->
-        <div class="setting-group">
-          <label class="setting-label">出力フォーマット</label>
-          <select id="format-select" disabled style="opacity:0.5">
-            <option value="mp3">MP3</option>
-          </select>
-        </div>
-
-        <!-- Target size (size mode) -->
-        <div class="setting-group" id="size-group">
-          <label class="setting-label">目標ファイルサイズ</label>
-          <div class="size-row">
-            <input type="number" id="target-size" value="3" min="0.1" max="500" step="0.1">
-            <span class="size-unit">MB</span>
-          </div>
-        </div>
-
-        <!-- Bitrate (bitrate mode) -->
-        <div class="setting-group hidden" id="bitrate-group">
-          <label class="setting-label">ビットレート</label>
-          <input type="range" id="bitrate-slider" min="32" max="320" step="8" value="128">
-        </div>
-
-      </div>
-
-      <!-- Bitrate value (bitrate mode) -->
-      <div id="bitrate-display-row" class="hidden" style="margin-top: 0.75rem;">
-        <div class="slider-header">
-          <span class="setting-label">選択中</span>
-          <span class="slider-value" id="bitrate-value">128 kbps</span>
-        </div>
-      </div>
-
-      <!-- Estimate -->
-      <div class="estimate-bar" id="estimate-bar" style="margin-top: 1.25rem;">
-        <span class="est-label">概算</span>
-        <div class="est-values">
-          <div class="est-item">
-            <span class="est-num" id="est-output">—</span>
-            <span class="est-sub">出力サイズ</span>
-          </div>
-          <div class="est-item">
-            <span class="est-num" id="est-duration">—</span>
-            <span class="est-sub">再生時間</span>
-          </div>
-        </div>
-        <span class="ratio-badge" id="est-ratio">—</span>
-      </div>
+  <!-- Waveform -->
+  <div class="card" style="padding:1rem">
+    <div class="waveform-wrap" id="waveform-wrap">
+      <canvas id="waveform-canvas"></canvas>
+      <div id="w-overlay" class="waveform-overlay"></div>
+      <div class="playhead" id="playhead"></div>
     </div>
-
-    <!-- Notice -->
-    <div class="notice" id="notice">
-      処理はすべてブラウザ内で完結します。ファイルは外部に送信されません。<br>
-      入力: MP3 / M4A / AAC / WAV / OGG / FLAC など → 出力: MP3
-    </div>
-
-    <!-- Progress -->
-    <div class="card" id="progress-section">
-      <div class="progress-label">
-        <span id="progress-text">処理中...</span>
-        <span id="progress-pct"></span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill indeterminate" id="progress-fill"></div>
-      </div>
-      <div class="log-output" id="log-output"></div>
-    </div>
-
-    <!-- Compress button -->
-    <button class="btn-compress" id="btn-compress" disabled>圧縮する</button>
-
-    <!-- Result -->
-    <div id="result-section">
-      <div class="result-stats">
-        <div class="stat-card">
-          <span class="stat-num" id="res-before">—</span>
-          <span class="stat-label">圧縮前</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-num accent" id="res-after">—</span>
-          <span class="stat-label">圧縮後</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-num accent" id="res-ratio">—</span>
-          <span class="stat-label">削減率</span>
-        </div>
-      </div>
-      <button class="btn-download" id="btn-download">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-        </svg>
-        ダウンロード
+    <div class="transport">
+      <button class="btn-play" id="btn-play">
+        <svg id="play-icon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
       </button>
-      <button class="btn-reset" id="btn-reset">別のファイルを変換する</button>
+      <span class="time-disp" id="time-disp">0:00 / 0:00</span>
+      <div class="t-spacer"></div>
+      <button class="btn-sm" id="btn-add-here">＋ 現在位置に追加</button>
+      <button class="btn-sm red" id="btn-clear-mk">クリア</button>
+    </div>
+  </div>
+
+  <!-- Split method -->
+  <div class="card">
+    <div class="section-lbl">分割方法</div>
+    <div class="smethod-bar">
+      <button class="smb active" data-sm="manual">手動クリック</button>
+      <button class="smb" data-sm="time">時間入力</button>
+      <button class="smb" data-sm="equal">等分割</button>
+      <button class="smb" data-sm="silence">無音検出</button>
     </div>
 
+    <div id="sm-manual" class="smp show">
+      <p style="font-size:12px;color:var(--muted);font-family:var(--mono);line-height:1.7">波形をクリックして分割点を追加。<br>マーカーはドラッグして移動できます。右クリックで削除。</p>
+    </div>
+
+    <div id="sm-time" class="smp">
+      <div class="section-lbl" style="margin-bottom:6px">分割点を追加</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" id="time-input" placeholder="例: 1:30 または 90" style="background:var(--surface2);border:0.5px solid var(--border-h);border-radius:var(--r-sm);color:var(--text);font-family:var(--mono);font-size:13px;padding:8px 11px;outline:none;flex:1;transition:border-color .2s">
+        <button class="btn-sm" id="btn-time-add" style="padding:8px 14px">追加</button>
+      </div>
+      <div class="marker-list" id="marker-list"></div>
+    </div>
+
+    <div id="sm-equal" class="smp">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:12px;color:var(--muted);font-family:var(--mono)">等分割数：</span>
+        <input type="number" id="eq-n" value="2" min="2" max="99" step="1" style="width:70px;text-align:center">
+        <button class="btn-sm" id="btn-eq" style="padding:8px 14px">適用</button>
+      </div>
+    </div>
+
+    <div id="sm-silence" class="smp">
+      <div class="silence-grid">
+        <div class="setting-group">
+          <label class="setting-label">無音閾値</label>
+          <div class="size-row">
+            <input type="number" id="sil-thresh" value="0.02" min="0.001" max="0.5" step="0.005">
+            <span class="size-unit">amp</span>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label class="setting-label">最短無音長</label>
+          <div class="size-row">
+            <input type="number" id="sil-dur" value="0.5" min="0.1" max="10" step="0.1">
+            <span class="size-unit">秒</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-sm" id="btn-detect" style="margin-top:.75rem;padding:8px;width:100%">無音を検出して分割点を追加</button>
+    </div>
   </div>
+
+  <!-- Segment preview -->
+  <div class="card" id="seg-card" style="display:none">
+    <div class="section-lbl" style="margin-bottom:8px">分割プレビュー（<span id="seg-count">0</span> セグメント）</div>
+    <div class="seg-list" id="seg-list"></div>
+  </div>
+
+  <!-- Split progress -->
+  <div class="card hidden" id="s-prog-card">
+    <div class="progress-label"><span id="s-prog-txt">エンコード中...</span><span id="s-prog-pct"></span></div>
+    <div class="progress-track"><div class="progress-fill" id="s-prog-fill"></div></div>
+    <div class="log-out" id="s-log"></div>
+  </div>
+
+  <button class="btn-primary" id="btn-split-go" disabled>すべてエンコード</button>
+
+  <div id="split-dl-area" class="hidden">
+    <button class="btn-dl-all" id="btn-dl-zip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      すべてZIPでダウンロード
+    </button>
+  </div>
+
+</div>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
-let selectedFile = null;
-let outputBlob = null;
-let currentMode = 'bitrate';
-let audioDuration = 0;
-let audioCtx = null;
-
 const $ = id => document.getElementById(id);
 
-function initApp() {
-  $('loading-screen').classList.add('hidden');
-  $('app-content').classList.remove('hidden');
+// state
+let selFile = null, decBuf = null, duration = 0;
+let audioCtx = null;
+let compressMode = 'bitrate';
+let splitMethod = 'manual';
+let markers = [];           // sorted seconds
+let encodedSegs = [];       // [{name,blob}]
+
+// playback
+let playSrc = null, playStartCtx = 0, playOffset = 0, playing = false, raf = null;
+
+// ── utils ──
+const fmtB = b => b < 1048576 ? (b/1024).toFixed(0)+' KB' : (b/1048576).toFixed(2)+' MB';
+function fmtT(s) {
+  if(!isFinite(s)||s<0) s=0;
+  return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
 }
-
-function formatBytes(bytes) {
-  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
-  return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+function parseT(str) {
+  str = str.trim();
+  if(str.includes(':')) { const [a,b]=str.split(':'); return +a*60+ +b; }
+  return parseFloat(str);
 }
+function getCtx() { if(!audioCtx) audioCtx=new AudioContext(); return audioCtx; }
 
-function formatDuration(s) {
-  const m = Math.floor(s / 60);
-  const sec = Math.floor(s % 60);
-  return `${m}:${String(sec).padStart(2, '0')}`;
-}
-
-function updateEstimate() {
-  if (!selectedFile || audioDuration === 0) return;
-  $('estimate-bar').classList.add('visible');
-
-  let estBytes;
-  if (currentMode === 'bitrate') {
-    const kbps = parseInt($('bitrate-slider').value);
-    estBytes = (kbps * 1000 / 8) * audioDuration;
-  } else {
-    const mb = parseFloat($('target-size').value) || 3;
-    estBytes = mb * 1024 * 1024;
-  }
-
-  const ratio = estBytes / selectedFile.size;
-  $('est-output').textContent = formatBytes(estBytes);
-  $('est-duration').textContent = formatDuration(audioDuration);
-  $('est-ratio').textContent = ratio < 1
-    ? `▼ ${Math.round((1 - ratio) * 100)}% 削減`
-    : `▲ ${Math.round((ratio - 1) * 100)}% 増加`;
-}
-
-function setFile(file) {
-  if (!file) return;
-  selectedFile = file;
-  audioDuration = 0;
-
-  $('drop-placeholder').style.display = 'none';
+// ── file ──
+async function setFile(f) {
+  if(!f) return;
+  selFile=f; decBuf=null; markers=[]; encodedSegs=[];
+  $('drop-ph').style.display='none';
   $('file-info').classList.add('visible');
-  $('file-name-display').textContent = file.name;
-  $('file-meta-display').textContent = `${formatBytes(file.size)} · ${file.type || '不明'}`;
+  $('fname').textContent=f.name;
+  $('fmeta').textContent=fmtB(f.size)+' · '+(f.type||'audio');
   $('drop-zone').classList.add('has-file');
-  $('btn-compress').disabled = false;
-  $('result-section').classList.remove('visible');
-  $('estimate-bar').classList.remove('visible');
+  $('tab-bar').classList.remove('hidden');
+  $('btn-compress').disabled=false;
+  $('btn-split-go').disabled=true;
+  $('c-result').classList.add('hidden');
+  $('split-dl-area').classList.add('hidden');
+  $('seg-card').style.display='none';
 
-  const audio = new Audio();
-  const url = URL.createObjectURL(file);
-  audio.src = url;
-  audio.addEventListener('loadedmetadata', () => {
-    audioDuration = audio.duration;
-    URL.revokeObjectURL(url);
-    updateEstimate();
-  });
-  audio.load();
+  try {
+    const ctx=getCtx();
+    const ab=await f.arrayBuffer();
+    decBuf=await ctx.decodeAudioData(ab);
+    duration=decBuf.duration;
+    drawWaveform();
+    renderSegs();
+    updateEst();
+  } catch(e) {
+    // fallback duration via Audio element
+    const au=new Audio();
+    const u=URL.createObjectURL(f);
+    au.src=u;
+    au.addEventListener('loadedmetadata',()=>{duration=au.duration;URL.revokeObjectURL(u);updateEst()});
+    au.load();
+  }
 }
 
 function clearFile() {
-  selectedFile = null;
-  audioDuration = 0;
-  $('drop-placeholder').style.display = '';
+  stopPlay();
+  selFile=decBuf=null; duration=0; markers=[]; encodedSegs=[];
+  $('drop-ph').style.display='';
   $('file-info').classList.remove('visible');
   $('drop-zone').classList.remove('has-file');
-  $('btn-compress').disabled = true;
-  $('estimate-bar').classList.remove('visible');
-  $('file-input').value = '';
+  $('tab-bar').classList.add('hidden');
+  $('btn-compress').disabled=true;
+  $('btn-split-go').disabled=true;
+  $('est-bar').classList.remove('visible');
+  $('file-input').value='';
+  $('c-result').classList.add('hidden');
+  $('split-dl-area').classList.add('hidden');
+  $('seg-card').style.display='none';
+  clearWaveform();
 }
 
-// ---- encode MP3 via lamejs in a chunked async loop ----
-async function encodeMp3(audioBuffer, kbps) {
-  const nCh = audioBuffer.numberOfChannels;
-  const sampleRate = audioBuffer.sampleRate;
-  const mp3enc = new lamejs.Mp3Encoder(nCh, sampleRate, kbps);
-  const CHUNK = 1152;
-  const L = audioBuffer.getChannelData(0);
-  const R = nCh > 1 ? audioBuffer.getChannelData(1) : L;
-  const toInt16 = f32 => {
-    const buf = new Int16Array(f32.length);
-    for (let i = 0; i < f32.length; i++) buf[i] = Math.max(-32768, Math.min(32767, f32[i] * 32767));
-    return buf;
-  };
-  const Lpcm = toInt16(L);
-  const Rpcm = toInt16(R);
-  const parts = [];
-  const total = Lpcm.length;
+// ── waveform ──
+function drawWaveform() {
+  if(!decBuf) return;
+  const wrap=$('waveform-wrap');
+  const canvas=$('waveform-canvas');
+  const W=wrap.clientWidth||640, H=110, dpr=devicePixelRatio||1;
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  const cx=canvas.getContext('2d');
+  cx.scale(dpr,dpr);
 
-  for (let i = 0; i < total; i += CHUNK) {
-    const end = Math.min(i + CHUNK, total);
-    const lChunk = Lpcm.subarray(i, end);
-    const rChunk = Rpcm.subarray(i, end);
-    const d = nCh > 1 ? mp3enc.encodeBuffer(lChunk, rChunk) : mp3enc.encodeBuffer(lChunk);
-    if (d.length > 0) parts.push(new Uint8Array(d));
-    // yield to UI every 50 chunks
-    if ((i / CHUNK) % 50 === 0) {
-      const pct = Math.min(98, Math.round((i / total) * 100));
-      $('progress-fill').classList.remove('indeterminate');
-      $('progress-fill').style.width = pct + '%';
-      $('progress-pct').textContent = pct + '%';
-      $('log-output').textContent = `エンコード中... ${pct}%`;
-      await new Promise(r => setTimeout(r, 0));
-    }
+  cx.fillStyle='#1e1e1e'; cx.fillRect(0,0,W,H);
+
+  // alternating segment shading
+  const segs=getSegs();
+  segs.forEach((s,i)=>{
+    cx.fillStyle=i%2?'rgba(100,181,246,0.05)':'rgba(200,245,100,0.05)';
+    cx.fillRect((s.s/duration)*W,0,((s.e-s.s)/duration)*W,H-16);
+  });
+
+  // waveform
+  const data=decBuf.getChannelData(0);
+  const step=Math.ceil(data.length/W);
+  const mid=(H-16)/2;
+  for(let i=0;i<W;i++){
+    let mx=0;
+    for(let j=0;j<step;j++){const v=Math.abs(data[i*step+j]||0);if(v>mx)mx=v;}
+    const h=Math.max(1,mx*(H-24));
+    cx.fillStyle='rgba(200,245,100,0.6)';
+    cx.fillRect(i,mid-h/2,1,h);
   }
-  const tail = mp3enc.flush();
-  if (tail.length > 0) parts.push(new Uint8Array(tail));
-  return new Blob(parts, { type: 'audio/mp3' });
+
+  // ruler
+  cx.fillStyle='rgba(255,255,255,0.06)'; cx.fillRect(0,H-16,W,16);
+  const intv=rulerInt(duration,W);
+  cx.font='9px DM Mono,monospace';
+  for(let t=0;t<=duration;t+=intv){
+    const x=(t/duration)*W;
+    cx.fillStyle='rgba(255,255,255,0.18)'; cx.fillRect(x,H-16,1,6);
+    if(x>4&&x<W-28){cx.fillStyle='rgba(255,255,255,0.35)';cx.fillText(fmtT(t),x+2,H-3);}
+  }
+
+  renderMarkersDOM();
 }
 
-// ---- event listeners ----
-$('file-input').addEventListener('change', e => setFile(e.target.files[0]));
+function rulerInt(d,w){
+  for(const c of[1,2,5,10,15,30,60,120,300,600]) if((d/c)*(w/d)>50) return c;
+  return 600;
+}
 
-$('btn-clear').addEventListener('click', e => {
-  e.stopPropagation();
-  clearFile();
+function clearWaveform(){
+  const c=$('waveform-canvas'); const cx=c.getContext('2d'); cx.clearRect(0,0,c.width,c.height);
+  $('w-overlay').innerHTML='';
+}
+
+function renderMarkersDOM(){
+  const ov=$('w-overlay'); ov.innerHTML='';
+  markers.forEach((t,i)=>{
+    const pct=(t/duration)*100;
+    const el=document.createElement('div');
+    el.className='split-marker';
+    el.style.left=pct+'%';
+    el.dataset.i=i;
+    const lbl=document.createElement('div');
+    lbl.className='split-marker-label';
+    lbl.textContent=fmtT(t);
+    el.appendChild(lbl);
+    el.addEventListener('mousedown',startDrag);
+    el.addEventListener('touchstart',startTouchDrag,{passive:false});
+    el.addEventListener('contextmenu',e=>{e.preventDefault();removeMarker(i);});
+    ov.appendChild(el);
+  });
+}
+
+// drag
+let dragIdx=-1;
+function startDrag(e){e.stopPropagation();dragIdx=+e.currentTarget.dataset.i;document.addEventListener('mousemove',onDrag);document.addEventListener('mouseup',endDrag);}
+function startTouchDrag(e){e.preventDefault();e.stopPropagation();dragIdx=+e.currentTarget.dataset.i;document.addEventListener('touchmove',onTouchDrag,{passive:false});document.addEventListener('touchend',endDrag);}
+function onDrag(e){moveDrag(e.clientX);}
+function onTouchDrag(e){e.preventDefault();moveDrag(e.touches[0].clientX);}
+function moveDrag(cx){
+  if(dragIdx<0) return;
+  const rect=$('waveform-wrap').getBoundingClientRect();
+  const t=Math.max(0.01,Math.min(duration-0.01,(cx-rect.left)/rect.width*duration));
+  markers[dragIdx]=t; markers.sort((a,b)=>a-b);
+  drawWaveform(); renderSegs();
+  if(splitMethod==='time') renderMarkerList();
+}
+function endDrag(){dragIdx=-1;document.removeEventListener('mousemove',onDrag);document.removeEventListener('mouseup',endDrag);document.removeEventListener('touchmove',onTouchDrag);document.removeEventListener('touchend',endDrag);}
+
+// click waveform
+$('waveform-canvas').addEventListener('click',e=>{
+  if(!decBuf||dragIdx>=0) return;
+  const rect=$('waveform-wrap').getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const t=(x/rect.width)*duration;
+  // seek
+  playOffset=t; if(!playing) $('time-disp').textContent=fmtT(t)+' / '+fmtT(duration);
+  // add marker in manual/time modes
+  if(splitMethod==='manual'||splitMethod==='time') addMarker(t);
 });
 
-const dz = $('drop-zone');
-dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
-dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
-dz.addEventListener('drop', e => {
-  e.preventDefault();
-  dz.classList.remove('dragover');
-  const f = e.dataTransfer.files[0];
-  if (f) setFile(f);
+function addMarker(t){
+  t=Math.max(0.01,Math.min(duration-0.01,t));
+  if(markers.some(m=>Math.abs(m-t)<0.1)) return;
+  markers.push(t); markers.sort((a,b)=>a-b);
+  drawWaveform(); renderSegs();
+  if(splitMethod==='time') renderMarkerList();
+  updateSplitBtn();
+}
+function removeMarker(i){markers.splice(i,1);drawWaveform();renderSegs();if(splitMethod==='time')renderMarkerList();updateSplitBtn();}
+
+function renderMarkerList(){
+  const list=$('marker-list'); list.innerHTML='';
+  markers.forEach((t,i)=>{
+    const row=document.createElement('div'); row.className='marker-row';
+    row.innerHTML=`<span class="mi">${i+1}</span><input class="mti" type="text" value="${fmtT(t)}" data-i="${i}"><span class="ml">→ セグメント ${i+1} の終点</span><button class="btn-rm" data-i="${i}">✕</button>`;
+    row.querySelector('.mti').addEventListener('change',e=>{
+      const v=parseT(e.target.value);
+      if(isNaN(v)||v<=0||v>=duration) return;
+      markers[i]=v; markers.sort((a,b)=>a-b);
+      drawWaveform(); renderSegs(); renderMarkerList();
+    });
+    row.querySelector('.btn-rm').addEventListener('click',e=>removeMarker(+e.currentTarget.dataset.i));
+    list.appendChild(row);
+  });
+}
+
+// ── segments ──
+function getSegs(){
+  const pts=[0,...markers,duration];
+  return pts.slice(0,-1).map((s,i)=>({s,e:pts[i+1]}));
+}
+function renderSegs(){
+  const segs=getSegs();
+  $('seg-count').textContent=segs.length;
+  const list=$('seg-list'); list.innerHTML='';
+  const base=selFile?selFile.name.replace(/\.[^.]+$/,''):'audio';
+  segs.forEach((seg,i)=>{
+    const dur=seg.e-seg.s;
+    const item=document.createElement('div'); item.className='seg-item';
+    item.innerHTML=`<span class="seg-nm">${base}_${String(i+1).padStart(2,'0')}.mp3</span><span class="seg-dr">${fmtT(seg.s)} → ${fmtT(seg.e)} &nbsp; ${fmtT(dur)}</span><button class="btn-dl-seg hidden" data-i="${i}">DL</button>`;
+    list.appendChild(item);
+  });
+  $('seg-card').style.display=segs.length>1?'block':'none';
+  // restore encoded DL btns
+  encodedSegs.forEach(({blob},i)=>{
+    const btn=list.children[i]?.querySelector('.btn-dl-seg');
+    if(btn&&blob){btn.classList.remove('hidden');const nm=list.children[i].querySelector('.seg-nm').textContent;btn.onclick=()=>dlBlob(blob,nm);}
+  });
+  updateSplitBtn();
+}
+
+function updateSplitBtn(){$('btn-split-go').disabled=!decBuf||markers.length===0;}
+
+// ── equal split ──
+$('btn-eq').addEventListener('click',()=>{
+  if(!decBuf) return;
+  const n=Math.max(2,parseInt($('eq-n').value)||2);
+  markers=Array.from({length:n-1},(_,i)=>(duration/n)*(i+1));
+  drawWaveform(); renderSegs(); updateSplitBtn();
 });
 
-document.querySelectorAll('.mode-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentMode = btn.dataset.mode;
-    if (currentMode === 'bitrate') {
-      $('size-group').classList.add('hidden');
-      $('bitrate-group').classList.remove('hidden');
-      $('bitrate-display-row').classList.remove('hidden');
-    } else {
-      $('size-group').classList.remove('hidden');
-      $('bitrate-group').classList.add('hidden');
-      $('bitrate-display-row').classList.add('hidden');
-    }
-    updateEstimate();
+// ── silence detection ──
+$('btn-detect').addEventListener('click',()=>{
+  if(!decBuf) return;
+  const thresh=parseFloat($('sil-thresh').value)||0.02;
+  const minD=parseFloat($('sil-dur').value)||0.5;
+  const data=decBuf.getChannelData(0), sr=decBuf.sampleRate;
+  const minSmp=Math.floor(minD*sr);
+  let silSt=-1, silN=0; const found=[];
+  for(let i=0;i<data.length;i++){
+    if(Math.abs(data[i])<thresh){if(silSt<0)silSt=i;silN++;}
+    else{if(silN>=minSmp) found.push((silSt+silN/2)/sr);silSt=-1;silN=0;}
+  }
+  if(!found.length){alert('無音区間が見つかりませんでした。閾値を上げてみてください。');return;}
+  markers=[...new Set([...markers,...found])].sort((a,b)=>a-b);
+  drawWaveform(); renderSegs();
+  if(splitMethod==='time') renderMarkerList();
+  updateSplitBtn();
+});
+
+// ── playback ──
+function stopPlay(){
+  if(playSrc){try{playSrc.stop()}catch(_){}}
+  playSrc=null; playing=false; cancelAnimationFrame(raf);
+  $('play-icon').innerHTML='<path d="M5 3l14 9-14 9V3z"/>';
+  $('playhead').classList.remove('vis');
+}
+$('btn-play').addEventListener('click',()=>{
+  if(!decBuf) return;
+  if(playing){stopPlay();return;}
+  const ctx=getCtx();
+  if(ctx.state==='suspended') ctx.resume();
+  playSrc=ctx.createBufferSource();
+  playSrc.buffer=decBuf;
+  playSrc.connect(ctx.destination);
+  playOffset=Math.min(playOffset,duration);
+  playStartCtx=ctx.currentTime-playOffset;
+  playSrc.start(0,playOffset);
+  playing=true;
+  $('play-icon').innerHTML='<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+  $('playhead').classList.add('vis');
+  playSrc.onended=()=>{if(playing){playOffset=0;stopPlay();}};
+  (function tick(){
+    if(!playing) return;
+    const el=getCtx().currentTime-playStartCtx;
+    playOffset=el;
+    $('playhead').style.left=Math.min(100,el/duration*100)+'%';
+    $('time-disp').textContent=fmtT(el)+' / '+fmtT(duration);
+    raf=requestAnimationFrame(tick);
+  })();
+});
+$('btn-add-here').addEventListener('click',()=>{if(decBuf)addMarker(playOffset);});
+$('btn-clear-mk').addEventListener('click',()=>{markers=[];drawWaveform();renderSegs();if(splitMethod==='time')renderMarkerList();updateSplitBtn();});
+
+// ── time input ──
+$('btn-time-add').addEventListener('click',()=>{
+  const v=parseT($('time-input').value);
+  if(isNaN(v)||v<=0||v>=duration){alert('有効な時間を入力してください（例: 1:30）');return;}
+  addMarker(v); $('time-input').value=''; renderMarkerList();
+});
+$('time-input').addEventListener('keydown',e=>{if(e.key==='Enter')$('btn-time-add').click();});
+
+// ── split method ──
+document.querySelectorAll('.smb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.smb').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); splitMethod=b.dataset.sm;
+    document.querySelectorAll('.smp').forEach(p=>p.classList.remove('show'));
+    $('sm-'+splitMethod).classList.add('show');
+    if(splitMethod==='time') renderMarkerList();
   });
 });
 
-$('bitrate-slider').addEventListener('input', () => {
-  $('bitrate-value').textContent = $('bitrate-slider').value + ' kbps';
-  updateEstimate();
-});
+// ── encoder ──
+async function encodeMp3(buf, kbps, onProg) {
+  const nch=buf.numberOfChannels, sr=buf.sampleRate;
+  const enc=new lamejs.Mp3Encoder(nch,sr,kbps);
+  const CHUNK=1152;
+  const toI16=f=>{const b=new Int16Array(f.length);for(let i=0;i<f.length;i++)b[i]=Math.max(-32768,Math.min(32767,f[i]*32767));return b;};
+  const L=toI16(buf.getChannelData(0));
+  const R=nch>1?toI16(buf.getChannelData(1)):L;
+  const parts=[]; const tot=L.length;
+  for(let i=0;i<tot;i+=CHUNK){
+    const e2=Math.min(i+CHUNK,tot);
+    const d=nch>1?enc.encodeBuffer(L.subarray(i,e2),R.subarray(i,e2)):enc.encodeBuffer(L.subarray(i,e2));
+    if(d.length) parts.push(new Uint8Array(d));
+    if((i/CHUNK)%50===0){onProg&&onProg(i/tot);await new Promise(r=>setTimeout(r,0));}
+  }
+  const tail=enc.flush(); if(tail.length) parts.push(new Uint8Array(tail));
+  return new Blob(parts,{type:'audio/mp3'});
+}
 
-$('target-size').addEventListener('input', updateEstimate);
+function sliceBuf(buf,s,e){
+  const sr=buf.sampleRate, nch=buf.numberOfChannels;
+  const si=Math.floor(s*sr), ei=Math.min(Math.floor(e*sr),buf.length);
+  const out=getCtx().createBuffer(nch,ei-si,sr);
+  for(let c=0;c<nch;c++) out.getChannelData(c).set(buf.getChannelData(c).subarray(si,ei));
+  return out;
+}
 
-$('btn-compress').addEventListener('click', async () => {
-  if (!selectedFile) return;
+function dlBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();}
 
-  // calc kbps
+// ── compress ──
+$('btn-compress').addEventListener('click',async()=>{
+  if(!selFile) return;
   let kbps;
-  if (currentMode === 'size') {
-    const mb = parseFloat($('target-size').value) || 3;
-    const durationS = audioDuration > 0 ? audioDuration : (selectedFile.size * 8 / 128000);
-    kbps = Math.max(32, Math.min(320, Math.floor((mb * 1024 * 1024 * 8) / (durationS * 1000))));
-  } else {
-    kbps = parseInt($('bitrate-slider').value);
-  }
+  if(compressMode==='size'){
+    const mb=parseFloat($('target-size').value)||3;
+    const d=duration>0?duration:selFile.size*8/128000;
+    kbps=Math.max(32,Math.min(320,Math.floor(mb*1048576*8/(d*1000))));
+  } else kbps=parseInt($('bitrate-slider').value);
 
-  const baseName = selectedFile.name.replace(/\.[^.]+$/, '');
-  const outputName = baseName + '_compressed.mp3';
-
-  $('btn-compress').disabled = true;
-  $('result-section').classList.remove('visible');
-  $('progress-section').classList.add('visible');
-  $('progress-text').textContent = 'デコード中...';
-  $('progress-pct').textContent = '';
-  $('progress-fill').style.width = '0%';
-  $('progress-fill').classList.add('indeterminate');
-  $('log-output').textContent = 'ファイルを読み込んでいます...';
-
+  const outNm=selFile.name.replace(/\.[^.]+$/,'')+'_compressed.mp3';
+  $('btn-compress').disabled=true;
+  $('c-result').classList.add('hidden');
+  $('c-prog-card').classList.remove('hidden');
+  $('c-prog-txt').textContent='デコード中...';
+  $('c-prog-pct').textContent='';
+  $('c-prog-fill').style.width='0%';
+  $('c-prog-fill').classList.add('ind');
+  $('c-log').textContent='読み込み中...';
   try {
-    // decode audio
-    if (!audioCtx) audioCtx = new AudioContext();
-    const arrayBuf = await selectedFile.arrayBuffer();
-    $('log-output').textContent = `デコード中... (${kbps} kbps でエンコードします)`;
-    const audioBuffer = await audioCtx.decodeAudioData(arrayBuf);
-    audioDuration = audioBuffer.duration;
+    const buf=decBuf||(await (async()=>{const ab=await selFile.arrayBuffer();const b=await getCtx().decodeAudioData(ab);decBuf=b;duration=b.duration;return b;})());
+    $('c-prog-fill').classList.remove('ind');
+    $('c-prog-txt').textContent='エンコード中...';
+    $('c-log').textContent=`${kbps} kbps でMP3エンコード中...`;
+    const blob=await encodeMp3(buf,kbps,p=>{
+      $('c-prog-fill').style.width=Math.round(p*100)+'%';
+      $('c-prog-pct').textContent=Math.round(p*100)+'%';
+      $('c-log').textContent=`エンコード中... ${Math.round(p*100)}%`;
+    });
+    $('c-prog-fill').style.width='100%'; $('c-prog-pct').textContent='100%';
+    $('c-prog-txt').textContent='完了'; $('c-log').textContent=`完了 — ${kbps} kbps MP3`;
+    const bf=selFile.size, af=blob.size, red=Math.round((1-af/bf)*100);
+    $('r-before').textContent=fmtB(bf); $('r-after').textContent=fmtB(af);
+    $('r-ratio').textContent=red>0?`-${red}%`:`+${Math.abs(red)}%`;
+    $('c-result').classList.remove('hidden');
+    $('btn-dl-compress').onclick=()=>dlBlob(blob,outNm);
+  } catch(e){ $('c-prog-txt').textContent='エラー'; $('c-log').textContent=e.message; }
+  finally{ $('btn-compress').disabled=false; }
+});
 
-    $('progress-text').textContent = 'エンコード中...';
-    $('log-output').textContent = 'MP3 エンコード開始...';
+// ── split encode ──
+$('btn-split-go').addEventListener('click',async()=>{
+  if(!decBuf||!markers.length) return;
+  const segs=getSegs();
+  const base=selFile?selFile.name.replace(/\.[^.]+$/,''):'audio';
+  encodedSegs=[];
+  $('btn-split-go').disabled=true;
+  $('split-dl-area').classList.add('hidden');
+  $('s-prog-card').classList.remove('hidden');
 
-    outputBlob = await encodeMp3(audioBuffer, kbps);
-
-    $('progress-fill').style.width = '100%';
-    $('progress-pct').textContent = '100%';
-    $('progress-text').textContent = '完了';
-    $('log-output').textContent = `完了 — ${kbps} kbps MP3`;
-
-    const before = selectedFile.size;
-    const after = outputBlob.size;
-    const reduction = Math.round((1 - after / before) * 100);
-
-    $('res-before').textContent = formatBytes(before);
-    $('res-after').textContent = formatBytes(after);
-    $('res-ratio').textContent = reduction > 0 ? `-${reduction}%` : `+${Math.abs(reduction)}%`;
-    $('result-section').classList.add('visible');
-
-    $('btn-download').onclick = () => {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(outputBlob);
-      a.download = outputName;
-      a.click();
-    };
-  } catch(e) {
-    $('progress-text').textContent = 'エラーが発生しました';
-    $('log-output').textContent = e.message;
-  } finally {
-    $('btn-compress').disabled = false;
+  for(let i=0;i<segs.length;i++){
+    const {s,e}=segs[i];
+    const nm=`${base}_${String(i+1).padStart(2,'0')}.mp3`;
+    $('s-prog-txt').textContent=`エンコード中 (${i+1} / ${segs.length})`;
+    $('s-log').textContent=nm+'...';
+    const sliced=sliceBuf(decBuf,s,e);
+    const blob=await encodeMp3(sliced,128,p=>{
+      $('s-prog-fill').style.width=Math.round(((i+p)/segs.length)*100)+'%';
+      $('s-prog-pct').textContent=Math.round(((i+p)/segs.length)*100)+'%';
+    });
+    encodedSegs.push({name:nm,blob});
+    const btn=$('seg-list').children[i]?.querySelector('.btn-dl-seg');
+    if(btn){btn.classList.remove('hidden');btn.onclick=()=>dlBlob(blob,nm);}
   }
+  $('s-prog-fill').style.width='100%'; $('s-prog-pct').textContent='100%';
+  $('s-prog-txt').textContent='完了'; $('s-log').textContent=`${segs.length} 個のセグメント完了`;
+  $('split-dl-area').classList.remove('hidden');
+  $('btn-split-go').disabled=false;
 });
 
-$('btn-reset').addEventListener('click', () => {
-  clearFile();
-  $('result-section').classList.remove('visible');
-  $('progress-section').classList.remove('visible');
+// ── ZIP ──
+$('btn-dl-zip').addEventListener('click',async()=>{
+  if(!encodedSegs.length) return;
+  const zip=new JSZip();
+  for(const {name,blob} of encodedSegs) zip.file(name,await blob.arrayBuffer());
+  const zb=await zip.generateAsync({type:'blob'});
+  const base=selFile?selFile.name.replace(/\.[^.]+$/,''):'audio';
+  dlBlob(zb,base+'_split.zip');
 });
 
-initApp();
+// ── compress tab controls ──
+document.querySelectorAll('.mode-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); compressMode=b.dataset.mode;
+    if(compressMode==='bitrate'){$('size-group').classList.add('hidden');$('bitrate-group').classList.remove('hidden');$('bitrate-disp-row').classList.remove('hidden');}
+    else{$('size-group').classList.remove('hidden');$('bitrate-group').classList.add('hidden');$('bitrate-disp-row').classList.add('hidden');}
+    updateEst();
+  });
+});
+$('bitrate-slider').addEventListener('input',()=>{$('bitrate-val').textContent=$('bitrate-slider').value+' kbps';updateEst();});
+$('target-size').addEventListener('input',updateEst);
+
+function updateEst(){
+  if(!selFile||!duration) return;
+  $('est-bar').classList.add('visible');
+  const estB=compressMode==='bitrate'?parseInt($('bitrate-slider').value)*125*duration:(parseFloat($('target-size').value)||3)*1048576;
+  const ratio=estB/selFile.size;
+  $('est-sz').textContent=fmtB(estB); $('est-dur').textContent=fmtT(duration);
+  $('est-ratio').textContent=ratio<1?`▼ ${Math.round((1-ratio)*100)}% 削減`:`▲ ${Math.round((ratio-1)*100)}% 増加`;
+}
+
+// ── tab switching ──
+document.querySelectorAll('.tab-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    const tab=b.dataset.tab;
+    $('tab-compress').classList.toggle('hidden',tab!=='compress');
+    $('tab-split').classList.toggle('hidden',tab!=='split');
+    if(tab==='split'&&decBuf){setTimeout(()=>drawWaveform(),50);}
+  });
+});
+
+// ── file events ──
+$('file-input').addEventListener('change',e=>setFile(e.target.files[0]));
+$('btn-clear').addEventListener('click',e=>{e.stopPropagation();clearFile();});
+const dz=$('drop-zone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('dragover'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('dragover');const f=e.dataTransfer.files[0];if(f)setFile(f);});
+window.addEventListener('resize',()=>{if(decBuf&&!$('tab-split').classList.contains('hidden'))drawWaveform();});
 </script>
 </body>
 </html>
