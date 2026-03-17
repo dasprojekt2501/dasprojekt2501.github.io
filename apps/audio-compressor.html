@@ -761,7 +761,7 @@ async function loadFFmpeg() {
   try {
     ffmpeg = createFFmpeg({
       log: true,
-      corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+      corePath: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js',
       progress: ({ ratio }) => {
         if (ratio > 0) {
           const pct = Math.min(99, Math.round(ratio * 100));
