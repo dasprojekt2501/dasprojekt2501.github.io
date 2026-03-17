@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audio Compressor</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0f0ee;
+    --muted: #666;
+    --accent: #c8f564;
+    --accent-dim: rgba(200,245,100,0.12);
+    --accent-glow: rgba(200,245,100,0.2);
+    --danger: #ff6b6b;
+    --info: #64b5f6;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1.5rem;
+  }
+
+  header {
+    width: 100%;
+    max-width: 640px;
+    margin-bottom: 3rem;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  h1 span {
+    color: var(--accent);
+  }
+
+  .subtitle {
+    margin-top: 0.6rem;
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  main {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover {
+    border-color: var(--border-hover);
+  }
+
+  /* Drop Zone */
+  #drop-zone {
+    border: 1px dashed var(--border-hover);
+    border-radius: 14px;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    background: var(--surface);
+  }
+
+  #drop-zone.dragover {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  #drop-zone.has-file {
+    border-style: solid;
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  #drop-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .drop-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+    opacity: 0.4;
+  }
+
+  .drop-title {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+  }
+
+  .drop-hint {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .file-info {
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .file-info.visible { display: flex; }
+
+  .file-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--accent-dim);
+    border: 0.5px solid var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .file-details { flex: 1; text-align: left; }
+  .file-name {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+  }
+  .file-meta {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-top: 2px;
+  }
+
+  .btn-clear {
+    background: none;
+    border: 0.5px solid var(--border-hover);
+    border-radius: 6px;
+    color: var(--muted);
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: var(--mono);
+    transition: all 0.15s;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+  }
+
+  .btn-clear:hover { color: var(--text); border-color: var(--text); }
+
+  /* Settings */
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .setting-group { display: flex; flex-direction: column; gap: 8px; }
+
+  .setting-label {
+    font-size: 11px;
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  select, input[type="number"] {
+    background: var(--surface2);
+    border: 0.5px solid var(--border-hover);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 14px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  select:focus, input[type="number"]:focus {
+    border-color: var(--accent);
+  }
+
+  select option { background: #1e1e1e; }
+
+  /* Mode toggle */
+  .mode-toggle {
+    display: flex;
+    background: var(--surface2);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+  }
+
+  .mode-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    border-radius: 6px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 7px 4px;
+    cursor: pointer;
+    transition: all 0.18s;
+    text-transform: uppercase;
+  }
+
+  .mode-btn.active {
+    background: var(--accent);
+    color: #0d0d0d;
+    font-weight: 500;
+  }
+
+  /* Size target input */
+  .size-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .size-row input {
+    flex: 1;
+  }
+
+  .size-unit {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* Bitrate slider */
+  .slider-wrap { display: flex; flex-direction: column; gap: 6px; }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .slider-value {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--accent);
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--surface2);
+    outline: none;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+  }
+
+  /* Estimate */
+  .estimate-bar {
+    display: none;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 0.875rem 1rem;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .estimate-bar.visible { display: flex; }
+
+  .est-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .est-values {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .est-item { display: flex; flex-direction: column; gap: 2px; }
+  .est-num { color: var(--text); }
+  .est-sub { font-size: 10px; color: var(--muted); }
+
+  .ratio-badge {
+    background: var(--accent-dim);
+    border: 0.5px solid var(--accent);
+    color: var(--accent);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  /* Progress */
+  #progress-section {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #progress-section.visible { display: flex; }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .progress-track {
+    height: 3px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .progress-fill.indeterminate {
+    width: 40%;
+    animation: slide 1.2s ease-in-out infinite;
+  }
+
+  @keyframes slide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(350%); }
+  }
+
+  .log-output {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    max-height: 80px;
+    overflow-y: auto;
+    line-height: 1.6;
+  }
+
+  /* Actions */
+  .btn-compress {
+    width: 100%;
+    background: var(--accent);
+    color: #0d0d0d;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-compress:hover:not(:disabled) {
+    background: #d4f97a;
+    transform: translateY(-1px);
+  }
+
+  .btn-compress:active:not(:disabled) { transform: translateY(0); }
+
+  .btn-compress:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Result */
+  #result-section {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #result-section.visible { display: flex; }
+
+  .result-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .stat-card {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--text);
+  }
+
+  .stat-num.accent { color: var(--accent); }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .btn-download {
+    width: 100%;
+    background: none;
+    border: 0.5px solid var(--accent);
+    color: var(--accent);
+    border-radius: 10px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-download:hover {
+    background: var(--accent);
+    color: #0d0d0d;
+  }
+
+  .btn-reset {
+    background: none;
+    border: 0.5px solid var(--border-hover);
+    color: var(--muted);
+    border-radius: 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+  }
+
+  .btn-reset:hover { color: var(--text); border-color: var(--text); }
+
+  /* Warning / info */
+  .notice {
+    background: rgba(100, 181, 246, 0.06);
+    border: 0.5px solid rgba(100, 181, 246, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 12px;
+    color: var(--info);
+    font-family: var(--mono);
+    line-height: 1.6;
+  }
+
+  .loading-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 480px) {
+    .settings-grid { grid-template-columns: 1fr; }
+    .result-stats { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Audio Tools</div>
+  <h1>Sound<span>Press</span></h1>
+  <p class="subtitle">ブラウザ上で完結する音声圧縮ツール — ファイルはサーバーへ送信されません</p>
+</header>
+
+<main>
+
+  <!-- FFmpeg loading -->
+  <div id="loading-screen" class="card loading-screen">
+    <div class="spinner"></div>
+    <span>FFmpeg を読み込み中...</span>
+  </div>
+
+  <div id="app-content" class="hidden">
+
+    <!-- File drop -->
+    <div id="drop-zone">
+      <input type="file" id="file-input" accept=".mp3,.m4a,.aac,.wav,.ogg,.flac,.opus,.weba,.webm">
+
+      <div id="drop-placeholder">
+        <svg class="drop-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="14" width="32" height="24" rx="3" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M24 10v14M18 18l6-6 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="24" cy="31" r="3" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M19 31h-4M33 31h-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <p class="drop-title">ファイルをドロップ、またはクリックして選択</p>
+        <p class="drop-hint">mp3 · m4a · aac · wav · ogg · flac · opus</p>
+      </div>
+
+      <div class="file-info" id="file-info">
+        <div class="file-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8f564" stroke-width="1.5">
+            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+          </svg>
+        </div>
+        <div class="file-details">
+          <div class="file-name" id="file-name-display"></div>
+          <div class="file-meta" id="file-meta-display"></div>
+        </div>
+        <button class="btn-clear" id="btn-clear" type="button">✕ 削除</button>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="card">
+      <div style="margin-bottom: 1.25rem;">
+        <div class="setting-label" style="margin-bottom: 8px;">圧縮モード</div>
+        <div class="mode-toggle">
+          <button class="mode-btn active" data-mode="bitrate">ビットレート指定</button>
+          <button class="mode-btn" data-mode="size">サイズ目標</button>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+
+        <!-- Format -->
+        <div class="setting-group">
+          <label class="setting-label">出力フォーマット</label>
+          <select id="format-select">
+            <option value="mp3">MP3</option>
+            <option value="aac">AAC (M4A)</option>
+            <option value="ogg">OGG Vorbis</option>
+            <option value="opus">Opus</option>
+          </select>
+        </div>
+
+        <!-- Target size (size mode) -->
+        <div class="setting-group" id="size-group">
+          <label class="setting-label">目標ファイルサイズ</label>
+          <div class="size-row">
+            <input type="number" id="target-size" value="3" min="0.1" max="500" step="0.1">
+            <span class="size-unit">MB</span>
+          </div>
+        </div>
+
+        <!-- Bitrate (bitrate mode) -->
+        <div class="setting-group hidden" id="bitrate-group">
+          <label class="setting-label">ビットレート</label>
+          <input type="range" id="bitrate-slider" min="32" max="320" step="8" value="128">
+        </div>
+
+      </div>
+
+      <!-- Bitrate value (bitrate mode) -->
+      <div id="bitrate-display-row" class="hidden" style="margin-top: 0.75rem;">
+        <div class="slider-header">
+          <span class="setting-label">選択中</span>
+          <span class="slider-value" id="bitrate-value">128 kbps</span>
+        </div>
+      </div>
+
+      <!-- Estimate -->
+      <div class="estimate-bar" id="estimate-bar" style="margin-top: 1.25rem;">
+        <span class="est-label">概算</span>
+        <div class="est-values">
+          <div class="est-item">
+            <span class="est-num" id="est-output">—</span>
+            <span class="est-sub">出力サイズ</span>
+          </div>
+          <div class="est-item">
+            <span class="est-num" id="est-duration">—</span>
+            <span class="est-sub">再生時間</span>
+          </div>
+        </div>
+        <span class="ratio-badge" id="est-ratio">—</span>
+      </div>
+    </div>
+
+    <!-- Notice -->
+    <div class="notice" id="notice">
+      初回の変換には少し時間がかかる場合があります（FFmpeg の初期化のため）。<br>
+      処理はすべてブラウザ内で行われます。ファイルは外部に送信されません。
+    </div>
+
+    <!-- Progress -->
+    <div class="card" id="progress-section">
+      <div class="progress-label">
+        <span id="progress-text">処理中...</span>
+        <span id="progress-pct"></span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill indeterminate" id="progress-fill"></div>
+      </div>
+      <div class="log-output" id="log-output"></div>
+    </div>
+
+    <!-- Compress button -->
+    <button class="btn-compress" id="btn-compress" disabled>圧縮する</button>
+
+    <!-- Result -->
+    <div id="result-section">
+      <div class="result-stats">
+        <div class="stat-card">
+          <span class="stat-num" id="res-before">—</span>
+          <span class="stat-label">圧縮前</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num accent" id="res-after">—</span>
+          <span class="stat-label">圧縮後</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num accent" id="res-ratio">—</span>
+          <span class="stat-label">削減率</span>
+        </div>
+      </div>
+      <button class="btn-download" id="btn-download">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+        </svg>
+        ダウンロード
+      </button>
+      <button class="btn-reset" id="btn-reset">別のファイルを変換する</button>
+    </div>
+
+  </div>
+</main>
+
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+<script>
+const { createFFmpeg, fetchFile } = FFmpeg;
+
+let ffmpeg = null;
+let selectedFile = null;
+let outputBlob = null;
+let currentMode = 'bitrate';
+let audioDuration = 0;
+
+const $ = id => document.getElementById(id);
+
+async function loadFFmpeg() {
+  try {
+    ffmpeg = createFFmpeg({
+      log: true,
+      corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+      progress: ({ ratio }) => {
+        if (ratio > 0) {
+          const pct = Math.min(99, Math.round(ratio * 100));
+          const fill = $('progress-fill');
+          fill.classList.remove('indeterminate');
+          fill.style.width = pct + '%';
+          $('progress-pct').textContent = pct + '%';
+        }
+      },
+      logger: ({ message }) => {
+        $('log-output').textContent = message;
+        const durMatch = message.match(/Duration: (\d+):(\d+):(\d+\.\d+)/);
+        if (durMatch) {
+          audioDuration = parseInt(durMatch[1]) * 3600 + parseInt(durMatch[2]) * 60 + parseFloat(durMatch[3]);
+          updateEstimate();
+        }
+      }
+    });
+    await ffmpeg.load();
+    $('loading-screen').classList.add('hidden');
+    $('app-content').classList.remove('hidden');
+  } catch(e) {
+    $('loading-screen').innerHTML = `<div style="color:#ff6b6b;font-family:monospace;font-size:13px;text-align:center;padding:1.5rem;line-height:1.8">FFmpeg の読み込みに失敗しました。<br>このアプリは <strong>https://</strong> 環境が必要です。<br>ローカルで使う場合は Live Server 等をご利用ください。<br><br><small style="color:#666">${e.message}</small></div>`;
+  }
+}
+
+function formatBytes(bytes) {
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+function formatDuration(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${String(sec).padStart(2, '0')}`;
+}
+
+function updateEstimate() {
+  if (!selectedFile || audioDuration === 0) return;
+  $('estimate-bar').classList.add('visible');
+
+  let estBytes;
+  if (currentMode === 'bitrate') {
+    const kbps = parseInt($('bitrate-slider').value);
+    estBytes = (kbps * 1000 / 8) * audioDuration;
+  } else {
+    const mb = parseFloat($('target-size').value) || 3;
+    estBytes = mb * 1024 * 1024;
+  }
+
+  const ratio = estBytes / selectedFile.size;
+  $('est-output').textContent = formatBytes(estBytes);
+  $('est-duration').textContent = formatDuration(audioDuration);
+  $('est-ratio').textContent = ratio < 1
+    ? `▼ ${Math.round((1 - ratio) * 100)}% 削減`
+    : `▲ ${Math.round((ratio - 1) * 100)}% 増加`;
+}
+
+function setFile(file) {
+  if (!file) return;
+  selectedFile = file;
+  audioDuration = 0;
+
+  $('drop-placeholder').style.display = 'none';
+  $('file-info').classList.add('visible');
+  $('file-name-display').textContent = file.name;
+  $('file-meta-display').textContent = `${formatBytes(file.size)} · ${file.type || '不明'}`;
+  $('drop-zone').classList.add('has-file');
+  $('btn-compress').disabled = false;
+  $('result-section').classList.remove('visible');
+  $('estimate-bar').classList.remove('visible');
+
+  const audio = new Audio();
+  const url = URL.createObjectURL(file);
+  audio.src = url;
+  audio.addEventListener('loadedmetadata', () => {
+    audioDuration = audio.duration;
+    URL.revokeObjectURL(url);
+    updateEstimate();
+  });
+  audio.load();
+}
+
+function clearFile() {
+  selectedFile = null;
+  audioDuration = 0;
+  $('drop-placeholder').style.display = '';
+  $('file-info').classList.remove('visible');
+  $('drop-zone').classList.remove('has-file');
+  $('btn-compress').disabled = true;
+  $('estimate-bar').classList.remove('visible');
+  $('file-input').value = '';
+}
+
+$('file-input').addEventListener('change', e => setFile(e.target.files[0]));
+
+$('btn-clear').addEventListener('click', e => {
+  e.stopPropagation();
+  clearFile();
+});
+
+const dz = $('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', e => {
+  e.preventDefault();
+  dz.classList.remove('dragover');
+  const f = e.dataTransfer.files[0];
+  if (f) setFile(f);
+});
+
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+    if (currentMode === 'bitrate') {
+      $('size-group').classList.add('hidden');
+      $('bitrate-group').classList.remove('hidden');
+      $('bitrate-display-row').classList.remove('hidden');
+    } else {
+      $('size-group').classList.remove('hidden');
+      $('bitrate-group').classList.add('hidden');
+      $('bitrate-display-row').classList.add('hidden');
+    }
+    updateEstimate();
+  });
+});
+
+$('bitrate-slider').addEventListener('input', () => {
+  $('bitrate-value').textContent = $('bitrate-slider').value + ' kbps';
+  updateEstimate();
+});
+
+$('target-size').addEventListener('input', updateEstimate);
+
+$('btn-compress').addEventListener('click', async () => {
+  if (!selectedFile || !ffmpeg) return;
+
+  const format = $('format-select').value;
+  const ext = format === 'aac' ? 'm4a' : format;
+  const baseName = selectedFile.name.replace(/\.[^.]+$/, '');
+  const outputName = baseName + '_compressed.' + ext;
+
+  let bitrateArg;
+  if (currentMode === 'size') {
+    const mb = parseFloat($('target-size').value) || 3;
+    const durationS = audioDuration > 0 ? audioDuration : (selectedFile.size * 8 / 128000);
+    const targetKbps = Math.max(32, Math.floor((mb * 1024 * 1024 * 8) / (durationS * 1000)));
+    bitrateArg = String(Math.min(320, targetKbps)) + 'k';
+  } else {
+    bitrateArg = $('bitrate-slider').value + 'k';
+  }
+
+  const codecMap = { mp3: 'libmp3lame', aac: 'aac', ogg: 'libvorbis', opus: 'libopus' };
+  const codec = codecMap[format];
+
+  $('btn-compress').disabled = true;
+  $('result-section').classList.remove('visible');
+  $('progress-section').classList.add('visible');
+  $('progress-text').textContent = '変換中...';
+  $('progress-pct').textContent = '';
+  $('progress-fill').style.width = '0%';
+  $('progress-fill').classList.add('indeterminate');
+  $('log-output').textContent = '';
+
+  try {
+    ffmpeg.FS('writeFile', 'input', await fetchFile(selectedFile));
+
+    const args = ['-i', 'input', '-c:a', codec, '-b:a', bitrateArg];
+    if (format === 'aac') args.push('-movflags', '+faststart');
+    args.push(outputName);
+
+    await ffmpeg.run(...args);
+
+    const data = ffmpeg.FS('readFile', outputName);
+    outputBlob = new Blob([data.buffer], { type: `audio/${format}` });
+
+    $('progress-fill').classList.remove('indeterminate');
+    $('progress-fill').style.width = '100%';
+    $('progress-text').textContent = '完了';
+    $('progress-pct').textContent = '100%';
+
+    const before = selectedFile.size;
+    const after = outputBlob.size;
+    const reduction = Math.round((1 - after / before) * 100);
+
+    $('res-before').textContent = formatBytes(before);
+    $('res-after').textContent = formatBytes(after);
+    $('res-ratio').textContent = reduction > 0 ? `-${reduction}%` : `+${Math.abs(reduction)}%`;
+
+    $('result-section').classList.add('visible');
+
+    $('btn-download').onclick = () => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(outputBlob);
+      a.download = outputName;
+      a.click();
+    };
+
+    try { ffmpeg.FS('unlink', 'input'); } catch(_) {}
+    try { ffmpeg.FS('unlink', outputName); } catch(_) {}
+
+  } catch(e) {
+    $('progress-text').textContent = 'エラーが発生しました';
+    $('log-output').textContent = e.message;
+  } finally {
+    $('btn-compress').disabled = false;
+  }
+});
+
+$('btn-reset').addEventListener('click', () => {
+  clearFile();
+  $('result-section').classList.remove('visible');
+  $('progress-section').classList.remove('visible');
+});
+
+loadFFmpeg();
+</script>
+</body>
+</html>
