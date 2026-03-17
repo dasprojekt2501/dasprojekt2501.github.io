@@ -646,11 +646,8 @@
         <!-- Format -->
         <div class="setting-group">
           <label class="setting-label">出力フォーマット</label>
-          <select id="format-select">
+          <select id="format-select" disabled style="opacity:0.5">
             <option value="mp3">MP3</option>
-            <option value="aac">AAC (M4A)</option>
-            <option value="ogg">OGG Vorbis</option>
-            <option value="opus">Opus</option>
           </select>
         </div>
 
@@ -698,8 +695,8 @@
 
     <!-- Notice -->
     <div class="notice" id="notice">
-      初回の変換には少し時間がかかる場合があります（FFmpeg の初期化のため）。<br>
-      処理はすべてブラウザ内で行われます。ファイルは外部に送信されません。
+      処理はすべてブラウザ内で完結します。ファイルは外部に送信されません。<br>
+      入力: MP3 / M4A / AAC / WAV / OGG / FLAC など → 出力: MP3
     </div>
 
     <!-- Progress -->
@@ -745,47 +742,19 @@
   </div>
 </main>
 
-<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
 <script>
-const { createFFmpeg, fetchFile } = FFmpeg;
-
-let ffmpeg = null;
 let selectedFile = null;
 let outputBlob = null;
 let currentMode = 'bitrate';
 let audioDuration = 0;
+let audioCtx = null;
 
 const $ = id => document.getElementById(id);
 
-async function loadFFmpeg() {
-  try {
-    ffmpeg = createFFmpeg({
-      log: true,
-      corePath: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js',
-      progress: ({ ratio }) => {
-        if (ratio > 0) {
-          const pct = Math.min(99, Math.round(ratio * 100));
-          const fill = $('progress-fill');
-          fill.classList.remove('indeterminate');
-          fill.style.width = pct + '%';
-          $('progress-pct').textContent = pct + '%';
-        }
-      },
-      logger: ({ message }) => {
-        $('log-output').textContent = message;
-        const durMatch = message.match(/Duration: (\d+):(\d+):(\d+\.\d+)/);
-        if (durMatch) {
-          audioDuration = parseInt(durMatch[1]) * 3600 + parseInt(durMatch[2]) * 60 + parseFloat(durMatch[3]);
-          updateEstimate();
-        }
-      }
-    });
-    await ffmpeg.load();
-    $('loading-screen').classList.add('hidden');
-    $('app-content').classList.remove('hidden');
-  } catch(e) {
-    $('loading-screen').innerHTML = `<div style="color:#ff6b6b;font-family:monospace;font-size:13px;text-align:center;padding:1.5rem;line-height:1.8">FFmpeg の読み込みに失敗しました。<br>このアプリは <strong>https://</strong> 環境が必要です。<br>ローカルで使う場合は Live Server 等をご利用ください。<br><br><small style="color:#666">${e.message}</small></div>`;
-  }
+function initApp() {
+  $('loading-screen').classList.add('hidden');
+  $('app-content').classList.remove('hidden');
 }
 
 function formatBytes(bytes) {
@@ -856,6 +825,46 @@ function clearFile() {
   $('file-input').value = '';
 }
 
+// ---- encode MP3 via lamejs in a chunked async loop ----
+async function encodeMp3(audioBuffer, kbps) {
+  const nCh = audioBuffer.numberOfChannels;
+  const sampleRate = audioBuffer.sampleRate;
+  const mp3enc = new lamejs.Mp3Encoder(nCh, sampleRate, kbps);
+  const CHUNK = 1152;
+  const L = audioBuffer.getChannelData(0);
+  const R = nCh > 1 ? audioBuffer.getChannelData(1) : L;
+  const toInt16 = f32 => {
+    const buf = new Int16Array(f32.length);
+    for (let i = 0; i < f32.length; i++) buf[i] = Math.max(-32768, Math.min(32767, f32[i] * 32767));
+    return buf;
+  };
+  const Lpcm = toInt16(L);
+  const Rpcm = toInt16(R);
+  const parts = [];
+  const total = Lpcm.length;
+
+  for (let i = 0; i < total; i += CHUNK) {
+    const end = Math.min(i + CHUNK, total);
+    const lChunk = Lpcm.subarray(i, end);
+    const rChunk = Rpcm.subarray(i, end);
+    const d = nCh > 1 ? mp3enc.encodeBuffer(lChunk, rChunk) : mp3enc.encodeBuffer(lChunk);
+    if (d.length > 0) parts.push(new Uint8Array(d));
+    // yield to UI every 50 chunks
+    if ((i / CHUNK) % 50 === 0) {
+      const pct = Math.min(98, Math.round((i / total) * 100));
+      $('progress-fill').classList.remove('indeterminate');
+      $('progress-fill').style.width = pct + '%';
+      $('progress-pct').textContent = pct + '%';
+      $('log-output').textContent = `エンコード中... ${pct}%`;
+      await new Promise(r => setTimeout(r, 0));
+    }
+  }
+  const tail = mp3enc.flush();
+  if (tail.length > 0) parts.push(new Uint8Array(tail));
+  return new Blob(parts, { type: 'audio/mp3' });
+}
+
+// ---- event listeners ----
 $('file-input').addEventListener('change', e => setFile(e.target.files[0]));
 
 $('btn-clear').addEventListener('click', e => {
@@ -899,51 +908,47 @@ $('bitrate-slider').addEventListener('input', () => {
 $('target-size').addEventListener('input', updateEstimate);
 
 $('btn-compress').addEventListener('click', async () => {
-  if (!selectedFile || !ffmpeg) return;
+  if (!selectedFile) return;
 
-  const format = $('format-select').value;
-  const ext = format === 'aac' ? 'm4a' : format;
-  const baseName = selectedFile.name.replace(/\.[^.]+$/, '');
-  const outputName = baseName + '_compressed.' + ext;
-
-  let bitrateArg;
+  // calc kbps
+  let kbps;
   if (currentMode === 'size') {
     const mb = parseFloat($('target-size').value) || 3;
     const durationS = audioDuration > 0 ? audioDuration : (selectedFile.size * 8 / 128000);
-    const targetKbps = Math.max(32, Math.floor((mb * 1024 * 1024 * 8) / (durationS * 1000)));
-    bitrateArg = String(Math.min(320, targetKbps)) + 'k';
+    kbps = Math.max(32, Math.min(320, Math.floor((mb * 1024 * 1024 * 8) / (durationS * 1000))));
   } else {
-    bitrateArg = $('bitrate-slider').value + 'k';
+    kbps = parseInt($('bitrate-slider').value);
   }
 
-  const codecMap = { mp3: 'libmp3lame', aac: 'aac', ogg: 'libvorbis', opus: 'libopus' };
-  const codec = codecMap[format];
+  const baseName = selectedFile.name.replace(/\.[^.]+$/, '');
+  const outputName = baseName + '_compressed.mp3';
 
   $('btn-compress').disabled = true;
   $('result-section').classList.remove('visible');
   $('progress-section').classList.add('visible');
-  $('progress-text').textContent = '変換中...';
+  $('progress-text').textContent = 'デコード中...';
   $('progress-pct').textContent = '';
   $('progress-fill').style.width = '0%';
   $('progress-fill').classList.add('indeterminate');
-  $('log-output').textContent = '';
+  $('log-output').textContent = 'ファイルを読み込んでいます...';
 
   try {
-    ffmpeg.FS('writeFile', 'input', await fetchFile(selectedFile));
+    // decode audio
+    if (!audioCtx) audioCtx = new AudioContext();
+    const arrayBuf = await selectedFile.arrayBuffer();
+    $('log-output').textContent = `デコード中... (${kbps} kbps でエンコードします)`;
+    const audioBuffer = await audioCtx.decodeAudioData(arrayBuf);
+    audioDuration = audioBuffer.duration;
 
-    const args = ['-i', 'input', '-c:a', codec, '-b:a', bitrateArg];
-    if (format === 'aac') args.push('-movflags', '+faststart');
-    args.push(outputName);
+    $('progress-text').textContent = 'エンコード中...';
+    $('log-output').textContent = 'MP3 エンコード開始...';
 
-    await ffmpeg.run(...args);
+    outputBlob = await encodeMp3(audioBuffer, kbps);
 
-    const data = ffmpeg.FS('readFile', outputName);
-    outputBlob = new Blob([data.buffer], { type: `audio/${format}` });
-
-    $('progress-fill').classList.remove('indeterminate');
     $('progress-fill').style.width = '100%';
-    $('progress-text').textContent = '完了';
     $('progress-pct').textContent = '100%';
+    $('progress-text').textContent = '完了';
+    $('log-output').textContent = `完了 — ${kbps} kbps MP3`;
 
     const before = selectedFile.size;
     const after = outputBlob.size;
@@ -952,7 +957,6 @@ $('btn-compress').addEventListener('click', async () => {
     $('res-before').textContent = formatBytes(before);
     $('res-after').textContent = formatBytes(after);
     $('res-ratio').textContent = reduction > 0 ? `-${reduction}%` : `+${Math.abs(reduction)}%`;
-
     $('result-section').classList.add('visible');
 
     $('btn-download').onclick = () => {
@@ -961,10 +965,6 @@ $('btn-compress').addEventListener('click', async () => {
       a.download = outputName;
       a.click();
     };
-
-    try { ffmpeg.FS('unlink', 'input'); } catch(_) {}
-    try { ffmpeg.FS('unlink', outputName); } catch(_) {}
-
   } catch(e) {
     $('progress-text').textContent = 'エラーが発生しました';
     $('log-output').textContent = e.message;
@@ -979,7 +979,7 @@ $('btn-reset').addEventListener('click', () => {
   $('progress-section').classList.remove('visible');
 });
 
-loadFFmpeg();
+initApp();
 </script>
 </body>
 </html>
