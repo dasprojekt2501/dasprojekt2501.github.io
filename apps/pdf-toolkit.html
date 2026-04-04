@@ -521,6 +521,117 @@ document.addEventListener('DOMContentLoaded',function(){
     vertical-align: middle; margin-right: 6px;
   }
 
+  /* ===== TRIM PANEL STYLES ===== */
+  .trim-mode-btns {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;
+  }
+  .trim-mode-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 16px 14px;
+    background: var(--surface); border: 2px solid var(--border);
+    border-radius: var(--radius); cursor: pointer; transition: all 0.2s;
+    color: var(--text-dim); font-family: 'Noto Sans JP', sans-serif;
+    font-size: 13px; font-weight: 500;
+  }
+  .trim-mode-btn:hover { border-color: var(--accent); color: var(--text); }
+  .trim-mode-btn.active { border-color: var(--accent); background: var(--accent-glow); color: var(--text); }
+  .trim-mode-icon { font-size: 24px; margin-bottom: 2px; }
+  .trim-mode-desc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+  .trim-workspace {
+    display: flex; gap: 16px; align-items: flex-start; margin-top: 14px;
+  }
+  .trim-preview-wrap { flex: 1; min-width: 0; }
+  .trim-canvas-container {
+    position: relative; display: block; cursor: crosshair;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+    width: 100%; background: #1a1a1a;
+  }
+  .trim-canvas-container canvas { display: block; width: 100%; height: auto; }
+  .trim-overlay {
+    position: absolute; inset: 0; pointer-events: none;
+    background: rgba(0,0,0,0.45);
+  }
+  .trim-selection {
+    position: absolute; border: 2px solid var(--accent);
+    background: rgba(74,124,255,0.12);
+    pointer-events: none; display: none;
+    box-shadow: 0 0 0 9999px rgba(0,0,0,0.45);
+  }
+  .trim-page-nav {
+    display: flex; align-items: center; gap: 10px; margin-top: 8px;
+    font-size: 13px; color: var(--text-dim); justify-content: center;
+  }
+  .trim-inputs-panel {
+    display: flex; flex-direction: column; gap: 8px;
+    flex-shrink: 0; width: 140px;
+  }
+  .trim-input-group { display: flex; flex-direction: column; gap: 4px; }
+  .trim-input-group label { font-size: 11px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+  .trim-input-group input[type="number"] {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text);
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    padding: 6px 10px; width: 100%; outline: none;
+    transition: border-color 0.2s;
+  }
+  .trim-input-group input[type="number"]:focus { border-color: var(--accent); }
+  .trim-input-group.full { margin-top: 4px; }
+
+  /* ページごとモード */
+  .trim-per-layout { display: flex; gap: 14px; margin-top: 14px; }
+  .trim-per-sidebar {
+    flex-shrink: 0; width: 120px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+  }
+  .trim-per-sidebar-title {
+    font-size: 11px; font-weight: 600; color: var(--text-dim);
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .trim-per-page-list { max-height: 420px; overflow-y: auto; }
+  .trim-per-page-list::-webkit-scrollbar { width: 4px; }
+  .trim-per-page-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .trim-per-page-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 10px; cursor: pointer; transition: all 0.15s;
+    border-bottom: 1px solid var(--border); font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .trim-per-page-item:hover { background: var(--surface2); }
+  .trim-per-page-item.active { background: var(--accent-glow); color: var(--accent); }
+  .trim-per-page-item .tpp-num { font-weight: 600; }
+  .trim-per-page-item .tpp-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--border);
+    flex-shrink: 0; margin-left: auto;
+  }
+  .trim-per-page-item.has-trim .tpp-dot { background: var(--accent3); }
+  .trim-per-main { flex: 1; min-width: 0; }
+  .trim-per-page-header {
+    font-size: 13px; font-weight: 600; color: var(--text-dim); margin-bottom: 10px;
+  }
+  .trim-per-summary {
+    margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .trim-per-chip {
+    background: var(--surface); border: 1px solid var(--accent3);
+    border-radius: 20px; padding: 3px 10px; font-size: 11px;
+    font-family: 'JetBrains Mono', monospace; color: var(--accent3);
+  }
+
+  @media (max-width: 640px) {
+    .trim-workspace { flex-direction: column; }
+    .trim-inputs-panel { width: 100%; flex-direction: row; flex-wrap: wrap; }
+    .trim-input-group { width: calc(50% - 4px); }
+    .trim-mode-btns { grid-template-columns: 1fr; }
+    .trim-per-layout { flex-direction: column; }
+    .trim-per-sidebar { width: 100%; }
+    .trim-per-page-list { max-height: 100px; display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; }
+    .trim-per-page-item { border: 1px solid var(--border); border-radius: 6px; border-bottom: 1px solid var(--border); padding: 6px 10px; }
+  }
+
   @media (max-width: 640px) {
     .app-header, .main { padding-left: 16px; padding-right: 16px; }
     .tabs { padding: 0 16px; }
@@ -539,7 +650,7 @@ document.addEventListener('DOMContentLoaded',function(){
   <div class="logo"><canvas id="headerLogo" width="64" height="64"></canvas></div>
   <div>
     <h1>PDF Toolkit</h1>
-    <p>分割・結合・抽出・回転・並べ替え・圧縮</p>
+    <p>分割・結合・抽出・回転・並べ替え・圧縮・トリミング</p>
   </div>
 </div>
 
@@ -550,6 +661,7 @@ document.addEventListener('DOMContentLoaded',function(){
   <div class="tab" data-tab="rotate"         onclick="switchTab('rotate')">🔄 回転</div>
   <div class="tab" data-tab="reorder"        onclick="switchTab('reorder')">↕️ 並べ替え</div>
   <div class="tab" data-tab="compress"       onclick="switchTab('compress')">🗜️ 圧縮</div>
+  <div class="tab" data-tab="trim"           onclick="switchTab('trim')">✂ トリミング</div>
 </div>
 
 <div class="main">
@@ -777,6 +889,138 @@ document.addEventListener('DOMContentLoaded',function(){
         ※ 各ページを画像として再レンダリングするため、圧縮後のPDFはテキスト検索・コピーが無効になります。<br>
         全ての処理はブラウザ内で完結します。ファイルは外部サーバーへ送信されません。
       </div>
+    </div>
+  </div>
+
+  <!-- TRIM -->
+  <div class="panel" id="panel-trim">
+    <div class="drop-zone" id="trim-drop">
+      <div class="icon">✂</div>
+      <div class="label">PDFファイルをドロップ or クリック</div>
+      <div class="sub">トリミングしたいPDFを1つ選んでください</div>
+      <input type="file" accept=".pdf" id="trim-file-input">
+    </div>
+    <div id="trim-file-info"></div>
+    <div id="trim-controls" class="hidden">
+      <!-- モード切替 -->
+      <div class="section">
+        <div class="section-title">トリミングモード</div>
+        <div class="trim-mode-btns">
+          <button class="trim-mode-btn active" id="trim-mode-all" onclick="setTrimMode('all')">
+            <span class="trim-mode-icon">📄</span>
+            <span>全ページ共通</span>
+            <span class="trim-mode-desc">一度の設定で全ページに適用</span>
+          </button>
+          <button class="trim-mode-btn" id="trim-mode-per" onclick="setTrimMode('per')">
+            <span class="trim-mode-icon">📑</span>
+            <span>ページごとに設定</span>
+            <span class="trim-mode-desc">各ページで異なる範囲を指定</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 全ページ共通モード -->
+      <div id="trim-all-section" class="section">
+        <div class="section-title">トリミング範囲を設定</div>
+        <div class="hint">プレビュー上でドラッグしてトリミング範囲を選択。または数値で直接入力できます。</div>
+        <div class="trim-workspace">
+          <div class="trim-preview-wrap">
+            <div class="trim-canvas-container" id="trim-canvas-container-all">
+              <canvas id="trim-canvas-all"></canvas>
+              <div class="trim-overlay" id="trim-overlay-all"></div>
+              <div class="trim-selection" id="trim-selection-all"></div>
+            </div>
+            <div class="trim-page-nav" id="trim-page-nav-all">
+              <button class="btn btn-secondary btn-small" onclick="trimNavPage('all',-1)">◀ 前</button>
+              <span id="trim-page-label-all">1 / 1</span>
+              <button class="btn btn-secondary btn-small" onclick="trimNavPage('all',1)">次 ▶</button>
+            </div>
+          </div>
+          <div class="trim-inputs-panel">
+            <div class="trim-input-group">
+              <label>上 (px)</label>
+              <input type="number" id="trim-top-all" min="0" value="0" oninput="onTrimInputChange('all')">
+            </div>
+            <div class="trim-input-group">
+              <label>下 (px)</label>
+              <input type="number" id="trim-bottom-all" min="0" value="0" oninput="onTrimInputChange('all')">
+            </div>
+            <div class="trim-input-group">
+              <label>左 (px)</label>
+              <input type="number" id="trim-left-all" min="0" value="0" oninput="onTrimInputChange('all')">
+            </div>
+            <div class="trim-input-group">
+              <label>右 (px)</label>
+              <input type="number" id="trim-right-all" min="0" value="0" oninput="onTrimInputChange('all')">
+            </div>
+            <div class="trim-input-group full">
+              <label>余白を追加 (px)</label>
+              <input type="number" id="trim-margin-all" min="0" value="0">
+            </div>
+            <button class="btn btn-secondary btn-small" style="width:100%;margin-top:8px;" onclick="resetTrimSelection('all')">選択リセット</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ページごとモード -->
+      <div id="trim-per-section" class="section hidden">
+        <div class="section-title">ページを選択してトリミング範囲を設定</div>
+        <div class="hint">ページをクリックして選択し、プレビュー上でドラッグしてトリミング範囲を指定してください。</div>
+        <div class="trim-per-layout">
+          <!-- ページ一覧サイドバー -->
+          <div class="trim-per-sidebar">
+            <div class="trim-per-sidebar-title">ページ一覧</div>
+            <div class="trim-per-page-list" id="trim-per-page-list"></div>
+          </div>
+          <!-- プレビュー & 入力 -->
+          <div class="trim-per-main">
+            <div class="trim-per-page-header" id="trim-per-page-header">ページを選択してください</div>
+            <div class="trim-workspace">
+              <div class="trim-preview-wrap">
+                <div class="trim-canvas-container" id="trim-canvas-container-per">
+                  <canvas id="trim-canvas-per"></canvas>
+                  <div class="trim-overlay" id="trim-overlay-per"></div>
+                  <div class="trim-selection" id="trim-selection-per"></div>
+                </div>
+              </div>
+              <div class="trim-inputs-panel">
+                <div class="trim-input-group">
+                  <label>上 (px)</label>
+                  <input type="number" id="trim-top-per" min="0" value="0" oninput="onTrimInputChange('per')">
+                </div>
+                <div class="trim-input-group">
+                  <label>下 (px)</label>
+                  <input type="number" id="trim-bottom-per" min="0" value="0" oninput="onTrimInputChange('per')">
+                </div>
+                <div class="trim-input-group">
+                  <label>左 (px)</label>
+                  <input type="number" id="trim-left-per" min="0" value="0" oninput="onTrimInputChange('per')">
+                </div>
+                <div class="trim-input-group">
+                  <label>右 (px)</label>
+                  <input type="number" id="trim-right-per" min="0" value="0" oninput="onTrimInputChange('per')">
+                </div>
+                <div class="trim-input-group full">
+                  <label>余白を追加 (px)</label>
+                  <input type="number" id="trim-margin-per" min="0" value="0">
+                </div>
+                <button class="btn btn-secondary btn-small" style="width:100%;margin-top:4px;" onclick="resetTrimSelection('per')">選択リセット</button>
+                <button class="btn btn-secondary btn-small" style="width:100%;margin-top:4px;" onclick="applyTrimToAll()">全ページに適用</button>
+                <button class="btn btn-secondary btn-small" style="width:100%;margin-top:4px;" onclick="clearAllTrimSettings()">全ページリセット</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ページごと設定サマリー -->
+        <div class="trim-per-summary" id="trim-per-summary"></div>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn btn-primary" id="trim-btn" onclick="executeTrim()" disabled>✂ トリミングしてダウンロード</button>
+        <button class="btn btn-secondary" onclick="resetTrim()">リセット</button>
+        <span class="status" id="trim-status"></span>
+      </div>
+      <div class="progress-bar" id="trim-progress"><div class="fill"></div></div>
     </div>
   </div>
 
@@ -1371,6 +1615,439 @@ function resetCompress() {
   document.getElementById('compress-quality-val').textContent = '70%';
   document.getElementById('compress-dpi').value = 150;
   document.getElementById('compress-dpi-val').textContent = '150 DPI';
+}
+
+// ===== TRIM =====
+let trimFile = null, trimBytes = null, trimFileName = '';
+let trimPdfDoc = null, trimPageCount = 0;
+let trimMode = 'all'; // 'all' | 'per'
+let trimCurrentPage = 1; // 全ページモードのプレビューページ
+let trimPerCurrentPage = 1; // ページごとモードの現在ページ
+let trimAllSel = null; // 全ページ共通の選択（canvas比率 {x1,y1,x2,y2}）
+let trimPerSel = {}; // { [pageNum]: {x1,y1,x2,y2} } canvas比率
+let trimPageSizes = []; // 各ページのPDFサイズ { width, height } in pt
+const TRIM_PREVIEW_SCALE = 1.5; // render DPI factor (72 * scale)
+
+setupDrop('trim-drop', 'trim-file-input', loadTrimFile);
+
+async function loadTrimFile(file) {
+  trimFile = file;
+  trimFileName = baseName(file.name);
+  trimBytes = await file.arrayBuffer();
+  trimPdfDoc = await pdfjsLib.getDocument({ data: trimBytes.slice(0) }).promise;
+  trimPageCount = trimPdfDoc.numPages;
+  trimPerSel = {};
+  trimAllSel = null;
+  trimCurrentPage = 1;
+  trimPerCurrentPage = 1;
+
+  // ページサイズはpdf.jsのviewport（表示と同じ向き）から取得
+  trimPageSizes = [];
+  for (let i = 1; i <= trimPageCount; i++) {
+    const pg = await trimPdfDoc.getPage(i);
+    const vp = pg.getViewport({ scale: 1 });
+    trimPageSizes.push({ width: vp.width, height: vp.height, rotate: pg.rotate || 0 });
+  }
+
+  showFileInfo('trim-file-info', file.name, trimPageCount, file.size, 'resetTrim');
+  document.getElementById('trim-controls').classList.remove('hidden');
+  document.getElementById('trim-btn').disabled = false;
+
+  buildTrimPerPageList();
+  await renderTrimPreview('all', 1);
+  document.getElementById('trim-page-nav-all').style.display = trimPageCount > 1 ? 'flex' : 'none';
+  updateTrimPageLabel('all');
+  initTrimDrag('all');
+}
+
+function buildTrimPerPageList() {
+  const list = document.getElementById('trim-per-page-list');
+  list.innerHTML = '';
+  for (let i = 1; i <= trimPageCount; i++) {
+    const item = document.createElement('div');
+    item.className = 'trim-per-page-item';
+    item.id = `trim-per-item-${i}`;
+    item.dataset.page = i;
+    item.innerHTML = `<span class="tpp-num">P${i}</span><span class="tpp-dot"></span>`;
+    item.addEventListener('click', () => selectTrimPerPage(i));
+    list.appendChild(item);
+  }
+  // 最初のページを選択
+  selectTrimPerPage(1);
+}
+
+async function selectTrimPerPage(pageNum) {
+  trimPerCurrentPage = pageNum;
+  document.querySelectorAll('.trim-per-page-item').forEach(el => el.classList.toggle('active', +el.dataset.page === pageNum));
+  document.getElementById('trim-per-page-header').textContent = `ページ ${pageNum} / ${trimPageCount} のトリミング範囲`;
+  await renderTrimPreview('per', pageNum);
+  // 保存済み設定を復元
+  const saved = trimPerSel[pageNum];
+  if (saved) {
+    // pt → px (preview座標) 変換はrenderTrimPreview後に行う
+    restoreTrimPerInputs(pageNum);
+    updateTrimSelectionBox('per');
+  } else {
+    ['top','bottom','left','right'].forEach(d => { document.getElementById(`trim-${d}-per`).value = 0; });
+    hideTrimSelection('per');
+  }
+  initTrimDrag('per');
+}
+
+function restoreTrimPerInputs(pageNum) {
+  const r = trimPerSel[pageNum];
+  if (!r || r.x1 == null) return;
+  const { width: ptW, height: ptH } = trimPageSizes[pageNum - 1];
+  document.getElementById('trim-left-per').value   = Math.round(r.x1 * ptW);
+  document.getElementById('trim-right-per').value  = Math.round((1 - r.x2) * ptW);
+  document.getElementById('trim-top-per').value    = Math.round(r.y1 * ptH);
+  document.getElementById('trim-bottom-per').value = Math.round((1 - r.y2) * ptH);
+}
+
+async function renderTrimPreview(mode, pageNum) {
+  const canvas = document.getElementById(`trim-canvas-${mode}`);
+  const ctx = canvas.getContext('2d');
+  const page = await trimPdfDoc.getPage(pageNum);
+  // pdf.jsのviewportはrotation適用済み → pdf-libのgetSize()と同じ向きになる
+  const viewport = page.getViewport({ scale: TRIM_PREVIEW_SCALE });
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  await page.render({ canvasContext: ctx, viewport }).promise;
+}
+
+function updateTrimPageLabel(mode) {
+  if (mode === 'all') {
+    document.getElementById('trim-page-label-all').textContent = `${trimCurrentPage} / ${trimPageCount}`;
+  }
+}
+
+async function trimNavPage(mode, dir) {
+  if (mode !== 'all') return;
+  const newPage = Math.min(trimPageCount, Math.max(1, trimCurrentPage + dir));
+  if (newPage === trimCurrentPage) return;
+  trimCurrentPage = newPage;
+  updateTrimPageLabel('all');
+  await renderTrimPreview('all', newPage);
+  updateTrimSelectionBox('all');
+  initTrimDrag('all');
+}
+
+// ===== ドラッグ選択 =====
+// モードごとのドラッグ状態を管理（cloneNodeを使わずフラグで管理）
+const trimDragState = { all: { active: false, startX: 0, startY: 0 }, per: { active: false, startX: 0, startY: 0 } };
+let trimDragInitialized = false;
+
+function initTrimDrag(mode) {
+  // 初回のみwindowレベルのリスナーを登録
+  if (!trimDragInitialized) {
+    trimDragInitialized = true;
+
+    window.addEventListener('mousemove', e => {
+      ['all', 'per'].forEach(m => {
+        if (!trimDragState[m].active) return;
+        const container = document.getElementById(`trim-canvas-container-${m}`);
+        const canvas2 = document.getElementById(`trim-canvas-${m}`);
+        if (!container || !canvas2) return;
+        const rect = container.getBoundingClientRect();
+        const scaleX = canvas2.width / rect.width;
+        const scaleY = canvas2.height / rect.height;
+        const curX = Math.min(canvas2.width, Math.max(0, (e.clientX - rect.left) * scaleX));
+        const curY = Math.min(canvas2.height, Math.max(0, (e.clientY - rect.top) * scaleY));
+        const x1 = Math.min(trimDragState[m].startX, curX), y1 = Math.min(trimDragState[m].startY, curY);
+        const x2 = Math.max(trimDragState[m].startX, curX), y2 = Math.max(trimDragState[m].startY, curY);
+        applyTrimFromCanvas(m, x1, y1, x2, y2, canvas2.width, canvas2.height);
+      });
+    });
+
+    window.addEventListener('mouseup', () => {
+      trimDragState.all.active = false;
+      trimDragState.per.active = false;
+    });
+  }
+
+  const container = document.getElementById(`trim-canvas-container-${mode}`);
+  if (!container) return;
+
+  // 既存のリスナーを解除するためにdata属性でフラグ管理
+  if (container.dataset.dragBound === '1') return;
+  container.dataset.dragBound = '1';
+
+  container.addEventListener('mousedown', e => {
+    const canvas = document.getElementById(`trim-canvas-${mode}`);
+    if (!canvas) return;
+    trimDragState[mode].active = true;
+    const rect = container.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    trimDragState[mode].startX = (e.clientX - rect.left) * scaleX;
+    trimDragState[mode].startY = (e.clientY - rect.top) * scaleY;
+    e.preventDefault();
+  });
+
+  // タッチ対応
+  container.addEventListener('touchstart', e => {
+    const canvas = document.getElementById(`trim-canvas-${mode}`);
+    if (!canvas) return;
+    trimDragState[mode].active = true;
+    const rect = container.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    trimDragState[mode].startX = (e.touches[0].clientX - rect.left) * scaleX;
+    trimDragState[mode].startY = (e.touches[0].clientY - rect.top) * scaleY;
+    e.preventDefault();
+  }, { passive: false });
+
+  container.addEventListener('touchmove', e => {
+    if (!trimDragState[mode].active) return;
+    const canvas2 = document.getElementById(`trim-canvas-${mode}`);
+    if (!canvas2) return;
+    const rect = container.getBoundingClientRect();
+    const scaleX = canvas2.width / rect.width;
+    const scaleY = canvas2.height / rect.height;
+    const curX = Math.min(canvas2.width, Math.max(0, (e.touches[0].clientX - rect.left) * scaleX));
+    const curY = Math.min(canvas2.height, Math.max(0, (e.touches[0].clientY - rect.top) * scaleY));
+    const x1 = Math.min(trimDragState[mode].startX, curX), y1 = Math.min(trimDragState[mode].startY, curY);
+    const x2 = Math.max(trimDragState[mode].startX, curX), y2 = Math.max(trimDragState[mode].startY, curY);
+    applyTrimFromCanvas(mode, x1, y1, x2, y2, canvas2.width, canvas2.height);
+    e.preventDefault();
+  }, { passive: false });
+
+  container.addEventListener('touchend', () => { trimDragState[mode].active = false; });
+}
+
+function applyTrimFromCanvas(mode, x1, y1, x2, y2, cW, cH) {
+  // canvas上の選択範囲を0〜1の比率で保存（座標変換は実行時に行う）
+  const ratios = {
+    x1: x1 / cW,  // 左端の比率
+    y1: y1 / cH,  // 上端の比率
+    x2: x2 / cW,  // 右端の比率
+    y2: y2 / cH,  // 下端の比率
+  };
+
+  if (mode === 'all') {
+    trimAllSel = ratios;
+  } else {
+    trimPerSel[trimPerCurrentPage] = ratios;
+    updateTrimPerPageListDots();
+    updateTrimPerSummary();
+  }
+
+  // 入力欄の表示（参考用：canvasピクセル値）
+  const pageNum = mode === 'all' ? trimCurrentPage : trimPerCurrentPage;
+  const { width: ptW, height: ptH } = trimPageSizes[pageNum - 1];
+  document.getElementById(`trim-left-${mode}`).value   = Math.round(ratios.x1 * ptW);
+  document.getElementById(`trim-right-${mode}`).value  = Math.round((1 - ratios.x2) * ptW);
+  document.getElementById(`trim-top-${mode}`).value    = Math.round(ratios.y1 * ptH);
+  document.getElementById(`trim-bottom-${mode}`).value = Math.round((1 - ratios.y2) * ptH);
+
+  // 選択ボックスをcanvas上に表示
+  const sel = document.getElementById(`trim-selection-${mode}`);
+  const container = document.getElementById(`trim-canvas-container-${mode}`);
+  const rect = container.getBoundingClientRect();
+  sel.style.display = 'block';
+  sel.style.left   = (ratios.x1 * rect.width) + 'px';
+  sel.style.top    = (ratios.y1 * rect.height) + 'px';
+  sel.style.width  = ((ratios.x2 - ratios.x1) * rect.width) + 'px';
+  sel.style.height = ((ratios.y2 - ratios.y1) * rect.height) + 'px';
+}
+
+function updateTrimSelectionBox(mode) {
+  const ratios = mode === 'all' ? trimAllSel : trimPerSel[trimPerCurrentPage];
+  if (!ratios || ratios.x1 == null) { hideTrimSelection(mode); return; }
+  const container = document.getElementById(`trim-canvas-container-${mode}`);
+  const rect = container.getBoundingClientRect();
+  const box = document.getElementById(`trim-selection-${mode}`);
+  box.style.display = 'block';
+  box.style.left   = (ratios.x1 * rect.width) + 'px';
+  box.style.top    = (ratios.y1 * rect.height) + 'px';
+  box.style.width  = ((ratios.x2 - ratios.x1) * rect.width) + 'px';
+  box.style.height = ((ratios.y2 - ratios.y1) * rect.height) + 'px';
+}
+
+function hideTrimSelection(mode) {
+  document.getElementById(`trim-selection-${mode}`).style.display = 'none';
+}
+
+function onTrimInputChange(mode) {
+  const pageNum = mode === 'all' ? trimCurrentPage : trimPerCurrentPage;
+  const { width: ptW, height: ptH } = trimPageSizes[pageNum - 1];
+  const left   = Math.max(0, parseInt(document.getElementById(`trim-left-${mode}`).value) || 0);
+  const right  = Math.max(0, parseInt(document.getElementById(`trim-right-${mode}`).value) || 0);
+  const top    = Math.max(0, parseInt(document.getElementById(`trim-top-${mode}`).value) || 0);
+  const bottom = Math.max(0, parseInt(document.getElementById(`trim-bottom-${mode}`).value) || 0);
+  const ratios = {
+    x1: left / ptW,
+    y1: top / ptH,
+    x2: (ptW - right) / ptW,
+    y2: (ptH - bottom) / ptH,
+  };
+  if (mode === 'all') {
+    trimAllSel = ratios;
+  } else {
+    trimPerSel[pageNum] = ratios;
+    updateTrimPerPageListDots();
+    updateTrimPerSummary();
+  }
+  updateTrimSelectionBox(mode);
+}
+
+function resetTrimSelection(mode) {
+  ['top','bottom','left','right'].forEach(d => { document.getElementById(`trim-${d}-${mode}`).value = 0; });
+  if (mode === 'all') {
+    trimAllSel = null;
+  } else {
+    delete trimPerSel[trimPerCurrentPage];
+    updateTrimPerPageListDots();
+    updateTrimPerSummary();
+  }
+  hideTrimSelection(mode);
+}
+
+function clearAllTrimSettings() {
+  trimPerSel = {};
+  updateTrimPerPageListDots();
+  updateTrimPerSummary();
+  hideTrimSelection('per');
+  ['top','bottom','left','right'].forEach(d => { document.getElementById(`trim-${d}-per`).value = 0; });
+}
+
+function applyTrimToAll() {
+  const pageNum = trimPerCurrentPage;
+  const r = trimPerSel[pageNum];
+  if (!r) return;
+  for (let i = 1; i <= trimPageCount; i++) trimPerSel[i] = { ...r };
+  updateTrimPerPageListDots();
+  updateTrimPerSummary();
+}
+
+function updateTrimPerPageListDots() {
+  for (let i = 1; i <= trimPageCount; i++) {
+    const item = document.getElementById(`trim-per-item-${i}`);
+    if (!item) continue;
+    const r = trimPerSel[i];
+    const hasTrim = r && r.x1 != null && (r.x1 > 0 || r.y1 > 0 || r.x2 < 1 || r.y2 < 1);
+    item.classList.toggle('has-trim', !!hasTrim);
+  }
+}
+
+function updateTrimPerSummary() {
+  const summary = document.getElementById('trim-per-summary');
+  const pages = Object.keys(trimPerSel).filter(p => {
+    const r = trimPerSel[p];
+    return r && r.x1 != null && (r.x1 > 0 || r.y1 > 0 || r.x2 < 1 || r.y2 < 1);
+  }).map(Number).sort((a,b) => a-b);
+  if (pages.length === 0) { summary.innerHTML = ''; return; }
+  summary.innerHTML = pages.map(p => `<span class="trim-per-chip">P${p}</span>`).join('');
+}
+
+function setTrimMode(mode) {
+  trimMode = mode;
+  document.getElementById('trim-mode-all').classList.toggle('active', mode === 'all');
+  document.getElementById('trim-mode-per').classList.toggle('active', mode === 'per');
+  document.getElementById('trim-all-section').classList.toggle('hidden', mode !== 'all');
+  document.getElementById('trim-per-section').classList.toggle('hidden', mode !== 'per');
+}
+
+// ===== トリミング実行 =====
+async function executeTrim() {
+  if (!trimBytes) return;
+  const btn = document.getElementById('trim-btn');
+  const status = document.getElementById('trim-status');
+  const prog = document.getElementById('trim-progress');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>処理中...';
+  status.textContent = '';
+  prog.classList.add('active');
+
+  try {
+    const srcDoc = await PDFDocument.load(trimBytes);
+    const outDoc = await PDFDocument.create();
+
+    for (let i = 0; i < trimPageCount; i++) {
+      prog.querySelector('.fill').style.width = `${((i + 1) / trimPageCount) * 100}%`;
+      const [copiedPage] = await outDoc.copyPages(srcDoc, [i]);
+
+      let ratios = trimMode === 'all' ? trimAllSel : trimPerSel[i + 1];
+      if (!ratios || ratios.x1 == null) { outDoc.addPage(copiedPage); await sleep(10); continue; }
+
+      // MediaBoxの生サイズ（rotation未適用）
+      const mb = copiedPage.getMediaBox();
+      const mbW = mb.width, mbH = mb.height;
+      // rotationを取得
+      const rotAngle = copiedPage.getRotation().angle; // 0,90,180,270
+
+      // canvas比率(x1,y1,x2,y2) → MediaBox座標(cropX,cropY,cropW,cropH)
+      // canvasは rotation 適用済みで表示されているので逆回転してMediaBox座標に変換
+      // PDF座標系: 左下原点、Y軸上向き
+      let cropX, cropY, cropW, cropH;
+      const rx1 = ratios.x1, ry1 = ratios.y1, rx2 = ratios.x2, ry2 = ratios.y2;
+
+      if (rotAngle === 0) {
+        cropX = rx1 * mbW;
+        cropY = (1 - ry2) * mbH;
+        cropW = (rx2 - rx1) * mbW;
+        cropH = (ry2 - ry1) * mbH;
+      } else if (rotAngle === 90) {
+        // canvas x→MediaBox Y(上), canvas y→MediaBox X(左)
+        cropX = ry1 * mbW;
+        cropY = rx1 * mbH;
+        cropW = (ry2 - ry1) * mbW;
+        cropH = (rx2 - rx1) * mbH;
+      } else if (rotAngle === 180) {
+        cropX = (1 - rx2) * mbW;
+        cropY = ry1 * mbH;
+        cropW = (rx2 - rx1) * mbW;
+        cropH = (ry2 - ry1) * mbH;
+      } else if (rotAngle === 270) {
+        // canvas x→MediaBox Y(下から), canvas y→MediaBox X(右から)
+        cropX = (1 - ry2) * mbW;
+        cropY = (1 - rx2) * mbH;
+        cropW = (ry2 - ry1) * mbW;
+        cropH = (rx2 - rx1) * mbH;
+      }
+
+      if (cropW > 0 && cropH > 0) {
+        copiedPage.setCropBox(cropX, cropY, cropW, cropH);
+        copiedPage.setMediaBox(cropX, cropY, cropW, cropH);
+        copiedPage.setBleedBox(cropX, cropY, cropW, cropH);
+        copiedPage.setTrimBox(cropX, cropY, cropW, cropH);
+        copiedPage.setArtBox(cropX, cropY, cropW, cropH);
+      }
+      outDoc.addPage(copiedPage);
+      await sleep(10);
+    }
+
+    const outBytes = await outDoc.save();
+    downloadBlob(outBytes, `${trimFileName}_trimmed.pdf`);
+    status.textContent = `✓ トリミング完了（${trimPageCount}ページ）`;
+  } catch(e) {
+    console.error(e);
+    status.textContent = 'エラー: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '✂ トリミングしてダウンロード';
+    setTimeout(() => prog.classList.remove('active'), 800);
+  }
+}
+
+function resetTrim() {
+  trimFile = null; trimBytes = null; trimPdfDoc = null;
+  trimPageCount = 0; trimPageSizes = [];
+  trimAllSel = null;
+  trimPerSel = {};
+  trimCurrentPage = 1; trimPerCurrentPage = 1;
+  document.getElementById('trim-file-info').innerHTML = '';
+  document.getElementById('trim-controls').classList.add('hidden');
+  document.getElementById('trim-status').textContent = '';
+  document.getElementById('trim-file-input').value = '';
+  document.getElementById('trim-btn').disabled = true;
+  hideTrimSelection('all');
+  hideTrimSelection('per');
+  ['top','bottom','left','right'].forEach(d => {
+    document.getElementById(`trim-${d}-all`).value = 0;
+    document.getElementById(`trim-${d}-per`).value = 0;
+  });
+  setTrimMode('all');
 }
 </script>
 </body>
