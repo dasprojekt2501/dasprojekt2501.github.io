@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+    <meta property="og:title" content="The Workplace Purgatory in Japan's Large Corporations">
+    <meta property="og:description" content="An essay on the invisible trap of light duty, high pay, and long-term stagnation in Japan's large corporations.">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/essays/purgatory-at-work-en.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="PROJEKT2501">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Workplace Purgatory in Japan's Large Corporations">
+    <meta name="twitter:description" content="An essay on the invisible trap of light duty, high pay, and long-term stagnation in Japan's large corporations.">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Workplace Purgatory in Japan's Large Corporations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover,
+        .back-link a:hover,
+        .essay-content a:hover,
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            line-height: 1;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+
+        .lang-btn:hover {
+            opacity: 0.8;
+        }
+
+        .lang-btn.active {
+            opacity: 1;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
+            border-color: #333;
+        }
+
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .toc-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .essay-header {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .essay-kicker {
+            color: #666;
+            font-size: 1.05em;
+            margin-bottom: 14px;
+        }
+
+        body.dark-mode .essay-kicker {
+            color: #aaa;
+        }
+
+        .essay-meta {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        .essay-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .essay-content p,
+        .essay-content blockquote {
+            margin-bottom: 20px;
+        }
+
+        .essay-content h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .essay-content h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .essay-content ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .essay-content li {
+            margin-bottom: 8px;
+        }
+
+        .essay-content a,
+        .back-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        body.dark-mode .essay-content a,
+        body.dark-mode .back-link a {
+            color: #4a9eff;
+        }
+
+        .essay-content blockquote,
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #666;
+        }
+
+        body.dark-mode .essay-content blockquote,
+        body.dark-mode .info-box {
+            background-color: #2a2a2a;
+            border-left-color: #999;
+        }
+
+        .section-divider {
+            margin: 50px 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+        }
+
+        body.dark-mode .section-divider {
+            background: linear-gradient(to right, transparent, #333, transparent);
+        }
+
+        .back-link {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .back-link {
+            border-top-color: #333;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="toc-overlay" onclick="toggleTOC()"></div>
+
+    <div class="toc-sidebar">
+        <div class="toc-header">Table of Contents</div>
+        <ul class="toc-list" id="tocList"></ul>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app-en.html">Apps</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn" onclick="location.href='purgatory-at-work.html'" title="日本語">🇯🇵</button>
+                        <button class="lang-btn active" title="English">🇺🇸</button>
+                    </div>
+                    <div class="controls">
+                        <button class="toc-toggle" onclick="toggleTOC()" aria-label="Toggle table of contents">
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                        </button>
+                        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                            <div class="toggle-circle"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <article>
+            <div class="essay-header">
+                <h1 class="essay-title">The Workplace Purgatory in Japan's Large Corporations</h1>
+                <div class="essay-kicker">The Invisible Trap of Light Duty, High Pay, and Long-Term Stagnation</div>
+                <div class="essay-meta">May 19, 2026 | Essay</div>
+            </div>
+
+            <div class="essay-content">
+                <div class="info-box">
+                    <p>This essay reflects on a largely unnamed condition in Japanese large corporations: workers returning from mental-health leave who become suspended for years inside a system of light duties, preserved salaries, and stalled recovery.</p>
+                </div>
+
+                <h2 id="section-1">1. Defining the Phenomenon</h2>
+                <p>In Japan's large corporations, employees who return to work after sick leave due to depression or other mental illnesses frequently become locked into the following condition for extended periods, often years or even decades:</p>
+                <ul>
+                    <li>Restricted duties consisting of light, low-responsibility tasks</li>
+                    <li>Unchanged high salaries from before their leave</li>
+                    <li>Continued medication, often accompanied by visible physical side effects</li>
+                    <li>Classification as a "successful return to work," rendering their actual condition invisible</li>
+                </ul>
+                <p>This paper refers to this state as the <strong>"Workplace Purgatory"</strong>: neither heaven nor hell, but a condition of indefinite suspension between the two.</p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-2">2. Why This State Emerges</h2>
+                <h3 id="corporate-logic">The Corporate Logic</h3>
+                <ul>
+                    <li>Japan's strict employment regulations make it nearly impossible to dismiss permanent employees.</li>
+                    <li>A light-duty return to work is more cost-effective for the company than an extended leave of absence.</li>
+                    <li>Establishing a formal return-to-work support framework allows the company to satisfy legal and social obligations.</li>
+                    <li>Large corporations, which tend to have more developed trial attendance and gradual resumption systems, paradoxically facilitate this kind of long-term stagnation.</li>
+                </ul>
+
+                <h3 id="individual-logic">The Individual's Logic</h3>
+                <ul>
+                    <li>The objectively favorable conditions of high pay and low workload eliminate the motivation to leave.</li>
+                    <li>There is a desire to preserve an identity tied to belonging to a large corporation.</li>
+                    <li>Fear of failing to adapt to a new environment is especially acute in those who have experienced depression.</li>
+                    <li>Depression itself strips away the capacity to imagine the future, making the option of change literally invisible.</li>
+                </ul>
+
+                <h3 id="systemic-logic">The Systemic Logic</h3>
+                <ul>
+                    <li>Seniority-based wages, retirement allowances, social credibility, and health insurance function simultaneously as welfare provisions and as chains that make departure increasingly difficult.</li>
+                    <li>Once classified as a successful return, the employee's long-term trajectory is tracked by no one: not the company, not the medical system, not the government.</li>
+                </ul>
+
+                <hr class="section-divider">
+
+                <h2 id="section-3">3. The Nature of the Trap</h2>
+                <h3 id="trap-outside">The Trap Visible from Outside</h3>
+                <p>A comfortable environment paradoxically severs individuals from their authentic lives and binds them to the company. To borrow the words of Char Aznable from <em>Mobile Suit Gundam</em>, these are people whose <strong>"souls are weighed down by gravity."</strong> The stronger the gravitational pull of high pay, stability, and belonging, the more the soul is pressed to the ground, and the greater the energy required to rise.</p>
+
+                <h3 id="trap-inside">The Trap Invisible from Within</h3>
+                <p>More cruelly, the person trapped is often unaware of being trapped at all. What depression steals is not only motivation, but the very capacity to imagine a future. It is less that they cannot escape into space and more that they <strong>can no longer imagine that space exists.</strong></p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-4">4. The Long-Term Cost</h2>
+                <h3 id="professional-cost">Professional Cost</h3>
+                <p>Years or decades of light duties cause occupational skills to stagnate and atrophy. By the time of retirement, the individual may find themselves without competencies transferable to the outside world.</p>
+
+                <h3 id="medical-cost">Medical Cost</h3>
+                <p>Long-term medication carries cumulative physical effects. Visible signs such as dry, darkened skin reflect chronic internal inflammation and drug side effects, consequences that cannot be ignored across a timespan of decades.</p>
+
+                <h3 id="psychological-cost">Psychological Cost</h3>
+                <p>A fixed self-perception of being someone who cannot do anything deepens over time, creating a downward spiral of diminishing self-worth. The moderate challenge and sense of achievement essential to genuine recovery are permanently withheld.</p>
+
+                <h3 id="existential-cost">Existential Cost</h3>
+                <p>Perhaps most grave of all, an identity fused with corporate belonging persists for decades, leaving the individual upon retirement with no answer to the question, "Who am I?" Reaching old age without having recovered, without having reclaimed oneself, is a quiet and largely unacknowledged tragedy.</p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-5">5. The Impact on Others</h2>
+                <p>The Workplace Purgatory is not solely the affected individual's problem. The work redistributed away from light-duty employees is absorbed, most often without additional compensation, by single employees, childless employees, and non-permanent staff.</p>
+                <ul>
+                    <li>They carry heavier workloads for lower pay.</li>
+                    <li>They lack institutional protections and have little recourse to voice their situation.</li>
+                    <li>They endure a slow erosion of energy while carrying a justified anger at structural injustice.</li>
+                </ul>
+                <p>It is essential to recognize that this is not a conflict between individuals. It is <strong>a failure of institutional design</strong>. The problem is not the protected versus those who bear the burden. It is the structure that produces this distortion in the first place.</p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-6">6. Why This Remains Academically Unaddressed</h2>
+                <p>No academic literature directly addresses this phenomenon as it has been described here. The reasons are themselves revealing.</p>
+                <ul>
+                    <li>Classified as a successful return to work, the situation is never recognized as a problem.</li>
+                    <li>Companies have little incentive to cooperate with research that exposes these realities.</li>
+                    <li>Because both the individual and the employer regard the arrangement as working, it never becomes a subject of inquiry.</li>
+                    <li>Existing research has explicitly acknowledged the long-term outcomes of partial return-to-work arrangements as a gap in the literature.</li>
+                </ul>
+                <p><strong>This phenomenon occupies an unmapped space: not yet named, not yet studied.</strong></p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-7">7. Is There a Way Out?</h2>
+                <p>Resolution at the individual level is difficult. However, a meaningful direction might look like this:</p>
+                <ul>
+                    <li>Shifting the goal of treatment from maintaining the status quo to genuine recovery.</li>
+                    <li>Working with a skilled psychiatrist or counselor toward the horizon of eventually graduating from this environment.</li>
+                    <li>Recovering the ability to imagine a life outside the corporate <strong>틀</strong>, the mold that has shaped not just the boundaries of one's work, but the contours of one's selfhood.</li>
+                </ul>
+
+                <blockquote>
+                    <p><strong>About <em>틀</em>:</strong> This Korean word points not only to an outer frame, but to a mold that shapes a person's thought, identity, and sense of what is possible. Leaving such a mold is not merely stepping outside a boundary; it requires rebuilding the self.</p>
+                </blockquote>
+
+                <p>The last point is the most difficult. What is needed first is not the act of leaving, but <strong>the recovery of the capacity to imagine leaving.</strong></p>
+                <p>At a structural level, the definition of success in return-to-work support must be reconceived, from resumption of employment to long-term recovery and autonomy. This is a challenge that can only be met through coordinated effort among corporations, the medical community, and government.</p>
+
+                <hr class="section-divider">
+
+                <h2 id="conclusion">Conclusion</h2>
+                <p>At the heart of this issue lies a paradox: <strong>well-intentioned systems bind people.</strong></p>
+                <p>Companies comply with the law. Medicine provides treatment. Individuals strive to adapt. No single actor bears malicious intent. And yet the aggregate result is that people are severed from their authentic lives and spend decades suspended in lukewarm water.</p>
+                <p>This is not a question of individual weakness. It is a quiet tragedy produced by structure itself.</p>
+
+                <blockquote>
+                    <p><em>This paper is a reflection composed from direct observation and dialogue with those affected.</em></p>
+                </blockquote>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html">← Back to all essays</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem("theme") || "light";
+        if (currentTheme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        }
+
+        function generateTOC() {
+            const tocList = document.getElementById("tocList");
+            const headings = document.querySelectorAll(".essay-content h2, .essay-content h3");
+
+            headings.forEach((heading, index) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+
+                if (!heading.id) {
+                    heading.id = "heading-" + index;
+                }
+
+                a.href = "#" + heading.id;
+                a.textContent = heading.textContent;
+
+                if (heading.tagName === "H3") {
+                    a.classList.add("toc-h3");
+                }
+
+                a.onclick = function() {
+                    toggleTOC();
+                };
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+
+        function toggleTOC() {
+            document.querySelector(".toc-sidebar").classList.toggle("open");
+            document.querySelector(".toc-overlay").classList.toggle("active");
+        }
+
+        window.addEventListener("DOMContentLoaded", generateTOC);
+    </script>
+</body>
+</html>

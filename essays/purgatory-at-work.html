@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+    <meta property="og:title" content="日本大企業における復職煉獄現象">
+    <meta property="og:description" content="軽業務・高給・長期固定化という見えない罠をめぐる考察。">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/essays/purgatory-at-work.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="PROJEKT2501">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="日本大企業における復職煉獄現象">
+    <meta name="twitter:description" content="軽業務・高給・長期固定化という見えない罠をめぐる考察。">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本大企業における復職煉獄現象</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover,
+        .back-link a:hover,
+        .essay-content a:hover,
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            line-height: 1;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+
+        .lang-btn:hover {
+            opacity: 0.8;
+        }
+
+        .lang-btn.active {
+            opacity: 1;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
+            border-color: #333;
+        }
+
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .toc-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .essay-header {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .essay-kicker {
+            color: #666;
+            font-size: 1.05em;
+            margin-bottom: 14px;
+        }
+
+        body.dark-mode .essay-kicker {
+            color: #aaa;
+        }
+
+        .essay-meta {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        .essay-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .essay-content p,
+        .essay-content blockquote {
+            margin-bottom: 20px;
+        }
+
+        .essay-content h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .essay-content h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .essay-content ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .essay-content li {
+            margin-bottom: 8px;
+        }
+
+        .essay-content a,
+        .back-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        body.dark-mode .essay-content a,
+        body.dark-mode .back-link a {
+            color: #4a9eff;
+        }
+
+        .essay-content blockquote,
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #666;
+        }
+
+        body.dark-mode .essay-content blockquote,
+        body.dark-mode .info-box {
+            background-color: #2a2a2a;
+            border-left-color: #999;
+        }
+
+        .section-divider {
+            margin: 50px 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+        }
+
+        body.dark-mode .section-divider {
+            background: linear-gradient(to right, transparent, #333, transparent);
+        }
+
+        .back-link {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .back-link {
+            border-top-color: #333;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="toc-overlay" onclick="toggleTOC()"></div>
+
+    <div class="toc-sidebar">
+        <div class="toc-header">目次</div>
+        <ul class="toc-list" id="tocList"></ul>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app.html">Apps</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn active" title="日本語">🇯🇵</button>
+                        <button class="lang-btn" onclick="location.href='purgatory-at-work-en.html'" title="English">🇺🇸</button>
+                    </div>
+                    <div class="controls">
+                        <button class="toc-toggle" onclick="toggleTOC()" aria-label="目次を開く">
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                        </button>
+                        <button class="theme-toggle" onclick="toggleTheme()" aria-label="ダークモード切替">
+                            <div class="toggle-circle"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <article>
+            <div class="essay-header">
+                <h1 class="essay-title">日本大企業における「復職煉獄」現象</h1>
+                <div class="essay-kicker">軽業務・高給・長期固定化という見えない罠</div>
+                <div class="essay-meta">2026年5月19日 | エッセイ</div>
+            </div>
+
+            <div class="essay-content">
+                <div class="info-box">
+                    <p>本稿は、日本の大企業で精神疾患から復職した人が、軽業務と高給のあいだで長く停滞し続ける状態について考察する。制度は善意で設計されていても、ときに人を回復から遠ざける見えない拘束へと変わる。</p>
+                </div>
+
+                <h2 id="section-1">1. 現象の定義</h2>
+                <p>日本の大企業において、うつ病等の精神疾患による休職から復帰した従業員が、以下の状態に長期間固定化されることがある。</p>
+                <ul>
+                    <li>就業制限付きの軽業務</li>
+                    <li>休職前と変わらない高い給与</li>
+                    <li>薬の継続服用と、それに伴う身体的変化</li>
+                    <li>「復職成功」として処理され、実態が不可視化されること</li>
+                </ul>
+                <p>本稿ではこの状態を<strong>「復職煉獄」</strong>と呼ぶ。天国でも地獄でもなく、宙吊りのまま長く留め置かれる状態という意味においてである。</p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-2">2. なぜこの状態が生まれるか</h2>
+                <h3 id="corporate-logic">企業側の論理</h3>
+                <ul>
+                    <li>日本の強固な解雇規制により、正社員を簡単に解雇できない。</li>
+                    <li>軽業務での復職は、長期休職の継続よりコスト的に合理的である。</li>
+                    <li>「復職支援」という形式を整えることで、法的・社会的責任を果たした形を取りやすい。</li>
+                    <li>大企業ほど試し出勤や段階的復帰制度が整っており、その制度の充実が逆に長期固定化を促進する。</li>
+                </ul>
+
+                <h3 id="individual-logic">本人側の論理</h3>
+                <ul>
+                    <li>高給・低負荷という客観的好条件が、離脱の動機を奪う。</li>
+                    <li>「大企業に属している」というアイデンティティを手放しにくい。</li>
+                    <li>新しい環境へ適応できないのではないかという恐怖が強い。</li>
+                    <li>うつが未来を想像する力そのものを奪い、現状変更の選択肢を見えなくする。</li>
+                </ul>
+
+                <h3 id="systemic-logic">制度的論理</h3>
+                <ul>
+                    <li>年功序列、退職金、社会的信用、健康保険が、福祉であると同時に離脱を困難にする鎖として機能する。</li>
+                    <li>「復職成功」としてカウントされた後の長期的状態は、企業・医療・行政のいずれにも追跡されない。</li>
+                </ul>
+
+                <hr class="section-divider">
+
+                <h2 id="section-3">3. 「煉獄」の本質</h2>
+                <h3 id="trap-outside">外から見える罠</h3>
+                <p>恵まれた環境が、逆に本来の人生から人を引き離し、会社に縛り付ける。これは富野由悠季原作の『機動戦士ガンダム』におけるシャア・アズナブルの言葉を借りれば、<strong>「魂が重力に縛られた人々」</strong>の状態である。高給、安定、帰属という重力が強いほど、そこから浮き上がるために必要なエネルギーも大きくなる。</p>
+
+                <h3 id="trap-inside">内から見えない罠</h3>
+                <p>より残酷なのは、本人が縛られていることを自覚しにくい点である。うつが奪うのは気力だけではない。未来を想像する力そのものである。「宇宙に出られない」のではなく、<strong>「宇宙があることを想像できなくなっている」</strong>状態に近い。</p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-4">4. 長期的コスト</h2>
+                <h3 id="professional-cost">職業的コスト</h3>
+                <p>軽業務を数年、数十年と続けることで、職業人としてのスキルは停止し、劣化する。退職時には外部で通用する能力が著しく損なわれている可能性がある。</p>
+
+                <h3 id="medical-cost">医学的コスト</h3>
+                <p>薬の長期服用は身体への蓄積的影響を持つ。皮膚の乾燥や黒ずみなどの変化は、慢性炎症や副作用の外的表れであり、数十年単位では無視できない。</p>
+
+                <h3 id="psychological-cost">心理的コスト</h3>
+                <p>「何もできない自分」という自己認識が固定化され、自己肯定感はさらに低下する。本来の回復に必要な適度な挑戦と達成感が、永続的に奪われてしまう。</p>
+
+                <h3 id="existential-cost">実存的コスト</h3>
+                <p>最も深刻なのは、会社への帰属とアイデンティティが同一化したまま年月が過ぎ、退職後に「自分とは何か」を失うことである。回復しないまま老後を迎えることは、静かで見えにくい悲劇である。</p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-5">5. 周囲への影響</h2>
+                <p>「復職煉獄」は当事者だけの問題ではない。軽業務者から移された業務は、多くの場合、独身・子なし従業員や非正規従業員によって吸収される。</p>
+                <ul>
+                    <li>より低い給与で、より重い負荷を担う。</li>
+                    <li>制度的保護が薄く、声を上げにくい。</li>
+                    <li>構造的不公正への怒りを抱えながら、ゆっくりと消耗していく。</li>
+                </ul>
+                <p>重要なのは、これは個人間の対立ではなく、<strong>制度設計の失敗</strong>だということである。「保護される側」と「割を食う側」を争わせるのではなく、その歪みを生み出している構造そのものを問題として捉える必要がある。</p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-6">6. なぜ学術的に言語化されていないか</h2>
+                <p>この現象を正面から扱った研究論文は、現時点では存在しない。その理由は示唆的である。</p>
+                <ul>
+                    <li>「復職成功」としてカウントされるため、問題として認識されない。</li>
+                    <li>企業は実態を明らかにする研究に協力しにくい。</li>
+                    <li>本人も企業も「うまくいっている」と見なすため、研究対象になりにくい。</li>
+                    <li>部分的復職後の長期的状態は、既存研究でも空白として残されている。</li>
+                </ul>
+                <p><strong>この現象は、まだ名前も研究も十分に与えられていない空白地帯にある。</strong></p>
+
+                <hr class="section-divider">
+
+                <h2 id="section-7">7. 出口はあるか</h2>
+                <p>個人レベルでの解決は容易ではない。しかし理想的な方向性があるとすれば、次のようなものだろう。</p>
+                <ul>
+                    <li>治療の目標を「現状維持」から「本当の回復」へ切り替えること。</li>
+                    <li>「いつかこの環境を卒業する」という視野を、良い精神科医やカウンセラーと共有すること。</li>
+                    <li>会社員という<strong>틀</strong>から外れた働き方や生き方を想像できる状態を取り戻すこと。</li>
+                </ul>
+
+                <blockquote>
+                    <p><strong>틀（トゥル）について：</strong>これは単なる外側の「枠」ではなく、人をはめ込む鋳型や、その人の思考・自己認識そのものを内側から形作る構造を含意する言葉である。そこから外れることは、境界線をまたぐだけでなく、自己を作り直すことでもある。</p>
+                </blockquote>
+
+                <p>ただし最後の点が最も難しい。まず必要なのは、辞めることそのものではなく、<strong>辞めることを想像できる状態を取り戻すこと</strong>だからである。</p>
+                <p>構造的には、復職支援の「成功」基準を「職場復帰」から「長期的な回復と自律」へ再定義する必要がある。それは企業・医療・行政の連携なしには実現しない課題である。</p>
+
+                <hr class="section-divider">
+
+                <h2 id="conclusion">おわりに</h2>
+                <p>この問題の核心は、<strong>善意の制度が人を縛る</strong>という逆説にある。</p>
+                <p>企業は法を守り、医療は治療を提供し、本人は適応しようとする。それぞれに悪意はない。しかし総体として、人は本来の人生から切り離され、数十年をぬるま湯の中で過ごすことになる。</p>
+                <p>これは個人の弱さの問題ではなく、構造が生み出す静かな悲劇である。</p>
+
+                <blockquote>
+                    <p><em>本稿は、当事者の観察と対話をもとに構成された考察である。</em></p>
+                </blockquote>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html">← Home に戻る</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem("theme") || "light";
+        if (currentTheme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        }
+
+        function generateTOC() {
+            const tocList = document.getElementById("tocList");
+            const headings = document.querySelectorAll(".essay-content h2, .essay-content h3");
+
+            headings.forEach((heading, index) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+
+                if (!heading.id) {
+                    heading.id = "heading-" + index;
+                }
+
+                a.href = "#" + heading.id;
+                a.textContent = heading.textContent;
+
+                if (heading.tagName === "H3") {
+                    a.classList.add("toc-h3");
+                }
+
+                a.onclick = function() {
+                    toggleTOC();
+                };
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+
+        function toggleTOC() {
+            document.querySelector(".toc-sidebar").classList.toggle("open");
+            document.querySelector(".toc-overlay").classList.toggle("active");
+        }
+
+        window.addEventListener("DOMContentLoaded", generateTOC);
+    </script>
+</body>
+</html>
