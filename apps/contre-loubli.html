@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
+
+    <meta property="og:title" content="Contre L'oubli - PROJEKT2501">
+    <meta property="og:description" content="Ouraデータを素材に、AIが省察を生成するジャーナリングアプリ。">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/apps/contre-loubli.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PROJEKT2501">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Contre L'oubli - PROJEKT2501">
+    <meta name="twitter:description" content="Ouraデータを素材に、AIが省察を生成するジャーナリングアプリ。">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contre L'oubli - PROJEKT2501</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; line-height: 1.6; color: #333; background-color: #faf8f5; transition: background-color 0.3s ease, color 0.3s ease; }
+        body.dark-mode { background-color: #1a1a1a; color: #e0e0e0; }
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        header { margin-bottom: 60px; border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; }
+        body.dark-mode header { border-bottom-color: #333; }
+        h1 { font-size: 2em; margin-bottom: 10px; font-weight: 600; }
+        .subtitle { color: #666; font-size: 1.1em; }
+        body.dark-mode .subtitle { color: #999; }
+        .header-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        nav a { color: #0066cc; text-decoration: none; margin-right: 20px; font-size: 0.95em; }
+        body.dark-mode nav a { color: #4a9eff; }
+        nav a:hover, .page-links a:hover { text-decoration: underline; }
+        .language-toggle { display: flex; gap: 10px; margin-right: 15px; }
+        .lang-btn { background: none; border: none; font-size: 1.5em; cursor: pointer; padding: 4px; opacity: 0.5; transition: opacity 0.3s; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+        .lang-btn:hover { opacity: 0.8; }
+        .lang-btn.active { opacity: 1; }
+        .theme-toggle { position: relative; width: 48px; height: 24px; background-color: #e8e4dd; border: none; border-radius: 12px; cursor: pointer; transition: background-color 0.3s ease; padding: 0; }
+        body.dark-mode .theme-toggle { background-color: #2a2a2a; }
+        .toggle-circle { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background-color: #333; border-radius: 50%; transition: transform 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        body.dark-mode .toggle-circle { transform: translateX(24px); background-color: #faf8f5; }
+        .app-header { text-align: center; margin-bottom: 60px; }
+        .app-icon-large { width: 120px; height: 120px; background: #e8e4dd; border-radius: 24px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 4em; }
+        body.dark-mode .app-icon-large { background: #2a2a2a; }
+        .app-name { font-size: 2em; font-weight: 600; margin-bottom: 10px; }
+        .app-tagline { color: #666; font-size: 1.2em; margin-bottom: 20px; }
+        body.dark-mode .app-tagline { color: #999; }
+        .platform { color: #999; font-size: 0.95em; }
+        .description { margin-bottom: 50px; }
+        .description h2, .documents h2 { font-size: 1.4em; margin-bottom: 20px; font-weight: 600; }
+        .description p { color: #666; line-height: 1.8; margin-bottom: 1em; }
+        body.dark-mode .description p { color: #999; }
+        .documents { margin-bottom: 50px; }
+        .document-list { display: grid; gap: 14px; }
+        .document-link { display: block; padding: 18px 20px; border: 1px solid #e8e4dd; border-radius: 8px; color: #333; text-decoration: none; background: #fff; }
+        body.dark-mode .document-link { background: #222; border-color: #2a2a2a; color: #e0e0e0; }
+        .document-link strong { display: block; margin-bottom: 4px; }
+        .document-link span { color: #777; font-size: 0.92em; }
+        body.dark-mode .document-link span { color: #999; }
+        .page-links { text-align: center; margin-top: 40px; }
+        .page-links a { color: #0066cc; text-decoration: none; font-size: 0.95em; margin: 0 15px; }
+        body.dark-mode .page-links a { color: #4a9eff; }
+        footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid #e0e0e0; color: #999; font-size: 0.9em; text-align: center; }
+        body.dark-mode footer { border-top-color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Apps</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app.html">Apps</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn active" title="日本語">🇯🇵</button>
+                        <button class="lang-btn" onclick="location.href='contre-loubli-en.html'" title="English">🇺🇸</button>
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="app-header">
+            <div class="app-icon-large">📝</div>
+            <h2 class="app-name">Contre L'oubli</h2>
+            <p class="app-tagline">Ouraデータを素材に、AIが省察を生成するジャーナリングアプリ。</p>
+            <p class="platform">iPhone</p>
+        </div>
+
+        <section class="description">
+            <h2>アプリについて</h2>
+            <p>Contre L'oubli は、日々の記録、引用、気分、そしてOuraの身体データをもとに、AIによる省察を生成する個人用ジャーナリングアプリです。</p>
+            <p>日記を単なるログではなく、眠りや回復、身体のリズムとつながる思考の素材として扱います。</p>
+        </section>
+
+        <section class="documents">
+            <h2>ドキュメント</h2>
+            <div class="document-list">
+                <a class="document-link" href="contre-loubli-privacy.html">
+                    <strong>Privacy Policy / プライバシーポリシー</strong>
+                    <span>データの保存、Oura連携、Anthropic API利用について</span>
+                </a>
+                <a class="document-link" href="contre-loubli-terms.html">
+                    <strong>Terms of Service / 利用規約</strong>
+                    <span>本アプリの利用条件と第三者サービスについて</span>
+                </a>
+            </div>
+        </section>
+
+        <div class="page-links">
+            <a href="../app.html">アプリ一覧へ戻る</a>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') { document.body.classList.add('dark-mode'); }
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+    </script>
+</body>
+</html>
