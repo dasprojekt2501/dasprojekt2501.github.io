@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Contre L'oubli</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; line-height: 1.6; color: #333; background-color: #faf8f5; transition: background-color 0.3s ease, color 0.3s ease; }
+        body.dark-mode { background-color: #1a1a1a; color: #e0e0e0; }
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        header { margin-bottom: 50px; border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; }
+        body.dark-mode header { border-bottom-color: #333; }
+        h1 { font-size: 2em; margin-bottom: 10px; font-weight: 600; }
+        .subtitle, .last-updated { color: #666; }
+        body.dark-mode .subtitle, body.dark-mode .last-updated { color: #999; }
+        .header-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        nav a, .policy-content a { color: #0066cc; text-decoration: none; margin-right: 20px; font-size: 0.95em; }
+        body.dark-mode nav a, body.dark-mode .policy-content a { color: #4a9eff; }
+        nav a:hover, .policy-content a:hover { text-decoration: underline; }
+        .language-toggle { display: flex; gap: 10px; margin-right: 15px; }
+        .lang-btn { background: none; border: none; font-size: 1.5em; cursor: pointer; padding: 4px; opacity: 0.5; transition: opacity 0.3s; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+        .lang-btn:hover { opacity: 0.8; }
+        .lang-btn.active { opacity: 1; }
+        .theme-toggle { position: relative; width: 48px; height: 24px; background-color: #e8e4dd; border: none; border-radius: 12px; cursor: pointer; transition: background-color 0.3s ease; padding: 0; }
+        body.dark-mode .theme-toggle { background-color: #2a2a2a; }
+        .toggle-circle { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background-color: #333; border-radius: 50%; transition: transform 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        body.dark-mode .toggle-circle { transform: translateX(24px); background-color: #faf8f5; }
+        .policy-content h2 { font-size: 1.18em; margin-top: 30px; margin-bottom: 12px; font-weight: 600; }
+        .policy-content p { color: #666; line-height: 1.8; margin-bottom: 1em; }
+        body.dark-mode .policy-content p { color: #999; }
+        .policy-content ul { margin-left: 28px; margin-bottom: 20px; color: #666; }
+        body.dark-mode .policy-content ul { color: #999; }
+        .policy-content li { margin-bottom: 8px; }
+        footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid #e0e0e0; color: #999; font-size: 0.9em; text-align: center; }
+        body.dark-mode footer { border-top-color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Contre L'oubli</h1>
+            <p class="subtitle">Privacy Policy</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../app-en.html">Apps</a>
+                    <a href="contre-loubli-en.html">App page</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn" onclick="location.href='contre-loubli-privacy.html'" title="日本語">🇯🇵</button>
+                        <button class="lang-btn active" title="English">🇺🇸</button>
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <p class="last-updated">Last updated: June 6, 2026</p>
+
+        <div class="policy-content">
+            <h2>Overview</h2>
+            <p>Contre L'oubli ("the App") is a personal journaling application. This Privacy Policy explains how the App handles your data. The core principle of the App is that your journal is yours: your data stays on your device except in the specific, limited cases described below.</p>
+
+            <h2>Data Stored on Your Device</h2>
+            <p>The following data is stored locally on your device and is not transmitted to any server operated by the developer:</p>
+            <ul>
+                <li>Journal entries, including text, marked quotes, and attached images</li>
+                <li>Mood records</li>
+                <li>Saved quotes and daily cards</li>
+                <li>AI reflections generated by the App</li>
+                <li>App settings and preferences</li>
+            </ul>
+            <p>The developer does not operate any server and does not collect, store, or have access to this data.</p>
+
+            <h2>Data Sent to Third Parties</h2>
+            <p>The App sends data to third-party services only in the following cases, and only with your explicit configuration:</p>
+            <p><strong>1. Anthropic (Claude API)</strong></p>
+            <p>The AI reflection feature is optional and requires you to provide your own Anthropic API key. When you generate a reflection, the following data is sent to Anthropic's API to produce the reflection:</p>
+            <ul>
+                <li>Your journal entries for the relevant period</li>
+                <li>If enabled, your Oura Ring health data for the relevant period</li>
+            </ul>
+            <p>This data is transmitted only at the moment you generate a reflection. Data sent via the Anthropic API is not used to train Anthropic's models. Anthropic's standard API data retention period is 7 days, after which logs are deleted. Please refer to Anthropic's privacy policy for details.</p>
+            <p><strong>2. Oura (Oura Cloud API)</strong></p>
+            <p>The Oura Ring integration is optional. If you connect your Oura account, the App retrieves your health data, such as sleep, heart rate variability, readiness, and step count, from the Oura Cloud API. This data is used solely as material for AI reflections and is stored locally on your device. Please refer to Oura's privacy policy for details on how Oura handles your data.</p>
+
+            <h2>Credential Storage</h2>
+            <p>Your Anthropic API key and Oura authentication tokens are stored securely in the device's Keychain. They are never transmitted to any server operated by the developer.</p>
+
+            <h2>Health Data</h2>
+            <p>Oura health data is used exclusively as optional material for AI reflections. It is never sold, shared with third parties other than Anthropic, and only when you generate a reflection with the feature enabled, or used for advertising. You can disconnect your Oura account and disable this feature at any time.</p>
+
+            <h2>Your Control</h2>
+            <ul>
+                <li>All journal data can be deleted within the App.</li>
+                <li>You can delete your Anthropic API key at any time.</li>
+                <li>You can disconnect your Oura account at any time.</li>
+                <li>Uninstalling the App removes all locally stored data.</li>
+            </ul>
+
+            <h2>Children's Privacy</h2>
+            <p>The App is not directed at children under the age of 13.</p>
+
+            <h2>Changes to This Policy</h2>
+            <p>This Privacy Policy may be updated from time to time. Changes will be reflected on this page with an updated date.</p>
+
+            <h2>Contact</h2>
+            <p>For questions about this Privacy Policy, please contact: peripherie@icloud.com</p>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') { document.body.classList.add('dark-mode'); }
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+    </script>
+</body>
+</html>
