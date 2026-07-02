@@ -36,6 +36,11 @@
         .terms-content ul { margin-left: 28px; margin-bottom: 20px; color: #666; }
         body.dark-mode .terms-content ul { color: #999; }
         .terms-content li { margin-bottom: 8px; }
+        .reveal-contact-btn { background: none; border: 1px solid #0066cc; border-radius: 8px; color: #0066cc; cursor: pointer; font: inherit; padding: 8px 14px; transition: opacity 0.2s ease; }
+        .reveal-contact-btn:hover { opacity: 0.75; }
+        body.dark-mode .reveal-contact-btn { border-color: #4a9eff; color: #4a9eff; }
+        .hidden-contact { display: none; }
+        .hidden-contact.visible { display: inline; }
         footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid #e0e0e0; color: #999; font-size: 0.9em; text-align: center; }
         body.dark-mode footer { border-top-color: #333; }
     </style>
@@ -99,7 +104,7 @@
             <p>開発者は、いつでも本アプリを変更または提供を中止することができ、また本規約を更新することができます。変更後も本アプリの使用を継続した場合、更新された規約に同意したものとみなされます。</p>
 
             <h2>9. お問い合わせ</h2>
-            <p>本規約に関するお問い合わせは、以下までご連絡ください: peripherie@icloud.com</p>
+            <p>本規約に関するお問い合わせは、以下までご連絡ください: <button class="reveal-contact-btn" type="button" onclick="revealEmail()">メールアドレスを表示</button> <a class="hidden-contact" id="contact-email" href="#"></a></p>
         </div>
 
         <footer>
@@ -113,6 +118,14 @@
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+        function revealEmail() {
+            const email = ['peripherie', 'icloud.com'].join('@');
+            const link = document.getElementById('contact-email');
+            link.href = 'mailto:' + email;
+            link.textContent = email;
+            link.classList.add('visible');
+            document.querySelector('.reveal-contact-btn').style.display = 'none';
         }
     </script>
 </body>
