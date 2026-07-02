@@ -55,6 +55,9 @@
         .app-icon-large { width: 120px; height: 120px; background: #e8e4dd; border-radius: 24px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 4em; }
         body.dark-mode .app-icon-large { background: #2a2a2a; }
         .app-icon-large img { width: 100%; height: 100%; border-radius: 24px; object-fit: cover; }
+        .theme-icon-dark { display: none; }
+        body.dark-mode .theme-icon-light { display: none; }
+        body.dark-mode .theme-icon-dark { display: block; }
         .app-name { font-size: 2em; font-weight: 600; margin-bottom: 10px; }
         .app-tagline { color: #666; font-size: 1.2em; margin-bottom: 30px; }
         body.dark-mode .app-tagline { color: #999; }
@@ -127,7 +130,8 @@
         <!-- アプリヘッダー -->
         <div class="app-header">
             <div class="app-icon-large">
-                        <img src="mementomori.png" alt="Memento Mori Icon">
+                <img class="theme-icon-light" src="mementomori_icon_light.png" alt="Memento Mori Icon">
+                <img class="theme-icon-dark" src="mementomori_icon_dark.png" alt="Memento Mori Icon">
             </div>
             <h2 class="app-name">Memento Mori</h2>
             <p class="app-tagline">
@@ -136,9 +140,7 @@
             <a href="https://apps.apple.com/app/memento-mori-%E6%AD%BB%E3%82%92%E6%83%B3%E3%81%88/id6759522180" class="download-button" target="_blank" rel="noopener">App Storeでダウンロード</a>
         </div>
 
-        <!-- スクリーンショット -->
         <section class="screenshots">
-            <h2>スクリーンショット</h2>
                         <div class="screenshot-container">
                 <div class="screenshot"><img src="mementomori_jp_main.png" alt="メイン画面"></div>
                 <div class="screenshot"><img src="mementomori_jp_weekgrid.png" alt="週グリッド"></div>
