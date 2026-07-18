@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+    <meta property="og:title" content="Political Senescence">
+    <meta property="og:description" content="An ethnography of promotion and bodily transformation in the editorial bureau of a declining Japanese national daily.">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/essays/seijiteki-roka-en.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="PROJEKT2501">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Political Senescence">
+    <meta name="twitter:description" content="An ethnography of promotion and bodily transformation in the editorial bureau of a declining Japanese national daily.">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Political Senescence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover,
+        .back-link a:hover,
+        .essay-content a:hover,
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            line-height: 1;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+
+        .lang-btn:hover {
+            opacity: 0.8;
+        }
+
+        .lang-btn.active {
+            opacity: 1;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
+            border-color: #333;
+        }
+
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .toc-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .essay-header {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .essay-kicker {
+            color: #666;
+            font-size: 1.05em;
+            margin-bottom: 14px;
+        }
+
+        body.dark-mode .essay-kicker {
+            color: #aaa;
+        }
+
+        .essay-meta {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        .essay-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .essay-content p,
+        .essay-content blockquote {
+            margin-bottom: 20px;
+        }
+
+        .essay-content h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .essay-content h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .essay-content ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .essay-content li {
+            margin-bottom: 8px;
+        }
+
+        .essay-content a,
+        .back-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        body.dark-mode .essay-content a,
+        body.dark-mode .back-link a {
+            color: #4a9eff;
+        }
+
+        .essay-content blockquote,
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #666;
+        }
+
+        body.dark-mode .essay-content blockquote,
+        body.dark-mode .info-box {
+            background-color: #2a2a2a;
+            border-left-color: #999;
+        }
+
+        .section-divider {
+            margin: 50px 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+        }
+
+        body.dark-mode .section-divider {
+            background: linear-gradient(to right, transparent, #333, transparent);
+        }
+
+        .back-link {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .back-link {
+            border-top-color: #333;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+
+.essay-author {
+    color: #777;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+}
+
+body.dark-mode .essay-author {
+    color: #aaa;
+}
+
+.keywords {
+    font-size: 0.92em;
+    color: #666;
+}
+
+body.dark-mode .keywords {
+    color: #aaa;
+}
+
+.essay-figure {
+    margin: 36px 0 32px;
+}
+
+.essay-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+body.dark-mode .essay-figure img {
+    border-color: #444;
+}
+
+.essay-figure figcaption {
+    margin-top: 10px;
+    color: #666;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+body.dark-mode .essay-figure figcaption {
+    color: #aaa;
+}
+
+.footnote-ref {
+    font-size: 0.72em;
+    line-height: 0;
+    vertical-align: super;
+}
+
+.footnote-ref a,
+.footnote-backref {
+    text-decoration: none;
+}
+
+.footnotes {
+    margin-left: 28px;
+}
+
+.footnotes li {
+    margin-bottom: 16px;
+    padding-left: 4px;
+    color: #555;
+    font-size: 0.92em;
+    line-height: 1.7;
+}
+
+body.dark-mode .footnotes li {
+    color: #bbb;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 36px 16px;
+    }
+
+    .header-controls {
+        align-items: flex-end;
+        gap: 20px;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+    }
+
+    nav a {
+        margin-right: 0;
+    }
+
+    .essay-title {
+        font-size: 1.85em;
+    }
+
+    .essay-content {
+        font-size: 1em;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="toc-overlay" onclick="toggleTOC()"></div>
+
+    <div class="toc-sidebar">
+        <div class="toc-header">Table of Contents</div>
+        <ul class="toc-list" id="tocList"></ul>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html?lang=en">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app-en.html">Apps</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn" onclick="location.href='seijiteki-roka.html'" title="日本語">🇯🇵</button>
+                        <button class="lang-btn active" title="English">🇺🇸</button>
+                    </div>
+                    <div class="controls">
+                        <button class="toc-toggle" onclick="toggleTOC()" aria-label="Open table of contents">
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                        </button>
+                        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                            <div class="toggle-circle"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <article>
+            <div class="essay-header">
+                <h1 class="essay-title">Political Senescence</h1>
+                <div class="essay-kicker">An Ethnography of Promotion and Bodily Transformation in the Editorial Bureau of a Declining Japanese National Daily</div>
+                <div class="essay-author"><strong>PROJEKT2501</strong> (affiliation withheld)</div>
+                <div class="essay-meta">July 18, 2026 | Essay</div>
+            </div>
+
+            <div class="essay-content">
+                <div class="info-box">
+                    <p><strong>Abstract</strong></p>
+                    <p>In most societies, age precedes rank. From the age-set systems of East Africa to the seniority principle of the Japanese firm, the study of gerontocracy has repeatedly confirmed an isomorphism between the accumulation of calendar years and the accumulation of authority. This paper reports on a society in which the causal arrow is reversed: a society in which the approach to rank produces age. Drawing on more than a decade of participant observation in the Editorial Bureau of Company X, a Japanese national daily in decline, it describes the bodily aging — far in excess of calendar age — observable among those promoted to the rank of deputy managing editor and above, a phenomenon here termed <em>political senescence</em>, and analyzes its generative mechanism as the competition and compounding of three hypotheses: attrition, selection, and mimicry. The analytical frame combines the concept of involution — the turn of a system deprived of external growth toward internal elaboration — with the &quot;three bodies&quot; of medical anthropology. The conclusion can be summarized in one sentence: the soul is sold in a lump sum; the body pays in installments.</p>
+                    <p class="keywords"><strong>Keywords:</strong> political senescence; soul line; involution; bodily hexis; participant observation; newspapers</p>
+                </div>
+
+                <h2 id="section-1">1 Introduction — The Problem</h2>
+                <p>One winter morning, I shared an elevator in a headquarters building in central Tokyo with a man. The doors closed. The man did not notice me — or noticed me and chose the etiquette of not noticing<sup class="footnote-ref"><a href="#note-1" id="note-ref-1-1" aria-label="Note 1">1</a></sup>. From where I stood I could see him in profile. His thoracic spine curved deeply forward; his head projected several centimeters beyond the vertical line of his shoulders. His white hair was undyed. In his hands, not a smartphone but a sheet of A4 paper folded in quarters. Its contents were illegible from my position, but it was the kind of document that is legible to those to whom such documents are legible. The personnel database records, for his calendar age, a figure difficult to reconcile with observation. The elevator stopped; the man got off. His gait showed a marked restriction in the range of motion of the hip joints. I recorded the morning&#39;s observation in my field notes that evening. This paper is written from more than a decade&#39;s sediment of such notes.</p>
+                <p>Anthropology has recorded many societies in which age produces authority<sup class="footnote-ref"><a href="#note-2" id="note-ref-2-1" aria-label="Note 2">2</a></sup>. Age determines grade; grade determines voice. The seniority principle of the Japanese firm has been understood as a mild variant of this lineage. In my field, however, the arrow points the other way. It is not that age brings rank. It is that the approach to rank brings age. Those holding the rank of deputy managing editor and above were systematically &quot;older&quot; than the standard body of Japanese men of their generation — in posture, hair, skin, and gait. Most of them are in their late forties and fifties. Their bodies are walking twenty to thirty years ahead of them.</p>
+                <p>The outline of the field first. Company X is a Japanese national daily. Its morning-edition circulation peaked early in the present century<sup class="footnote-ref"><a href="#note-3" id="note-ref-3-1" aria-label="Note 3">3</a></sup>. It has declined without interruption since; indexed to 100 at the peak year, it stands at around 50 as of this writing. In less than a quarter century, the external world has halved. Over the same period, the internal world of the Editorial Bureau — the number of committees, the layers of consensus-building, the fine grain of the vocabulary of personnel — has, as far as my observation reaches, grown steadily more elaborate. This is the organizational version of what Geertz found in the wet-rice agriculture of Java: involution, the process by which a system whose external expansion has stopped turns toward internal complication<sup class="footnote-ref"><a href="#note-4" id="note-ref-4-1" aria-label="Note 4">4</a></sup>. The central claim of this paper is that the cost of this involution is being transferred onto the bodies of the members of one particular stratum.</p>
+                <p>The altitude at which the transfer begins can be specified. An invisible line runs through the hierarchy of Company X&#39;s Editorial Bureau. Below the line, the retention of the soul and promotion are compatible. Above it, as a rule, they are not. I call this line the <em>soul line</em>. Just as the tree line<sup class="footnote-ref"><a href="#note-5" id="note-ref-5-1" aria-label="Note 5">5</a></sup> does not permit a tree to stand upright above a certain altitude, the soul line does not permit a soul to stand upright above a certain rank. By observation, the soul line in Company X&#39;s Editorial Bureau passes between the headship of a non-mainstream department and the rank of deputy managing editor. As far as the headship of a non-mainstream department, an individual can arrive without selling the soul. Above that, there are only two routes. The first is passage by exceptional ability or achievement. I call this <em>altitude acclimatization</em> and exclude it from the present study. The acclimatized can breathe above the soul line. They are few, but they exist. The second route is internal politics. The subjects of this paper are the travelers of the second route.</p>
+                <p>This paper defines <em>political senescence</em> as bodily aging, far in excess of calendar age, that accompanies long engagement in internal politics<sup class="footnote-ref"><a href="#note-6" id="note-ref-6-1" aria-label="Note 6">6</a></sup>. For its generative mechanism, three hypotheses are advanced. First, the <strong>attrition hypothesis</strong>: that political labor — the drafting of memos, <em>nemawashi</em> (the prior engineering of consent), the calculus of seating order, upward reporting — itself corrodes the body. Second, the <strong>selection hypothesis</strong>: that at altitudes above the soul line, bodies that look old are preferred, and survive. Third, the <strong>mimicry hypothesis</strong>: that assimilation to the bodily norms of gerontocratic rule — the wearing of a body resembling one&#39;s superiors — functions as a display of loyalty. The three are not mutually exclusive. As Chapter 5 argues, political senescence is most likely their compound.</p>
+                <p>The paper proceeds as follows. Chapter 2 reviews the relevant literatures and locates the study. Chapter 3 describes the methods. Chapter 4 presents three cases. Chapter 5 examines the three hypotheses and attempts their integration under the theory of involution. Chapter 6 concludes.</p>
+                <p>One point should be made clear at the outset. This paper is not a critique of any individual. What it describes is a type, and the structure that produces the type. Its subjects, too, as will be shown, are debtors of a structure. Their bodies are its ledger.</p>
+                <hr class="section-divider">
+                <h2 id="section-2">2 Prior Research</h2>
+                <p>This study sits at the seam of four research lineages. I take them in turn.</p>
+                <h3 id="section-2-1">2.1 Age and Power</h3>
+                <p>The anthropology of aging has established two basic findings: that the meaning of age is culturally constructed, and that the distribution of age and power is institutionalized differently in different societies. The ethnography of gerontocracy (see note 2) showed institutions in which the accumulation of calendar years converts automatically into authority. Studies of contemporary India and Japan, by contrast, have described processes in which age becomes an object of marginalization and moral evaluation<sup class="footnote-ref"><a href="#note-7" id="note-ref-7-1" aria-label="Note 7">7</a></sup>. The elderly Japanese described by Traphagan perform the activities that hold off senility as moral practice. My field offers the mirror image. The promoted men of Company X have been exempted from — or stripped of — the morality of resisting age. For them, age is less a nature to be resisted than a job requirement to be fulfilled.</p>
+                <p>In both lineages, the arrow of analysis ran from age to rank, or from age to margin. The reverse arrow — from rank to aging — has, to my knowledge, not been treated systematically.</p>
+                <h3 id="section-2-2">2.2 Theories of the Body</h3>
+                <p>The reading of the body as a recording medium of society begins with Mauss&#39;s &quot;techniques of the body&quot;<sup class="footnote-ref"><a href="#note-8" id="note-ref-8-1" aria-label="Note 8">8</a></sup>. Ways of walking, sitting, and handling tools are not physiology but transmission, and differ from society to society. Douglas pressed the point further, formulating the body as a microcosm of society — a symbolic system in which social tensions are expressed<sup class="footnote-ref"><a href="#note-9" id="note-ref-9-1" aria-label="Note 9">9</a></sup>. Bourdieu&#39;s concept of bodily hexis<sup class="footnote-ref"><a href="#note-10" id="note-ref-10-1" aria-label="Note 10">10</a></sup> wrote class and power into this process of sedimentation, and Wacquant&#39;s &quot;bodily capital&quot;<sup class="footnote-ref"><a href="#note-11" id="note-ref-11-1" aria-label="Note 11">11</a></sup> showed the body to be a capital that is accumulated, converted, and depreciated. Medical anthropology, with Scheper-Hughes and Lock&#39;s &quot;three bodies&quot;<sup class="footnote-ref"><a href="#note-12" id="note-ref-12-1" aria-label="Note 12">12</a></sup>, acquired a device for distinguishing analytically among individual experience, social symbol, and political control.</p>
+                <p>This paper uses these devices more or less as they stand. Its originality lies not in the apparatus but in the object. Wacquant&#39;s boxers accumulate bodily capital and hurry to convert it before it depreciates. My subjects run the circuit in reverse: they keep exchanging bodily capital for political capital at a ruinous rate.</p>
+                <h3 id="section-2-3">2.3 Japanese Organizations and Newsrooms</h3>
+                <p>The ethnography of Japanese organizations has a thick record. From participant observation in a regional bank, Rohlen described the process by which an organization undertakes to form the whole person of its members — &quot;spiritual education&quot;<sup class="footnote-ref"><a href="#note-13" id="note-ref-13-1" aria-label="Note 13">13</a></sup>. Nakane&#39;s theory of the vertical society<sup class="footnote-ref"><a href="#note-14" id="note-ref-14-1" aria-label="Note 14">14</a></sup> formulated the structure in which belonging to a &quot;frame&quot; overrides &quot;attribute&quot;; Kondo described the crafting of selves in the workplace<sup class="footnote-ref"><a href="#note-15" id="note-ref-15-1" aria-label="Note 15">15</a></sup>; Ogasawara described the circuit of informal power by which the gossip of female clerical workers governs the reputations and promotions of salarymen<sup class="footnote-ref"><a href="#note-16" id="note-ref-16-1" aria-label="Note 16">16</a></sup>; Allison described the nightly reproduction of corporate masculinity in the hostess club<sup class="footnote-ref"><a href="#note-17" id="note-ref-17-1" aria-label="Note 17">17</a></sup>. The economy of <em>chikuri</em> — unsolicited upward reporting on one&#39;s colleagues — treated in Chapter 4 is the masculine, verticalized variant of the circuit Ogasawara described.</p>
+                <p>The ethnography of the newsroom likewise has its classics. Tuchman and Gans showed news to be an organizational product<sup class="footnote-ref"><a href="#note-18" id="note-ref-18-1" aria-label="Note 18">18</a></sup>. More recent work has extended to newsrooms in digital transition and decline<sup class="footnote-ref"><a href="#note-19" id="note-ref-19-1" aria-label="Note 19">19</a></sup>. On Japan, there is the institutional analysis of the press clubs as information cartels<sup class="footnote-ref"><a href="#note-20" id="note-ref-20-1" aria-label="Note 20">20</a></sup>, and a literature on the structural bankruptcy of the newspaper business model<sup class="footnote-ref"><a href="#note-21" id="note-ref-21-1" aria-label="Note 21">21</a></sup>. But the concern of these studies has consistently been with how news is made, or why it has ceased to be made. The bodies of those who have stopped making news and begun making careers lie outside the frame.</p>
+                <h3 id="section-2-4">2.4 Organization and Soul</h3>
+                <p>Finally, there is a lineage concerned with what organizations do to the selves of their members. Goffman named the systematic stripping of the self by total institutions the &quot;mortification of the self&quot;<sup class="footnote-ref"><a href="#note-22" id="note-ref-22-1" aria-label="Note 22">22</a></sup>. Hirschman sorted members&#39; options in the face of organizational deterioration into exit, voice, and loyalty<sup class="footnote-ref"><a href="#note-23" id="note-ref-23-1" aria-label="Note 23">23</a></sup>. Graeber analyzed the spiritual violence inflicted by labor performed in the knowledge of its own pointlessness<sup class="footnote-ref"><a href="#note-24" id="note-ref-24-1" aria-label="Note 24">24</a></sup>. And Geertz&#39;s involution (see note 4) showed what happens inside a system that has lost external growth.</p>
+                <p>These four lineages have treated, respectively, age and power, body and structure, Japanese organizations and the press, organization and self. But the question — what does a declining organization write onto the bodies of those who rise within it? — has fallen into the seam between the four, and has not been picked up. This paper takes the seam as its object.</p>
+                <hr class="section-divider">
+                <h2 id="section-3">3 Methods</h2>
+                <h3 id="section-3-1">3.1 The Field and the Observer&#39;s Position</h3>
+                <p>The field is the Editorial Bureau at Company X&#39;s Tokyo headquarters. The observation period extends over more than a decade. Throughout it, I was employed in the Bureau, occupying the position that the typology of participant observation calls the <em>complete participant</em><sup class="footnote-ref"><a href="#note-25" id="note-ref-25-1" aria-label="Note 25">25</a></sup>: my subjects treated me as a colleague and did not know that I was an observer. The position is unrivaled in depth of access; it carries the ethical problems discussed below.</p>
+                <p>A participant observer, however deeply he participates, is a structural stranger in the single respect that he observes. As Simmel argued, it is precisely the peculiar composition of nearness and distance that endows the stranger with objectivity<sup class="footnote-ref"><a href="#note-26" id="note-ref-26-1" aria-label="Note 26">26</a></sup>. My own composition remained, throughout the period, within a range suited to observation. Into the circumstances by which it was so maintained, I do not enter.</p>
+                <h3 id="section-3-2">3.2 Materials</h3>
+                <p>The materials of this study fall into four classes.</p>
+                <p>First, <strong>personnel materials</strong>. Company X&#39;s personnel changes are announced in its own pages. I have preserved more than a decade of transfer records and organized them so that each individual&#39;s altitude history — the sequence of ranks — can be traced.</p>
+                <p>Second, <strong>records of bodily observation</strong>. At their core is fixed-point observation of posture in elevators (systematized in the later period of fieldwork; more than four hundred observations in total). The elevator offers exceptionally good conditions for postural observation: the subject is stationary, the lighting is uniform, and the timing of egress is predictable. Supplementary records include lateral observation of spinal curvature in meeting rooms, and visual assessment, at banquets, of glabellar furrow depth and hair color<sup class="footnote-ref"><a href="#note-27" id="note-ref-27-1" aria-label="Note 27">27</a></sup>. For several years during the epidemic, the banquet data have a gap. Observation continued on the screens of remote meetings, but resolution and framing limited its value as postural data. The possibility that the subjects&#39; aging accelerated during the gap cannot be excluded.</p>
+                <p>Third, <strong>discourse materials</strong>: corridor conversation, utterances in the smoking room (before its closure), and farewell-party speeches, recorded where possible.</p>
+                <p>Fourth, <strong>material culture</strong>. I observed the formal features of the documents my subjects produce — above all, the memos that circulate in internal politics. I do not enter into their contents. Not because I could not, but because I did not need to: this class of document functions not by its content but by its existence and its routes of circulation.</p>
+                <p>No measuring instruments were used, for ethical reasons (see 3.4). In their place, I have received professional training in observation at a news organization. Whether that training guarantees the validity of the present measurements is a judgment I leave to the reader.</p>
+                <h3 id="section-3-3">3.3 Analytical Framework</h3>
+                <p>The analysis rests on three theories. First, Scheper-Hughes and Lock&#39;s &quot;three bodies&quot; (see note 12): the three levels — individual body, social body, body politic — provide the scaffolding on which Chapter 5 integrates the observations. Second, Bourdieu&#39;s bodily hexis (see note 10): the view that social structure settles into the body as posture, gait, and the rhythm of speech makes it possible to read political senescence not as an incidental health problem but as the imprint of structure. Third, the concept of involution already introduced (see note 4).</p>
+                <h3 id="section-3-4">3.4 Ethical Considerations</h3>
+                <p>This study is classified as covert observation. The ethical problems of the method have been discussed repeatedly<sup class="footnote-ref"><a href="#note-28" id="note-ref-28-1" aria-label="Note 28">28</a></sup>. I take those discussions seriously. That said, three points.</p>
+                <p>First, every case in this paper is a composite of multiple individuals and corresponds to no particular person. Should any reader within the subject population feel that he is the one described, the feeling is a misrecognition. The ease with which the misrecognition arises, however, is itself evidence for the paper&#39;s thesis — the reality of the type — and I accept it with gratitude.</p>
+                <p>Second, subjects were neither informed of the study nor asked for consent. The announcement &quot;I am conducting a longitudinal observation of your stoop&quot; would irreversibly destroy the natural state of the field.</p>
+                <p>Third, the mutuality of observation. The Editorial Bureau is, by its nature, a space in which members observe one another (see Chapter 4). The premise of unidirectional observation never held in this field to begin with. This fact does not cancel the ethical debt of covert observation, but it is relevant to any accounting of how the debt is distributed.</p>
+                <p><strong>Conflict of interest</strong>: A conflict of interest requiring disclosure exists. Its disclosure, being incompatible with the requirements of anonymity, is withheld.</p>
+                <h3 id="section-3-5">3.5 Limitations of Method</h3>
+                <p>The limitations of this study are three. First, the sample is confined to one bureau of one company. Second, all bodily indices rest on non-instrumental observation. Third, the aging of the observer. I, too, aged by exactly the length of the observation period. How much of the observed aging belongs to change in the subjects, and how much to deterioration in the observer&#39;s eyesight and criteria — the problem known in longitudinal research as <em>observer drift</em><sup class="footnote-ref"><a href="#note-29" id="note-ref-29-1" aria-label="Note 29">29</a></sup> — this study cannot fully separate. That the separation cannot be made may itself say something about the nature of time in this organization; I return to the point in Chapter 6.</p>
+                <hr class="section-divider">
+                <h2 id="section-4">4 Ethnographic Description — Three Bodies</h2>
+                <h3 id="section-4-1">4.1 The Field — An Ecology of the Soul Line</h3>
+                <p>Company X&#39;s Editorial Bureau occupies several floors of the headquarters building. At its center is a large open room lined with departmental &quot;islands,&quot; where hours that heat toward deadline alternate, within each day, with hours that slacken. A reporter&#39;s career describes, roughly, an altitude series: reporter, desk editor, department head, deputy managing editor, managing editor. As stated in the introduction, the soul line passes between the headship of a non-mainstream department and the rank of deputy managing editor<sup class="footnote-ref"><a href="#note-30" id="note-ref-30-1" aria-label="Note 30">30</a></sup>.</p>
+                <p>Above and below the line, the content of labor changes discontinuously. Labor below the line is, ultimately, connected to the printed page. Labor above the line is not — as a rule. Instances of officials at deputy-managing-editor rank or above writing bylined articles were not absent during the observation period; their frequency, however, was not such as to cast doubt on the rule, but such as to sharpen its outline. Their labor consists of meetings, of meetings before meetings, and of memos. The memo records the utterances of superiors, interprets them, tracks the movements of other departments, and speculates on personnel; it is drafted, transmitted, and sometimes read.</p>
+                <p>The heat per unit area of the open room has declined observably over the past decade and more. The heat of deadlines remains, but its total quantity thins with the age of the paper; meanwhile, in one corner of the floor — the precinct where those above the soul line gather — a different heat is conserved. It is heat that does not go toward the page.</p>
+                <p>It may be noted that the etiquette of rank inside elevators (the position at the control panel being the lowest) meant that my fixed-point data arrived automatically tagged with relative rank<sup class="footnote-ref"><a href="#note-31" id="note-ref-31-1" aria-label="Note 31">31</a></sup>.</p>
+                <h3 id="section-4-2">4.2 Case A — The Scribe&#39;s Body</h3>
+                <p>Case A is a deputy managing editor in his fifties (all three cases below are composites of multiple individuals; see 3.4). The greater part of A&#39;s day consists of typing memos into a laptop. He types during meetings and after them. While typing, A inclines forward as if offering his head to the screen; the curvature of his thoracic spine reaches, by visual estimate, fifty degrees. The posture is not confined to typing. Standing or walking, A&#39;s body retains the typing posture. The posture is no longer an act; it is a trait.</p>
+                <p>The scribes of medieval Europe often left a set phrase in the colophons of their manuscripts: <em>Tres digiti scribunt, totum corpusque laborat</em> — three fingers write, but the whole body labors<sup class="footnote-ref"><a href="#note-32" id="note-ref-32-1" aria-label="Note 32">32</a></sup>. The scribe&#39;s body was the apparatus that paid the cost of reproducing sacred text. A&#39;s body sits within the same accounting structure; only the nature of the text differs. The scribe reproduced scripture; A reproduces the intentions of his superiors. Transposed into an East Asian idiom: the copying of sutras was a practice for the accumulation of merit. A&#39;s memos, too, are merit — except that the merit is addressed not to the Buddha but to the managing editor.</p>
+                <p>The group photographs in the company&#39;s published anniversary volumes are this study&#39;s only retrospective bodily source. In the old photographs, A stands upright. The curvature is not a trait he entered with. It accumulated across his years of service — like tree rings, or like interest.</p>
+                <p>If one traces the history by which upright posture has been bound to military, educational, and moral value<sup class="footnote-ref"><a href="#note-33" id="note-ref-33-1" aria-label="Note 33">33</a></sup>, A&#39;s curvature invites reading as a moral failure. This paper declines that reading. A&#39;s curvature is not a failure; it is a payment. It may be added that a considerable portion of the memos A produces show no trace of having been read. On the psychic cost of continuing to write unread documents, a classic treatment already exists (see note 24).</p>
+                <h3 id="section-4-3">4.3 Case B — A Hannya Without a Mask-Carver</h3>
+                <p>Case B is an official of deputy-managing-editor grade, in his fifties. By the observational record, B&#39;s mode of conduct changed after a certain point: from the promotion pattern of his cohort and the disposition of vacancies above him, the possibility of reaching the far side of the soul line entered B&#39;s field of vision. The perception of possibility does not always produce desire. In B, it did. Thereafter, B&#39;s rate of banquet attendance rose; his seat fixed itself diagonally in front of his superiors; and the onset of his laughter came to track theirs at a mean delay of under one second.</p>
+                <p>Over the same several years, two vertical furrows were carved into B&#39;s glabella, and deepened (for the grading criteria, see note 27). At first the furrows appeared only during contraction of the facial muscles. In the later observation period, they no longer disappeared at rest. They are the trace of sustained contraction of the corrugator supercilii — the muscle Darwin counted among the muscles of grief, which draws the brows together and downward and contracts under difficulty, displeasure, and deliberation<sup class="footnote-ref"><a href="#note-34" id="note-ref-34-1" aria-label="Note 34">34</a></sup>. B&#39;s glabella came to retain the shape of contraction even in scenes requiring none. Expression is no longer a state; it is a terrain.</p>
+                <p>Theories of the face offer instruments for reading this terrain. Simmel saw in the face the surface on which the inner unity of the person appears most purely<sup class="footnote-ref"><a href="#note-35" id="note-ref-35-1" aria-label="Note 35">35</a></sup>. Mauss traced the conceptual history of the person to the <em>persona</em> — that is, to the mask<sup class="footnote-ref"><a href="#note-36" id="note-ref-36-1" aria-label="Note 36">36</a></sup>. The person was, at its origin, a removable face. What Case B exhibits is the process by which removability is lost.</p>
+                <p>Colloquial Japanese describes a countenance like B&#39;s as <em>hannya no yō</em> — &quot;like a <em>hannya</em>.&quot; The description is more precise than it appears. In noh, the expression of a mask is not fixed. To tilt the mask upward is called <em>terasu</em>, &quot;to brighten&quot;: the mask lightens. To tilt it downward is called <em>kumorasu</em>, &quot;to cloud&quot;: the mask darkens<sup class="footnote-ref"><a href="#note-37" id="note-ref-37-1" aria-label="Note 37">37</a></sup>. B&#39;s countenance implements the same mechanism. Turned toward superiors — the mask tilted upward — it brightens. Turned toward subordinates — the mask tilted downward — it clouds. A single face outputs two expressions according to the direction of the gradient. This output characteristic coincides exactly with the specification demanded of middle management in a vertical society.</p>
+                <p>The theory of rites of passage reinforces the interpretation. In the three-stage schema of separation, transition, and incorporation, the rituals of the liminal period are frequently attended by monstrous masks<sup class="footnote-ref"><a href="#note-38" id="note-ref-38-1" aria-label="Note 38">38</a></sup>. The rank of deputy managing editor is structurally liminal: no longer a reporter, not yet an executive. Ordinarily, the ritual mask is lent from outside and collected when the ritual ends. B&#39;s mask was generated from the side of the face, without passing through the hands of a <em>menuchi</em> — a carver of noh masks. Even when the rite of incorporation is complete — even when B reaches the executive floor — this mask will not come off. As the general theory of sacrifice teaches, offerings are not returned. I return to the point in 5.4.</p>
+                <h3 id="section-4-4">4.4 Case C — The Watcher&#39;s Curvature</h3>
+                <p>Case C is an official of department-head or deputy-managing-editor grade, in his fifties. His hair is entirely white; the curvature of his spine is second only to A&#39;s. C&#39;s central practice is observation and report. He observes the conduct of subordinates — lateness, expenses, flaws in copy, missteps at banquets — records it, and reports it upward. The practice has not been assigned to him as duty. C performs it voluntarily, sustainedly, and, as far as observation reaches, with deep satisfaction. To borrow the vocabulary of <em>ikigai</em> research<sup class="footnote-ref"><a href="#note-39" id="note-ref-39-1" aria-label="Note 39">39</a></sup>, C&#39;s <em>ikigai</em> is unambiguous, and does not waver. Whether such stability should be called happiness lies beyond the scope of this paper.</p>
+                <p>The anthropology of gossip has treated rumor as a horizontal apparatus for the maintenance of communal norms<sup class="footnote-ref"><a href="#note-40" id="note-ref-40-1" aria-label="Note 40">40</a></sup>. C&#39;s practice is a variant of the apparatus, with one decisive difference: gradient. C&#39;s gossip does not circulate horizontally. It is delivered vertically, and upward only. Where gossip is a commons, <em>chikuri</em> is a private gift (Chapter 5).</p>
+                <p>What the historical study of denunciation under totalitarian regimes has repeatedly found is the banality of its motives<sup class="footnote-ref"><a href="#note-41" id="note-ref-41-1" aria-label="Note 41">41</a></sup>: not ideology, but promotion, housing, irritation at a neighbor. My observations are consistent with the finding. Denunciation requires no cause. Where an institution keeps a receiving window open, denunciation occurs. The window of Company X&#39;s Editorial Bureau is open.</p>
+                <p>Foucault wrote that the tower of the panopticon need contain no one<sup class="footnote-ref"><a href="#note-42" id="note-ref-42-1" aria-label="Note 42">42</a></sup>: the mere possibility of the gaze suffices for discipline. At Company X, there is someone in the tower. He is in his fifties, white-haired, and curved. Surveillance was never automated. It aged as manpower.</p>
+                <h3 id="section-4-5">4.5 Summary</h3>
+                <p>The three cases inhabit the same altitude band and make their payments at different sites: A with posture, B with countenance, C with pigment and curvature. The sites differ; the currency is one.</p>
+                <hr class="section-divider">
+                <h2 id="section-5">5 Discussion</h2>
+                <h3 id="section-5-1">5.1 The Three Hypotheses</h3>
+                <p>The <strong>attrition hypothesis</strong> attends to the bodily cost of political labor itself. Long hours of seated forward inclination (Case A), the frequency and depth of banquets (Case B), sustained vigilance (Case C) — all are real physiological loads. Japanese medical anthropology has traced how overwork came to be institutionalized as illness<sup class="footnote-ref"><a href="#note-43" id="note-ref-43-1" aria-label="Note 43">43</a></sup>. But the overwork of political labor lies outside the institution. The workload of a man who writes no articles leaves no trace on the page; it is therefore not measured; it therefore does not exist. Political labor is labor that is never booked as labor, and its attrition is institutionally invisible. The weakness of the attrition hypothesis is that it explains the speed of the aging but not its function.</p>
+                <p>The <strong>selection hypothesis</strong> explains the function: at altitudes above the soul line, bodies that look old are preferred. Why? Because a youthful body is the bodily display of exit capability. A body still convertible on the outside market may betray the organization at any moment. Conversely, a body that has visibly lost its outside value functions as collateral for loyalty. The logic is the bodily version of what commitment theory calls the burning of one&#39;s bridges<sup class="footnote-ref"><a href="#note-44" id="note-ref-44-1" aria-label="Note 44">44</a></sup>. Only he who hands over a hostage is trusted. The <em>hannya</em> countenance and the stoop are the smoke, still rising, of bridges already burned. In Hirschman&#39;s terms (see note 23), the soul line is the altitude at which the credibility of exit is extinguished. Only to those who have proven with their bodies that they cannot leave is loyalty above that altitude permitted.</p>
+                <p>The <strong>mimicry hypothesis</strong> reverses the direction: the aged body is not selected but donned. In biological terms, this is Batesian mimicry<sup class="footnote-ref"><a href="#note-45" id="note-ref-45-1" aria-label="Note 45">45</a></sup>: a harmless species imitates the appearance of a harmful one and thereby escapes predation. The candidate for deputy managing editor assimilates himself to the bodily norms of his already-aged superiors — curvature, white hair, slowness — and thereby escapes elimination. In a vertical society (see note 14), the safety of the subordinate is purchased by oneness with the superior. The oneness does not stop at the spirit.</p>
+                <p>The three hypotheses are not exclusive; they compound as stages. Political senescence <strong>begins as mimicry</strong> (the donning), <strong>becomes substance through attrition</strong> (the costume becomes flesh — Bourdieu&#39;s hexis describes precisely this process), and <strong>is fixed by selection</strong> (only the substantiated remain). A mask, once it can no longer be removed, is called a face.</p>
+                <h3 id="section-5-2">5.2 Involution — Figure 1</h3>
+                <p>Figure 1 superimposes the trajectory of Company X&#39;s morning-edition circulation index on the trajectory of the mean thoracic kyphosis angle of the cohort at deputy-managing-editor rank and above<sup class="footnote-ref"><a href="#note-46" id="note-ref-46-1" aria-label="Note 46">46</a></sup>. The two curves are mirror images.</p>
+                <figure class="essay-figure">
+                    <img src="fig1_involution_pre_en.svg" alt="Figure 1: circulation index and mean kyphosis angle">
+                    <figcaption><strong>Figure 1</strong> Morning-edition circulation index of Company X (left axis, peak year = 100) and mean thoracic kyphosis angle of the deputy-managing-editor-and-above cohort (right axis, degrees, visual estimate). Horizontal axis: years since peak.</figcaption>
+                </figure>
+                <p>Geertz&#39;s involution named the process by which a wet-rice agriculture whose extensive expansion had ceased turned toward the intensification and elaboration of labor (see note 4). What is occurring in Company X&#39;s Editorial Bureau is its organizational version. The more the external rewards — circulation, influence, scoops — thin out, the more elaborate the internal symbolic economy becomes: committees, seating orders, layers of <em>nemawashi</em>, the vocabulary of personnel, and memos. An economy that can no longer earn foreign currency (the trust of readers) keeps printing domestic currency (the confidence of superiors). Printing costs money. The right-hand axis of Figure 1 is the account of the printing costs.</p>
+                <p>In its proper sense, involution means that labor grows more elaborate while output per head stagnates. Political labor purifies the definition. It grows more elaborate, and produces nothing.</p>
+                <h3 id="section-5-3">5.3 Integration by the Three Bodies</h3>
+                <p>Scheper-Hughes and Lock&#39;s three levels (see note 12) integrate the observations so far.</p>
+                <p>At the level of the <strong>individual body</strong>, the subjects are in pain. In the discourse materials, pain in the shoulders and lower back was among the most frequent of topics — and, notably, almost the only topic in their conversation that carried no political context. Pain is the last apolitical language left to them.</p>
+                <p>At the level of the <strong>social body</strong>, their bodies are the living representation of the organization&#39;s decline. The organization possesses no official language for its own decline: on the page it is called digital strategy; in meetings it is called reform. What goes unspoken, however, does not disappear. It returns as the posture of executives. The isomorphism of Figure 1 is the measurement of that return.</p>
+                <p>At the level of the <strong>body politic</strong>, their bodies are relay points of discipline. As Case C shows, surveillance is implemented not as an institution but as a person; and rank is executed daily, as banquet coordinates and elevator positions. At this level, the term &quot;body politic&quot; ceases to be a metaphor.</p>
+                <h3 id="section-5-4">5.4 Gift and Sacrifice</h3>
+                <p>Finally, the whole seen from the theory of exchange. As Mauss showed, the gift creates the obligation of return<sup class="footnote-ref"><a href="#note-47" id="note-ref-47-1" aria-label="Note 47">47</a></sup>. <em>Chikuri</em> is the upward gift of information. The return is paid in personnel decisions. But the exchange is an extreme case of unequal exchange: the item, the timing, and the rate of the return are set unilaterally by the recipient. All the giver can do is raise the frequency of giving. Case C&#39;s sustained practice reads as the consequence of this structure.</p>
+                <p>The theory of sacrifice reaches deeper. For Hubert and Mauss, sacrifice is an operation that opens a circuit between the profane and the sacred through the destruction of an offering<sup class="footnote-ref"><a href="#note-48" id="note-ref-48-1" aria-label="Note 48">48</a></sup>. Case B&#39;s unmasked face, and Case A&#39;s upright posture, are offerings in this sense. The destroyed good opens the circuit to the sanctuary of the executive floor. And, as the general theory teaches, offerings are not returned.</p>
+                <p>Goffman&#39;s mortification of the self (see note 22) named the stripping executed by the total institution at admission: the haircut, the confiscation of belongings, the conversion of names into numbers. Company X is not a total institution. Its stripping is therefore executed not at entry and not in a lump, but at each stage of promotion, in installments, and by the self. Call it the privatization of the mortification of the self.</p>
+                <p>Here the formula of the introduction acquires its full meaning. <strong>The soul is sold in a lump sum; the body pays in installments.</strong> The decision to sell is made once. But the payment of the price continues — in posture, in glabella, in pigment, in range of motion — across the whole term of service. The interest is compound.</p>
+                <hr class="section-divider">
+                <h2 id="section-6">6 Conclusion</h2>
+                <p>This paper has named the bodily aging in excess of calendar age observed among those promoted to deputy managing editor and above in the Editorial Bureau of a declining national daily <em>political senescence</em>, and has described it on the basis of more than a decade of participant observation. The conclusions are three. First, political senescence is a three-stage compound of mimicry, attrition, and selection. Second, its total quantity is a function of the organization&#39;s involution: the loss of external rewards drives the elaboration of the internal symbolic economy, and the cost is transferred onto the bodies of a particular stratum (Figure 1). Third, the transfer follows the logic of gift and sacrifice; the payment is by installment, and the interest is compound.</p>
+                <p>The organization cannot speak its own decline directly. In print, the decline is called strategy; in meetings, reform. But what goes unspoken does not vanish. It is entered, accurately, on the bodies of those who climbed above the soul line — as kyphosis, as the carving of the glabella, as white hair. The official history of the organization is printed on paper. Its actual history is printed in flesh.</p>
+                <p>One point reserved in 3.5. That the observer&#39;s aging cannot be separated from the subjects&#39; proved to be not only a defect of method but a finding. In an organization whose external clock — circulation — is winding down, time is measured only by the cycle of personnel transfers and the deterioration of bodies. I lived the same internal time as my subjects. That the two cannot be separated is only natural. In this organization, time no longer flows outside.</p>
+                <p>The limitations of the study are the confinement of the sample to one bureau of one company; the non-instrumental character of all measurement; and the fact that the rater&#39;s own criteria deteriorated over time (see note 27). Future research will require calibrated multiple raters and comparison across organizations. The same phenomenon is predicted in other organizations where external rewards thin and the internal labor market closes: broadcasters, government ministries, and universities (especially universities)<sup class="footnote-ref"><a href="#note-49" id="note-ref-49-1" aria-label="Note 49">49</a></sup>.</p>
+                <p>One last point. The subjects of this paper are not villains. They are men who climbed the only ladder left inside an organization whose outside was disappearing. Midway up the ladder they paid their souls as toll, and they have been paying interest with their bodies ever since. I did not write this paper to condemn them. I wrote it to record. Recording is what newspapers were once good at.</p>
+                <p><strong>Acknowledgments</strong> This paper has not undergone peer review. That is why no reviewers are thanked.</p>
+                <hr class="section-divider">
+
+                <h2 id="notes">Notes</h2>
+                <ol class="footnotes">
+                <li id="note-1">Civil inattention: Goffman, Erving, <em>Behavior in Public Places: Notes on the Social Organization of Gatherings</em>, Free Press, 1963. The etiquette of registering another&#39;s presence while directing no further attention to it. The elevator is its purest culture medium. My observations were conducted under cover of this etiquette; for the methodological implications, see 3.4. <a class="footnote-backref" href="#note-ref-1-1" aria-label="Back to text">↩</a></li>
+                <li id="note-2">Representatively, Spencer, Paul, <em>The Samburu: A Study of Gerontocracy in a Nomadic Tribe</em>, Routledge &amp; Kegan Paul, 1965. Note the subtitle. A classic ethnography of a society in which age produces authority; the present paper records its mirror image. On the cultural construction of aging generally, see Lock, Margaret, <em>Encounters with Aging: Mythologies of Menopause in Japan and North America</em>, University of California Press, 1993. <a class="footnote-backref" href="#note-ref-2-1" aria-label="Back to text">↩</a></li>
+                <li id="note-3">Circulation figures are based on the published values of the circulation audit bureau. Out of consideration for identifiability, this paper gives neither absolute figures nor calendar years, using only an index (peak year = 100) and elapsed years (Figure 1). The anonymization measures of this paper exist for the sake of individuals before they exist for the sake of the organization (see 3.4). <a class="footnote-backref" href="#note-ref-3-1" aria-label="Back to text">↩</a></li>
+                <li id="note-4">Geertz, Clifford, <em>Agricultural Involution: The Processes of Ecological Change in Indonesia</em>, University of California Press, 1963. An analysis of the process by which a wet-rice agriculture whose extensive expansion had halted turned toward the internal elaboration and complication of labor input. <a class="footnote-backref" href="#note-ref-4-1" aria-label="Back to text">↩</a></li>
+                <li id="note-5">The tree line: the upper limit at which trees can grow upright in high mountains. Above it, cold and wind force trees into a creeping form (krummholz), or into renouncing growth altogether. Cases of souls that assumed the creeping form are treated in Chapter 4. <a class="footnote-backref" href="#note-ref-5-1" aria-label="Back to text">↩</a></li>
+                <li id="note-6"><em>Senescence</em> is the term of art for aging in biology and gerontology. In cell biology, cellular senescence denotes the state of a cell that has ceased dividing yet does not die, and continues to secrete inflammatory factors. An entity that does not divide, does not die, and goes on emitting inflammatory signals into its surroundings — the extent to which this definition can be transposed to the present subject population requires careful examination (Chapter 5). <a class="footnote-backref" href="#note-ref-6-1" aria-label="Back to text">↩</a></li>
+                <li id="note-7">Cohen, Lawrence, <em>No Aging in India: Alzheimer&#39;s, the Bad Family, and Other Modern Things</em>, University of California Press, 1998; Traphagan, John W., <em>Taming Oblivion: Aging Bodies and the Fear of Senility in Japan</em>, State University of New York Press, 2000. Traphagan&#39;s elderly Japanese perform the activities that delay senility — exercise, hobbies, sociality — as moral practice. The subjects of this paper stand outside that moral sphere. <a class="footnote-backref" href="#note-ref-7-1" aria-label="Back to text">↩</a></li>
+                <li id="note-8">Mauss, Marcel, « Les techniques du corps », <em>Journal de Psychologie</em> 32, 1936 (lecture delivered 1934). The classic that made walking and sitting not physiology but the ways in which society imposes the use of the body. <a class="footnote-backref" href="#note-ref-8-1" aria-label="Back to text">↩</a></li>
+                <li id="note-9">Douglas, Mary, <em>Natural Symbols: Explorations in Cosmology</em>, Barrie &amp; Rockliff, 1970. The body as microcosm of society: the tighter the control exerted on social structure, the tighter the control exerted on bodily expression. <a class="footnote-backref" href="#note-ref-9-1" aria-label="Back to text">↩</a></li>
+                <li id="note-10">Bourdieu, Pierre, <em>Esquisse d&#39;une théorie de la pratique</em>, Droz, 1972. Bodily hexis is defined as &quot;political mythology realized, em-bodied, turned into a permanent disposition.&quot; In the subjects of this paper, the definition leaves the plane of metaphor. <a class="footnote-backref" href="#note-ref-10-1" aria-label="Back to text">↩</a></li>
+                <li id="note-11">Wacquant, Loïc, <em>Body &amp; Soul: Notebooks of an Apprentice Boxer</em>, Oxford University Press, 2004. An apprenticeship ethnography of a Chicago boxing gym, including an analysis of the accumulation, management, and conversion of bodily capital. <a class="footnote-backref" href="#note-ref-11-1" aria-label="Back to text">↩</a></li>
+                <li id="note-12">Scheper-Hughes, Nancy &amp; Margaret M. Lock, &quot;The Mindful Body: A Prolegomenon to Future Work in Medical Anthropology,&quot; <em>Medical Anthropology Quarterly</em> 1(1), 1987, pp. 6–41. The three levels of the individual body, the social body, and the body politic — the last denoting the dimension in which discipline and control traverse individual bodies. In the context of this paper, the term is too literal to require explanation. <a class="footnote-backref" href="#note-ref-12-1" aria-label="Back to text">↩</a></li>
+                <li id="note-13">Rohlen, Thomas P., <em>For Harmony and Strength: Japanese White-Collar Organization in Anthropological Perspective</em>, University of California Press, 1974; also his &quot;Spiritual Education in a Japanese Bank,&quot; <em>American Anthropologist</em> 75(5), 1973, which describes the &quot;spiritual education&quot; imposed on new bank employees — zazen, pilgrimage, military-style retreats. Company X has no zazen. For the functional equivalent, see Chapter 4. <a class="footnote-backref" href="#note-ref-13-1" aria-label="Back to text">↩</a></li>
+                <li id="note-14">Nakane, Chie, <em>Tate shakai no ningen kankei</em> [Personal Relations in a Vertical Society], Kōdansha Gendai Shinsho, 1967. (English version: <em>Japanese Society</em>, Weidenfeld &amp; Nicolson, 1970.) <a class="footnote-backref" href="#note-ref-14-1" aria-label="Back to text">↩</a></li>
+                <li id="note-15">Kondo, Dorinne K., <em>Crafting Selves: Power, Gender, and Discourses of Identity in a Japanese Workplace</em>, University of Chicago Press, 1990. <a class="footnote-backref" href="#note-ref-15-1" aria-label="Back to text">↩</a></li>
+                <li id="note-16">Ogasawara, Yuko, <em>Office Ladies and Salaried Men: Power, Gender, and Work in Japanese Companies</em>, University of California Press, 1998. An ethnography of the circuit of informal power by which the rumor and unofficial evaluations of female clerical workers govern the reputations and promotions of male employees. <a class="footnote-backref" href="#note-ref-16-1" aria-label="Back to text">↩</a></li>
+                <li id="note-17">Allison, Anne, <em>Nightwork: Sexuality, Pleasure, and Corporate Masculinity in a Tokyo Hostess Club</em>, University of Chicago Press, 1994. <a class="footnote-backref" href="#note-ref-17-1" aria-label="Back to text">↩</a></li>
+                <li id="note-18">Tuchman, Gaye, <em>Making News: A Study in the Construction of Reality</em>, Free Press, 1978; Gans, Herbert J., <em>Deciding What&#39;s News: A Study of CBS Evening News, NBC Nightly News, Newsweek, and Time</em>, Pantheon, 1979. <a class="footnote-backref" href="#note-ref-18-1" aria-label="Back to text">↩</a></li>
+                <li id="note-19">Boyer, Dominic, <em>The Life Informatic: Newsmaking in the Digital Era</em>, Cornell University Press, 2013; Usher, Nikki, <em>Making News at The New York Times</em>, University of Michigan Press, 2014. The latter is an inside observation of a prestige paper on the downslope of circulation and authority, and the air of its field is akin to that of the present study; its concern, however, remains newsmaking, not bodies. <a class="footnote-backref" href="#note-ref-19-1" aria-label="Back to text">↩</a></li>
+                <li id="note-20">Freeman, Laurie Anne, <em>Closing the Shop: Information Cartels and Japan&#39;s Mass Media</em>, Princeton University Press, 2000. <a class="footnote-backref" href="#note-ref-20-1" aria-label="Back to text">↩</a></li>
+                <li id="note-21">Kawachi, Takashi, <em>Shinbunsha: Hatan shita bijinesu moderu</em> [The Newspaper Company: A Bankrupt Business Model], Shinchō Shinsho, 2007; Hayashi, Kaori, <em>Media fushin</em> [Media Distrust], Iwanami Shinsho, 2017. Some two decades after the former&#39;s publication, the bankruptcy is proceeding on schedule. <a class="footnote-backref" href="#note-ref-21-1" aria-label="Back to text">↩</a></li>
+                <li id="note-22">Goffman, Erving, <em>Asylums: Essays on the Social Situation of Mental Patients and Other Inmates</em>, Anchor Books, 1961. The &quot;mortification of the self&quot; denotes the systematic stripping of the self that accompanies admission to a total institution. <a class="footnote-backref" href="#note-ref-22-1" aria-label="Back to text">↩</a></li>
+                <li id="note-23">Hirschman, Albert O., <em>Exit, Voice, and Loyalty: Responses to Decline in Firms, Organizations, and States</em>, Harvard University Press, 1970. That the subtitle reads &quot;Responses to Decline in Firms, Organizations, and States&quot; deserves emphasis in the present context. <a class="footnote-backref" href="#note-ref-23-1" aria-label="Back to text">↩</a></li>
+                <li id="note-24">Graeber, David, <em>Bullshit Jobs: A Theory</em>, Simon &amp; Schuster, 2018. An analysis of the spiritual violence inflicted on the actor by labor performed in the knowledge of its own pointlessness. Which of the book&#39;s five types the political labor of this paper falls under is left as an exercise for the reader; it is noted that multiple assignment is not precluded. <a class="footnote-backref" href="#note-ref-24-1" aria-label="Back to text">↩</a></li>
+                <li id="note-25">Gold, Raymond L., &quot;Roles in Sociological Field Observations,&quot; <em>Social Forces</em> 36(3), 1958, pp. 217–223. The classic that laid out the four roles from complete participant to complete observer. The advantage of the complete participant is depth of access; the price is ethics. The present study received both at their maximum values. <a class="footnote-backref" href="#note-ref-25-1" aria-label="Back to text">↩</a></li>
+                <li id="note-26">Simmel, Georg, „Exkurs über den Fremden,&quot; <em>Soziologie</em>, Duncker &amp; Humblot, 1908 (&quot;Excursus on the Stranger&quot;). The stranger, who &quot;comes today and stays tomorrow,&quot; bears objectivity by virtue of a peculiar composition of nearness to and distance from the group. <a class="footnote-backref" href="#note-ref-26-1" aria-label="Back to text">↩</a></li>
+                <li id="note-27">Glabellar furrow depth was graded on a five-point ordinal scale. The standard (grade three) was the author&#39;s own glabella at the start of observation. Hair was recorded for color only; density is not employed as an index. For the metrological problem of the standard&#39;s own deterioration over time, see 3.5. <a class="footnote-backref" href="#note-ref-27-1" aria-label="Back to text">↩</a></li>
+                <li id="note-28">The classic of the controversy is Humphreys, Laud, <em>Tearoom Trade: Impersonal Sex in Public Places</em>, Aldine, 1970 — a study that provoked one of the largest ethical controversies in the history of social science. I would like to write that the present study shares with that book only its methodological problem, the natures of the two fields being entirely different — but the summary &quot;the observation, in public space, of the ritual conduct of men driven by an ardor incomprehensible from outside&quot; applies to both. <a class="footnote-backref" href="#note-ref-28-1" aria-label="Back to text">↩</a></li>
+                <li id="note-29">Observer drift: a known problem of behavioral observation research, in which the observer&#39;s criteria of judgment change gradually and unawares over time. It is ordinarily controlled by the periodic calibration of inter-rater reliability; the present study has one rater, who has no one to calibrate against. <a class="footnote-backref" href="#note-ref-29-1" aria-label="Back to text">↩</a></li>
+                <li id="note-30">Below the soul line extends a paired ecology — the habitat of bodies that stagnate under institutional protection. It constitutes an independent object of study, and lies outside the scope of this paper. <a class="footnote-backref" href="#note-ref-30-1" aria-label="Back to text">↩</a></li>
+                <li id="note-31">In Japanese business etiquette, the position in front of the elevator&#39;s control panel is the lowest seat, and the far corner diagonal to it the highest. By this etiquette, my fixed-point data arrived automatically tagged with relative rank — a rare case, methodologically, of etiquette standing in for instrumentation. <a class="footnote-backref" href="#note-ref-31-1" aria-label="Back to text">↩</a></li>
+                <li id="note-32"><em>Tres digiti scribunt, totum corpusque laborat</em> (&quot;three fingers write, but the whole body labors&quot;): a set phrase frequent in the colophons of medieval manuscripts. Scribes also left in their colophons complaints of the cold, of back pain, and of the quality of the parchment. The colophon is the one internal company document of the Middle Ages that went uncensored. <a class="footnote-backref" href="#note-ref-32-1" aria-label="Back to text">↩</a></li>
+                <li id="note-33">Gilman, Sander L., <em>Stand Up Straight!: A History of Posture</em>, Reaktion Books, 2018. The history by which upright posture has been bound to the military, to education, and to morals. <a class="footnote-backref" href="#note-ref-33-1" aria-label="Back to text">↩</a></li>
+                <li id="note-34">Darwin, Charles, <em>The Expression of the Emotions in Man and Animals</em>, John Murray, 1872. Darwin placed the corrugator supercilii at the center of the muscle group that contracts under grief, perplexity, and deliberation. The precursor study is Duchenne de Boulogne, <em>Mécanisme de la physionomie humaine</em>, 1862, which isolated the action of each facial muscle by electrical stimulation. The level of the subjects&#39; consent was the level of the era (compare 3.4). <a class="footnote-backref" href="#note-ref-34-1" aria-label="Back to text">↩</a></li>
+                <li id="note-35">Simmel, Georg, „Die ästhetische Bedeutung des Gesichts,&quot; 1901 (&quot;The Aesthetic Significance of the Face&quot;). A short essay on the face as the bodily site where the inner unity of the person appears most completely. <a class="footnote-backref" href="#note-ref-35-1" aria-label="Back to text">↩</a></li>
+                <li id="note-36">Mauss, Marcel, « Une catégorie de l&#39;esprit humain: la notion de personne, celle de &quot;moi&quot; », <em>Journal of the Royal Anthropological Institute</em> 68, 1938. The lecture that traced the genealogy of the concept of the person from the Latin <em>persona</em> — the mask of the theater. <a class="footnote-backref" href="#note-ref-36-1" aria-label="Back to text">↩</a></li>
+                <li id="note-37">To tilt a noh mask upward is called <em>terasu</em> (&quot;to brighten&quot;); to tilt it downward, <em>kumorasu</em> (&quot;to cloud&quot;). That a single mask shows different expressions at different angles is a basic understanding of noh performance theory. The <em>hannya</em> is the mask of a woman transformed by jealousy and resentment into a demon; though a mask of fury, it is said to harbor grief when clouded. The duality is not unrelated to the context of this paper. The craftsman who carves noh masks is called a <em>menuchi</em>; the title of this section derives from the term. <a class="footnote-backref" href="#note-ref-37-1" aria-label="Back to text">↩</a></li>
+                <li id="note-38">Van Gennep, Arnold, <em>Les rites de passage</em>, Émile Nourry, 1909; Turner, Victor, &quot;Betwixt and Between: The Liminal Period in Rites de Passage,&quot; in <em>The Forest of Symbols</em>, Cornell University Press, 1967. According to Turner, the rituals of the liminal period are often attended by monstrous masks and exaggerated forms, which set the initiand reflecting on the components of his own culture. Masks are ordinarily lent as ritual apparatus, and collected afterward. For a mask that was not collected, see the text. <a class="footnote-backref" href="#note-ref-38-1" aria-label="Back to text">↩</a></li>
+                <li id="note-39">Mathews, Gordon, <em>What Makes Life Worth Living? How Japanese and Americans Make Sense of Their Worlds</em>, University of California Press, 1996. A comparative ethnography organized around the Japanese term <em>ikigai</em>. <a class="footnote-backref" href="#note-ref-39-1" aria-label="Back to text">↩</a></li>
+                <li id="note-40">Gluckman, Max, &quot;Gossip and Scandal,&quot; <em>Current Anthropology</em> 4(3), 1963, pp. 307–316. Gossip as an apparatus for maintaining communal values; participation in gossip as an index of membership. <a class="footnote-backref" href="#note-ref-40-1" aria-label="Back to text">↩</a></li>
+                <li id="note-41">Fitzpatrick, Sheila &amp; Robert Gellately (eds.), <em>Accusatory Practices: Denunciation in Modern European History, 1789–1989</em>, University of Chicago Press, 1997. The historical study of denunciation under the Stalinist and Nazi regimes shows the motives of denouncers to have lain, for the most part, not in regime ideology but in everyday interests: promotion, housing, private grudges. <a class="footnote-backref" href="#note-ref-41-1" aria-label="Back to text">↩</a></li>
+                <li id="note-42">Foucault, Michel, <em>Surveiller et punir: Naissance de la prison</em>, Gallimard, 1975. <a class="footnote-backref" href="#note-ref-42-1" aria-label="Back to text">↩</a></li>
+                <li id="note-43">Kitanaka, Junko, <em>Depression in Japan: Psychiatric Cures for a Society in Distress</em>, Princeton University Press, 2012. A genealogy of how fatigue and overwork came to be medicalized and institutionalized in Japan. <a class="footnote-backref" href="#note-ref-43-1" aria-label="Back to text">↩</a></li>
+                <li id="note-44">Schelling, Thomas C., <em>The Strategy of Conflict</em>, Harvard University Press, 1960. The classic of commitment theory: destroying one&#39;s own options — burning bridges, handing over hostages — generates credibility in negotiation. The objects of burning that game theory envisioned were bridges, not glabellae; but the theory does not choose its domain of application. <a class="footnote-backref" href="#note-ref-44-1" aria-label="Back to text">↩</a></li>
+                <li id="note-45">Bates, Henry Walter, &quot;Contributions to an Insect Fauna of the Amazon Valley. Lepidoptera: Heliconidæ,&quot; <em>Transactions of the Linnean Society</em> 23, 1862. The phenomenon in which a harmless species escapes predation by imitating the appearance of a harmful one is named Batesian mimicry after its discoverer. In the present application, the determination of which species is the harmful one is withheld. <a class="footnote-backref" href="#note-ref-45-1" aria-label="Back to text">↩</a></li>
+                <li id="note-46">The circulation index was constructed by the author from the published values of the circulation audit bureau (peak year = 100). Curvature angles are visual estimates made at banquets and in meeting rooms (n = 14). Correlation does not imply causation. For the possibility that the present case is the exception, see the text of 5.1 and 5.2. <a class="footnote-backref" href="#note-ref-46-1" aria-label="Back to text">↩</a></li>
+                <li id="note-47">Mauss, Marcel, « Essai sur le don. Forme et raison de l&#39;échange dans les sociétés archaïques », <em>L&#39;Année sociologique</em>, nouvelle série 1, 1925. <a class="footnote-backref" href="#note-ref-47-1" aria-label="Back to text">↩</a></li>
+                <li id="note-48">Hubert, Henri &amp; Marcel Mauss, « Essai sur la nature et la fonction du sacrifice », <em>L&#39;Année sociologique</em> 2, 1899. <a class="footnote-backref" href="#note-ref-48-1" aria-label="Back to text">↩</a></li>
+                <li id="note-49">Observation of the same phenomenon at universities lies outside the scope of this paper. That it lies outside the scope, the author counts as good fortune. <a class="footnote-backref" href="#note-ref-49-1" aria-label="Back to text">↩</a></li>
+                </ol>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html?lang=en">← Back to Home</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem("theme") || "light";
+        if (currentTheme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        }
+
+        function generateTOC() {
+            const tocList = document.getElementById("tocList");
+            const headings = document.querySelectorAll(".essay-content h2, .essay-content h3");
+
+            headings.forEach((heading, index) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+
+                if (!heading.id) {
+                    heading.id = "heading-" + index;
+                }
+
+                a.href = "#" + heading.id;
+                a.textContent = heading.textContent;
+
+                if (heading.tagName === "H3") {
+                    a.classList.add("toc-h3");
+                }
+
+                a.onclick = function() {
+                    toggleTOC();
+                };
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+
+        function toggleTOC() {
+            document.querySelector(".toc-sidebar").classList.toggle("open");
+            document.querySelector(".toc-overlay").classList.toggle("active");
+        }
+
+        window.addEventListener("DOMContentLoaded", generateTOC);
+    </script>
+</body>
+</html>

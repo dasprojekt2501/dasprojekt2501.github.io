@@ -301,10 +301,10 @@
 
             <article class="essay-item">
                 <h2 class="essay-title">
-                    <a href="essays/seijiteki-roka.html">政治的老化</a>
+                    <a href="essays/seijiteki-roka.html" id="secondEssayLink">政治的老化</a>
                 </h2>
-                <div class="essay-date">2026年7月18日</div>
-                <p class="essay-excerpt">
+                <div class="essay-date" id="secondEssayDate">2026年7月18日</div>
+                <p class="essay-excerpt" id="secondEssayExcerpt">
                     衰退期にある日本の全国紙編集局で、地位への接近が老いを生む「政治的老化」の構造を描く民族誌。
                 </p>
             </article>
@@ -347,7 +347,11 @@
                 firstEssayTitle: '日本の伝統的大企業における「診断書煉獄」',
                 firstEssayHref: 'essays/purgatory-at-work.html',
                 firstEssayDate: '2026年7月17日',
-                firstEssayExcerpt: '診断書による配慮が一部の社員を保護する一方、周囲に見えない負担を生む、日本の伝統的大企業の構造的な罠についてのエッセイ。'
+                firstEssayExcerpt: '診断書による配慮が一部の社員を保護する一方、周囲に見えない負担を生む、日本の伝統的大企業の構造的な罠についてのエッセイ。',
+                secondEssayTitle: '政治的老化',
+                secondEssayHref: 'essays/seijiteki-roka.html',
+                secondEssayDate: '2026年7月18日',
+                secondEssayExcerpt: '衰退期にある日本の全国紙編集局で、地位への接近が老いを生む「政治的老化」の構造を描く民族誌。'
             },
             en: {
                 subtitle: 'Essays and Notes',
@@ -355,7 +359,11 @@
                 firstEssayTitle: "Medical Certificate Purgatory in Japan's Traditional Corporations",
                 firstEssayHref: 'essays/purgatory-at-work-en.html',
                 firstEssayDate: 'July 17, 2026',
-                firstEssayExcerpt: "An essay on the structural trap where medical certificates create protection for some workers and hidden burdens for others in Japan's traditional corporations."
+                firstEssayExcerpt: "An essay on the structural trap where medical certificates create protection for some workers and hidden burdens for others in Japan's traditional corporations.",
+                secondEssayTitle: 'Political Senescence',
+                secondEssayHref: 'essays/seijiteki-roka-en.html',
+                secondEssayDate: 'July 18, 2026',
+                secondEssayExcerpt: 'An ethnography of how proximity to rank produces bodily aging within the editorial bureau of a declining Japanese national daily.'
             }
         };
 
@@ -372,6 +380,10 @@
             document.getElementById('firstEssayLink').href = content.firstEssayHref;
             document.getElementById('firstEssayDate').textContent = content.firstEssayDate;
             document.getElementById('firstEssayExcerpt').textContent = content.firstEssayExcerpt;
+            document.getElementById('secondEssayLink').textContent = content.secondEssayTitle;
+            document.getElementById('secondEssayLink').href = content.secondEssayHref;
+            document.getElementById('secondEssayDate').textContent = content.secondEssayDate;
+            document.getElementById('secondEssayExcerpt').textContent = content.secondEssayExcerpt;
 
             document.getElementById('jaButton').classList.toggle('active', selectedLanguage === 'ja');
             document.getElementById('enButton').classList.toggle('active', selectedLanguage === 'en');

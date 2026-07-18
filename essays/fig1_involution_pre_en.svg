@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" font-family="Helvetica, Arial, sans-serif">
+  <rect width="760" height="430" fill="#ffffff"/>
+
+  <!-- horizontal gridlines (left-axis ticks) -->
+  <g stroke="#e8e8e8" stroke-width="1">
+    <line x1="70" y1="360" x2="660" y2="360"/>
+    <line x1="70" y1="268.6" x2="660" y2="268.6"/>
+    <line x1="70" y1="177.1" x2="660" y2="177.1"/>
+    <line x1="70" y1="85.7" x2="660" y2="85.7"/>
+  </g>
+
+  <!-- axes -->
+  <g stroke="#333333" stroke-width="1.2">
+    <line x1="70" y1="40" x2="70" y2="360"/>
+    <line x1="70" y1="360" x2="660" y2="360"/>
+    <line x1="660" y1="40" x2="660" y2="360"/>
+  </g>
+
+  <!-- left axis ticks + labels (index) -->
+  <g font-size="11" fill="#333333" text-anchor="end">
+    <text x="64" y="364">40</text>
+    <text x="64" y="272.6">60</text>
+    <text x="64" y="181.1">80</text>
+    <text x="64" y="89.7">100</text>
+  </g>
+
+  <!-- right axis ticks + labels (degrees) -->
+  <g font-size="11" fill="#8c3330" text-anchor="start">
+    <text x="666" y="364">20</text>
+    <text x="666" y="284">30</text>
+    <text x="666" y="204">40</text>
+    <text x="666" y="124">50</text>
+    <text x="666" y="44">60</text>
+  </g>
+
+  <!-- x axis labels (years since peak) -->
+  <g font-size="11" fill="#333333" text-anchor="middle">
+    <text x="70" y="378">T0</text>
+    <text x="188" y="378">+5</text>
+    <text x="306" y="378">+10</text>
+    <text x="424" y="378">+15</text>
+    <text x="542" y="378">+20</text>
+    <text x="660" y="378">+25</text>
+  </g>
+  <text x="365" y="398" font-size="11" fill="#333333" text-anchor="middle">Years since peak</text>
+
+  <!-- axis titles -->
+  <text x="20" y="200" font-size="12" fill="#333333" text-anchor="middle" transform="rotate(-90,20,200)">Morning-edition circulation (index, peak = 100)</text>
+  <text x="740" y="200" font-size="12" fill="#8c3330" text-anchor="middle" transform="rotate(90,740,200)">Mean thoracic kyphosis (deg., visual estimate)</text>
+
+  <!-- circulation index curve (solid) -->
+  <polyline fill="none" stroke="#1a1a1a" stroke-width="2"
+    points="70,85.7 117.2,88.5 164.4,93.0 211.6,95.8 258.8,98.5 306,101.3 353.2,107.7 400.4,133.3 447.6,154.3 494.8,183.5 542,225.1 589.2,262.6 636.4,301.0 660,322.5"/>
+
+  <!-- kyphosis curve (dashed) -->
+  <polyline fill="none" stroke="#8c3330" stroke-width="2" stroke-dasharray="7,4"
+    points="70,296 164.4,288 258.8,272 353.2,248 400.4,232 447.6,216 494.8,192 542,168 589.2,144 636.4,120 660,104"/>
+
+  <!-- annotation -->
+  <text x="592" y="98" font-size="10" fill="#8c3330">52° (est.)</text>
+
+  <!-- legend -->
+  <g font-size="11">
+    <line x1="90" y1="26" x2="122" y2="26" stroke="#1a1a1a" stroke-width="2"/>
+    <text x="128" y="30" fill="#333333">Circulation index (left axis)</text>
+    <line x1="320" y1="26" x2="352" y2="26" stroke="#8c3330" stroke-width="2" stroke-dasharray="7,4"/>
+    <text x="358" y="30" fill="#333333">Mean kyphosis angle (right axis)</text>
+  </g>
+</svg>
