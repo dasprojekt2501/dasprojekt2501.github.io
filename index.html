@@ -101,6 +101,37 @@
             text-decoration: underline;
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            line-height: 1;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+
+        .lang-btn:hover {
+            opacity: 0.8;
+        }
+
+        .lang-btn.active {
+            opacity: 1;
+        }
+
         .theme-toggle {
             position: relative;
             width: 48px;
@@ -205,33 +236,65 @@
         body.dark-mode footer {
             border-top-color: #333;
         }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 40px 16px;
+            }
+
+            .header-controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px 18px;
+            }
+
+            nav a {
+                margin-right: 0;
+            }
+
+            .header-actions {
+                justify-content: flex-end;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>PROJEKT2501</h1>
-            <p class="subtitle">Essays and Notes</p>
+            <p class="subtitle" id="pageSubtitle">Essays and Notes</p>
             <div class="header-controls">
                 <nav>
-                    <a href="index.html">Home</a>
+                    <a href="index.html?lang=en" id="homeLink">Home</a>
                     <a href="music.html">Music</a>
-                    <a href="app-en.html">Apps</a>
+                    <a href="app-en.html" id="appsLink">Apps</a>
                     <a href="about.html">About</a>
                 </nav>
-                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
-                    <div class="toggle-circle"></div>
-                </button>
+                <div class="header-actions">
+                    <div class="language-toggle" aria-label="Language">
+                        <button class="lang-btn" id="jaButton" onclick="setLanguage('ja')" title="日本語" aria-label="日本語に切り替える">🇯🇵</button>
+                        <button class="lang-btn active" id="enButton" onclick="setLanguage('en')" title="English" aria-label="Switch to English">🇺🇸</button>
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
             </div>
         </header>
 
         <main class="essays">
             <article class="essay-item">
                 <h2 class="essay-title">
-                    <a href="essays/purgatory-at-work-en.html">Medical Certificate Purgatory in Japan's Traditional Corporations</a>
+                    <a href="essays/purgatory-at-work-en.html" id="firstEssayLink">Medical Certificate Purgatory in Japan's Traditional Corporations</a>
                 </h2>
-                <div class="essay-date">July 17, 2026</div>
-                <p class="essay-excerpt">
+                <div class="essay-date" id="firstEssayDate">July 17, 2026</div>
+                <p class="essay-excerpt" id="firstEssayExcerpt">
                     An essay on the structural trap where medical certificates create protection for some workers and hidden burdens for others in Japan's traditional corporations.
                 </p>
             </article>
@@ -276,6 +339,53 @@
             const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
             localStorage.setItem('theme', theme);
         }
+
+        const translations = {
+            ja: {
+                subtitle: 'エッセイとノート',
+                apps: 'アプリ',
+                firstEssayTitle: '日本の伝統的大企業における「診断書煉獄」',
+                firstEssayHref: 'essays/purgatory-at-work.html',
+                firstEssayDate: '2026年7月17日',
+                firstEssayExcerpt: '診断書による配慮が一部の社員を保護する一方、周囲に見えない負担を生む、日本の伝統的大企業の構造的な罠についてのエッセイ。'
+            },
+            en: {
+                subtitle: 'Essays and Notes',
+                apps: 'Apps',
+                firstEssayTitle: "Medical Certificate Purgatory in Japan's Traditional Corporations",
+                firstEssayHref: 'essays/purgatory-at-work-en.html',
+                firstEssayDate: 'July 17, 2026',
+                firstEssayExcerpt: "An essay on the structural trap where medical certificates create protection for some workers and hidden burdens for others in Japan's traditional corporations."
+            }
+        };
+
+        function setLanguage(language) {
+            const selectedLanguage = translations[language] ? language : 'en';
+            const content = translations[selectedLanguage];
+
+            document.documentElement.lang = selectedLanguage;
+            document.getElementById('pageSubtitle').textContent = content.subtitle;
+            document.getElementById('homeLink').href = `index.html?lang=${selectedLanguage}`;
+            document.getElementById('appsLink').textContent = content.apps;
+            document.getElementById('appsLink').href = selectedLanguage === 'ja' ? 'app.html' : 'app-en.html';
+            document.getElementById('firstEssayLink').textContent = content.firstEssayTitle;
+            document.getElementById('firstEssayLink').href = content.firstEssayHref;
+            document.getElementById('firstEssayDate').textContent = content.firstEssayDate;
+            document.getElementById('firstEssayExcerpt').textContent = content.firstEssayExcerpt;
+
+            document.getElementById('jaButton').classList.toggle('active', selectedLanguage === 'ja');
+            document.getElementById('enButton').classList.toggle('active', selectedLanguage === 'en');
+            document.getElementById('jaButton').setAttribute('aria-pressed', selectedLanguage === 'ja');
+            document.getElementById('enButton').setAttribute('aria-pressed', selectedLanguage === 'en');
+
+            localStorage.setItem('language', selectedLanguage);
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', selectedLanguage);
+            window.history.replaceState({}, '', url);
+        }
+
+        const requestedLanguage = new URLSearchParams(window.location.search).get('lang');
+        setLanguage(requestedLanguage || localStorage.getItem('language') || 'en');
     </script>
 </body>
 </html>
