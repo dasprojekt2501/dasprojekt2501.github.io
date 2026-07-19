@@ -310,13 +310,8 @@
             </article>
 
             <article class="essay-item">
-                <h2 class="essay-title">
-                    <a href="essays/essay3.html">Your Third Essay Title</a>
-                </h2>
-                <div class="essay-date">January xxx, 2026</div>
-                <p class="essay-excerpt">
-                    Yet another essay. You can copy and expand this template as needed to add more essays to your collection.
-                </p>
+                <h2 class="essay-title">Coming soon...</h2>
+                <p class="essay-excerpt" id="thirdEssayExcerpt">The next essay is in progress.</p>
             </article>
         </main>
 
@@ -351,7 +346,8 @@
                 secondEssayTitle: '政治的老化',
                 secondEssayHref: 'essays/seijiteki-roka.html',
                 secondEssayDate: '2026年7月18日',
-                secondEssayExcerpt: '衰退期にある日本の全国紙編集局で、地位への接近が老いを生む「政治的老化」の構造を描く民族誌。'
+                secondEssayExcerpt: '衰退期にある日本の全国紙編集局で、地位への接近が老いを生む「政治的老化」の構造を描く民族誌。',
+                thirdEssayExcerpt: '次のエッセイを準備中です。'
             },
             en: {
                 subtitle: 'Essays and Notes',
@@ -363,7 +359,8 @@
                 secondEssayTitle: 'Political Senescence',
                 secondEssayHref: 'essays/seijiteki-roka-en.html',
                 secondEssayDate: 'July 18, 2026',
-                secondEssayExcerpt: 'An ethnography of how proximity to rank produces bodily aging within the editorial bureau of a declining Japanese national daily.'
+                secondEssayExcerpt: 'An ethnography of how proximity to rank produces bodily aging within the editorial bureau of a declining Japanese national daily.',
+                thirdEssayExcerpt: 'The next essay is in progress.'
             }
         };
 
@@ -384,6 +381,7 @@
             document.getElementById('secondEssayLink').href = content.secondEssayHref;
             document.getElementById('secondEssayDate').textContent = content.secondEssayDate;
             document.getElementById('secondEssayExcerpt').textContent = content.secondEssayExcerpt;
+            document.getElementById('thirdEssayExcerpt').textContent = content.thirdEssayExcerpt;
 
             document.getElementById('jaButton').classList.toggle('active', selectedLanguage === 'ja');
             document.getElementById('enButton').classList.toggle('active', selectedLanguage === 'en');
