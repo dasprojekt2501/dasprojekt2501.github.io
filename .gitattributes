@@ -1,0 +1,2 @@
+# Keep third-party vendor files byte-for-byte consistent with their packages.
+apps/vendor/** -whitespace

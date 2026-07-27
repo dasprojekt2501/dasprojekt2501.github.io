@@ -1,0 +1,13 @@
+{
+  "name": "projekt2501-static-site",
+  "private": true,
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "vendor:sync": "node tools/sync-pdf-vendor.mjs",
+    "check:pdf-toolkit": "node tools/check-pdf-toolkit.mjs"
+  },
+  "dependencies": {
+    "pdf-lib": "1.17.1",
+    "pdfjs-dist": "6.1.200"
+  }
+}
