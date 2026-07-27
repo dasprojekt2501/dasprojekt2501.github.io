@@ -19,6 +19,7 @@ const LIMITS = Object.freeze({
   maxPages: 500,
   maxCanvasPixels: 25_000_000,
   maxTotalCanvasPixels: 120_000_000,
+  maxRedactRegions: 1000,
 });
 const PDFJS_ROOT = new URL('./vendor/pdfjs/', import.meta.url);
 GlobalWorkerOptions.workerSrc = new URL('pdf.worker.mjs', PDFJS_ROOT).href;
@@ -1371,6 +1372,553 @@ async function resetTrim() {
   setTrimMode('all');
 }
 
+// ===== REDACT / BLUR =====
+let redactFile = null;
+let redactBytes = null;
+let redactPdfTask = null;
+let redactPdfDoc = null;
+let redactPageCount = 0;
+let redactPageSizes = [];
+let redactCurrentPage = 1;
+let redactMode = 'redact';
+let redactRegions = {};
+let redactRegionId = 0;
+let redactOutputBytes = null;
+let redactOutputName = '';
+let redactPreviewGeneration = 0;
+let redactProcessing = false;
+const REDACT_PREVIEW_SCALE = 1.25;
+
+setupDrop('redact-drop', 'redact-file-input', loadRedactFile);
+
+document.getElementById('redact-blur').addEventListener('input', function() {
+  document.getElementById('redact-blur-val').textContent = `${this.value} px`;
+  document.getElementById('redact-regions').style.setProperty('--redact-preview-blur', `${Math.max(2, Number(this.value) * 0.55)}px`);
+  invalidateRedactOutput();
+});
+document.getElementById('redact-dpi').addEventListener('input', function() {
+  document.getElementById('redact-dpi-val').textContent = `${this.value} DPI`;
+  invalidateRedactOutput();
+});
+document.getElementById('redact-download-btn').addEventListener('click', () => {
+  if (redactOutputBytes && redactOutputName) downloadBlob(redactOutputBytes, redactOutputName);
+});
+
+function totalRedactRegions() {
+  return Object.values(redactRegions).reduce((total, regions) => total + regions.length, 0);
+}
+
+function invalidateRedactOutput() {
+  redactOutputBytes = null;
+  redactOutputName = '';
+  document.getElementById('redact-result').style.display = 'none';
+}
+
+async function loadRedactFile(file) {
+  if (redactProcessing) {
+    throw new Error(msg('現在の処理が完了してから別のPDFを選択してください。', 'Wait for the current process to finish before selecting another PDF.'));
+  }
+  await resetRedact();
+  redactFile = file;
+  redactBytes = await file.arrayBuffer();
+  const opened = await openPdfJs(redactBytes);
+  redactPdfTask = opened.task;
+  redactPdfDoc = opened.doc;
+  redactPageCount = redactPdfDoc.numPages;
+  redactPageSizes = [];
+
+  for (let pageNumber = 1; pageNumber <= redactPageCount; pageNumber++) {
+    const page = await redactPdfDoc.getPage(pageNumber);
+    const viewport = page.getViewport({ scale: 1 });
+    redactPageSizes.push({ width: viewport.width, height: viewport.height });
+    page.cleanup();
+  }
+
+  showFileInfo('redact-file-info', file.name, redactPageCount, file.size, 'resetRedact');
+  document.getElementById('redact-controls').classList.remove('hidden');
+  document.getElementById('redact-btn').disabled = true;
+  redactCurrentPage = 1;
+  setRedactMode('redact');
+  setStatus('redact', '');
+  await renderRedactPreview();
+}
+
+function setRedactMode(mode) {
+  if (!['redact', 'blur'].includes(mode)) return;
+  redactMode = mode;
+  for (const candidate of ['redact', 'blur']) {
+    const button = document.getElementById(`redact-mode-${candidate}`);
+    const active = candidate === mode;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  }
+}
+
+function currentRedactRegions() {
+  return redactRegions[redactCurrentPage] || [];
+}
+
+async function renderRedactPreview() {
+  if (!redactPdfDoc) return;
+  const pageNumber = redactCurrentPage;
+  const generation = ++redactPreviewGeneration;
+  const page = await redactPdfDoc.getPage(pageNumber);
+  const viewport = page.getViewport({ scale: REDACT_PREVIEW_SCALE });
+  ensureCanvasSize(viewport);
+  const temporary = document.createElement('canvas');
+  temporary.width = Math.ceil(viewport.width);
+  temporary.height = Math.ceil(viewport.height);
+  try {
+    const context = temporary.getContext('2d', { alpha: false });
+    context.fillStyle = '#fff';
+    context.fillRect(0, 0, temporary.width, temporary.height);
+    await page.render({ canvasContext: context, viewport }).promise;
+    if (generation !== redactPreviewGeneration || pageNumber !== redactCurrentPage) return;
+    const canvas = document.getElementById('redact-canvas');
+    canvas.width = temporary.width;
+    canvas.height = temporary.height;
+    const canvasContext = canvas.getContext('2d', { alpha: false });
+    canvasContext.drawImage(temporary, 0, 0);
+    updateRedactPageUi();
+  } finally {
+    page.cleanup();
+    temporary.width = 0;
+    temporary.height = 0;
+  }
+}
+
+function updateRedactPageUi() {
+  const size = redactPageSizes[redactCurrentPage - 1];
+  document.getElementById('redact-page-label').textContent = `${redactCurrentPage} / ${redactPageCount}`;
+  document.getElementById('redact-page-size').textContent = size
+    ? msg(`ページ: ${size.width.toFixed(1)} × ${size.height.toFixed(1)} pt`, `Page: ${size.width.toFixed(1)} × ${size.height.toFixed(1)} pt`)
+    : '—';
+  renderRedactRegionOverlays();
+  renderRedactRegionList();
+  const total = totalRedactRegions();
+  document.getElementById('redact-btn').disabled = !redactBytes || total === 0;
+}
+
+function renderRedactRegionOverlays() {
+  const host = document.getElementById('redact-regions');
+  host.replaceChildren();
+  for (const region of currentRedactRegions()) {
+    const element = document.createElement('div');
+    element.className = `redact-region mode-${region.mode}`;
+    element.style.left = `${region.x1 * 100}%`;
+    element.style.top = `${region.y1 * 100}%`;
+    element.style.width = `${(region.x2 - region.x1) * 100}%`;
+    element.style.height = `${(region.y2 - region.y1) * 100}%`;
+    host.appendChild(element);
+  }
+}
+
+function renderRedactRegionList() {
+  const list = document.getElementById('redact-region-list');
+  list.replaceChildren();
+  const size = redactPageSizes[redactCurrentPage - 1];
+  const regions = currentRedactRegions();
+  const total = totalRedactRegions();
+  const redactCount = Object.values(redactRegions).flat().filter(region => region.mode === 'redact').length;
+  const blurCount = total - redactCount;
+  document.getElementById('redact-region-summary').textContent = msg(
+    `全${total}範囲（墨消し ${redactCount}・ぼかし ${blurCount}）／このページ ${regions.length}範囲`,
+    `${total} total region${total === 1 ? '' : 's'} (${redactCount} redact, ${blurCount} blur) / ${regions.length} on this page`,
+  );
+
+  regions.forEach((region, index) => {
+    const item = document.createElement('div');
+    item.className = 'redact-region-item';
+    const kind = document.createElement('span');
+    kind.className = `redact-region-kind mode-${region.mode}`;
+    kind.textContent = region.mode === 'redact' ? msg('墨消し', 'REDACT') : msg('ぼかし', 'BLUR');
+    const coords = document.createElement('span');
+    coords.className = 'redact-region-coords';
+    coords.textContent = size
+      ? `#${index + 1}  L${Math.round(region.x1 * size.width)} T${Math.round(region.y1 * size.height)}  ${Math.round((region.x2 - region.x1) * size.width)}×${Math.round((region.y2 - region.y1) * size.height)} pt`
+      : `#${index + 1}`;
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'mi-remove redact-region-remove';
+    remove.dataset.action = 'removeRedactRegion';
+    remove.dataset.actionArgs = `[${region.id}]`;
+    remove.setAttribute('aria-label', msg(`範囲${index + 1}を削除`, `Remove region ${index + 1}`));
+    remove.textContent = '×';
+    item.append(kind, coords, remove);
+    list.appendChild(item);
+  });
+}
+
+function addRedactRegion(region) {
+  if (!redactBytes || redactProcessing) return;
+  if (totalRedactRegions() >= LIMITS.maxRedactRegions) {
+    throw new Error(msg(`範囲は最大${LIMITS.maxRedactRegions}個です。`, `A maximum of ${LIMITS.maxRedactRegions} regions is allowed.`));
+  }
+  const values = [region.x1, region.y1, region.x2, region.y2];
+  if (!values.every(Number.isFinite)) throw new Error(msg('範囲の座標が不正です。', 'The region coordinates are invalid.'));
+  const normalized = {
+    id: ++redactRegionId,
+    mode: region.mode === 'blur' ? 'blur' : 'redact',
+    x1: Math.max(0, Math.min(1, Math.min(region.x1, region.x2))),
+    y1: Math.max(0, Math.min(1, Math.min(region.y1, region.y2))),
+    x2: Math.max(0, Math.min(1, Math.max(region.x1, region.x2))),
+    y2: Math.max(0, Math.min(1, Math.max(region.y1, region.y2))),
+  };
+  if (normalized.x2 - normalized.x1 < 0.001 || normalized.y2 - normalized.y1 < 0.001) {
+    throw new Error(msg('範囲が小さすぎます。', 'The selected region is too small.'));
+  }
+  if (!redactRegions[redactCurrentPage]) redactRegions[redactCurrentPage] = [];
+  redactRegions[redactCurrentPage].push(normalized);
+  invalidateRedactOutput();
+  setStatus('redact', '');
+  updateRedactPageUi();
+}
+
+function addRedactFromInputs() {
+  if (!redactBytes) return;
+  const size = redactPageSizes[redactCurrentPage - 1];
+  const left = Number(document.getElementById('redact-left').value);
+  const top = Number(document.getElementById('redact-top').value);
+  const width = Number(document.getElementById('redact-width').value);
+  const height = Number(document.getElementById('redact-height').value);
+  if (![left, top, width, height].every(Number.isFinite) || left < 0 || top < 0 || width <= 0 || height <= 0) {
+    throw new Error(msg('0以上の位置と、1以上の幅・高さを入力してください。', 'Enter non-negative positions and positive width and height values.'));
+  }
+  if (left + width > size.width || top + height > size.height) {
+    throw new Error(msg('入力した範囲がページの外にはみ出しています。', 'The entered region extends beyond the page.'));
+  }
+  addRedactRegion({
+    mode: redactMode,
+    x1: left / size.width,
+    y1: top / size.height,
+    x2: (left + width) / size.width,
+    y2: (top + height) / size.height,
+  });
+}
+
+function removeRedactRegion(id) {
+  if (redactProcessing) return;
+  const regions = currentRedactRegions();
+  const next = regions.filter(region => region.id !== id);
+  if (next.length === regions.length) return;
+  if (next.length) redactRegions[redactCurrentPage] = next;
+  else delete redactRegions[redactCurrentPage];
+  invalidateRedactOutput();
+  updateRedactPageUi();
+}
+
+function undoRedactRegion() {
+  if (redactProcessing) return;
+  const regions = currentRedactRegions();
+  if (!regions.length) return;
+  regions.pop();
+  if (!regions.length) delete redactRegions[redactCurrentPage];
+  invalidateRedactOutput();
+  updateRedactPageUi();
+}
+
+function clearRedactPage() {
+  if (redactProcessing) return;
+  if (!currentRedactRegions().length) return;
+  delete redactRegions[redactCurrentPage];
+  invalidateRedactOutput();
+  updateRedactPageUi();
+}
+
+function clearAllRedactRegions() {
+  if (redactProcessing) return;
+  redactRegions = {};
+  invalidateRedactOutput();
+  setStatus('redact', '');
+  updateRedactPageUi();
+}
+
+async function redactNavPage(direction) {
+  if (!redactPdfDoc) return;
+  const next = Math.max(1, Math.min(redactPageCount, redactCurrentPage + direction));
+  if (next === redactCurrentPage) return;
+  redactCurrentPage = next;
+  hideRedactDraft();
+  await renderRedactPreview();
+}
+
+const redactPointerState = { active: false, pointerId: null, startX: 0, startY: 0 };
+const redactCanvasContainer = document.getElementById('redact-canvas-container');
+
+function redactPointerPosition(event) {
+  const rect = redactCanvasContainer.getBoundingClientRect();
+  return {
+    x: Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)),
+    y: Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height)),
+    rect,
+  };
+}
+
+function showRedactDraft(x1, y1, x2, y2) {
+  const draft = document.getElementById('redact-draft');
+  draft.style.display = 'block';
+  draft.style.left = `${Math.min(x1, x2) * 100}%`;
+  draft.style.top = `${Math.min(y1, y2) * 100}%`;
+  draft.style.width = `${Math.abs(x2 - x1) * 100}%`;
+  draft.style.height = `${Math.abs(y2 - y1) * 100}%`;
+}
+
+function hideRedactDraft() {
+  redactPointerState.active = false;
+  redactPointerState.pointerId = null;
+  document.getElementById('redact-draft').style.display = 'none';
+}
+
+redactCanvasContainer.addEventListener('pointerdown', event => {
+  if (!redactBytes || redactProcessing || !event.isPrimary || event.button !== 0) return;
+  const position = redactPointerPosition(event);
+  redactPointerState.active = true;
+  redactPointerState.pointerId = event.pointerId;
+  redactPointerState.startX = position.x;
+  redactPointerState.startY = position.y;
+  redactCanvasContainer.setPointerCapture(event.pointerId);
+  showRedactDraft(position.x, position.y, position.x, position.y);
+  event.preventDefault();
+});
+
+redactCanvasContainer.addEventListener('pointermove', event => {
+  if (!redactPointerState.active || event.pointerId !== redactPointerState.pointerId) return;
+  const position = redactPointerPosition(event);
+  showRedactDraft(redactPointerState.startX, redactPointerState.startY, position.x, position.y);
+  event.preventDefault();
+});
+
+redactCanvasContainer.addEventListener('pointerup', event => {
+  if (!redactPointerState.active || event.pointerId !== redactPointerState.pointerId) return;
+  const position = redactPointerPosition(event);
+  const widthPx = Math.abs(position.x - redactPointerState.startX) * position.rect.width;
+  const heightPx = Math.abs(position.y - redactPointerState.startY) * position.rect.height;
+  const startX = redactPointerState.startX;
+  const startY = redactPointerState.startY;
+  hideRedactDraft();
+  if (widthPx < 4 || heightPx < 4) {
+    setStatus('redact', msg('4px以上の範囲をドラッグしてください。', 'Drag a region at least 4 px wide and high.'), true);
+    return;
+  }
+  try {
+    addRedactRegion({ mode: redactMode, x1: startX, y1: startY, x2: position.x, y2: position.y });
+  } catch (error) {
+    setStatus('redact', humanError(error), true);
+  }
+  event.preventDefault();
+});
+
+redactCanvasContainer.addEventListener('pointercancel', hideRedactDraft);
+
+function canvasToPng(canvas) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(async blob => {
+      if (!blob) {
+        reject(new Error(msg('ページ画像を作成できませんでした。', 'Could not create the page image.')));
+        return;
+      }
+      resolve(new Uint8Array(await blob.arrayBuffer()));
+    }, 'image/png');
+  });
+}
+
+function pixelBounds(region, width, height) {
+  const x1 = Math.max(0, Math.min(width, Math.floor(region.x1 * width)));
+  const y1 = Math.max(0, Math.min(height, Math.floor(region.y1 * height)));
+  const x2 = Math.max(x1, Math.min(width, Math.ceil(region.x2 * width)));
+  const y2 = Math.max(y1, Math.min(height, Math.ceil(region.y2 * height)));
+  return { x1, y1, x2, y2, width: x2 - x1, height: y2 - y1 };
+}
+
+function applyBlurToPixels(context, originalCanvas, region, blurPixels) {
+  if (!('filter' in context)) {
+    throw new Error(msg('このブラウザはぼかし処理に対応していません。', 'This browser does not support canvas blur.'));
+  }
+  const bounds = pixelBounds(region, originalCanvas.width, originalCanvas.height);
+  if (!bounds.width || !bounds.height) return;
+  const padding = Math.max(4, Math.ceil(blurPixels * 3));
+  const sourceX = Math.max(0, bounds.x1 - padding);
+  const sourceY = Math.max(0, bounds.y1 - padding);
+  const sourceX2 = Math.min(originalCanvas.width, bounds.x2 + padding);
+  const sourceY2 = Math.min(originalCanvas.height, bounds.y2 + padding);
+  const sourceWidth = sourceX2 - sourceX;
+  const sourceHeight = sourceY2 - sourceY;
+  const temporary = document.createElement('canvas');
+  temporary.width = sourceWidth;
+  temporary.height = sourceHeight;
+  const temporaryContext = temporary.getContext('2d');
+  temporaryContext.fillStyle = '#fff';
+  temporaryContext.fillRect(0, 0, sourceWidth, sourceHeight);
+  temporaryContext.filter = `blur(${blurPixels}px)`;
+  temporaryContext.drawImage(originalCanvas, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, sourceWidth, sourceHeight);
+  context.drawImage(
+    temporary,
+    bounds.x1 - sourceX,
+    bounds.y1 - sourceY,
+    bounds.width,
+    bounds.height,
+    bounds.x1,
+    bounds.y1,
+    bounds.width,
+    bounds.height,
+  );
+  temporary.width = 0;
+  temporary.height = 0;
+}
+
+function removeGeneratedPdfMetadata(documentToClean) {
+  documentToClean.setTitle('');
+  documentToClean.setAuthor('');
+  documentToClean.setSubject('');
+  documentToClean.setKeywords([]);
+  documentToClean.setCreator('');
+  documentToClean.setProducer('');
+  documentToClean.setCreationDate(new Date(0));
+  documentToClean.setModificationDate(new Date(0));
+}
+
+async function executeRedact() {
+  if (!redactBytes || totalRedactRegions() === 0 || redactProcessing) return;
+  const button = document.getElementById('redact-btn');
+  const progress = document.getElementById('redact-progress');
+  const sourceDocument = redactPdfDoc;
+  const sourceFile = redactFile;
+  const sourcePageCount = redactPageCount;
+  const regionsForOutput = Object.fromEntries(Object.entries(redactRegions).map(([page, regions]) => [page, regions.map(region => ({ ...region }))]));
+  const configurationSignature = JSON.stringify({
+    regions: regionsForOutput,
+    blur: document.getElementById('redact-blur').value,
+    dpi: document.getElementById('redact-dpi').value,
+  });
+  redactProcessing = true;
+  document.getElementById('redact-file-input').disabled = true;
+  button.disabled = true;
+  button.innerHTML = `<span class="spinner"></span>${msg('処理中…', 'Processing…')}`;
+  progress.classList.add('active');
+  setProgressBar(progress, 0);
+  setStatus('redact', msg('ページを安全な画像PDFへ再構築しています…', 'Rebuilding pages into a flattened image PDF…'));
+  invalidateRedactOutput();
+
+  try {
+    const outputDocument = await PDFDocument.create();
+    removeGeneratedPdfMetadata(outputDocument);
+    const dpi = Math.max(96, Math.min(240, Number(document.getElementById('redact-dpi').value) || 150));
+    const blurSetting = Math.max(4, Math.min(30, Number(document.getElementById('redact-blur').value) || 14));
+    const blurPixels = blurSetting * dpi / 150;
+    let runningTotal = 0;
+
+    for (let pageNumber = 1; pageNumber <= sourcePageCount; pageNumber++) {
+      const sourcePage = await sourceDocument.getPage(pageNumber);
+      const baseViewport = sourcePage.getViewport({ scale: 1 });
+      const viewport = sourcePage.getViewport({ scale: dpi / 72 });
+      runningTotal = ensureCanvasSize(viewport, runningTotal);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
+      try {
+        const context = canvas.getContext('2d', { alpha: false });
+        context.fillStyle = '#fff';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        await sourcePage.render({ canvasContext: context, viewport }).promise;
+        const pageRegions = regionsForOutput[pageNumber] || [];
+        const blurRegions = pageRegions.filter(region => region.mode === 'blur');
+        const blackRegions = pageRegions.filter(region => region.mode === 'redact');
+
+        if (blurRegions.length) {
+          const originalCanvas = document.createElement('canvas');
+          originalCanvas.width = canvas.width;
+          originalCanvas.height = canvas.height;
+          originalCanvas.getContext('2d', { alpha: false }).drawImage(canvas, 0, 0);
+          for (const region of blurRegions) applyBlurToPixels(context, originalCanvas, region, blurPixels);
+          originalCanvas.width = 0;
+          originalCanvas.height = 0;
+        }
+
+        context.filter = 'none';
+        context.fillStyle = '#000';
+        for (const region of blackRegions) {
+          const bounds = pixelBounds(region, canvas.width, canvas.height);
+          context.fillRect(bounds.x1, bounds.y1, bounds.width, bounds.height);
+        }
+
+        const pngBytes = await canvasToPng(canvas);
+        const embeddedImage = await outputDocument.embedPng(pngBytes);
+        const outputPage = outputDocument.addPage([baseViewport.width, baseViewport.height]);
+        outputPage.drawImage(embeddedImage, { x: 0, y: 0, width: baseViewport.width, height: baseViewport.height });
+      } finally {
+        sourcePage.cleanup();
+        canvas.width = 0;
+        canvas.height = 0;
+      }
+      setProgressBar(progress, pageNumber / sourcePageCount * 100);
+      await sleep(10);
+    }
+
+    const generatedOutputBytes = await outputDocument.save({ useObjectStreams: true });
+    const currentSignature = JSON.stringify({
+      regions: redactRegions,
+      blur: document.getElementById('redact-blur').value,
+      dpi: document.getElementById('redact-dpi').value,
+    });
+    if (currentSignature !== configurationSignature || redactPdfDoc !== sourceDocument || redactFile !== sourceFile) {
+      throw new Error(msg('処理中に設定が変更されました。もう一度実行してください。', 'Settings changed during processing. Run the operation again.'));
+    }
+    redactOutputBytes = generatedOutputBytes;
+    const allRegions = Object.values(regionsForOutput).flat();
+    const hasRedact = allRegions.some(region => region.mode === 'redact');
+    const hasBlur = allRegions.some(region => region.mode === 'blur');
+    const suffix = hasRedact && hasBlur ? '_redacted_blurred.pdf' : hasRedact ? '_redacted.pdf' : '_blurred.pdf';
+    redactOutputName = `${baseName(sourceFile.name)}${suffix}`;
+    document.getElementById('redact-stat-before').textContent = formatSize(sourceFile.size);
+    document.getElementById('redact-stat-after').textContent = formatSize(redactOutputBytes.length);
+    document.getElementById('redact-stat-regions').textContent = String(allRegions.length);
+    document.getElementById('redact-result').style.display = 'block';
+    setStatus('redact', hasBlur
+      ? msg('✓ PDFを準備しました。ぼかしは墨消しではないため、共有前に用途を再確認してください。', '✓ PDF prepared. Blur is not redaction; confirm it is appropriate before sharing.')
+      : msg('✓ 墨消し済みPDFを準備しました。ダウンロード後に全ページを確認してください。', '✓ Redacted PDF prepared. Download and inspect every page.'));
+  } catch (error) {
+    console.error(error);
+    setStatus('redact', `${msg('エラー: ', 'Error: ')}${humanError(error)}`, true);
+  } finally {
+    redactProcessing = false;
+    document.getElementById('redact-file-input').disabled = false;
+    button.disabled = !redactBytes || totalRedactRegions() === 0;
+    button.innerHTML = msg('⬛ 適用してPDFを準備', '⬛ Apply & Prepare PDF');
+    setTimeout(() => progress.classList.remove('active'), 800);
+  }
+}
+
+async function resetRedact() {
+  if (redactProcessing) {
+    setStatus('redact', msg('現在の処理が完了するまでお待ちください。', 'Wait for the current process to finish.'));
+    return;
+  }
+  ++redactPreviewGeneration;
+  hideRedactDraft();
+  if (redactPdfTask) await redactPdfTask.destroy().catch(() => {});
+  redactFile = null;
+  redactBytes = null;
+  redactPdfTask = null;
+  redactPdfDoc = null;
+  redactPageCount = 0;
+  redactPageSizes = [];
+  redactCurrentPage = 1;
+  redactRegions = {};
+  redactRegionId = 0;
+  invalidateRedactOutput();
+  document.getElementById('redact-file-info').replaceChildren();
+  document.getElementById('redact-controls').classList.add('hidden');
+  document.getElementById('redact-file-input').value = '';
+  document.getElementById('redact-canvas').width = 0;
+  document.getElementById('redact-canvas').height = 0;
+  document.getElementById('redact-regions').replaceChildren();
+  document.getElementById('redact-region-list').replaceChildren();
+  document.getElementById('redact-region-summary').textContent = '';
+  document.getElementById('redact-btn').disabled = true;
+  setStatus('redact', '');
+  setRedactMode('redact');
+}
+
 // ===== ACTIONS & ACCESSIBILITY =====
 const ACTIONS = Object.freeze({
   switchTab,
@@ -1382,11 +1930,13 @@ const ACTIONS = Object.freeze({
   executeCompress, resetCompress,
   setTrimMode, trimNavPage, selectTrimPerPage, onTrimInputChange,
   resetTrimSelection, applyTrimToAll, clearAllTrimSettings, executeTrim, resetTrim,
+  setRedactMode, redactNavPage, addRedactFromInputs, removeRedactRegion,
+  undoRedactRegion, clearRedactPage, clearAllRedactRegions, executeRedact, resetRedact,
 });
 
 function scopeForAction(action) {
   const lowered = action.toLowerCase();
-  return ['split', 'merge', 'extract', 'rotate', 'reorder', 'compress', 'trim'].find(scope => lowered.includes(scope));
+  return ['split', 'merge', 'extract', 'rotate', 'reorder', 'compress', 'trim', 'redact'].find(scope => lowered.includes(scope));
 }
 
 function restoreActionButton(scope) {
@@ -1400,6 +1950,7 @@ function restoreActionButton(scope) {
     reorder: !reorderBytes,
     compress: !compressFile,
     trim: !trimBytes,
+    redact: !redactBytes || totalRedactRegions() === 0,
   }[scope];
   button.disabled = Boolean(disabled);
 }

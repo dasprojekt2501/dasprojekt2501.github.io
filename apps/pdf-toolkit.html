@@ -16,12 +16,12 @@
   <div class="logo"><canvas id="headerLogo" width="64" height="64"></canvas></div>
   <div>
     <h1>PDF Toolkit</h1>
-    <p>分割・結合・抽出・回転・並べ替え・圧縮・トリミング</p>
+    <p>分割・結合・抽出・回転・並べ替え・圧縮・トリミング・墨消し/ぼかし</p>
   </div>
 </div>
 
 <div class="app-security-summary" role="note">
-  すべての処理はこのブラウザ内で行われます。圧縮は各ページを画像化してリンク・フォーム・スクリプト等を除去しますが、それ以外の機能はPDF内の要素を保持するため、無害化処理ではありません。
+  すべての処理はこのブラウザ内で行われます。圧縮と墨消し・ぼかしは各ページを画像化して新しいPDFへ再構築します。それ以外の機能はPDF内の要素を保持するため、無害化処理ではありません。
 </div>
 
 <div class="tabs" id="tabs" role="tablist" aria-label="PDF編集機能">
@@ -32,6 +32,7 @@
   <button type="button" class="tab" data-tab="reorder" data-action="switchTab" data-action-args='["reorder"]' role="tab">↕️ 並べ替え</button>
   <button type="button" class="tab" data-tab="compress" data-action="switchTab" data-action-args='["compress"]' role="tab">🗜️ 圧縮</button>
   <button type="button" class="tab" data-tab="trim" data-action="switchTab" data-action-args='["trim"]' role="tab">✂ トリミング</button>
+  <button type="button" class="tab" data-tab="redact" data-action="switchTab" data-action-args='["redact"]' role="tab">⬛ 墨消し・ぼかし</button>
 </div>
 
 <div class="main">
@@ -394,6 +395,110 @@
         <span class="status" id="trim-status"></span>
       </div>
       <div class="progress-bar" id="trim-progress"><div class="fill"></div></div>
+    </div>
+  </div>
+
+  <!-- REDACT / BLUR -->
+  <div class="panel" id="panel-redact">
+    <div class="drop-zone" id="redact-drop">
+      <div class="icon">⬛</div>
+      <div class="label">PDFファイルをドロップ or クリック</div>
+      <div class="sub">墨消し・ぼかしを行うPDFを1つ選んでください</div>
+      <input type="file" accept=".pdf" id="redact-file-input">
+    </div>
+    <div id="redact-file-info"></div>
+    <div class="redact-security-notice" role="note">
+      <strong>墨消し:</strong> 選択範囲を黒い画素で置き換え、全ページを画像化した新規PDFとして出力します。元のテキスト・画像・リンク・フォーム・スクリプト・埋め込みデータは引き継ぎません。共有前に出力結果を必ず確認してください。
+    </div>
+    <div class="security-notice" role="alert">
+      <strong>ぼかしは機密情報の削除ではありません。</strong> 内容を推測・復元される可能性があるため、個人情報・パスワード・秘密情報には必ず「墨消し」を使用してください。
+    </div>
+
+    <div id="redact-controls" class="hidden">
+      <div class="section">
+        <div class="section-title">追加する範囲の処理</div>
+        <div class="redact-mode-btns" role="group" aria-label="処理モード">
+          <button class="redact-mode-btn active" id="redact-mode-redact" data-action="setRedactMode" data-action-args='["redact"]' aria-pressed="true">
+            <span class="redact-mode-icon">⬛</span>
+            <span>墨消し</span>
+            <span class="redact-mode-desc">黒く塗り、元の内容を出力から除去</span>
+          </button>
+          <button class="redact-mode-btn" id="redact-mode-blur" data-action="setRedactMode" data-action-args='["blur"]' aria-pressed="false">
+            <span class="redact-mode-icon">▦</span>
+            <span>ぼかし</span>
+            <span class="redact-mode-desc">見た目だけをぼかす（機密情報には非推奨）</span>
+          </button>
+        </div>
+        <div class="redact-sliders">
+          <label class="redact-slider-row" id="redact-blur-settings">
+            <span>ぼかし強度</span>
+            <input type="range" id="redact-blur" min="4" max="30" value="14" step="1">
+            <span class="slider-val" id="redact-blur-val">14 px</span>
+          </label>
+          <label class="redact-slider-row">
+            <span>出力解像度</span>
+            <input type="range" id="redact-dpi" min="96" max="240" value="150" step="6">
+            <span class="slider-val" id="redact-dpi-val">150 DPI</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">範囲を追加</div>
+        <div class="hint">プレビュー上をドラッグすると、現在のモードで範囲を追加できます。重なった場合は墨消しが常に最前面に適用されます。</div>
+        <div class="redact-workspace">
+          <div class="redact-preview-wrap">
+            <div class="redact-canvas-container" id="redact-canvas-container" aria-label="PDFページの範囲選択プレビュー">
+              <canvas id="redact-canvas"></canvas>
+              <div class="redact-regions" id="redact-regions" aria-hidden="true"></div>
+              <div class="redact-draft" id="redact-draft" aria-hidden="true"></div>
+            </div>
+            <div class="trim-page-nav">
+              <button class="btn btn-secondary btn-small" data-action="redactNavPage" data-action-args='[-1]'>◀ 前</button>
+              <span id="redact-page-label">1 / 1</span>
+              <button class="btn btn-secondary btn-small" data-action="redactNavPage" data-action-args='[1]'>次 ▶</button>
+            </div>
+          </div>
+          <div class="redact-input-panel">
+            <div class="redact-input-grid">
+              <label>左 (pt)<input type="number" id="redact-left" min="0" value="36"></label>
+              <label>上 (pt)<input type="number" id="redact-top" min="0" value="36"></label>
+              <label>幅 (pt)<input type="number" id="redact-width" min="1" value="144"></label>
+              <label>高さ (pt)<input type="number" id="redact-height" min="1" value="36"></label>
+            </div>
+            <button class="btn btn-secondary btn-small redact-add-btn" data-action="addRedactFromInputs" data-action-args='[]'>数値で範囲を追加</button>
+            <div class="redact-page-size" id="redact-page-size">—</div>
+          </div>
+        </div>
+        <div class="redact-region-summary" id="redact-region-summary" aria-live="polite"></div>
+        <div class="redact-region-list" id="redact-region-list"></div>
+        <div class="quick-btns redact-quick-btns">
+          <button class="btn btn-secondary btn-small" data-action="undoRedactRegion" data-action-args='[]'>最後の範囲を取り消す</button>
+          <button class="btn btn-secondary btn-small" data-action="clearRedactPage" data-action-args='[]'>このページをクリア</button>
+          <button class="btn btn-secondary btn-small" data-action="clearAllRedactRegions" data-action-args='[]'>全ページをクリア</button>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn btn-primary" id="redact-btn" data-action="executeRedact" data-action-args='[]' disabled>⬛ 適用してPDFを準備</button>
+        <button class="btn btn-secondary" data-action="resetRedact" data-action-args='[]'>リセット</button>
+        <span class="status" id="redact-status"></span>
+      </div>
+      <div class="progress-bar" id="redact-progress"><div class="fill"></div></div>
+
+      <div class="compress-result" id="redact-result">
+        <div class="section-title redact-result-title">処理結果</div>
+        <div class="result-stats">
+          <div class="stat-box"><div class="stat-label">元のサイズ</div><div class="stat-val before" id="redact-stat-before">—</div></div>
+          <div class="stat-box"><div class="stat-label">処理後</div><div class="stat-val after" id="redact-stat-after">—</div></div>
+          <div class="stat-box"><div class="stat-label">適用範囲</div><div class="stat-val ratio" id="redact-stat-regions">—</div></div>
+        </div>
+        <button class="btn-download" id="redact-download-btn">⬇ 処理済みPDFをダウンロード</button>
+        <div class="result-note">
+          ※ 出力PDFは各ページをPNG画像として再構築します。テキスト検索・コピー、リンク、フォーム等は失われ、ファイルサイズが増える場合があります。<br>
+          ファイルは外部サーバーへ送信されません。ダウンロードしたPDFを開き、全ページを確認してから共有してください。
+        </div>
+      </div>
     </div>
   </div>
 

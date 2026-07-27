@@ -16,12 +16,12 @@
   <div class="logo"><canvas id="headerLogo" width="64" height="64"></canvas></div>
   <div>
     <h1>PDF Toolkit</h1>
-    <p>Split · Merge · Extract · Rotate · Reorder · Compress · Trim</p>
+    <p>Split · Merge · Extract · Rotate · Reorder · Compress · Trim · Redact/Blur</p>
   </div>
 </div>
 
 <div class="app-security-summary" role="note">
-  All processing stays in this browser. Compression rasterizes every page and removes links, forms, scripts, and similar active content; the other tools preserve PDF elements and are not sanitization features.
+  All processing stays in this browser. Compression and Redact/Blur rasterize every page into a new PDF. The other tools preserve PDF elements and are not sanitization features.
 </div>
 
 <div class="tabs" id="tabs" role="tablist" aria-label="PDF editing tools">
@@ -32,6 +32,7 @@
   <button type="button" class="tab" data-tab="reorder" data-action="switchTab" data-action-args='["reorder"]' role="tab">↕️ Reorder</button>
   <button type="button" class="tab" data-tab="compress" data-action="switchTab" data-action-args='["compress"]' role="tab">🗜️ Compress</button>
   <button type="button" class="tab" data-tab="trim" data-action="switchTab" data-action-args='["trim"]' role="tab">✂ Trim</button>
+  <button type="button" class="tab" data-tab="redact" data-action="switchTab" data-action-args='["redact"]' role="tab">⬛ Redact &amp; Blur</button>
 </div>
 
 <div class="main">
@@ -394,6 +395,110 @@
         <span class="status" id="trim-status"></span>
       </div>
       <div class="progress-bar" id="trim-progress"><div class="fill"></div></div>
+    </div>
+  </div>
+
+  <!-- REDACT / BLUR -->
+  <div class="panel" id="panel-redact">
+    <div class="drop-zone" id="redact-drop">
+      <div class="icon">⬛</div>
+      <div class="label">Drop a PDF here or click to browse</div>
+      <div class="sub">Select one PDF to redact or blur</div>
+      <input type="file" accept=".pdf" id="redact-file-input">
+    </div>
+    <div id="redact-file-info"></div>
+    <div class="redact-security-notice" role="note">
+      <strong>Redaction:</strong> Replaces selected areas with black pixels and rasterizes every page into a new PDF. Original text, images, links, forms, scripts, and embedded data are not copied. Always inspect the output before sharing it.
+    </div>
+    <div class="security-notice" role="alert">
+      <strong>Blur is not redaction.</strong> Blurred content may still be inferred or reconstructed. Always use Redact for personal data, passwords, or confidential information.
+    </div>
+
+    <div id="redact-controls" class="hidden">
+      <div class="section">
+        <div class="section-title">Mode for new regions</div>
+        <div class="redact-mode-btns" role="group" aria-label="Processing mode">
+          <button class="redact-mode-btn active" id="redact-mode-redact" data-action="setRedactMode" data-action-args='["redact"]' aria-pressed="true">
+            <span class="redact-mode-icon">⬛</span>
+            <span>Redact</span>
+            <span class="redact-mode-desc">Fill with black and remove the original content</span>
+          </button>
+          <button class="redact-mode-btn" id="redact-mode-blur" data-action="setRedactMode" data-action-args='["blur"]' aria-pressed="false">
+            <span class="redact-mode-icon">▦</span>
+            <span>Blur</span>
+            <span class="redact-mode-desc">Visual obscuring only (not for confidential data)</span>
+          </button>
+        </div>
+        <div class="redact-sliders">
+          <label class="redact-slider-row" id="redact-blur-settings">
+            <span>Blur strength</span>
+            <input type="range" id="redact-blur" min="4" max="30" value="14" step="1">
+            <span class="slider-val" id="redact-blur-val">14 px</span>
+          </label>
+          <label class="redact-slider-row">
+            <span>Output resolution</span>
+            <input type="range" id="redact-dpi" min="96" max="240" value="150" step="6">
+            <span class="slider-val" id="redact-dpi-val">150 DPI</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Add regions</div>
+        <div class="hint">Drag on the preview to add a region in the current mode. Where regions overlap, redaction is always applied on top.</div>
+        <div class="redact-workspace">
+          <div class="redact-preview-wrap">
+            <div class="redact-canvas-container" id="redact-canvas-container" aria-label="PDF page region selection preview">
+              <canvas id="redact-canvas"></canvas>
+              <div class="redact-regions" id="redact-regions" aria-hidden="true"></div>
+              <div class="redact-draft" id="redact-draft" aria-hidden="true"></div>
+            </div>
+            <div class="trim-page-nav">
+              <button class="btn btn-secondary btn-small" data-action="redactNavPage" data-action-args='[-1]'>◀ Prev</button>
+              <span id="redact-page-label">1 / 1</span>
+              <button class="btn btn-secondary btn-small" data-action="redactNavPage" data-action-args='[1]'>Next ▶</button>
+            </div>
+          </div>
+          <div class="redact-input-panel">
+            <div class="redact-input-grid">
+              <label>Left (pt)<input type="number" id="redact-left" min="0" value="36"></label>
+              <label>Top (pt)<input type="number" id="redact-top" min="0" value="36"></label>
+              <label>Width (pt)<input type="number" id="redact-width" min="1" value="144"></label>
+              <label>Height (pt)<input type="number" id="redact-height" min="1" value="36"></label>
+            </div>
+            <button class="btn btn-secondary btn-small redact-add-btn" data-action="addRedactFromInputs" data-action-args='[]'>Add Region by Values</button>
+            <div class="redact-page-size" id="redact-page-size">—</div>
+          </div>
+        </div>
+        <div class="redact-region-summary" id="redact-region-summary" aria-live="polite"></div>
+        <div class="redact-region-list" id="redact-region-list"></div>
+        <div class="quick-btns redact-quick-btns">
+          <button class="btn btn-secondary btn-small" data-action="undoRedactRegion" data-action-args='[]'>Undo Last Region</button>
+          <button class="btn btn-secondary btn-small" data-action="clearRedactPage" data-action-args='[]'>Clear This Page</button>
+          <button class="btn btn-secondary btn-small" data-action="clearAllRedactRegions" data-action-args='[]'>Clear All Pages</button>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn btn-primary" id="redact-btn" data-action="executeRedact" data-action-args='[]' disabled>⬛ Apply &amp; Prepare PDF</button>
+        <button class="btn btn-secondary" data-action="resetRedact" data-action-args='[]'>Reset</button>
+        <span class="status" id="redact-status"></span>
+      </div>
+      <div class="progress-bar" id="redact-progress"><div class="fill"></div></div>
+
+      <div class="compress-result" id="redact-result">
+        <div class="section-title redact-result-title">Result</div>
+        <div class="result-stats">
+          <div class="stat-box"><div class="stat-label">Original Size</div><div class="stat-val before" id="redact-stat-before">—</div></div>
+          <div class="stat-box"><div class="stat-label">Processed</div><div class="stat-val after" id="redact-stat-after">—</div></div>
+          <div class="stat-box"><div class="stat-label">Regions</div><div class="stat-val ratio" id="redact-stat-regions">—</div></div>
+        </div>
+        <button class="btn-download" id="redact-download-btn">⬇ Download Processed PDF</button>
+        <div class="result-note">
+          * The output PDF rebuilds every page as a PNG image. Text search/copy, links, forms, and similar features are removed, and the file may become larger.<br>
+          Your file never leaves this browser. Open and inspect every output page before sharing it.
+        </div>
+      </div>
     </div>
   </div>
 

@@ -29,6 +29,9 @@ for (const language of ['ja', 'en']) {
   check(!/\son(?:click|input|change|load|error)\s*=/i.test(html), `${language}: inline event handlers are not allowed.`);
   check(!/<script(?![^>]+\bsrc=)[^>]*>/i.test(html), `${language}: inline scripts are not allowed.`);
   check(!/https?:\/\//i.test(html), `${language}: remote application dependencies are not allowed.`);
+  check(/id="panel-redact"/.test(html), `${language}: the Redact/Blur panel is missing.`);
+  check(/id="redact-left"/.test(html) && /id="redact-width"/.test(html), `${language}: keyboard-accessible redaction inputs are missing.`);
+  check(/id="redact-download-btn"/.test(html), `${language}: the processed PDF download button is missing.`);
 }
 
 check(!/@import|https?:\/\//i.test(sources.css), 'CSS contains a remote import or URL.');
@@ -36,8 +39,23 @@ check(!/pdfjsLib|cdnjs|unpkg|jsdelivr/i.test(sources.js), 'JavaScript contains a
 check(/isEvalSupported:\s*false/.test(sources.js), 'PDF.js JavaScript evaluation is not disabled.');
 check(/maxFileBytes:\s*100\s*\*\s*1024\s*\*\s*1024/.test(sources.js), 'The 100 MB file limit is missing.');
 check(/maxPages:\s*500/.test(sources.js), 'The 500-page limit is missing.');
+check(/maxRedactRegions:\s*1000/.test(sources.js), 'The redaction region limit is missing.');
 check(/marginPt\s*\/\s*displaySize\.width/.test(sources.js), 'Trim margin is not applied to output geometry.');
 check(/new URL\('\.\/vendor\/pdfjs\//.test(sources.js), 'PDF.js is not loaded from the local vendor directory.');
+
+const redactStart = sources.js.indexOf('async function executeRedact()');
+const redactEnd = sources.js.indexOf('async function resetRedact()', redactStart);
+const redactSource = sources.js.slice(redactStart, redactEnd);
+check(redactStart >= 0 && redactEnd > redactStart, 'The Redact/Blur output pipeline is missing.');
+check(/PDFDocument\.create\(\)/.test(redactSource), 'Redact/Blur does not rebuild into a fresh PDF.');
+check(/embedPng\(pngBytes\)/.test(redactSource), 'Redact/Blur pages are not embedded losslessly as PNG images.');
+check(!/copyPages|PDFDocument\.load/.test(redactSource), 'Redact/Blur must not copy original PDF objects into the output.');
+check(/removeGeneratedPdfMetadata\(outputDocument\)/.test(redactSource), 'Generated Redact/Blur metadata is not cleared.');
+check(/const blurRegions[\s\S]*const blackRegions/.test(redactSource), 'Blur and redaction regions are not processed separately.');
+check(redactSource.indexOf('applyBlurToPixels') < redactSource.indexOf("context.fillStyle = '#000'"), 'Black redaction must be applied after blur so it always wins overlaps.');
+check(/canvas\.toBlob[\s\S]*'image\/png'/.test(sources.js), 'The lossless PNG canvas encoder is missing.');
+check(/ぼかしは機密情報の削除ではありません/.test(sources.ja), 'Japanese blur security warning is missing.');
+check(/Blur is not redaction/.test(sources.en), 'English blur security warning is missing.');
 
 const ids = html => new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]).filter(id => id !== 'favicon'));
 const jaIds = ids(sources.ja);
