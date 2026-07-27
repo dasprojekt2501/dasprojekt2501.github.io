@@ -56,6 +56,8 @@ check(redactSource.indexOf('applyBlurToPixels') < redactSource.indexOf("context.
 check(/canvas\.toBlob[\s\S]*'image\/png'/.test(sources.js), 'The lossless PNG canvas encoder is missing.');
 check(/ぼかしは機密情報の削除ではありません/.test(sources.ja), 'Japanese blur security warning is missing.');
 check(/Blur is not redaction/.test(sources.en), 'English blur security warning is missing.');
+check(/範囲外の内容はPDF内部に残ります/.test(sources.ja), 'Japanese trim retention warning is missing.');
+check(/Content outside the cropped area remains in the PDF/.test(sources.en), 'English trim retention warning is missing.');
 
 const ids = html => new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]).filter(id => id !== 'favicon'));
 const jaIds = ids(sources.ja);
