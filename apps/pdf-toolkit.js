@@ -21,6 +21,18 @@ const LIMITS = Object.freeze({
   maxTotalCanvasPixels: 4_500_000_000, // 500ページのA4を300DPIで処理できる上限（1ページ毎のcanvasは都度解放される）
   maxRedactRegions: 1000,
 });
+// Safariなど一部のブラウザはcanvasのfilterに未対応で、ぼかしを出力へ適用できない。
+// UA判定ではなく実際にfilterが効くか試すため、将来対応された環境では自動的に有効へ戻る。
+const CANVAS_BLUR_SUPPORTED = (() => {
+  try {
+    const context = document.createElement('canvas').getContext('2d');
+    if (!context || !('filter' in context)) return false;
+    context.filter = 'blur(2px)';
+    return context.filter === 'blur(2px)';
+  } catch {
+    return false;
+  }
+})();
 const PDFJS_ROOT = new URL('./vendor/pdfjs/', import.meta.url);
 GlobalWorkerOptions.workerSrc = new URL('pdf.worker.mjs', PDFJS_ROOT).href;
 
@@ -1475,6 +1487,24 @@ let redactProcessing = false;
 const REDACT_PREVIEW_SCALE = 1.25;
 
 setupDrop('redact-drop', 'redact-file-input', loadRedactFile);
+if (!CANVAS_BLUR_SUPPORTED) markBlurUnavailable();
+
+function markBlurUnavailable() {
+  const button = document.getElementById('redact-mode-blur');
+  button.disabled = true;
+  button.setAttribute('aria-disabled', 'true');
+  button.querySelector('.redact-mode-desc').textContent = msg('このブラウザでは利用できません', 'Unavailable in this browser');
+  document.getElementById('redact-blur').disabled = true;
+  document.getElementById('redact-blur-settings').classList.add('unavailable');
+  const notice = document.createElement('div');
+  notice.className = 'security-notice';
+  notice.setAttribute('role', 'note');
+  notice.textContent = msg(
+    'お使いのブラウザ（Safariなど）はcanvasのぼかし処理に対応していないため、ぼかしは選択できません。墨消しは通常どおり使用できます。機密情報の削除には、そもそも墨消しの使用が推奨されます。',
+    'Your browser (for example Safari) does not support canvas blur, so blur cannot be selected. Redaction works normally — and redaction is the recommended choice for removing confidential information anyway.',
+  );
+  button.closest('.section').prepend(notice);
+}
 
 document.getElementById('redact-blur').addEventListener('input', function() {
   document.getElementById('redact-blur-val').textContent = `${this.value} px`;
@@ -1530,6 +1560,10 @@ async function loadRedactFile(file) {
 
 function setRedactMode(mode) {
   if (!['redact', 'blur'].includes(mode)) return;
+  if (mode === 'blur' && !CANVAS_BLUR_SUPPORTED) {
+    setStatus('redact', msg('このブラウザはぼかしに対応していないため、墨消しのみ使用できます。', 'This browser does not support blur, so only redaction is available.'), true);
+    return;
+  }
   redactMode = mode;
   for (const candidate of ['redact', 'blur']) {
     const button = document.getElementById(`redact-mode-${candidate}`);

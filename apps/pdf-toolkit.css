@@ -637,6 +637,9 @@
     font: inherit; font-size: 13px; transition: all 0.2s;
   }
   .redact-mode-btn:hover { border-color: var(--accent); color: var(--text); }
+  .redact-mode-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .redact-mode-btn:disabled:hover { border-color: var(--border); color: var(--text-dim); }
+  .redact-slider-row.unavailable { opacity: 0.4; }
   .redact-mode-btn.active { border-color: var(--accent); background: var(--accent-glow); color: var(--text); }
   #redact-mode-redact.active { border-color: var(--accent2); background: rgba(255,107,107,0.1); }
   .redact-mode-icon { font-size: 24px; line-height: 1; }
