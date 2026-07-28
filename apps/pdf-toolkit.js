@@ -18,7 +18,7 @@ const LIMITS = Object.freeze({
   maxFileBytes: 100 * 1024 * 1024,
   maxPages: 500,
   maxCanvasPixels: 25_000_000,
-  maxTotalCanvasPixels: 120_000_000,
+  maxTotalCanvasPixels: 4_500_000_000, // 500ページのA4を300DPIで処理できる上限（1ページ毎のcanvasは都度解放される）
   maxRedactRegions: 1000,
 });
 const PDFJS_ROOT = new URL('./vendor/pdfjs/', import.meta.url);
@@ -141,6 +141,30 @@ function showDropError(dropId, text = '') {
   }
   error.textContent = text;
   error.classList.toggle('visible', Boolean(text));
+}
+
+// 処理中のタブでは新しいファイルの読み込みとリセットをブロックする
+// （実行中の関数はさらに開始時点の状態スナップショットを使い、途中のUI操作から出力を守る）
+const processingScopes = new Set();
+function beginProcessing(scope) {
+  processingScopes.add(scope);
+  const input = document.getElementById(`${scope}-file-input`);
+  if (input) input.disabled = true;
+}
+function endProcessing(scope) {
+  processingScopes.delete(scope);
+  const input = document.getElementById(`${scope}-file-input`);
+  if (input) input.disabled = false;
+}
+function ensureNotProcessing(scope) {
+  if (processingScopes.has(scope)) {
+    throw new Error(msg('現在の処理が完了してから別のPDFを選択してください。', 'Wait for the current process to finish before selecting another PDF.'));
+  }
+}
+function refuseResetWhileProcessing(scope) {
+  if (!processingScopes.has(scope)) return false;
+  setStatus(scope, msg('現在の処理が完了するまでお待ちください。', 'Wait for the current process to finish.'));
+  return true;
 }
 
 async function validatePdfFile(file) {
@@ -268,6 +292,7 @@ let splitBytes = null, splitPageCount = 0, splitPoints = new Set(), splitFileNam
 setupDrop('split-drop', 'split-file-input', loadSplitFile);
 
 async function loadSplitFile(file) {
+  ensureNotProcessing('split');
   splitBytes = await file.arrayBuffer();
   splitFileName = baseName(file.name);
   const pdf = await PDFDocument.load(splitBytes);
@@ -304,25 +329,33 @@ function updateSplitPreview() {
   document.getElementById('split-btn').disabled = splitPoints.size === 0;
 }
 async function executeSplit() {
-  const btn = document.getElementById('split-btn'), status = document.getElementById('split-status'), prog = document.getElementById('split-progress');
-  btn.disabled = true; setStatus('split', msg('処理中…', 'Processing…')); prog.classList.add('active'); setProgressBar(prog, 0);
+  const bytes = splitBytes, pageCount = splitPageCount, fileName = splitFileName;
   const sorted = [...splitPoints].sort((a,b) => a-b);
-  const ranges = []; let s = 0;
-  for (const sp of sorted) { ranges.push([s, sp-1]); s = sp; }
-  ranges.push([s, splitPageCount-1]);
-  for (let i = 0; i < ranges.length; i++) {
-    setProgressBar(prog, ((i+1)/ranges.length)*100);
-    const src = await PDFDocument.load(splitBytes);
-    const np = await PDFDocument.create();
-    const idx = []; for (let p = ranges[i][0]; p <= ranges[i][1]; p++) idx.push(p);
-    (await np.copyPages(src, idx)).forEach(pg => np.addPage(pg));
-    downloadBlob(await np.save(), `${splitFileName}_p${ranges[i][0]+1}-${ranges[i][1]+1}.pdf`);
-    await sleep(300);
+  if (!bytes || sorted.length === 0) return;
+  const btn = document.getElementById('split-btn'), prog = document.getElementById('split-progress');
+  beginProcessing('split');
+  btn.disabled = true; setStatus('split', msg('処理中…', 'Processing…')); prog.classList.add('active'); setProgressBar(prog, 0);
+  try {
+    const ranges = []; let s = 0;
+    for (const sp of sorted) { ranges.push([s, sp-1]); s = sp; }
+    ranges.push([s, pageCount-1]);
+    for (let i = 0; i < ranges.length; i++) {
+      setProgressBar(prog, ((i+1)/ranges.length)*100);
+      const src = await PDFDocument.load(bytes);
+      const np = await PDFDocument.create();
+      const idx = []; for (let p = ranges[i][0]; p <= ranges[i][1]; p++) idx.push(p);
+      (await np.copyPages(src, idx)).forEach(pg => np.addPage(pg));
+      downloadBlob(await np.save(), `${fileName}_p${ranges[i][0]+1}-${ranges[i][1]+1}.pdf`);
+      await sleep(300);
+    }
+    setStatus('split', msg(`✓ ${ranges.length}ファイルをダウンロードしました`, `✓ Downloaded ${ranges.length} file${ranges.length === 1 ? '' : 's'}`)); btn.disabled = false;
+  } finally {
+    endProcessing('split');
+    setTimeout(() => prog.classList.remove('active'), 1000);
   }
-  setStatus('split', msg(`✓ ${ranges.length}ファイルをダウンロードしました`, `✓ Downloaded ${ranges.length} file${ranges.length === 1 ? '' : 's'}`)); btn.disabled = false;
-  setTimeout(() => prog.classList.remove('active'), 1000);
 }
 function resetSplit() {
+  if (refuseResetWhileProcessing('split')) return;
   splitBytes = null; splitPageCount = 0; splitPoints.clear();
   document.getElementById('split-file-info').innerHTML = '';
   document.getElementById('split-controls').classList.add('hidden');
@@ -335,6 +368,7 @@ let mergeFiles = [], mergeIdCtr = 0, mergeDragId = null;
 setupDrop('merge-drop', 'merge-file-input', addMergeFile, true);
 
 async function addMergeFile(file) {
+  ensureNotProcessing('merge');
   const bytes = await file.arrayBuffer();
   const pdf = await PDFDocument.load(bytes);
   const pageCount = pdf.getPageCount();
@@ -375,27 +409,38 @@ function moveMergeFile(id, delta) {
   renderMergeList();
 }
 async function executeMerge() {
-  const btn = document.getElementById('merge-btn'), status = document.getElementById('merge-status'), prog = document.getElementById('merge-progress');
+  const files = mergeFiles.slice();
+  if (files.length < 2) return;
+  const btn = document.getElementById('merge-btn'), prog = document.getElementById('merge-progress');
+  beginProcessing('merge');
   btn.disabled = true; setStatus('merge', msg('処理中…', 'Processing…')); prog.classList.add('active'); setProgressBar(prog, 0);
-  const merged = await PDFDocument.create();
-  for (let i = 0; i < mergeFiles.length; i++) {
-    setProgressBar(prog, ((i+1)/mergeFiles.length)*100);
-    const src = await PDFDocument.load(mergeFiles[i].bytes);
-    (await merged.copyPages(src, src.getPageIndices())).forEach(p => merged.addPage(p));
-    await sleep(100);
+  try {
+    const merged = await PDFDocument.create();
+    for (let i = 0; i < files.length; i++) {
+      setProgressBar(prog, ((i+1)/files.length)*100);
+      const src = await PDFDocument.load(files[i].bytes);
+      (await merged.copyPages(src, src.getPageIndices())).forEach(p => merged.addPage(p));
+      await sleep(100);
+    }
+    downloadBlob(await merged.save(), `${baseName(files[0].name)}_merged.pdf`);
+    const tp = files.reduce((s, f) => s + f.pageCount, 0);
+    setStatus('merge', msg(`✓ ${files.length}ファイル（計${tp}ページ）を結合しました`, `✓ Merged ${files.length} files (${tp} pages)`)); btn.disabled = false;
+  } finally {
+    endProcessing('merge');
+    setTimeout(() => prog.classList.remove('active'), 1000);
   }
-  downloadBlob(await merged.save(), `${baseName(mergeFiles[0].name)}_merged.pdf`);
-  const tp = mergeFiles.reduce((s, f) => s + f.pageCount, 0);
-  setStatus('merge', msg(`✓ ${mergeFiles.length}ファイル（計${tp}ページ）を結合しました`, `✓ Merged ${mergeFiles.length} files (${tp} pages)`)); btn.disabled = false;
-  setTimeout(() => prog.classList.remove('active'), 1000);
 }
-function resetMerge() { mergeFiles = []; mergeIdCtr = 0; renderMergeList(); setStatus('merge', ''); document.getElementById('merge-file-input').value = ''; }
+function resetMerge() {
+  if (refuseResetWhileProcessing('merge')) return;
+  mergeFiles = []; mergeIdCtr = 0; renderMergeList(); setStatus('merge', ''); document.getElementById('merge-file-input').value = '';
+}
 
 // ===== EXTRACT =====
 let extractBytes = null, extractPageCount = 0, extractSelected = new Set(), extractFileName = '';
 setupDrop('extract-drop', 'extract-file-input', loadExtractFile);
 
 async function loadExtractFile(file) {
+  ensureNotProcessing('extract');
   extractBytes = await file.arrayBuffer();
   extractFileName = baseName(file.name);
   const pdf = await PDFDocument.load(extractBytes);
@@ -435,21 +480,29 @@ function extractDeselectAll() {
   updateExtractCount();
 }
 async function executeExtract() {
-  const btn = document.getElementById('extract-btn'), status = document.getElementById('extract-status'), prog = document.getElementById('extract-progress');
-  btn.disabled = true; setStatus('extract', msg('処理中…', 'Processing…')); prog.classList.add('active'); setProgressBar(prog, 50);
-  const src = await PDFDocument.load(extractBytes);
-  const np = await PDFDocument.create();
+  const bytes = extractBytes, fileName = extractFileName;
   const sorted = [...extractSelected].sort((a, b) => a - b);
-  (await np.copyPages(src, sorted.map(p => p - 1))).forEach(pg => np.addPage(pg));
-  const extName = sorted.length <= 4
-    ? `${extractFileName}_extracted_p${sorted.join('_p')}.pdf`
-    : `${extractFileName}_extracted_${sorted.length}pages.pdf`;
-  downloadBlob(await np.save(), extName);
-  setProgressBar(prog, 100);
-  setStatus('extract', msg(`✓ ${sorted.length}ページを抽出しました`, `✓ Extracted ${sorted.length} page${sorted.length === 1 ? '' : 's'}`)); btn.disabled = false;
-  setTimeout(() => prog.classList.remove('active'), 1000);
+  if (!bytes || sorted.length === 0) return;
+  const btn = document.getElementById('extract-btn'), prog = document.getElementById('extract-progress');
+  beginProcessing('extract');
+  btn.disabled = true; setStatus('extract', msg('処理中…', 'Processing…')); prog.classList.add('active'); setProgressBar(prog, 50);
+  try {
+    const src = await PDFDocument.load(bytes);
+    const np = await PDFDocument.create();
+    (await np.copyPages(src, sorted.map(p => p - 1))).forEach(pg => np.addPage(pg));
+    const extName = sorted.length <= 4
+      ? `${fileName}_extracted_p${sorted.join('_p')}.pdf`
+      : `${fileName}_extracted_${sorted.length}pages.pdf`;
+    downloadBlob(await np.save(), extName);
+    setProgressBar(prog, 100);
+    setStatus('extract', msg(`✓ ${sorted.length}ページを抽出しました`, `✓ Extracted ${sorted.length} page${sorted.length === 1 ? '' : 's'}`)); btn.disabled = false;
+  } finally {
+    endProcessing('extract');
+    setTimeout(() => prog.classList.remove('active'), 1000);
+  }
 }
 function resetExtract() {
+  if (refuseResetWhileProcessing('extract')) return;
   extractBytes = null; extractPageCount = 0; extractSelected.clear();
   document.getElementById('extract-file-info').innerHTML = '';
   document.getElementById('extract-controls').classList.add('hidden');
@@ -462,6 +515,7 @@ let rotateBytes = null, rotatePageCount = 0, rotateAngles = [], rotateFileName =
 setupDrop('rotate-drop', 'rotate-file-input', loadRotateFile);
 
 async function loadRotateFile(file) {
+  ensureNotProcessing('rotate');
   rotateBytes = await file.arrayBuffer();
   rotateFileName = baseName(file.name);
   const pdf = await PDFDocument.load(rotateBytes);
@@ -508,23 +562,32 @@ function updateRotateBtn() {
   document.getElementById('rotate-btn').disabled = rotateAngles.every(a => a === 0);
 }
 async function executeRotate() {
-  const btn = document.getElementById('rotate-btn'), status = document.getElementById('rotate-status'), prog = document.getElementById('rotate-progress');
+  const bytes = rotateBytes, fileName = rotateFileName, angles = rotateAngles.slice();
+  if (!bytes || angles.every(a => a === 0)) return;
+  const btn = document.getElementById('rotate-btn'), prog = document.getElementById('rotate-progress');
+  beginProcessing('rotate');
   btn.disabled = true; setStatus('rotate', msg('処理中…', 'Processing…')); prog.classList.add('active'); setProgressBar(prog, 50);
-  const pdf = await PDFDocument.load(rotateBytes);
-  for (let i = 0; i < rotatePageCount; i++) {
-    if (rotateAngles[i] !== 0) {
-      const page = pdf.getPage(i);
-      const cur = page.getRotation().angle;
-      page.setRotation(degrees((cur + rotateAngles[i]) % 360));
+  try {
+    const pdf = await PDFDocument.load(bytes);
+    for (let i = 0; i < angles.length; i++) {
+      if (angles[i] !== 0) {
+        const page = pdf.getPage(i);
+        const cur = page.getRotation().angle;
+        // 元PDFの/Rotateは負の値もありうるため0〜270へ正規化する
+        page.setRotation(degrees(((cur + angles[i]) % 360 + 360) % 360));
+      }
     }
+    downloadBlob(await pdf.save(), `${fileName}_rotated.pdf`);
+    setProgressBar(prog, 100);
+    const changed = angles.filter(a => a !== 0).length;
+    setStatus('rotate', msg(`✓ ${changed}ページを回転しました`, `✓ Rotated ${changed} page${changed === 1 ? '' : 's'}`)); btn.disabled = false;
+  } finally {
+    endProcessing('rotate');
+    setTimeout(() => prog.classList.remove('active'), 1000);
   }
-  downloadBlob(await pdf.save(), `${rotateFileName}_rotated.pdf`);
-  setProgressBar(prog, 100);
-  const changed = rotateAngles.filter(a => a !== 0).length;
-  setStatus('rotate', msg(`✓ ${changed}ページを回転しました`, `✓ Rotated ${changed} page${changed === 1 ? '' : 's'}`)); btn.disabled = false;
-  setTimeout(() => prog.classList.remove('active'), 1000);
 }
 function resetRotate() {
+  if (refuseResetWhileProcessing('rotate')) return;
   rotateBytes = null; rotatePageCount = 0; rotateAngles = [];
   document.getElementById('rotate-file-info').innerHTML = '';
   document.getElementById('rotate-controls').classList.add('hidden');
@@ -538,6 +601,7 @@ let reorderDragIdx = null;
 setupDrop('reorder-drop', 'reorder-file-input', loadReorderFile);
 
 async function loadReorderFile(file) {
+  ensureNotProcessing('reorder');
   reorderBytes = await file.arrayBuffer();
   reorderFileName = baseName(file.name);
   const pdf = await PDFDocument.load(reorderBytes);
@@ -583,23 +647,27 @@ function moveReorderPage(pos, direction) {
 function reverseReorder() { reorderOrder.reverse(); renderReorderList(); }
 function resetReorderOrder() { reorderOrder = Array.from({ length: reorderPageCount }, (_, i) => i); renderReorderList(); }
 async function executeReorder() {
-  if (!reorderBytes) return;
+  const bytes = reorderBytes, order = reorderOrder.slice(), fileName = reorderFileName;
+  if (!bytes || order.length === 0) return;
   const btn = document.getElementById('reorder-btn'), prog = document.getElementById('reorder-progress');
+  beginProcessing('reorder');
   btn.disabled = true; setStatus('reorder', msg('処理中…', 'Processing…')); prog.classList.add('active'); setProgressBar(prog, 35);
   try {
-    const src = await PDFDocument.load(reorderBytes);
+    const src = await PDFDocument.load(bytes);
     const np = await PDFDocument.create();
-    (await np.copyPages(src, reorderOrder)).forEach(pg => np.addPage(pg));
+    (await np.copyPages(src, order)).forEach(pg => np.addPage(pg));
     setProgressBar(prog, 85);
-    downloadBlob(await np.save(), `${reorderFileName}_reordered.pdf`);
+    downloadBlob(await np.save(), `${fileName}_reordered.pdf`);
     setProgressBar(prog, 100);
     setStatus('reorder', msg('✓ 並べ替えたPDFをダウンロードしました', '✓ Downloaded the reordered PDF'));
   } finally {
+    endProcessing('reorder');
     btn.disabled = false;
     setTimeout(() => prog.classList.remove('active'), 1000);
   }
 }
 function resetReorder() {
+  if (refuseResetWhileProcessing('reorder')) return;
   reorderBytes = null; reorderPageCount = 0; reorderOrder = [];
   document.getElementById('reorder-file-info').innerHTML = '';
   document.getElementById('reorder-controls').classList.add('hidden');
@@ -608,7 +676,7 @@ function resetReorder() {
 }
 
 // ===== COMPRESS =====
-let compressFile = null, compressedBytes = null, compressGeneration = 0;
+let compressFile = null, compressedBytes = null, compressedName = '', compressGeneration = 0;
 
 // Slider listeners
 document.getElementById('compress-quality').addEventListener('input', function() {
@@ -618,14 +686,16 @@ document.getElementById('compress-dpi').addEventListener('input', function() {
   document.getElementById('compress-dpi-val').textContent = this.value + ' DPI';
 });
 document.getElementById('compress-target').addEventListener('change', function() {
-  if (compressFile) void calibrateCompress(compressFile);
+  if (compressFile && !processingScopes.has('compress')) void calibrateCompress(compressFile);
 });
 
 setupDrop('compress-drop', 'compress-file-input', loadCompressFile);
 
 async function loadCompressFile(file) {
+  ensureNotProcessing('compress');
   compressFile = file;
   compressedBytes = null;
+  compressedName = '';
   showFileInfo('compress-file-info', file.name, null, file.size, 'resetCompress');
   document.getElementById('compress-btn').disabled = true;
   document.getElementById('compress-result').style.display = 'none';
@@ -644,12 +714,12 @@ function abortIfStale(generation, file) {
 
 function canvasToJpeg(canvas, quality) {
   return new Promise((resolve, reject) => {
-    canvas.toBlob(async blob => {
+    canvas.toBlob(blob => {
       if (!blob) {
         reject(new Error(msg('ページ画像を作成できませんでした。', 'Could not create the page image.')));
         return;
       }
-      resolve(new Uint8Array(await blob.arrayBuffer()));
+      blob.arrayBuffer().then(buffer => resolve(new Uint8Array(buffer)), reject);
     }, 'image/jpeg', quality);
   });
 }
@@ -777,7 +847,8 @@ function copyCompressionMetadata(outDoc, metadata) {
 
 async function executeCompress() {
   if (!compressFile) return;
-  ++compressGeneration;
+  const file = compressFile;
+  const generation = ++compressGeneration;
   const btn = document.getElementById('compress-btn');
   const progWrap = document.getElementById('compress-progress-wrap');
   const progFill = document.getElementById('compress-progress-fill');
@@ -790,6 +861,7 @@ async function executeCompress() {
   const dpi = parseInt(document.getElementById('compress-dpi').value);
   const rmMeta = document.getElementById('compress-meta').checked;
 
+  beginProcessing('compress');
   btn.disabled = true;
   btn.innerHTML = `<span class="spinner"></span>${msg('圧縮中…', 'Compressing…')}`;
   progWrap.style.display = 'block';
@@ -806,7 +878,7 @@ async function executeCompress() {
   };
 
   try {
-    const originalArray = await compressFile.arrayBuffer();
+    const originalArray = await file.arrayBuffer();
     const originalSize = originalArray.byteLength;
 
     setProgress(5, msg('PDF解析中…', 'Parsing PDF…'));
@@ -819,6 +891,7 @@ async function executeCompress() {
     let runningTotal = 0;
 
     for (let i = 1; i <= numPages; i++) {
+      abortIfStale(generation, file);
       const pct = 8 + ((i - 1) / numPages) * 82;
       setProgress(pct, msg(`レンダリング・構築中… (${i} / ${numPages}ページ)`, `Rendering and building… (${i} / ${numPages} pages)`));
       const rendered = await renderPageToJpeg(pdfDoc, i, dpi, quality, runningTotal);
@@ -837,8 +910,10 @@ async function executeCompress() {
 
     setProgress(94, msg('PDF出力中…', 'Writing PDF…'));
     const outBytes = await outDoc.save({ useObjectStreams: true });
+    abortIfStale(generation, file);
     setProgress(100, msg('完了！', 'Complete!'));
     compressedBytes = outBytes;
+    compressedName = `${baseName(file.name)}_compressed.pdf`;
 
     const afterSize = outBytes.byteLength;
     const ratio = Math.round((1 - afterSize / originalSize) * 100);
@@ -871,6 +946,7 @@ async function executeCompress() {
     setStatus('compress', `${msg('エラー: ', 'Error: ')}${humanError(err)}`, true);
   } finally {
     if (loadingTask) await loadingTask.destroy().catch(() => {});
+    endProcessing('compress');
     btn.disabled = !compressFile;
     btn.innerHTML = msg('🗜️ 圧縮を実行', '🗜️ Compress PDF');
     setTimeout(() => { progWrap.style.display = 'none'; }, 800);
@@ -878,13 +954,14 @@ async function executeCompress() {
 }
 
 document.getElementById('compress-download-btn').addEventListener('click', () => {
-  if (!compressedBytes || !compressFile) return;
-  downloadBlob(compressedBytes, baseName(compressFile.name) + '_compressed.pdf');
+  if (!compressedBytes || !compressedName) return;
+  downloadBlob(compressedBytes, compressedName);
 });
 
 function resetCompress() {
+  if (refuseResetWhileProcessing('compress')) return;
   ++compressGeneration;
-  compressFile = null; compressedBytes = null;
+  compressFile = null; compressedBytes = null; compressedName = '';
   document.getElementById('compress-file-info').innerHTML = '';
   document.getElementById('calib-bar').style.display = 'none';
   document.getElementById('compress-btn').disabled = true;
@@ -914,6 +991,7 @@ const TRIM_PREVIEW_SCALE = 1.5; // render DPI factor (72 * scale)
 setupDrop('trim-drop', 'trim-file-input', loadTrimFile);
 
 async function loadTrimFile(file) {
+  ensureNotProcessing('trim');
   if (trimPdfTask) await trimPdfTask.destroy().catch(() => {});
   trimFile = file;
   trimFileName = baseName(file.name);
@@ -1266,22 +1344,27 @@ function setTrimMode(mode) {
 // ===== トリミング実行 =====
 async function executeTrim() {
   if (!trimBytes) return;
+  const bytes = trimBytes, pageCount = trimPageCount, fileName = trimFileName, mode = trimMode;
+  const allSel = trimAllSel ? { ...trimAllSel } : null;
+  const perSel = Object.fromEntries(Object.entries(trimPerSel).map(([page, ratios]) => [page, { ...ratios }]));
+  const pageSizes = trimPageSizes.slice();
   const btn = document.getElementById('trim-btn');
   const prog = document.getElementById('trim-progress');
+  beginProcessing('trim');
   btn.disabled = true;
   btn.innerHTML = `<span class="spinner"></span>${msg('処理中…', 'Processing…')}`;
   setStatus('trim', '');
   prog.classList.add('active');
 
   try {
-    const srcDoc = await PDFDocument.load(trimBytes);
+    const srcDoc = await PDFDocument.load(bytes);
     const outDoc = await PDFDocument.create();
 
-    for (let i = 0; i < trimPageCount; i++) {
-      setProgressBar(prog, ((i + 1) / trimPageCount) * 100);
+    for (let i = 0; i < pageCount; i++) {
+      setProgressBar(prog, ((i + 1) / pageCount) * 100);
       const [copiedPage] = await outDoc.copyPages(srcDoc, [i]);
 
-      let ratios = trimMode === 'all' ? trimAllSel : trimPerSel[i + 1];
+      let ratios = mode === 'all' ? allSel : perSel[i + 1];
       if (!ratios || ratios.x1 == null) { outDoc.addPage(copiedPage); await sleep(10); continue; }
 
       // MediaBoxの生サイズ（rotation未適用）
@@ -1294,7 +1377,7 @@ async function executeTrim() {
       // canvasは rotation 適用済みで表示されているので逆回転してMediaBox座標に変換
       // PDF座標系: 左下原点、Y軸上向き
       let cropX, cropY, cropW, cropH;
-      const displaySize = trimPageSizes[i];
+      const displaySize = pageSizes[i];
       const marginPt = Math.max(0, Number(ratios.marginPt) || 0);
       const rx1 = Math.max(0, ratios.x1 - marginPt / displaySize.width);
       const ry1 = Math.max(0, ratios.y1 - marginPt / displaySize.height);
@@ -1337,12 +1420,13 @@ async function executeTrim() {
     }
 
     const outBytes = await outDoc.save();
-    downloadBlob(outBytes, `${trimFileName}_trimmed.pdf`);
-    setStatus('trim', msg(`✓ トリミング完了（${trimPageCount}ページ）`, `✓ Trimmed ${trimPageCount} page${trimPageCount === 1 ? '' : 's'}`));
+    downloadBlob(outBytes, `${fileName}_trimmed.pdf`);
+    setStatus('trim', msg(`✓ トリミング完了（${pageCount}ページ）`, `✓ Trimmed ${pageCount} page${pageCount === 1 ? '' : 's'}`));
   } catch(e) {
     console.error(e);
     setStatus('trim', `${msg('エラー: ', 'Error: ')}${humanError(e)}`, true);
   } finally {
+    endProcessing('trim');
     btn.disabled = false;
     btn.innerHTML = msg('✂ トリミングしてダウンロード', '✂ Trim & Download');
     setTimeout(() => prog.classList.remove('active'), 800);
@@ -1350,6 +1434,7 @@ async function executeTrim() {
 }
 
 async function resetTrim() {
+  if (refuseResetWhileProcessing('trim')) return;
   if (trimPdfTask) await trimPdfTask.destroy().catch(() => {});
   trimFile = null; trimBytes = null; trimPdfDoc = null; trimPdfTask = null;
   trimPageCount = 0; trimPageSizes = [];
@@ -1712,12 +1797,12 @@ redactCanvasContainer.addEventListener('pointercancel', hideRedactDraft);
 
 function canvasToPng(canvas) {
   return new Promise((resolve, reject) => {
-    canvas.toBlob(async blob => {
+    canvas.toBlob(blob => {
       if (!blob) {
         reject(new Error(msg('ページ画像を作成できませんでした。', 'Could not create the page image.')));
         return;
       }
-      resolve(new Uint8Array(await blob.arrayBuffer()));
+      blob.arrayBuffer().then(buffer => resolve(new Uint8Array(buffer)), reject);
     }, 'image/png');
   });
 }
@@ -1956,7 +2041,7 @@ function restoreActionButton(scope) {
 }
 
 async function runAction(element, action, argsText) {
-  const handler = ACTIONS[action];
+  const handler = Object.hasOwn(ACTIONS, action) ? ACTIONS[action] : null;
   if (!handler) throw new Error(`Unknown action: ${action}`);
   const args = argsText ? JSON.parse(argsText) : [];
   element.setAttribute('aria-busy', 'true');

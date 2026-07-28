@@ -1,0 +1,30 @@
+name: PDF Toolkit checks
+
+on:
+  push:
+    paths:
+      - 'apps/**'
+      - 'tools/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/pdf-toolkit-checks.yml'
+  pull_request:
+    paths:
+      - 'apps/**'
+      - 'tools/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/pdf-toolkit-checks.yml'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run check:pdf-toolkit

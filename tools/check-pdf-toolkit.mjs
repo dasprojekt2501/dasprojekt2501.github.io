@@ -80,6 +80,23 @@ for (const relativePath of [
   }
 }
 
+// Vendored libraries must be byte-identical to the locked packages so tampering is caught.
+for (const [vendorPath, packagePath] of [
+  ['apps/vendor/pdfjs/pdf.mjs', 'node_modules/pdfjs-dist/build/pdf.mjs'],
+  ['apps/vendor/pdfjs/pdf.worker.mjs', 'node_modules/pdfjs-dist/build/pdf.worker.mjs'],
+  ['apps/vendor/pdf-lib/pdf-lib.esm.min.js', 'node_modules/pdf-lib/dist/pdf-lib.esm.min.js'],
+]) {
+  try {
+    const [vendorBytes, packageBytes] = await Promise.all([
+      readFile(resolve(root, vendorPath)),
+      readFile(resolve(root, packagePath)),
+    ]);
+    check(vendorBytes.equals(packageBytes), `${vendorPath} differs from ${packagePath}; run "pnpm run vendor:sync" and review the change.`);
+  } catch {
+    failures.push(`Could not compare ${vendorPath} with ${packagePath}; install dependencies first.`);
+  }
+}
+
 for (const introFile of ['apps/pdf-toolkit-intro.html', 'apps/pdf-toolkit-intro-en.html']) {
   const intro = await readFile(resolve(root, introFile), 'utf8');
   check(/Content-Security-Policy/.test(intro), `${introFile}: CSP meta tag is missing.`);
