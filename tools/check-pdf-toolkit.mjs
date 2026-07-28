@@ -97,15 +97,35 @@ for (const [vendorPath, packagePath] of [
   }
 }
 
-for (const introFile of ['apps/pdf-toolkit-intro.html', 'apps/pdf-toolkit-intro-en.html']) {
+for (const [introFile, standaloneName] of [
+  ['apps/pdf-toolkit-intro.html', 'pdf-toolkit-standalone.html'],
+  ['apps/pdf-toolkit-intro-en.html', 'pdf-toolkit-standalone-en.html'],
+]) {
   const intro = await readFile(resolve(root, introFile), 'utf8');
   check(/Content-Security-Policy/.test(intro), `${introFile}: CSP meta tag is missing.`);
   check(!/\son(?:click|input|change|load|error)\s*=/i.test(intro), `${introFile}: inline event handlers are not allowed.`);
   check(!/<script(?![^>]+\bsrc=)[^>]*>/i.test(intro), `${introFile}: inline scripts are not allowed.`);
-  check(!/download="pdf-toolkit/i.test(intro), `${introFile}: obsolete standalone HTML download is still advertised.`);
+  check(intro.includes(`href="${standaloneName}"`) && intro.includes(`download="${standaloneName}"`), `${introFile}: the standalone download link is missing.`);
   for (const match of intro.matchAll(/<a[^>]+target="_blank"[^>]*>/gi)) {
     check(/\brel="[^"]*noopener[^"]*"/i.test(match[0]), `${introFile}: target=_blank link is missing rel=noopener.`);
   }
+}
+
+// 単一ファイル版はビルドスクリプトの決定的な出力と一致していなければならない（手編集・生成漏れの検知）
+try {
+  const { buildStandalonePages } = await import('./build-pdf-toolkit-standalone.mjs');
+  const standalonePages = await buildStandalonePages();
+  for (const [name, expected] of Object.entries(standalonePages)) {
+    check(/Content-Security-Policy/.test(expected), `apps/${name}: generated page is missing its CSP meta tag.`);
+    try {
+      const actual = await readFile(resolve(root, 'apps', name), 'utf8');
+      check(actual === expected, `apps/${name} is stale; run "pnpm run build:standalone".`);
+    } catch {
+      failures.push(`apps/${name} is missing; run "pnpm run build:standalone".`);
+    }
+  }
+} catch (error) {
+  failures.push(`Standalone build failed: ${error.message}`);
 }
 
 if (failures.length) {

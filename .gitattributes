@@ -1,2 +1,5 @@
 # Keep third-party vendor files byte-for-byte consistent with their packages.
 apps/vendor/** -whitespace
+
+# Generated standalone builds: hide from diffs and language stats.
+apps/pdf-toolkit-standalone*.html linguist-generated=true -diff

@@ -4,6 +4,7 @@
   "packageManager": "pnpm@11.9.0",
   "scripts": {
     "vendor:sync": "node tools/sync-pdf-vendor.mjs",
+    "build:standalone": "node tools/build-pdf-toolkit-standalone.mjs",
     "check:pdf-toolkit": "node tools/check-pdf-toolkit.mjs"
   },
   "dependencies": {
