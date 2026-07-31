@@ -309,8 +309,18 @@
             </article>
 
             <article class="essay-item">
+                <h2 class="essay-title">
+                    <a href="essays/morceaux-de-conversations-avec-jean-luc-godard-fr.html" id="thirdEssayLink">Morceaux de conversations avec Jean-Luc Godard</a>
+                </h2>
+                <div class="essay-date" id="thirdEssayDate">July 31, 2026</div>
+                <p class="essay-excerpt" id="thirdEssayExcerpt">
+                    Des fragments de conversations où Jean-Luc Godard parle du cinéma, des images et de son projet pour le Centre Pompidou.
+                </p>
+            </article>
+
+            <article class="essay-item">
                 <h2 class="essay-title">Coming soon...</h2>
-                <p class="essay-excerpt" id="thirdEssayExcerpt">The next essay is in progress.</p>
+                <p class="essay-excerpt" id="fourthEssayExcerpt">The next essay is in progress.</p>
             </article>
         </main>
 
@@ -346,7 +356,11 @@
                 secondEssayHref: 'essays/seijiteki-roka.html',
                 secondEssayDate: '2026年7月18日',
                 secondEssayExcerpt: '衰退期にある日本の全国紙編集局で、地位への接近が老いを生む「政治的老化」の構造を描く民族誌。',
-                thirdEssayExcerpt: '次のエッセイを準備中です。'
+                thirdEssayTitle: 'ジャン＝リュック・ゴダールとの会話の断片',
+                thirdEssayHref: 'essays/morceaux-de-conversations-avec-jean-luc-godard.html',
+                thirdEssayDate: '2026年7月31日',
+                thirdEssayExcerpt: 'ジャン＝リュック・ゴダールが、映画、イメージ、そしてポンピドゥー・センターの企画について語った会話の断片。',
+                fourthEssayExcerpt: '次のエッセイを準備中です。'
             },
             en: {
                 subtitle: 'Essays and Notes',
@@ -359,7 +373,11 @@
                 secondEssayHref: 'essays/seijiteki-roka-en.html',
                 secondEssayDate: 'July 18, 2026',
                 secondEssayExcerpt: 'An ethnography of how proximity to rank produces bodily aging within the editorial bureau of a declining Japanese national daily.',
-                thirdEssayExcerpt: 'The next essay is in progress.'
+                thirdEssayTitle: 'Morceaux de conversations avec Jean-Luc Godard',
+                thirdEssayHref: 'essays/morceaux-de-conversations-avec-jean-luc-godard-fr.html',
+                thirdEssayDate: 'July 31, 2026',
+                thirdEssayExcerpt: 'Des fragments de conversations où Jean-Luc Godard parle du cinéma, des images et de son projet pour le Centre Pompidou.',
+                fourthEssayExcerpt: 'The next essay is in progress.'
             }
         };
 
@@ -380,7 +398,11 @@
             document.getElementById('secondEssayLink').href = content.secondEssayHref;
             document.getElementById('secondEssayDate').textContent = content.secondEssayDate;
             document.getElementById('secondEssayExcerpt').textContent = content.secondEssayExcerpt;
+            document.getElementById('thirdEssayLink').textContent = content.thirdEssayTitle;
+            document.getElementById('thirdEssayLink').href = content.thirdEssayHref;
+            document.getElementById('thirdEssayDate').textContent = content.thirdEssayDate;
             document.getElementById('thirdEssayExcerpt').textContent = content.thirdEssayExcerpt;
+            document.getElementById('fourthEssayExcerpt').textContent = content.fourthEssayExcerpt;
 
             document.getElementById('jaButton').classList.toggle('active', selectedLanguage === 'ja');
             document.getElementById('enButton').classList.toggle('active', selectedLanguage === 'en');
