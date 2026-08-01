@@ -46,18 +46,16 @@ const GENERATED_NOTICE = `<!--
 // 単一ファイル版はimport map・data: URLモジュール・モジュールワーカーを必要とする。
 // 非対応ブラウザでは静的HTMLだけが表示されて操作しても無反応になるため、
 // モジュール外の古典スクリプトで起動を監視し、失敗時に理由を伝えるバナーを出す。
+// 配布先で外部サイトの存在を示さないため、ここには一切リンクを置かない。
+// 生成物に残る唯一の外部URLは、ライセンス表記としてHTMLコメントに書かれた2件のみ。
 const BOOT_WARNING_TEXT = {
   ja: {
     heading: '⚠ このブラウザでは単一ファイル版を起動できません',
-    body: 'お使いのブラウザは、単一ファイル版が必要とする機能（インポートマップ、data: URLのモジュール読み込み）に対応していないか、読み込みに失敗しました。このファイルを Chrome または Edge で開き直すか、オンライン版をご利用ください。',
-    link: 'オンライン版を開く',
-    href: 'https://dasprojekt2501.github.io/apps/pdf-toolkit.html',
+    body: 'お使いのブラウザは、単一ファイル版が必要とする機能（インポートマップ、data: URLのモジュール読み込み）に対応していないか、読み込みに失敗しました。このファイルを Chrome または Edge で開き直してください。',
   },
   en: {
     heading: '⚠ This browser cannot run the single-file version',
-    body: 'Your browser either lacks the features this build needs (import maps and data: URL module loading) or failed to load them. Please reopen this file in Chrome or Edge, or use the online version.',
-    link: 'Open the online version',
-    href: 'https://dasprojekt2501.github.io/apps/pdf-toolkit-en.html',
+    body: 'Your browser either lacks the features this build needs (import maps and data: URL module loading) or failed to load them. Please reopen this file in Chrome or Edge.',
   },
 };
 
@@ -66,12 +64,10 @@ function buildBootWarningMarkup(language) {
   return `<div id="standalone-unsupported" role="alert" hidden>
 <strong>${text.heading}</strong>
 <p>${text.body}</p>
-<p><a href="${text.href}" rel="noopener noreferrer">${text.link}</a></p>
 </div>
 <style>
 #standalone-unsupported { padding: 18px 20px; background: #3a1d1d; color: #ffd5d5; border-bottom: 2px solid #ff6b6b; font: 14px/1.7 -apple-system, BlinkMacSystemFont, 'Hiragino Sans', Meiryo, sans-serif; }
 #standalone-unsupported p { margin: 6px 0 0; }
-#standalone-unsupported a { color: #ffd5a0; }
 </style>`;
 }
 
