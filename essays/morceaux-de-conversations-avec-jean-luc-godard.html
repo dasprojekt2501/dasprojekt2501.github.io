@@ -203,6 +203,63 @@
             font-weight: 650;
         }
 
+        .speaker-link {
+            color: #0066cc;
+            text-decoration: none;
+            text-underline-offset: 0.18em;
+        }
+
+        .speaker-link:hover,
+        .speaker-link:focus-visible {
+            text-decoration: underline;
+        }
+
+        body.dark-mode .speaker-link {
+            color: #4a9eff;
+        }
+
+        .dialogue-turn {
+            border-radius: 4px;
+            scroll-margin-top: 24px;
+        }
+
+        .dialogue-turn.parallel-target {
+            animation: parallel-highlight 2.6s ease-out;
+        }
+
+        body.dark-mode .dialogue-turn.parallel-target {
+            animation-name: parallel-highlight-dark;
+        }
+
+        @keyframes parallel-highlight {
+            0%, 38% {
+                background-color: #fff0a8;
+                box-shadow: 0 0 0 7px #fff0a8;
+            }
+            100% {
+                background-color: transparent;
+                box-shadow: 0 0 0 7px transparent;
+            }
+        }
+
+        @keyframes parallel-highlight-dark {
+            0%, 38% {
+                background-color: #584d18;
+                box-shadow: 0 0 0 7px #584d18;
+            }
+            100% {
+                background-color: transparent;
+                box-shadow: 0 0 0 7px transparent;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .dialogue-turn.parallel-target,
+            body.dark-mode .dialogue-turn.parallel-target {
+                animation-duration: 0.01ms;
+            }
+        }
+
         .back-link {
             margin-top: 60px;
             padding-top: 30px;
@@ -632,6 +689,39 @@
             document.body.classList.toggle("dark-mode");
             localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
         }
+
+        function initializeParallelLinks() {
+            const counterpartPage = "morceaux-de-conversations-avec-jean-luc-godard-fr.html";
+            const turns = Array.from(document.querySelectorAll(".essay-content p")).filter((paragraph) => {
+                return paragraph.firstElementChild?.classList.contains("speaker");
+            });
+
+            turns.forEach((turn, index) => {
+                const id = "dialogue-" + String(index + 1).padStart(3, "0");
+                const speaker = turn.firstElementChild;
+                const link = document.createElement("a");
+
+                turn.id = id;
+                turn.classList.add("dialogue-turn");
+                link.className = "speaker-link";
+                link.href = counterpartPage + "#" + id;
+                link.title = "フランス語の対応する発言へ";
+                link.setAttribute("aria-label", speaker.textContent + " フランス語の対応する発言へ");
+                speaker.before(link);
+                link.appendChild(speaker);
+            });
+
+            const target = document.getElementById(location.hash.slice(1));
+            if (target?.classList.contains("dialogue-turn")) {
+                requestAnimationFrame(() => {
+                    target.scrollIntoView({ block: "center" });
+                    target.classList.add("parallel-target");
+                    setTimeout(() => target.classList.remove("parallel-target"), 2700);
+                });
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", initializeParallelLinks);
     </script>
 </body>
 </html>
