@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+            <!-- Favicon -->
+        <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+        <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+        <!-- OGP -->
+        <meta property="og:title" content="Épigraphe - One line a day">
+        <meta property="og:description" content="Save the words you want to keep, and one arrives each day. An app that lives in its widgets and notifications.">
+        <meta property="og:url" content="https://dasprojekt2501.github.io/apps/epigraphe-en.html">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="PROJEKT2501">
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Épigraphe - One line a day">
+        <meta name="twitter:description" content="Save the words you want to keep, and one arrives each day. An app that lives in its widgets and notifications.">
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Épigraphe - PROJEKT2501</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; line-height: 1.6; color: #333; background-color: #faf8f5; transition: background-color 0.3s ease, color 0.3s ease; }
+        body.dark-mode { background-color: #1a1a1a; color: #e0e0e0; }
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        header { margin-bottom: 60px; border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; }
+        body.dark-mode header { border-bottom-color: #333; }
+        h1 { font-size: 2em; margin-bottom: 10px; font-weight: 600; }
+        .subtitle { color: #666; font-size: 1.1em; }
+        body.dark-mode .subtitle { color: #999; }
+        .header-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        nav a { color: #0066cc; text-decoration: none; margin-right: 20px; font-size: 0.95em; }
+        body.dark-mode nav a { color: #4a9eff; }
+        nav a:hover { text-decoration: underline; }
+        .language-toggle { display: flex; gap: 10px; margin-right: 15px; }
+        .lang-btn { background: none; border: none; font-size: 1.5em; cursor: pointer; padding: 4px; opacity: 0.5; transition: opacity 0.3s; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+        .lang-btn:hover { opacity: 0.8; }
+        .lang-btn.active { opacity: 1; }
+        .theme-toggle { position: relative; width: 48px; height: 24px; background-color: #e8e4dd; border: none; border-radius: 12px; cursor: pointer; transition: background-color 0.3s ease; padding: 0; }
+        body.dark-mode .theme-toggle { background-color: #2a2a2a; }
+        .theme-toggle:hover { opacity: 0.8; }
+        .toggle-circle { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background-color: #333; border-radius: 50%; transition: transform 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        body.dark-mode .toggle-circle { transform: translateX(24px); background-color: #faf8f5; }
+        .app-header { text-align: center; margin-bottom: 60px; }
+        .app-icon-large { width: 120px; height: 120px; background: #e8e4dd; border-radius: 24px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 4em; }
+        body.dark-mode .app-icon-large { background: #2a2a2a; }
+        .app-icon-large img { width: 100%; height: 100%; border-radius: 24px; object-fit: cover; }
+        .theme-icon-dark { display: none; }
+        body.dark-mode .theme-icon-light { display: none; }
+        body.dark-mode .theme-icon-dark { display: block; }
+        .app-name { font-size: 2em; font-weight: 600; margin-bottom: 10px; }
+        .app-tagline { color: #666; font-size: 1.2em; margin-bottom: 30px; }
+        body.dark-mode .app-tagline { color: #999; }
+        .download-button { display: inline-block; padding: 12px 30px; background: #0066cc; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; transition: opacity 0.3s; }
+        body.dark-mode .download-button { background: #4a9eff; }
+        .download-button:hover { opacity: 0.8; }
+        .download-button.coming-soon { background: #999; cursor: not-allowed; }
+        .screenshots { margin-bottom: 60px; }
+        .screenshots h2 { font-size: 1.4em; margin-bottom: 20px; font-weight: 600; }
+        .screenshot-container { display: flex; gap: 20px; overflow-x: auto; padding: 10px 0; }
+        .screenshot { width: 200px; height: 400px; background: #e8e4dd; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.85em; text-align: center; padding: 10px; }
+        body.dark-mode .screenshot { background: #2a2a2a; }
+        .screenshot img { width: 100%; height: 100%; border-radius: 12px; object-fit: cover; }
+        .description { margin-bottom: 60px; }
+        .description h2 { font-size: 1.4em; margin-bottom: 20px; font-weight: 600; }
+        .description p { color: #666; line-height: 1.8; margin-bottom: 1em; }
+        body.dark-mode .description p { color: #999; }
+        .features { margin-bottom: 60px; }
+        .features h2 { font-size: 1.4em; margin-bottom: 20px; font-weight: 600; }
+        .features ul { list-style: none; padding: 0; }
+        .features li { color: #666; line-height: 1.8; margin-bottom: 10px; padding-left: 20px; position: relative; }
+        body.dark-mode .features li { color: #999; }
+        .features li:before { content: "•"; position: absolute; left: 0; color: #0066cc; }
+        body.dark-mode .features li:before { color: #4a9eff; }
+        .page-links { text-align: center; margin-top: 40px; }
+        .page-links a { color: #0066cc; text-decoration: none; font-size: 0.95em; margin: 0 15px; }
+        body.dark-mode .page-links a { color: #4a9eff; }
+        .page-links a:hover { text-decoration: underline; }
+        .epigraph { max-width: 560px; margin: 0 auto 60px; text-align: center; }
+        .epigraph blockquote { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 1.05em; line-height: 1.7; color: #555; margin: 0; }
+        body.dark-mode .epigraph blockquote { color: #b0b0b0; }
+        .epigraph .translation { font-size: 0.9em; line-height: 1.7; color: #999; margin-top: 12px; }
+        .epigraph cite { display: block; font-style: normal; font-size: 0.85em; color: #999; margin-top: 16px; }
+        .credit { color: #999; font-size: 0.85em; line-height: 1.8; margin-top: 40px; text-align: center; }
+        .credit a { color: #999; }
+        footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid #e0e0e0; color: #999; font-size: 0.9em; text-align: center; }
+        body.dark-mode footer { border-top-color: #333; }
+
+        /* Bluesky share button */
+        .bluesky-share-btn { display: inline-flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; padding: 4px; text-decoration: none; transition: opacity 0.3s; line-height: 1; }
+        .bluesky-share-btn:hover { opacity: 0.7; }
+        .bluesky-share-btn svg { width: 1.5em; height: 1.5em; fill: #0066cc; }
+        body.dark-mode .bluesky-share-btn svg { fill: #4a9eff; }
+
+        @media (max-width: 600px) { .screenshot { width: 150px; height: 300px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Apps</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app.html">Apps</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn" onclick="location.href='epigraphe.html'" title="日本語">🇯🇵</button>
+                        <button class="lang-btn active" title="English">🇺🇸</button>
+                    </div>
+                    <a class="bluesky-share-btn" href="https://bsky.app/intent/compose?text=%C3%89pigraphe%20%E2%80%94%20Save%20the%20words%20you%20want%20to%20keep%2C%20and%20one%20arrives%20each%20day.%0Ahttps%3A%2F%2Fdasprojekt2501.github.io%2Fapps%2Fepigraphe-en.html" target="_blank" rel="noopener" title="Share on Bluesky" style="margin-right: 10px;">
+                        <svg viewBox="0 0 600 530" xmlns="http://www.w3.org/2000/svg">
+                            <path d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/>
+                        </svg>
+                    </a>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- App header -->
+        <div class="app-header">
+            <div class="app-icon-large">
+                <img class="theme-icon-light" src="epigraphe_icon_light.png" alt="Épigraphe Icon">
+                <img class="theme-icon-dark" src="epigraphe_icon_dark.png" alt="Épigraphe Icon">
+            </div>
+            <h2 class="app-name">Épigraphe</h2>
+            <p class="app-tagline">
+                One line a day.
+            </p>
+            <span class="download-button coming-soon">Coming Soon</span>
+        </div>
+
+
+        <!-- Epigraph -->
+        <div class="epigraph">
+            <blockquote lang="es">Ya no nos quedan más que citas. La lengua es un sistema de citas.</blockquote>
+            <p class="translation">(There is nothing but quotations left for us. Our language is a system of quotations.)</p>
+            <cite>— Jorge Luis Borges, &ldquo;Utopía de un hombre que está cansado,&rdquo; El libro de arena, translated by Andrew Hurley</cite>
+        </div>
+
+        <!-- Screenshots (placeholder) -->
+        <section class="screenshots">
+            <div class="screenshot-container">
+                <div class="screenshot">Today's card</div>
+                <div class="screenshot">Home Screen widget</div>
+                <div class="screenshot">Library</div>
+                <div class="screenshot">Notification</div>
+                <div class="screenshot">Settings</div>
+            </div>
+        </section>
+
+        <!-- App description -->
+        <section class="description">
+            <h2>About</h2>
+            <p>Save the words you want to keep, and one of them arrives each day.</p>
+            <p>An épigraphe is the short quotation set at the beginning of a book.</p>
+            <p>This app really lives in its widgets and its notifications. The screens are only the back room. A notification here is not an invitation to open the app. It is the thing itself, finished where you read it.</p>
+            <p>The day decides the card. On the same day, the widget, the notification and the app all show the same one. The order is not random. Cards are drawn so that the collection turns over as a whole, which keeps the same few lines from crowding out the rest. Something you had forgotten comes back once you have forgotten it.</p>
+        </section>
+
+        <!-- Features -->
+        <section class="features">
+            <h2>Features</h2>
+            <ul>
+                <li>Today's card — chosen by the date, the same for that day</li>
+                <li>Home Screen widgets (medium and large)</li>
+                <li>Lock Screen widgets</li>
+                <li>Per-widget scope: all cards, favorites only, or one deck</li>
+                <li>A daily notification, at an hour you choose, with optional drift</li>
+                <li>Import a text file in one go</li>
+                <li>Save from other apps with the share button</li>
+                <li>An attribution line like "— Name, Source" is filed automatically</li>
+                <li>Decks, favorites, search, and duplicate checking</li>
+                <li>Share as text or as an image, and save the image to Photos</li>
+                <li>My Reminders — your own lines, at a time you set</li>
+                <li>JSON export and restore (everything, one deck, or favorites)</li>
+                <li>Japanese and English</li>
+            </ul>
+        </section>
+
+        <section class="description">
+            <h2>How it was made</h2>
+            <p>It was built on one rule: an app for not opening. Every feature added pulls it further from one line a day, so when in doubt, nothing was added.</p>
+            <p>No advertising. No account.</p>
+            <p>This app does not connect to anything. There is not a single line of networking code in it. What you save is not sent to a server, and I cannot read it either.</p>
+            <p>You can export whenever you like: everything as JSON, or one deck, or only your favorites. Read it back and the favorites and dates return with it.</p>
+        </section>
+
+
+        <!-- Support and privacy -->
+        <div class="page-links">
+            <a href="epigraphe-support-en.html">Support</a>
+            <a href="epigraphe-privacy-en.html">Privacy Policy</a>
+        </div>
+
+        <p class="credit">
+            The quotations are set in JeanLuc, by kind permission of its makers.<br>
+            Typeface(s): Jean-Luc by Atelier Carvalho Bernau,
+            <a href="http://carvalho-bernau.com" target="_blank" rel="noopener">carvalho-bernau.com</a>
+        </p>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') { document.body.classList.add('dark-mode'); }
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+    </script>
+</body>
+</html>

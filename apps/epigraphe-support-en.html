@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Épigraphe</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; line-height: 1.6; color: #333; background-color: #faf8f5; transition: background-color 0.3s ease, color 0.3s ease; }
+        body.dark-mode { background-color: #1a1a1a; color: #e0e0e0; }
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        header { margin-bottom: 60px; border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; }
+        body.dark-mode header { border-bottom-color: #333; }
+        h1 { font-size: 2em; margin-bottom: 10px; font-weight: 600; }
+        .subtitle { color: #666; font-size: 1.1em; }
+        body.dark-mode .subtitle { color: #999; }
+        .header-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        nav a { color: #0066cc; text-decoration: none; margin-right: 20px; font-size: 0.95em; }
+        body.dark-mode nav a { color: #4a9eff; }
+        nav a:hover { text-decoration: underline; }
+        .language-toggle { display: flex; gap: 10px; margin-right: 15px; }
+        .lang-btn { background: none; border: none; font-size: 1.5em; cursor: pointer; padding: 4px; opacity: 0.5; transition: opacity 0.3s; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+        .lang-btn:hover { opacity: 0.8; }
+        .lang-btn.active { opacity: 1; }
+        .theme-toggle { position: relative; width: 48px; height: 24px; background-color: #e8e4dd; border: none; border-radius: 12px; cursor: pointer; transition: background-color 0.3s ease; padding: 0; }
+        body.dark-mode .theme-toggle { background-color: #2a2a2a; }
+        .theme-toggle:hover { opacity: 0.8; }
+        .toggle-circle { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background-color: #333; border-radius: 50%; transition: transform 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        body.dark-mode .toggle-circle { transform: translateX(24px); background-color: #faf8f5; }
+        .policy-content { margin-top: 40px; }
+        .policy-content h2 { font-size: 1.4em; margin-top: 40px; margin-bottom: 20px; font-weight: 600; }
+        .policy-content p { color: #666; line-height: 1.8; margin-bottom: 1em; }
+        body.dark-mode .policy-content p { color: #999; }
+        .policy-content ul { color: #666; line-height: 1.8; margin: 0 0 1em 1.2em; }
+        body.dark-mode .policy-content ul { color: #999; }
+        .policy-content li { margin-bottom: 6px; }
+        .policy-content code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 4px; }
+        body.dark-mode .policy-content code { background: rgba(255,255,255,0.08); }
+        .last-updated { color: #999; font-size: 0.9em; margin-bottom: 40px; }
+        .faq-item { margin-bottom: 30px; }
+        .faq-item h3 { font-size: 1.1em; font-weight: 600; margin-bottom: 8px; }
+        .faq-item p { color: #666; line-height: 1.8; }
+        body.dark-mode .faq-item p { color: #999; }
+        .contact-box { background: rgba(0,0,0,0.03); border-radius: 12px; padding: 24px; text-align: center; margin-top: 40px; }
+        body.dark-mode .contact-box { background: rgba(255,255,255,0.05); }
+        .contact-box a { color: #0066cc; text-decoration: none; }
+        body.dark-mode .contact-box a { color: #4a9eff; }
+        .contact-box a:hover { text-decoration: underline; }
+        .reveal-contact-btn { background: none; border: 1px solid #0066cc; border-radius: 8px; color: #0066cc; cursor: pointer; font: inherit; padding: 8px 14px; transition: opacity 0.2s ease; }
+        .reveal-contact-btn:hover { opacity: 0.75; }
+        body.dark-mode .reveal-contact-btn { border-color: #4a9eff; color: #4a9eff; }
+        .hidden-contact { display: none; }
+        .hidden-contact.visible { display: inline; }
+        footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid #e0e0e0; color: #999; font-size: 0.9em; text-align: center; }
+        body.dark-mode footer { border-top-color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Épigraphe</h1>
+            <p class="subtitle">Support</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html">Home</a>
+                    <a href="../app.html">Apps</a>
+                    <a href="epigraphe-en.html">Back to app</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn" onclick="location.href='epigraphe-support.html'" title="日本語">🇯🇵</button>
+                        <button class="lang-btn active" title="English">🇺🇸</button>
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="policy-content">
+            <p>Thank you for using Épigraphe. If something is unclear, the questions below may help.</p>
+
+            <h2>Frequently asked questions</h2>
+
+            <div class="faq-item">
+                <h3>🔒 Where are my saved words stored?</h3>
+                <p>Only on your device. The app does not connect to anything, so nothing is ever sent to a server.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>📱 How do I add a widget?</h3>
+                <p>Touch and hold the Home Screen, tap Edit, then Add Widget, and choose Épigraphe. The medium and large sizes are the ones that hold a long quotation. Touch and hold a placed widget and choose Edit Widget to set its scope: all cards, favorites only, or a single deck.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>📐 Quotations are cut short in the Lock Screen widget</h3>
+                <p>Lock Screen widgets are narrow, so long quotations are truncated there. Use the medium or large Home Screen widget to read them in full. Another approach is to keep a deck of short maxims and point the Lock Screen widget at that deck.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>🔔 Notifications are not arriving</h3>
+                <p>Check Settings → Notifications → Épigraphe on your device to confirm they are allowed. Then check that notifications are switched on in the app’s own settings, and that you have at least one card saved.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>🕐 What is drift?</h3>
+                <p>It shifts the delivery time by up to 90 minutes either side of the hour you chose, differently each day. The time for a given day is always computed the same way, so a notification is never delivered twice.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>🎲 How is today’s card chosen?</h3>
+                <p>By the date. On the same day, the widget, the notification and the app all show the same card. Cards are drawn so that the collection turns over as a whole, which keeps the same few lines from crowding out the rest.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>🔀 The order changed after I added a card</h3>
+                <p>That is expected. Adding or removing a card recomputes the whole order, so on rare occasions a card shown recently may come round again the next day.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>📄 What format should the text file be in?</h3>
+                <p>One quotation per line, with tabs between the quote, the name and the source, in that order. The name and source can be left off. In the app, go to Library → the ⋯ menu → About the import format, and export a sample file to edit — that is the surest way to get the tabs right.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>💾 Backing up and restoring</h3>
+                <p>From Library → the ⋯ menu → Export as JSON, you can export everything, only your favorites, or a single deck. Choose Save to Files in the share sheet to keep it. To restore, use Import from File in the same menu and pick that JSON. Deck names, favorites and dates all come back with it.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>🗂 Renaming a deck</h3>
+                <p>Library → the ⋯ menu → Rename Deck. Choose a deck and give it a new name; every card in it moves across.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>⏰ What are My Reminders?</h3>
+                <p>Separately from the quotations, you can have a short line of your own arrive at a set time. Add them from Settings, repeating daily or on chosen weekdays, up to ten in all.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>🌐 How do I change the language?</h3>
+                <p>The app follows your device language, switching between Japanese and English. There is no language setting inside the app.</p>
+            </div>
+
+            <div class="contact-box">
+                <h2 style="margin-top: 0;">Contact</h2>
+                <p>If none of the above helps, please get in touch.</p>
+                <p style="margin-top: 12px; font-size: 1.05em;">
+                    📧 <button class="reveal-contact-btn" type="button" onclick="revealEmail()">Show email address</button>
+                    <a class="hidden-contact" id="support-email" href="#"></a>
+                </p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') { document.body.classList.add('dark-mode'); }
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+        function revealEmail() {
+            const email = ['peripherie', 'icloud.com'].join('@');
+            const link = document.getElementById('support-email');
+            link.href = 'mailto:' + email;
+            link.textContent = email;
+            link.classList.add('visible');
+            document.querySelector('.reveal-contact-btn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
