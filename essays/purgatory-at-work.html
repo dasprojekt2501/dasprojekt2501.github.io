@@ -7,21 +7,21 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
 
-    <meta property="og:title" content="診断書煉獄――日本の伝統的大企業における長期化した就業上の配慮と職業的停滞の概念モデル">
-    <meta property="og:description" content="長期化した職場配慮が職業的主体性を制約し、そのコストを同僚へ外部化する過程を論じる概念的エッセイ。">
+    <meta property="og:title" content="日本の伝統的大企業における「診断書煉獄」">
+    <meta property="og:description" content="軽業務・高給・長期固定化という見えない罠をめぐる考察。">
     <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
     <meta property="og:url" content="https://dasprojekt2501.github.io/essays/purgatory-at-work.html">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="PROJEKT2501">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="診断書煉獄――日本の伝統的大企業における長期化した就業上の配慮と職業的停滞の概念モデル">
-    <meta name="twitter:description" content="長期化した職場配慮が職業的主体性を制約し、そのコストを同僚へ外部化する過程を論じる概念的エッセイ。">
+    <meta name="twitter:title" content="日本の伝統的大企業における「診断書煉獄」">
+    <meta name="twitter:description" content="軽業務・高給・長期固定化という見えない罠をめぐる考察。">
     <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>診断書煉獄――日本の伝統的大企業における長期化した就業上の配慮と職業的停滞の概念モデル</title>
+    <title>日本の伝統的大企業における「診断書煉獄」</title>
     <style>
         * {
             margin: 0;
@@ -360,68 +360,6 @@
             border-left-color: #999;
         }
 
-        .conceptual-model {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1fr;
-            gap: 10px;
-            align-items: stretch;
-            margin: 28px 0 10px;
-        }
-
-        .model-stage {
-            padding: 14px;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            background-color: #fff;
-            font-size: 0.88em;
-        }
-
-        body.dark-mode .model-stage {
-            border-color: #333;
-            background-color: #222;
-        }
-
-        .model-stage strong {
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        .model-arrow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 1.25em;
-        }
-
-        .arrow-vertical {
-            display: none;
-        }
-
-        .model-caption {
-            margin-bottom: 28px;
-            color: #777;
-            font-size: 0.88em;
-        }
-
-        body.dark-mode .model-caption {
-            color: #aaa;
-        }
-
-        @media (max-width: 760px) {
-            .conceptual-model {
-                grid-template-columns: 1fr;
-            }
-
-            .arrow-horizontal {
-                display: none;
-            }
-
-            .arrow-vertical {
-                display: inline;
-            }
-        }
-
         .section-divider {
             margin: 50px 0;
             border: 0;
@@ -497,109 +435,131 @@
 
         <article>
             <div class="essay-header">
-                <h1 class="essay-title">診断書煉獄――日本の伝統的大企業における長期化した就業上の配慮と職業的停滞の概念モデル</h1>
-                <div class="essay-kicker">一時的な橋が、復職者・同僚・企業を結ぶ恒久的構造になるとき</div>
-                <div class="essay-meta">2026年8月11日 改稿</div>
+                <h1 class="essay-title">日本の伝統的大企業における「診断書煉獄」</h1>
+                <div class="essay-kicker">軽業務・高給・長期固定化という見えない罠</div>
+                <div class="essay-meta">2026年7月17日</div>
             </div>
 
             <div class="essay-content">
                 <div class="info-box">
-                    <p><strong>議論の射程と位置づけ。</strong> 本稿は統合的な概念エッセイであり、現象の頻度を推計する実証研究でも、配慮を受けるすべての労働者についての主張でもない。精神疾患による休職後、日本の一部の大企業で生じうる配置に対し、名称・境界条件・因果モデルを提案する。ここで示す命題には、今後の直接的な実証が必要である。</p>
+                    <p>本稿は、日本の大企業で精神疾患から復職した人が、軽業務と高給のあいだで長く停滞し続ける状態について考察する。制度は善意で設計されていても、ときに人を回復から遠ざける見えない拘束へと変わる。</p>
                 </div>
 
-                <h2 id="section-1">1. この概念が名づけるもの——そして名づけないもの</h2>
-                <p>メンタルヘルス不調による休業は、日本の雇用社会に定着した課題である。厚生労働省の2023年労働安全衛生調査によれば、過去1年間にメンタルヘルス不調により連続1か月以上休業した労働者がいた事業所は10.4%だった（<a href="https://www.mhlw.go.jp/toukei/list/dl/r05-46-50_kekka-gaiyo01.pdf" target="_blank" rel="noopener noreferrer">厚生労働省, 2024</a>）。労働者に占める休業者の割合は、最小規模の事業所より最大規模の事業所で高い。ただし、これらの数字が示すのは復職制度の重要性であり、以下で論じる複合状態の発生頻度ではない。</p>
-                <p><strong>「診断書煉獄」（Medical Certificate Purgatory）</strong>とは、医学的・人事的に制限された業務、給与と企業内身分の相対的な維持、職業的進展の停滞、他者への非公式な業務移転が、相互に固定化し合う長期的な復職後配置を捉える理念型である。移行のために架けられた橋が、どこへも通じなくなる。<strong>橋は、いつのまにか住居になる。</strong></p>
-                <p>診断書が原因なのではない。診断書は、より広い制度配置が姿を現す行政上の入口にすぎない。診断書と就業上の配慮は、健康・雇用・法的権利を守る。薬物療法も、就労継続や再発予防に不可欠な場合がある。分析すべき問題は、配慮の開始後に組織が何を行うか——あるいは行わないか——である。また「煉獄」は、長期の軽減業務に就くすべての人を指さない。能力の拡張、有意味な恒久職務、情報を得たうえで見直し可能な選択のいずれにもつながらなくなった、<strong>停滞した配慮</strong>を指す。</p>
-                <hr class="section-divider">
-                <h2 id="section-2">2. 境界条件——どのような配慮が「煉獄」なのか</h2>
-                <p>この概念が有用であるためには、制度の失敗と正当な長期支援を区別できなければならない。典型的な事例は、次の条件を組み合わせて持つ。</p>
+                <h2 id="section-1">1. 現象の定義</h2>
+                <p>メンタルヘルス不調による休業は、もはや日本の職場の周縁的な出来事ではない。厚生労働省の労働安全衛生調査によれば、過去1年間にメンタルヘルス不調により連続1か月以上休業した労働者がいた事業所の割合は10.4%にのぼる（<a href="https://www.mhlw.go.jp/toukei/list/dl/r05-46-50_kekka-gaiyo01.pdf" target="_blank" rel="noopener noreferrer">厚生労働省, 2024</a>）。労働者に占める休業者の割合は事業所規模とともに上昇し、最小規模の事業所では0.3%、従業員1,000人以上の事業所では1.0%に達する。つまり本稿が記述する現象は、保護の制度的機構が最も発達した場所にこそ集中している。</p>
+                <p>日本の大企業において、うつ病等の精神疾患による休職から復帰した従業員が、以下の状態に長期間——数年、時には数十年——固定化されることがある。</p>
                 <ul>
-                <li>メンタルヘルス不調による休職から、医学的または人事的な就業制限の下で復職している。</li>
-                <li>軽減された業務が、当初想定された移行期間を大幅に超えて続いている。</li>
-                <li>従前の責任を回復する道筋も、有意味な恒久職務へ再設計する道筋も明示されていない。</li>
-                <li>給与と企業内身分が相対的に維持される一方、現在の職務責任との結びつきが部分的に失われている。ここでいう「給与維持」は記述であって、「高給を不当に得ている」という非難ではない。</li>
-                <li>本人の能力、職業的主体性、または有意味な選択肢の幅が広がっていない。</li>
-                <li>その職務から外された仕事が、成果量の削減、人員増、その他の組織的措置を伴わずに同僚へ移転されている。</li>
+                <li>就業制限付きの軽業務</li>
+                <li>休職前と変わらない高い給与</li>
+                <li>薬の継続服用と、それに伴う身体的変化</li>
+                <li>「復職成功」として処理され、実態が不可視化されること</li>
                 </ul>
-                <p>逆に、長期であることだけでは足りない。十分な情報のもとで自由に選ばれた恒久的配慮、障害に合わせて再設計された有意味な仕事、能力・自律性・満足度が維持または改善する配置、人員増や実際の業務削減によって負担を吸収する配置、計画どおり機能する段階的復職は、この概念から除外されるべきである。基準は、最大限の生産性でも、元の職務への復帰の強制でもない。実質的な選択、有意味な参加、定期的な再評価、そして公正なコスト配分である。</p>
+                <p>本稿ではこの状態を<strong>「診断書煉獄」</strong>と呼ぶ。天国でも地獄でもなく、宙吊りのまま長く留め置かれる状態という意味においてである。</p>
+                <p>ここでいう「診断書煉獄」とは、診断書を提出した者が過保護に扱われ、その保護の中から抜け出せなくなる一方で、診断書を出していない者が、そのしわ寄せを引き受けさせられる構造を指す。診断書を出せば煉獄に入り、出さなければ他者の煉獄を支える地獄が待っている。この二重構造こそが、日本の伝統的大企業における問題の核心である。</p>
                 <hr class="section-divider">
-                <h2 id="section-3">3. 概念モデル</h2>
-                <div class="conceptual-model" role="img" aria-label="制度的発生条件から配慮の導入と固定化メカニズムを経て、復職者と同僚への二重の帰結が生じ、それが組織へフィードバックするモデル。">
-                    <div class="model-stage"><strong>制度的発生条件</strong>メンバーシップ型雇用、曖昧な職務、身分連動型賃金、情報の秘匿、リスク回避</div>
-                    <div class="model-arrow" aria-hidden="true"><span class="arrow-horizontal">→</span><span class="arrow-vertical">↓</span></div>
-                    <div class="model-stage"><strong>導入</strong>休職、診断書、段階的復職、就業制限、給与・身分の維持</div>
-                    <div class="model-arrow" aria-hidden="true"><span class="arrow-horizontal">→</span><span class="arrow-vertical">↓</span></div>
-                    <div class="model-stage"><strong>固定化</strong>再評価の欠如、不明確な目標、責任分散、損失回避、自己効力感の低下</div>
-                    <div class="model-arrow" aria-hidden="true"><span class="arrow-horizontal">→</span><span class="arrow-vertical">↓</span></div>
-                    <div class="model-stage"><strong>二重の帰結</strong>復職者の職業的停滞／同僚への配慮コストの外部化</div>
-                    <div class="model-arrow" aria-hidden="true"><span class="arrow-horizontal">→</span><span class="arrow-vertical">↓</span></div>
-                    <div class="model-stage"><strong>フィードバック</strong>疲弊、スティグマ、回避的配置、新たな休職、さらなる業務再配分</div>
-                </div>
-                <p class="model-caption">図1　提案する制度循環。矢印は実証済みの因果効果ではなく、検証すべき仮説を示す。</p>
-                <h3 id="institutional-conditions">制度的発生条件</h3>
-                <p>日本のメンバーシップ型雇用は、この状態が生じうる有力な環境である。濱口桂一郎が述べるように、企業は限定された職務だけでなく、人をメンバーとして雇い、職務は比較的開かれたまま配置転換可能である（濱口 2009; <a href="https://www.jil.go.jp/english/jli/documents/2024/049-02.pdf" target="_blank" rel="noopener noreferrer">Hamaguchi, 2024</a>）。雇用保障と在籍維持の規範は、退出より再配置を促す。年功、社内資格、退職給付、保険、企業帰属のアイデンティティは、職務が縮小しても生活の安定を支える。これらは、それ自体が欠陥なのではない。企業が持続可能な仕事を設計するより、在籍だけを維持する方が容易になったとき、停滞の発生条件になる。</p>
-                <p>職務境界の曖昧さも重要である。責任範囲が明確でなければ、外された仕事はコストとして記録されないまま再配分できる。医療情報の守秘は当然に守られるべきだが、同僚には配分の差だけが見え、理由は見えない。主治医、産業保健、人事、直属上司へ権限が分散し、各者がリスクを避ける一方で、本人の職業的軌道を誰も引き受けないことがある。出勤が再開されれば、形式上の「復職成功」は制度の視界から消える。日本の復職後コホート研究は再休職や就労継続を明らかにしてきたが、長期的な職業発達は相対的に観察されていない（<a href="https://www.jstage.jst.go.jp/article/indhealth/51/2/51_2012-0063/_article" target="_blank" rel="noopener noreferrer">Endo et al., 2013</a>）。</p>
-                <h3 id="fixation-mechanisms">固定化メカニズム</h3>
-                <p>配置は、一度の決定ではなく、複数の作用が重なることで恒久化する。再評価は症状の悪化だけを問い、責任・自信・選択肢が広がったかを問わないことがある。再発は可視的だが、組織の不作為は見えにくいため、管理職には最もリスクの低い配置を維持する誘因がある。給与と身分の維持は変化の物質的コストを高めうる。蓄積された「サイドベット」と存続的コミットメントは、この選択を道徳的欠陥ではなく、理解可能な判断として説明する（Becker, 1960; Meyer &amp; Allen, 1991）。</p>
-                <p>本人の主体性を、一つの物語に還元してはならない。現状を評価する人もいれば、不満だが安全のために残る人、出たいが経済的に出られない人、病状のため選択肢を考えにくい人、通常業務を望むのに会社が戻さない人、配置を周縁化として経験する人もいる。うつ病が肯定的な未来を想像するプロスペクションを損なうことはありうるが、それを根拠に、観察者が本人を「自分の利益に気づいていない」と断定することはできない（<a href="https://bpspsychub.onlinelibrary.wiley.com/doi/abs/10.1111/bjc.12087" target="_blank" rel="noopener noreferrer">Roepke &amp; Seligman, 2016</a>）。選好は明確なことも、葛藤を含むことも、環境に適応して変化することも、言語化しにくいこともある。制度は、無能力も満足も決めつけず、その差異を語れる余地をつくらなければならない。</p>
+                <h2 id="section-2">2. なぜこの状態が生まれるか</h2>
+                <h3 id="corporate-logic">企業側の論理</h3>
+                <ul>
+                <li>日本の強固な解雇規制により、正社員を簡単に解雇できない。労働契約法第16条は、判例上確立された解雇権濫用法理を明文化し、客観的に合理的な理由を欠く解雇を無効とする。</li>
+                <li>より根本的には、雇用モデルそのものが効いている。労働研究者・濱口桂一郎の言う日本の<strong>メンバーシップ型雇用</strong>では、企業は職務ではなく人を雇う。職務内容は特定されず、会社の裁量で配置転換が可能であり、その代わりにメンバーには組織内の居場所が保証される（濱口 2009; <a href="https://www.jil.go.jp/english/jli/documents/2024/049-02.pdf" target="_blank" rel="noopener noreferrer">Hamaguchi, 2024</a>）。メンバーが職務を遂行できなくなったとき、このシステムの本来的な応答は退出ではなく<em>配置転換</em>である——ほとんど実体のない業務への配置転換も含めて。</li>
+                <li>軽業務での復職は、長期休職の継続よりコスト的に合理的である。</li>
+                <li>「復職支援」という形式を整えることで、法的・社会的責任を果たした形を取りやすい。</li>
+                <li>大企業ほど試し出勤や段階的復帰制度が整っており、その制度の充実が逆に長期固定化を促進する——先に見た事業所規模の勾配とも整合する。</li>
+                </ul>
+                <p>本来、復職時の軽業務や就業上の配慮は、回復に向かうための一時的な橋である。そして<em>一時的な</em>措置としてなら、それは実証的にも支持されている。修正勤務（modified work）プログラムに関する基礎的なレビューは、一時的または恒久的な障害を負った労働者の復職を修正勤務が促進すると結論している（<a href="https://link.springer.com/article/10.1023/A:1023015622987" target="_blank" rel="noopener noreferrer">Krause, Dasinger &amp; Neuhauser, 1998</a>）。厚生労働省の<a href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055195_00005.html" target="_blank" rel="noopener noreferrer">職場復帰支援の手引き</a>も、業務内容や業務量の変更、就業上の配慮、フォローアップを復職支援プラン——段階と終わりを持つもの——の中で扱っている。問題は、その橋が実務上いつのまにか住居になり、本人も会社もそこから出る時期を見失うことである。</p>
+                <h3 id="individual-logic">本人側の論理</h3>
+                <ul>
+                <li>高給・低負荷という客観的好条件が、離脱の動機を奪う。</li>
+                <li>「大企業に属している」というアイデンティティを手放しにくい——メンバーシップ型雇用が、まさに育成するように設計されたアイデンティティである。</li>
+                <li>新しい環境へ適応できないのではないかという恐怖が強い。うつ病を経験した者では、この恐怖はいっそう先鋭化する。</li>
+                <li>うつが未来を想像する力そのものを奪い、現状変更の選択肢を見えなくする。これは単なる比喩ではない。臨床研究の相当な蓄積は、<em>プロスペクション</em>——ありうる未来の心的シミュレーション——の障害がうつ病の副産物ではなく、その因果的中核に近いと論じている。抑うつ状態にある人は、肯定的な未来のシナリオを生成する数も鮮明さも低下し、この欠損が絶望感と不作為を養う（<a href="https://bpspsychub.onlinelibrary.wiley.com/doi/abs/10.1111/bjc.12087" target="_blank" rel="noopener noreferrer">Roepke &amp; Seligman, 2016</a>）。</li>
+                </ul>
+                <h3 id="systemic-logic">制度的論理</h3>
+                <ul>
+                <li>年功序列、退職金、社会的信用、健康保険が、福祉であると同時に離脱を困難にする鎖として機能する。組織研究はこのメカニズムを古くから記述してきた。蓄積された「サイドベット」（Becker, 1960）は、Meyer と Allen（1991）の言う<em>存続的コミットメント</em>——留まりたいからではなく、離れるコストが大きくなりすぎたから留まる状態——を生む。</li>
+                <li>「復職成功」としてカウントされた後の長期的状態は、企業・医療・行政のいずれにも追跡されない。疫学文献さえこの空白を反映している。うつ病による休職からの復職者を追跡した数少ない日本のコホート研究は、そうした長期追跡がいかに稀であるかを自ら明記している（<a href="https://www.jstage.jst.go.jp/article/indhealth/51/2/51_2012-0063/_article" target="_blank" rel="noopener noreferrer">Endo et al., 2013</a>）。</li>
+                </ul>
                 <hr class="section-divider">
-                <h2 id="section-4">4. 同じ組織的失敗から生じる二つの帰結</h2>
-                <h3 id="returnee-outcomes">復職者——職業的主体性が縮小しうる</h3>
-                <p>物質的な安定と、職業的・心理的な拘束は両立する。低責任の業務に長く配置されれば、技能を使う、判断を行う、自信を取り戻す、承認を得る、新しい能力を試す機会が狭まる可能性がある。ここで見るべき結果は、健常者中心の「最大限の生産性」への適合ではない。<strong>職業的主体性</strong>——残る、責任を戻す、社内で移る、職種を変える、離職するという選択を、実際に利用可能な選択肢の中から行う実質的能力——である。</p>
-                <p>この定式化は、一つの「本来の人生」を普遍的な目的地とみなすことも避ける。安定した軽減職務に残ることは、正当な選択になりうる。煉獄になるのは、有意味な仕事や発言権が失われ、本人の希望が見直されず、見かけの安全が能力の持続的縮小によって買われているときである。ロックイン研究は、ミスマッチ、知覚された雇用可能性の低さ、無力感、健康悪化が相互に強化しうることを示唆する（<a href="https://www.tandfonline.com/doi/full/10.1080/02678373.2016.1163804" target="_blank" rel="noopener noreferrer">Stengård et al., 2016</a>; <a href="https://www.sciencedirect.com/science/article/abs/pii/S000187911730057X" target="_blank" rel="noopener noreferrer">Stengård et al., 2017</a>）。本モデルでは、<strong>鍵は扉だけでなく、その扉に気づき、評価する能力にもかかりうる。</strong>「かかりうる」が重要である。これは検証すべきメカニズムであって、外部から決めつける当事者の内面ではない。</p>
-                <h3 id="coworker-outcomes">同僚——配慮コストが外部化されうる</h3>
-                <p>業務制限は、自動的に同僚の負担を生むわけではない。企業は成果量を減らし、業務工程を再設計し、応援要員を置き、担当をローテーションし、追加余力に予算を付けられる。しかし、そのいずれも行わなければ、外された仕事は消えずに移動する。本稿はこれを<strong>「配慮コストの外部化」（accommodation-cost externalization）</strong>と呼ぶ。企業が管理すべき人員、時間、職務再設計、報酬、休息、調整のコストを、同僚の労力・健康・キャリア機会へ移すことである。</p>
-                <p>職場配慮の公正研究は、非公式な業務再配分がなぜ反発を生みうるかを説明する。とりわけ同僚には配分の帰結が見える一方、正当な守秘のため医学的理由が見えない場合に問題が生じやすい（<a href="https://www.jstor.org/stable/259397" target="_blank" rel="noopener noreferrer">Colella, 2001</a>; <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1744-6570.2004.tb02482.x" target="_blank" rel="noopener noreferrer">Colella, Paetzold &amp; Belliveau, 2004</a>）。倫理的な対応は、本人の診断名を明かすことではない。仕事をどう補うのか、追加資源をどこから出すのか、負担をどう点検するのか、配慮を受ける本人の正当性を攻撃せずに同僚が懸念を伝えるにはどうすればよいか——その<strong>手続</strong>を信頼できるものにすることである。</p>
-                <p>業務が非公式に配分される職場では、「公認された制約が少ない」と見なされる労働者——独身者や子どものいない労働者、職場によっては非正規社員——が、既定の負担者になりうる。これは柔軟勤務へのスティグマやワーク・ファミリー・バックラッシュ研究から導かれる妥当な命題だが、日本企業について確立した事実ではない（<a href="https://journals.aom.org/doi/10.5465/annals.2016.0077" target="_blank" rel="noopener noreferrer">Perrigino, Dunford &amp; Wilson, 2018</a>; <a href="https://link.springer.com/article/10.1007/s11205-018-2036-7" target="_blank" rel="noopener noreferrer">Chung, 2020</a>）。直接的な検証が必要である。一方、努力—報酬不均衡と組織的不公正の知覚が健康を損ね、病気休業を予測しうることは、すでに広く示されている（Siegrist, 1996; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1447369/" target="_blank" rel="noopener noreferrer">Elovainio, Kivimäki &amp; Vahtera, 2002</a>; Head et al., 2007）。</p>
-                <p>ここからフィードバック・ループが生じうる。管理されない再配分は疲弊、プレゼンティーイズム、心理的撤退、新たな休職につながる。配慮を受ける人へのスティグマが強まり、管理職はさらに防御的になり、次の業務の穴もまた非公式に吸収される。この条件つきの意味で、<strong>煉獄は隣人に負担をかけるだけではない。隣人を新たな住人として勧誘する。</strong> 批判の対象は、配慮を受ける労働者ではない。仕事を設計できないコストを、二つの集団に私的に吸収させる組織である。</p>
+                <h2 id="section-3">3. 「煉獄」の本質</h2>
+                <h3 id="trap-outside">外から見える罠</h3>
+                <p>恵まれた環境が、逆に本来の人生から人を引き離し、会社に縛り付ける。これは富野由悠季原作の『機動戦士ガンダム』におけるシャア・アズナブルの言葉を借りれば、<strong>「重力に魂を縛られた人々」</strong>の状態である。高給、安定、帰属という重力が強いほど、そこから浮き上がるために必要なエネルギーも大きくなる。</p>
+                <p>実のところ、産業心理学はこの重力に名前を与えている。Gunnar Aronsson らに始まるスウェーデンの研究プログラムは、望まない職場に留まりながら、他所で同等の職を得られる見込みが低いと認識している労働者の状態を<strong>「ロックイン（locked-in）」</strong>と呼ぶ（Aronsson, Dallner &amp; Gustafsson, 2000; <a href="https://www.tandfonline.com/doi/full/10.1080/02678373.2016.1163804" target="_blank" rel="noopener noreferrer">Stengård et al., 2016</a>）。知見は重い。ロックイン状態にあること——あるいはロックインの<em>リスク</em>にあることさえ——は、その後の主観的健康の悪化と抑うつ症状の増加を予測し（<a href="https://www.tandfonline.com/doi/full/10.1080/02678373.2016.1163804" target="_blank" rel="noopener noreferrer">Stengård et al., 2016</a>）、ロックインの立場は長期病欠の高さとも関連する（Fahlén et al., 2009）。</p>
+                <p>診断書煉獄は、このロックインの特殊な——そしてとりわけ陰湿な——変種である。スウェーデンの文献が想定するのは、概ね、自分は他所にいたいと<em>知っている</em>労働者だ。煉獄では、条件は客観的に有利であり、病そのものが「離れたい」という選好を形成する能力を侵食する。縛られているのは身体だけではない。縛めに気づくはずの能力そのものである。</p>
+                <h3 id="trap-inside">内から見えない罠</h3>
+                <p>より残酷なのは、本人が縛られていることを自覚しにくい点である。うつが奪うのは気力だけではない。未来を想像する力そのものである（<a href="https://bpspsychub.onlinelibrary.wiley.com/doi/abs/10.1111/bjc.12087" target="_blank" rel="noopener noreferrer">Roepke &amp; Seligman, 2016</a>）。「宇宙に出られない」のではなく、<strong>「宇宙があることを想像できなくなっている」</strong>状態に近い。</p>
                 <hr class="section-divider">
-                <h2 id="section-5">5. 既存概念との関係</h2>
-                <h3 id="sustainable-rtw">復職は回復ではない</h3>
-                <p>修正勤務は、疾病後の復職を促進しうる（<a href="https://link.springer.com/article/10.1023/A:1023015622987" target="_blank" rel="noopener noreferrer">Krause, Dasinger &amp; Neuhauser, 1998</a>）。厚生労働省の<a href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055195_00005.html" target="_blank" rel="noopener noreferrer">職場復帰支援の手引き</a>も、業務量、職務内容、就業上の配慮、フォローアップをプランの構成要素として適切に扱っている。<em>持続可能な復職</em>の研究も、職業生活が時間の中で維持できるかを問う（<a href="https://link.springer.com/article/10.1007/s10926-019-09832-7" target="_blank" rel="noopener noreferrer">Etuknwa, Daniels &amp; Eib, 2019</a>）。診断書煉獄は、さらに別の問いを加える。出勤が続いていても、能力、発言権、責任、有意味な選択肢は回復しているか、あるいは意図的に再設計されているか。<strong>復職は回復ではない。</strong></p>
-                <h3 id="locked-in">ロックイン</h3>
-                <p>ロックイン研究は一般に、本人の望む職業的位置と現実の位置との明確な不一致に、知覚された雇用可能性の低さが組み合わさる状態を前提とする。診断書煉獄はこれと重なるが、長引く疾病と制度依存の下で、本人の選好自体が不確かになり、環境に適応し、または言葉にしにくくなる事例へ注意を向ける。さらに、医学的に管理された就業制限と、そこから生じる仕事の第三者への配分という、ロックイン概念の中心ではない二要素を加える。</p>
-                <h3 id="banishment-room">追い出し部屋</h3>
-                <p>日本の「追い出し部屋」は、望まれない社員に単純または無意味な仕事を割り当て、自主退職を促す（<a href="https://www.nytimes.com/2013/08/17/business/global/layoffs-illegal-japan-workers-are-sent-to-the-boredom-room.html" target="_blank" rel="noopener noreferrer">Tabuchi, 2013</a>）。類似しているのは形式であって、道徳性や原因ではない。<strong>追い出し部屋が無為を追放の武器として使うのに対し、煉獄は無為を在籍維持のために投与する。</strong> 前者は意図的な懲罰である。後者は、方向を失った保護から生じうる。どちらも、有意味な仕事を設計しないまま、組織成員としての身分を維持または解消する危険を示す。</p>
+                <h2 id="section-4">4. 長期的コスト</h2>
+                <h3 id="professional-cost">職業的コスト</h3>
+                <p>軽業務を数年、数十年と続けることで、職業人としてのスキルは停止し、劣化する。退職時には外部で通用する能力が著しく損なわれている可能性がある。誰がロックインに陥るかを調べた研究も同じ方向を指す。能力と業務のミスマッチ——放置された<em>就業能力の低下</em>を含む——は、行き詰まる確率を高める（<a href="https://sjwop.com/articles/10.16993/sjwop.56" target="_blank" rel="noopener noreferrer">Stengård et al., 2019</a>）。ただし、10年以上軽業務に置かれた労働者のスキルの軌跡を測定したコホート研究は、いまだ存在しない。そのデータの不在自体が、本稿の記述する問題の一部である。</p>
+                <h3 id="medical-cost">医学的コスト</h3>
+                <p>薬の長期服用は、それ自体の蓄積的な負荷を持つ。抗うつ薬の長期使用に関する自然主義的研究および患者視点の研究は、体重増加、性機能障害、情動鈍麻、日中の鎮静、断薬の困難が相当な頻度で生じることを記録している（Bet et al., 2013; <a href="https://www.tandfonline.com/doi/full/10.2147/PPA.S110632" target="_blank" rel="noopener noreferrer">Cartwright et al., 2016</a>）。私が直接観察してきた事例では、その負荷は目にも見える——皮膚の乾燥や黒ずみ、早すぎる老いの相貌。ただしこれは臨床的な主張ではなく、現場からの観察として記しておく。数十年単位では無視できない帰結であり、そして年に一度の「復職成功」のチェックボックスには決して記録されない帰結である。</p>
+                <h3 id="psychological-cost">心理的コスト</h3>
+                <p>「何もできない自分」という自己認識が固定化され、自己肯定感はさらに低下する。ここでもロックイン文献が示唆的である。無力感とロックイン状態は、時間の中で相互に強化し合うように見える。無力感の強い者ほど行き詰まりやすく、行き詰まりが無力感を固定する（<a href="https://www.sciencedirect.com/science/article/abs/pii/S000187911730057X" target="_blank" rel="noopener noreferrer">Stengård et al., 2017</a>）——臨床心理学における学習性無力感の伝統の、職場における反響である。本来の回復に必要な適度な挑戦と達成感が、永続的に奪われてしまう。</p>
+                <h3 id="existential-cost">実存的コスト</h3>
+                <p>最も深刻なのは、会社への帰属とアイデンティティが同一化したまま年月が過ぎ、退職後に「自分とは何か」を失うことである。これはメンバーシップ型雇用の暗部でもある。企業がスキルの束ではなく人格の全体を雇うとき、停滞するのもまた人格の全体なのだ。回復しないまま老後を迎えることは、静かで見えにくい悲劇である。</p>
                 <hr class="section-divider">
-                <h2 id="section-6">6. 最も強い反論</h2>
+                <h2 id="section-5">5. 周囲への影響</h2>
+                <p>「診断書煉獄」は当事者だけの問題ではない。診断書を出した人は、過保護に扱われることで会社の中に固定化される。一方で、その周囲にいる人間は、制度上は健康で通常勤務が可能な人間として扱われるため、軽業務者から移された業務を引き受けることになる。</p>
+                <p>その負担は、多くの場合、独身・子なし従業員や非正規従業員によって吸収される。</p>
+                <ul>
+                <li>より低い給与で、より重い負荷を担う。</li>
+                <li>制度的保護が薄く、声を上げにくい。</li>
+                <li>構造的不公正への怒りを抱えながら、ゆっくりと消耗していく。</li>
+                </ul>
+                <p>組織的公正の研究は、まさにこの摩擦を予測している。Colella の配慮公平性モデルによれば、同僚は、誰がどの業務をどの給与で担っているかという<em>結果の比較</em>によって、他者への配慮の公平さを判断する。そしてその判断は、配慮が目立ち、自分の業務量に触れるとき、敵対的なものへと転じる（<a href="https://www.jstor.org/stable/259397" target="_blank" rel="noopener noreferrer">Colella, 2001</a>）。問題が最も先鋭化するのは、<em>不可視の</em>疾患においてである。医療情報は秘匿されるため、同僚の目に映るのは軽減された業務と維持された給与だけであり、その理由は見えない。この情報の真空が、公平性についての否定的な推論を組織的に生み出す（<a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1744-6570.2004.tb02482.x" target="_blank" rel="noopener noreferrer">Colella, Paetzold &amp; Belliveau, 2004</a>）。診断書は患者のプライバシーを守ると同時に、同じ一筆で、その周囲に不満を製造するのである。</p>
+                <p>この摩擦は、医療上の配慮に固有のものではない。ワーク・ファミリー研究は、類似のパターンを<strong>ワーク・ファミリー・バックラッシュ</strong>の名のもとに地図化してきた。ワーク・ライフ・バランス施策は、いかに善意のものであっても、受益者の周囲に否定的な態度・感情・行動を生み、それは知覚された不衡平・スティグマ・スピルオーバーというメカニズムを通じて作動する（<a href="https://journals.aom.org/doi/10.5465/annals.2016.0077" target="_blank" rel="noopener noreferrer">Perrigino, Dunford &amp; Wilson, 2018</a>）。しわ寄せの認知そのものも定量化されている。英国の全国調査では、労働者の35%が「柔軟な働き方をする人は他人の仕事を増やす」という文言に同意した（<a href="https://link.springer.com/article/10.1007/s11205-018-2036-7" target="_blank" rel="noopener noreferrer">Chung, 2020</a>）。そして損害は直接の当事者を越えて放射する。大学の科学者・技術者を対象とした研究では、柔軟な働き方へのスティグマが漂う環境で働いていること自体が、職務満足の低下と定着意向の弱まりを予測した——<em>性別や親であるか否かにかかわらず</em>。スティグマは、いかなる配慮も使っていない子なしの同僚にとってさえ、職場を劣化させるのである（<a href="https://journals.sagepub.com/doi/abs/10.1177/0730888413515497" target="_blank" rel="noopener noreferrer">Cech &amp; Blair-Loy, 2014</a>）。近年の実験的証拠は、本稿にとって重要なひねりを加える。柔軟な働き方が全員のための道具ではなく特定の集団への譲歩として枠づけられるとき、それを使うことへのペナルティは父親と子なしの労働者に最も重くのしかかる（<a href="https://onlinelibrary.wiley.com/doi/full/10.1111/gwao.70115" target="_blank" rel="noopener noreferrer">Wang &amp; Chung, 2026</a>）。</p>
+                <p>同僚たちの側の帳簿にも、文献上の名前がある。<strong>プレゼンティーイズム</strong>——不調を抱えたまま働くこと——である。日本の企業データでは、健康関連総コストのうちプレゼンティーイズムが約64%を占め、アブセンティーイズム（病欠）の11%を大きく上回る（Nagata et al., 2018）。近年の全国推計は、メンタルヘルス関連のプレゼンティーイズムによる損失を、対応するアブセンティーイズム損失の25倍超と見積もっている（<a href="https://journals.lww.com/joem/fulltext/2025/09000/the_impact_of_productivity_loss_from_presenteeism.3.aspx" target="_blank" rel="noopener noreferrer">Hara et al., 2025</a>）。軽業務者の減らされた業務量は消えるわけではない。それは、自らの状態が悪化してもなお働き続ける同僚たち——いかなる復職統計にも決して現れない、まさにその集団——へと移動するのである。</p>
+                <p>しかも、しわ寄せを受ける側が抱える構造的不公正への怒りは、単なる士気の問題では済まない。知覚された組織的不公正は、それ自体が確立された健康リスクである。フィンランドの病院コホートでは、公正感の低い従業員は、主観的健康不良と軽度精神障害のオッズが1.7〜2.4倍にのぼり、病欠も顕著に多かった（<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1447369/" target="_blank" rel="noopener noreferrer">Elovainio, Kivimäki &amp; Vahtera, 2002</a>）。この知見は英国の Whitehall II コホートで前向きに拡張されている（<a href="https://pubmed.ncbi.nlm.nih.gov/15483310/" target="_blank" rel="noopener noreferrer">Kivimäki et al., 2004</a>）。そして、しわ寄せを受ける者の状況——報酬は増えぬまま努力だけが増える——は、Siegrist の努力‐報酬不均衡（ERI）モデルの教科書的な布置そのものであり（Siegrist, 1996）、Whitehall II では、努力‐報酬不均衡と関係的不公正のそれぞれが、その後の病欠を予測した（Head et al., 2007）。ここで円環が閉じる。ひとりの診断書保持者を過剰に保護する構造は、その傍らにいる人々に対して、産業疫学が次の抑うつへの経路として特定した心理社会的条件を、まさにそのまま課すのである。煉獄は隣人に負担を強いるだけではない。隣人を、次の住人として徴募するのだ。</p>
+                <p>企業側も、この問題を完全に知らないわけではない。<a href="https://www.jil.go.jp/institute/research/2013/documents/0112.pdf" target="_blank" rel="noopener noreferrer">JILPT の企業調査</a>では、治療と仕事の両立支援における課題として「休職者の復帰後の仕事の与え方、配置」が高い割合で挙げられている。つまり、復職後に何を任せ、どこまで戻し、誰が不足分を引き受けるのかは、現場だけでなく企業制度上の難問でもある。</p>
+                <p>重要なのは、これは個人間の対立ではなく、<strong>制度設計の失敗</strong>だということである。「保護される側」と「割を食う側」を争わせるのではなく、その歪みを生み出している構造そのものを問題として捉える必要がある。</p>
+                <hr class="section-divider">
+                <h2 id="section-6">6. 既存研究との接点</h2>
+                <p>この現象を「軽業務・高給・長期固定化」という一体の構造として扱った研究は、少なくとも現時点では見当たらない。ただし、隣接する研究領域は存在する。復職支援、再休職、就業上の配慮、プレゼンティーイズム、職場配慮の公正感は、それぞれ個別には研究されている。それらを地図に描くことで、空白の所在は正確に見えてくる。</p>
+                <p><strong>「復職」は「回復」を意味しない。</strong> 日本のコホートデータはこれを明確に示す。大手通信企業でうつ病による初回休職から復職した540人の従業員のうち、8.5年の追跡期間中にほぼ半数が再休職を経験した——5年以内で47.1%、再発は復職後2〜3年に集中する（<a href="https://www.jstage.jst.go.jp/article/indhealth/51/2/51_2012-0063/_article" target="_blank" rel="noopener noreferrer">Endo et al., 2013</a>）。同じコホートで、約2年以内に37%が再休職し、組織レベルの仕事の量的負担が独立したリスク因子だった（<a href="https://link.springer.com/article/10.1007/s00420-014-0939-4" target="_blank" rel="noopener noreferrer">Endo et al., 2015</a>）。しかも再休職が起きた場合、2回目の休職は1回目より<em>長く</em>なる傾向がある（<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6363587/" target="_blank" rel="noopener noreferrer">Endo et al., 2019</a>）。復職後の再発は、その予防を目的とした無作為化比較試験が実施されるほどにありふれている（Arends et al., 2014）。「復職成功」という制度的カテゴリーは、臨床的に脆弱な集団を覆い隠しているのである。</p>
+                <p><strong>ロックイン文献。</strong> 第3節で述べたとおり、スカンジナビアの研究は、望まない職場に低い被雇用可能性の認知とともに留まることが、時間とともに健康を損なうことを確立した（<a href="https://www.tandfonline.com/doi/full/10.1080/02678373.2016.1163804" target="_blank" rel="noopener noreferrer">Stengård et al., 2016</a>）。だがこの文献は、金箔張りの変種——高給と正式な保護のもとでの行き詰まり——を検討していないし、ロックインの定義が前提とする選好の形成能力そのものを病が侵食するケースも扱っていない。</p>
+                <p><strong>配慮の公平性と同僚負担。</strong> Colella らは、同僚が配慮をどう公平性の観点から判断するかを理論化してきた（<a href="https://www.jstor.org/stable/259397" target="_blank" rel="noopener noreferrer">Colella, 2001</a>; <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1744-6570.2004.tb02482.x" target="_blank" rel="noopener noreferrer">Colella et al., 2004</a>）。だがこの研究群の中心は配慮という<em>イベント</em>であり、数十年にわたって持続し、職場の分業をその周りに再編成してしまう配慮ではない。</p>
+                <p><strong>ワーク・ファミリー・バックラッシュと柔軟な働き方へのスティグマ。</strong> <em>家族向け</em>配慮のダークサイドは、ある程度まで地図化されている（<a href="https://journals.aom.org/doi/10.5465/annals.2016.0077" target="_blank" rel="noopener noreferrer">Perrigino et al., 2018</a>; <a href="https://link.springer.com/article/10.1007/s11205-018-2036-7" target="_blank" rel="noopener noreferrer">Chung, 2020</a>; <a href="https://journals.sagepub.com/doi/abs/10.1177/0730888413515497" target="_blank" rel="noopener noreferrer">Cech &amp; Blair-Loy, 2014</a>）。だがその文献が扱うのは、自発的で、概ね可視的で、原理的には有期の取り決めである。診断書による配慮は非自発的で、秘匿され、無期限だ。この違いは、柔軟な働き方の文献が推奨する公正回復の手段——開示や、全員向けの普遍的なフレーミング——をまさに無効化してしまう（<a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1744-6570.2004.tb02482.x" target="_blank" rel="noopener noreferrer">Colella et al., 2004</a>; <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/gwao.70115" target="_blank" rel="noopener noreferrer">Wang &amp; Chung, 2026</a>）。示唆的なことに、ワーク・ライフ・バランス施策の効果に関する現在の旗艦的レビューは、同僚への影響を<em>今後の</em>研究課題として名指している（<a href="https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-110622-050544" target="_blank" rel="noopener noreferrer"><em>Annual Review of Organizational Psychology and Organizational Behavior</em>, 2025</a>）。施策そのものが十分に研究されている場所でさえ、隣人の側の帳簿は研究されていないのである。</p>
+                <p><strong>プレゼンティーイズム。</strong> コスト文献（Nagata et al., 2018; <a href="https://journals.lww.com/joem/fulltext/2025/09000/the_impact_of_productivity_loss_from_presenteeism.3.aspx" target="_blank" rel="noopener noreferrer">Hara et al., 2025</a>）は、不調のまま働く者の損失を定量化しているが、その損失を構造的な双子——移転された業務量が、隣の席のプレゼンティーイズムを生み出すという、軽業務者の保護された過少就業——には接続していない。</p>
+                <p><strong>日本の復職実践。</strong> 日本はこの領域で独自のインフラを発達させてきた。とりわけ復職前リハビリテーションとしての「リワークプログラム」である（Akiyama et al., 2010）。多施設コホートのデータは、参加者が通常治療のみの群より有意に良好な就労継続を示すことを示唆している（<a href="https://www.frontiersin.org/journals/psychiatry/articles/10.3389/fpsyt.2020.616223/full" target="_blank" rel="noopener noreferrer">Ohki, Igarashi &amp; Yamauchi, 2021</a>）。だが、そこで測定されている転帰は<em>出勤</em>の継続——まさに煉獄が「成功」として数えられてしまう、その指標である。</p>
+                <p><strong>懲罰的な従兄弟。</strong> 制度化された無為の懲罰的な形態には、ジャーナリズムがすでに名前を与えている。余剰人員に無意味な仕事を与え、自主退職に追い込む<strong>追い出し部屋</strong>である（<a href="https://www.nytimes.com/2013/08/17/business/global/layoffs-illegal-japan-workers-are-sent-to-the-boredom-room.html" target="_blank" rel="noopener noreferrer">Tabuchi, 2013</a>）。その系譜は1970年代の窓際族に遡る。どちらの現象も同じ根——解雇規制とメンバーシップ型の配置転換——から生えているが、追い出し部屋が無為を<em>追放</em>の武器として使うのに対し、煉獄は無為を<em>維持</em>のために投与する。懲罰的な形態には名前と公衆がある。保護的な形態にはどちらもない。</p>
+                <p>ここで重要なのは、「軽業務そのものが悪い」ということではない。軽業務や短時間勤務は、復職支援として有効な場合がある（<a href="https://link.springer.com/article/10.1023/A:1023015622987" target="_blank" rel="noopener noreferrer">Krause et al., 1998</a>）。もっとも、復職時の就業上の配慮そのものについても、わが国の復職ガイダンス策定のために行われたシステマティックレビューは、とりわけメンタルヘルス疾患についてエビデンスの不足を指摘している（<a href="https://www.jstage.jst.go.jp/article/sangyoeisei/60/3/60_17-029-A/_html/-char/en" target="_blank" rel="noopener noreferrer">野川・小島原, 2018</a>）。問題は、それが長期化し、固定化し、本人の職業的回復や周囲の公正感を損なう状態について、十分に検証されていないことである。既存研究は、復職の成否、再休職、就労継続、職場配慮、プレゼンティーイズムをそれぞれ扱ってきた。しかし、軽業務・高賃金・企業内身分・職業的停滞・離脱不能性が結合した長期状態を、ひとつの構造として捉える視点はまだ十分ではない。本稿が「診断書煉獄」と呼ぶのは、この接合部に生じる、制度的には成功でありながら実存的には停滞であるような状態である。</p>
+                <h3 id="research-gap">空白地帯が生まれる理由</h3>
+                <ul>
+                <li>「復職成功」としてカウントされるため、問題として認識されない。復職までの日数、出勤の継続、正式な休職の再発といった標準的な転帰指標は、煉獄に留め置かれた労働者によってすべて満たされてしまう。</li>
+                <li>企業は実態を明らかにする研究に協力しにくい。</li>
+                <li>本人も企業も「うまくいっている」と見なすため、研究対象になりにくい。</li>
+                <li>復職後の長期追跡は、最良のコホート研究においてさえ稀であり、通常は復職後数年で終わる（<a href="https://www.jstage.jst.go.jp/article/indhealth/51/2/51_2012-0063/_article" target="_blank" rel="noopener noreferrer">Endo et al., 2013</a>）。</li>
+                </ul>
+                <p><strong>これは完全な空白ではない。既存研究のあいだに落ちている空白地帯である。</strong></p>
+                <hr class="section-divider">
+                <h2 id="section-7">7. 出口はあるか</h2>
+                <p>個人レベルでの解決は容易ではない。しかし理想的な方向性があるとすれば、次のようなものだろう。</p>
+                <ul>
+                <li>治療の目標を「現状維持」から「本当の回復」へ切り替えること。</li>
+                <li>「いつかこの環境を卒業する」という視野を、良い精神科医やカウンセラーと共有すること。臨床のプロスペクション研究も同じ方向を指していることは付記に値する。未来志向の思考を意図的に再建する治療的アプローチ——目標設定、計画、肯定的期待——は、抑うつに対して有望な結果を示している（<a href="https://bpspsychub.onlinelibrary.wiley.com/doi/abs/10.1111/bjc.12087" target="_blank" rel="noopener noreferrer">Roepke &amp; Seligman, 2016</a>）。</li>
+                <li>会社員という틀から外れた働き方や生き方を想像できる状態を取り戻すこと。</li>
+                </ul>
                 <blockquote>
-                <p>「煉獄」と呼ばれている状態は、重い障害のある人が雇用を維持できた成功例ではないか。責任、技能、移動可能性によって回復を測ること自体が、健常者中心主義や生産性至上主義を再生産していないか。本人が低負荷で安定した仕事を選ぶなら、外部の観察者にそれを停滞と呼ぶ権利があるのか。同僚が過重負担なら、解決は配慮の縮小ではなく、資源の追加ではないか。</p>
+                <p><strong>틀（トゥル）について：</strong> これは単なる外側の「枠」ではなく、人をはめ込む鋳型や、その人の思考・自己認識そのものを内側から形作る構造を含意する言葉である。そこから外れることは、境界線をまたぐだけでなく、自己を作り直すことでもある。</p>
                 </blockquote>
-                <p>この反論は、倫理的な出発点について正しい。長期配慮は失敗ではない。通常業務を完全に回復することだけが成功なのでもない。情報を得た本人の希望は尊重されるべきであり、同僚の負担を理由に別の労働者の権利を縮小してはならない。コストを負うべき主体は企業である。</p>
-                <p>この反論に耐えるためには、概念を狭く保たなければならない。本稿が批判するのは、有意味な選択、定期的な再評価、職業上の発言権、目的ある仕事、組織による費用負担を欠く配置である。問うべきは、本人が残る、責任を戻す、職務を再設計する、異動する、離職するという選択肢から選べるかであって、観察者がその選択を評価するかではない。企業が選択肢を現実のものにし、配慮の費用を負担しているかであって、同僚が私的に補助する意思を持つかではない。復職者と同僚の権利は、ゼロサムではない。</p>
-                <hr class="section-divider">
-                <h2 id="section-7">7. 制度的含意</h2>
-                <p>出口は、一定期間後に配慮を消滅させる恣意的な期限ではない。退職が特権的な終着点なのでもない。必要な原則は、<strong>配慮を自動終了させない、義務的な定期再評価</strong>である。正当な制度は、次の措置を備えるだろう。</p>
-                <ul>
-                <li>段階的復職または軽減職務の目的、想定期間、再評価基準を文書化する。</li>
-                <li>3か月または6か月などの固定時点で職務を見直す。ただし、時間の経過そのものを支援終了の理由にはしない。</li>
-                <li>症状と再発リスクだけでなく、就業能力、職業上の目標、本人の希望を評価する。</li>
-                <li>本人が望む場合は管理可能な範囲で責任を段階的に戻し、従前職務が適切でなければ有意味な恒久職務を設計する。</li>
-                <li>外された仕事の行き先を記録し、可能なら成果量を削減し、必要な配慮には人員と予算を付ける。</li>
-                <li>同僚の善意を無償資源と見なさず、追加労働を報酬、評価、休息、ローテーションによって認める。</li>
-                <li>医療情報の守秘を守りながら、業務配分の手続と、分配的・手続的公正を確保する仕組みを説明する。</li>
-                <li>配慮を受ける本人と同僚の双方が、報復を恐れず配置を問い直せる独立した窓口を設ける。</li>
-                <li>健康、就労継続、能力、主体性、仕事の質、負担配分、自由に表明された希望という複数の指標で成功を評価する。</li>
-                </ul>
-                <p>これらは問いを、「社員は復職したか」から「これは影響を受ける全員にとって、持続可能で見直し可能な参加の形か」へ変える。また、同僚間の私的調整に置かれていた責任を、職務・人員・資源を支配する組織へ戻す。</p>
-                <hr class="section-divider">
-                <h2 id="section-8">8. なお分かっていないこと</h2>
-                <p>この概念は調査への招待であって、判決ではない。この複合状態がどの程度存在し、どれほど続き、誰が保護または周縁化として経験し、移された仕事がどこへ行き、どの組織実践が固定化を防ぐのかは、まだ分かっていない。引用した研究は、復職、再休職、就業上の配慮、ロックイン、組織的公正、プレゼンティーイズムという、この現象に近接する実証研究であって、モデル全体の証明ではない。</p>
-                <p>この不確実性は、問いを消すのではなく、表現を律するべきである。統計的に地図化される前に、概念として見える現象はある。したがって、現時点での主張は控えめだが重要である。<strong>「復職成功」と数えられる一部の配置は、長期化した配慮、制限された職業的主体性、予算化されない同僚負担を、自己強化的な制度循環の中で結びつけている可能性がある。</strong></p>
+                <p>ただし最後の点が最も難しい。まず必要なのは、辞めることそのものではなく、<strong>辞めることを想像できる状態を取り戻すこと</strong>だからである。</p>
+                <p>構造的には、復職支援の「成功」基準を「職場復帰」から「長期的な回復と自律」へ再定義する必要がある。研究の側も、この方向に動き始めている。<em>持続可能な復職</em>（sustainable return to work）という旗印のもと、労働者が戻ってきたかではなく、その職業生活が時間の中で持ちこたえるかを問う流れである（<a href="https://link.springer.com/article/10.1007/s10926-019-09832-7" target="_blank" rel="noopener noreferrer">Etuknwa, Daniels &amp; Eib, 2019</a>）。日本のリワーク・インフラも、復職前リハビリテーションが就労継続を改善しうることを示している（<a href="https://www.frontiersin.org/journals/psychiatry/articles/10.3389/fpsyt.2020.616223/full" target="_blank" rel="noopener noreferrer">Ohki et al., 2021</a>）。だが、出勤の持続可能性は、いまだ人間の回復ではない。出社しているかどうかだけでなく、本人が職業人として回復しているか、自分の能力や選択肢を取り戻しているか、周囲に不公正なしわ寄せが生じていないかを見なければならない。配慮には、厚労省の手引きが本来含意しながら実務が忘れている、見直しの時点と時間軸が備わっているべきだ。それは企業・医療・行政の連携なしには実現しない課題である。</p>
                 <hr class="section-divider">
                 <h2 id="conclusion">おわりに</h2>
-                <p>診断書煉獄の核心には、<strong>雇用を守りながら、職業上の可能性を縮小させうる制度</strong>という逆説がある。診断、診断書、薬、本人の選択のどれか一つが、この結果を生むのではない。在籍維持が職務設計の代わりになり、慎重さが再評価の代わりになり、見えない労働が組織投資の代わりになったとき、この状態が現れる。</p>
-                <p>名前を与えることが、権利を配慮によって守られている人へのスティグマになってはならない。むしろ、組織の責任を回避しにくくするための名前である。人間的な復職制度は、健康を守りながら本人の未来を凍結せず、一人を支えながら別の一人を静かに消耗させない。その成功を測るのは、単なる出勤でも最大限の生産性でもない。有意味な主体性が広がり続けること、または本人の情報に基づく選択によって、意図的に守られていることである。</p>
+                <p>この問題の核心は、<strong>善意の制度が人を縛る</strong>という逆説にある。</p>
+                <p>企業は法を守り、医療は治療を提供し、本人は適応しようとする。それぞれに悪意はない。しかし総体として、人は本来の人生から切り離され、数十年をぬるま湯の中で過ごすことになる。</p>
+                <p>これは個人の弱さの問題ではなく、構造が生み出す静かな悲劇である。そして、この構造が現在我々の用いるすべての指標を満たしてしまっている以上、それに抗する最初の一歩は、本稿が試みたこと——名前を与えること——なのである。</p>
                 <hr class="section-divider">
                 <blockquote>
-                <p><strong>主な参考文献</strong></p>
+                <p><strong>参考文献</strong></p>
                 <ul>
                 <li>Akiyama, T., Tsuchiya, M., Igarashi, Y., Ozaki, N., Yokoyama, M., Katagiri, Y., et al. (2010). &quot;Rework Program&quot; in Japan: Innovative high-level rehabilitation. <em>Asia-Pacific Psychiatry</em>, 2, 208–216.</li>
                 <li>Annual Review of Organizational Psychology and Organizational Behavior. (2025). <a href="https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-110622-050544" target="_blank" rel="noopener noreferrer">How effective are work-life balance policies? The importance of inclusion</a>. Vol. 12, 73–108.</li>
                 <li>Arends, I., van der Klink, J. J. L., van Rhenen, W., de Boer, M. R., &amp; Bültmann, U. (2014). Prevention of recurrent sickness absence in workers with common mental disorders: results of a cluster-randomised controlled trial. <em>Occupational and Environmental Medicine</em>, 71(1), 21–29.</li>
                 <li>Aronsson, G., Dallner, M., &amp; Gustafsson, K. (2000). Yrkes- och arbetsplatsinlåsning: En empirisk studie av omfattning och hälsokonsekvenser［職業および職場におけるロックイン：その範囲と健康への帰結に関する実証研究］. <em>Arbete &amp; Hälsa</em>, 5, 1–25.</li>
                 <li>Becker, H. S. (1960). Notes on the concept of commitment. <em>American Journal of Sociology</em>, 66(1), 32–40.</li>
+                <li>Bet, P. M., Hugtenburg, J. G., Penninx, B. W., &amp; Hoogendijk, W. J. (2013). Side effects of antidepressants during long-term use in a naturalistic setting. <em>European Neuropsychopharmacology</em>, 23(11), 1443–1451.</li>
+                <li>Cartwright, C., Gibson, K., Read, J., Cowan, O., &amp; Dehar, T. (2016). <a href="https://www.tandfonline.com/doi/full/10.2147/PPA.S110632" target="_blank" rel="noopener noreferrer">Long-term antidepressant use: patient perspectives of benefits and adverse effects</a>. <em>Patient Preference and Adherence</em>, 10, 1401.</li>
                 <li>Cech, E. A., &amp; Blair-Loy, M. (2014). <a href="https://journals.sagepub.com/doi/abs/10.1177/0730888413515497" target="_blank" rel="noopener noreferrer">Consequences of flexibility stigma among academic scientists and engineers</a>. <em>Work and Occupations</em>, 41(1), 86–110.</li>
                 <li>Chung, H. (2020). <a href="https://link.springer.com/article/10.1007/s11205-018-2036-7" target="_blank" rel="noopener noreferrer">Gender, flexibility stigma and the perceived negative consequences of flexible working in the UK</a>. <em>Social Indicators Research</em>, 151(2), 521–545.</li>
                 <li>Colella, A. (2001). <a href="https://www.jstor.org/stable/259397" target="_blank" rel="noopener noreferrer">Coworker distributive fairness judgments of the workplace accommodation of employees with disabilities</a>. <em>Academy of Management Review</em>, 26(1), 100–116.</li>
@@ -632,7 +592,7 @@
                 <li>Tabuchi, H. (2013, August 16). <a href="https://www.nytimes.com/2013/08/17/business/global/layoffs-illegal-japan-workers-are-sent-to-the-boredom-room.html" target="_blank" rel="noopener noreferrer">Layoffs taboo, Japan workers are sent to the boredom room</a>. <em>The New York Times</em>.</li>
                 <li>Wang, S., &amp; Chung, H. (2026). <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/gwao.70115" target="_blank" rel="noopener noreferrer">Revisiting flexibility stigma: How framing remote working shapes bias against remote workers</a>. <em>Gender, Work &amp; Organization</em>.</li>
                 </ul>
-                <p><em>本稿は、職場での観察と対話に示唆を得た概念的統合である。上に挙げた研究は、提案した現象に近接する実証研究であって、モデル全体の証明ではない。直接的な検証を要する命題は、本文中にその旨を明記した。</em></p>
+                <p><em>本稿は、当事者の観察と対話をもとに構成された考察である。上に挙げた研究は、この現象の最も近接した実証的隣人であって、すべての主張の証明ではない。主張が観察のみに依拠する箇所では、本文中にその旨を明記した。</em></p>
                 </blockquote>
             </div>
 
