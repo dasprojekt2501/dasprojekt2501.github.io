@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+    <meta property="og:title" content="The Sinking Newspaper’s Private-University Humanities Men—and Generative AI">
+    <meta property="og:description" content="An essay on how a sinking Japanese newspaper’s private-university humanities culture finds its perfect machine in generative AI.">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/essays/shizumiyuku-shimbunsha-no-shidai-bunkei-ojisan-to-seisei-ai-en.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="PROJEKT2501">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Sinking Newspaper’s Private-University Humanities Men—and Generative AI">
+    <meta name="twitter:description" content="An essay on how a sinking Japanese newspaper’s private-university humanities culture finds its perfect machine in generative AI.">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sinking Newspaper’s Private-University Humanities Men—and Generative AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover,
+        .back-link a:hover,
+        .essay-content a:hover,
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            line-height: 1;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+
+        .lang-btn:hover {
+            opacity: 0.8;
+        }
+
+        .lang-btn.active {
+            opacity: 1;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
+            border-color: #333;
+        }
+
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .toc-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .essay-header {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .essay-kicker {
+            color: #666;
+            font-size: 1.05em;
+            margin-bottom: 14px;
+        }
+
+        body.dark-mode .essay-kicker {
+            color: #aaa;
+        }
+
+        .essay-meta {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        .essay-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .essay-content p,
+        .essay-content blockquote {
+            margin-bottom: 20px;
+        }
+
+        .essay-content h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .essay-content h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .essay-content ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .essay-content li {
+            margin-bottom: 8px;
+        }
+
+        .essay-content a,
+        .back-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        body.dark-mode .essay-content a,
+        body.dark-mode .back-link a {
+            color: #4a9eff;
+        }
+
+        .essay-content blockquote,
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #666;
+        }
+
+        body.dark-mode .essay-content blockquote,
+        body.dark-mode .info-box {
+            background-color: #2a2a2a;
+            border-left-color: #999;
+        }
+
+        .section-divider {
+            margin: 50px 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+        }
+
+        body.dark-mode .section-divider {
+            background: linear-gradient(to right, transparent, #333, transparent);
+        }
+
+        .back-link {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .back-link {
+            border-top-color: #333;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html?lang=en">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app-en.html">Apps</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn" onclick="location.href='shizumiyuku-shimbunsha-no-shidai-bunkei-ojisan-to-seisei-ai.html'" title="日本語" aria-label="Switch to Japanese">🇯🇵</button>
+                        <button class="lang-btn active" title="English" aria-label="English">🇺🇸</button>
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <div class="toggle-circle"></div>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <article>
+            <div class="essay-header">
+                <h1 class="essay-title">The Sinking Newspaper’s Private-University Humanities Men—and Generative AI</h1>
+                <div class="essay-meta">August 20, 2026</div>
+            </div>
+
+            <div class="essay-content">
+                <p>Sometimes I think there may be no group of people in Japan better suited to generative AI than the employees of one particular national daily.</p>
+                <p>The reason is simple.</p>
+                <p>For many of them, work stopped meaning “thinking for yourself” a long time ago.</p>
+                <p>The boss said so.</p>
+                <p>That is how it has always been done.</p>
+                <p>The other newspapers are doing it too.</p>
+                <p>That is how we wrote it last time.</p>
+                <p>The editor changed it.</p>
+                <p>The department head decided.</p>
+                <p>It is company policy.</p>
+                <p>In this chain of borrowed authority, one question is conspicuously unnecessary:</p>
+                <p><strong>What do I think?</strong></p>
+                <p>So when generative AI arrived, I suspect they did not experience it primarily as a threat.</p>
+                <p>If anything, they may have welcomed it as a machine almost perfectly designed for the way they already worked.</p>
+                <p>You no longer have to think for yourself to produce plausible prose.</p>
+                <p>You no longer have to understand the structure of a subject to produce a plausible explanation.</p>
+                <p>You do not even have to formulate your own questions. The machine will generate plausible questions for you.</p>
+                <p>And it does all of this in seconds.</p>
+                <p>Could there be a technology better suited to the corporate culture of the Sinking Newspaper?</p>
+                <p>The problem is not that AI has taken away people’s ability to think.</p>
+                <p>More precisely, the problem is this:</p>
+                <p><strong>a machine that appears to think has arrived in an organization that had already largely stopped thinking for itself.</strong></p>
+                <p>And whenever I look at this absence of thought inside the Sinking Newspaper, I find myself thinking about the educational backgrounds of the people who work there.</p>
+                <p>A striking number of reporters come from prestigious private universities, particularly humanities and social-science programs, with Waseda and Keio sitting at the top of the hierarchy.</p>
+                <p>The world of Japan’s elite private-university humanities track.</p>
+                <p>I am not making the crude argument that graduating from a private humanities program makes someone incapable of logical thought.</p>
+                <p>The problem is more interesting than that.</p>
+                <p>It lies in the structure of Japanese university entrance examinations and in the particular kind of intelligence that system rewards.</p>
+                <p>For many private humanities programs, depending on the admissions route, mathematics is not required at all.</p>
+                <p>Nor is it necessarily necessary to take a single examination in physics, chemistry, or biology.</p>
+                <p>You can gain admission to a highly prestigious university through some combination of English, Japanese, Japanese history, and world history.</p>
+                <p>That path is built into the system.</p>
+                <p>As a result, some students effectively stop seriously studying mathematics and the natural sciences sometime around compulsory schooling or the minimal requirements of high school.</p>
+                <p>They may graduate from university, acquire the label of “highly educated,” and become reporters at one of the country’s most influential newspapers while their understanding of mathematics, physics, chemistry, and biology remains surprisingly close to where it was in their early teens.</p>
+                <p>At the same time, they may be exceptionally good at memorizing historical dates, names, political systems, English vocabulary, classical Japanese vocabulary, and enormous quantities of miscellaneous information, then reproducing it rapidly under exam conditions.</p>
+                <p>Memorize a vast number of proper nouns.</p>
+                <p>Choose the correct answer.</p>
+                <p>Recognize patterns in past exams.</p>
+                <p>Anticipate what the examiner wants.</p>
+                <p>Do all of this quickly and accurately.</p>
+                <p>For entrance examinations, these are extremely useful skills.</p>
+                <p>And if you grew up in or around Tokyo in a relatively privileged family, attended cram schools from childhood, and were surrounded by information about admissions strategies, you could learn the rules of this game quite early.</p>
+                <p>Which school should I attend?</p>
+                <p>Which textbook should I use?</p>
+                <p>Which subject can I drop?</p>
+                <p>Which admissions route lets me avoid mathematics?</p>
+                <p>Which university can I enter without studying science?</p>
+                <p>What is the shortest route to a prestigious degree?</p>
+                <p>There is certainly a kind of rationality at work here.</p>
+                <p>But it is not quite the rationality required to understand the world.</p>
+                <p>It is, rather,</p>
+                <p><strong>the ability to optimize within rules that someone else has already written.</strong></p>
+                <p>You do not have to formulate the question.</p>
+                <p>You do not have to question the rules.</p>
+                <p>There is a problem, there is a correct answer, and there is an examiner.</p>
+                <p>The winner is the person who reaches the examiner’s predetermined answer by the shortest route.</p>
+                <p>The value of mathematics and science is not merely that they teach you formulas or the periodic table.</p>
+                <p>They also train certain habits of mind.</p>
+                <p>Form a hypothesis.</p>
+                <p>Quantify.</p>
+                <p>Separate variables.</p>
+                <p>Distinguish correlation from causation.</p>
+                <p>Change the conditions and see what happens.</p>
+                <p>Look for counterexamples.</p>
+                <p>Question measurement error.</p>
+                <p>Ask whether a result is reproducible.</p>
+                <p>And when the data contradict the explanation you prefer, discard the explanation.</p>
+                <p>Of course, studying science does not automatically make someone logical, any more than studying the humanities automatically makes someone illogical.</p>
+                <p>The point is not that simple.</p>
+                <p>But it remains remarkable that Japan has created an educational route through which people can largely avoid this kind of training from adolescence onward and still emerge carrying the badge of an elite education.</p>
+                <p>And when you read Japanese newspapers, the consequences sometimes appear in peculiar ways.</p>
+                <p>When national newspapers cover politics, crime, or accidents, the level of detail can be almost obsessive.</p>
+                <p>Factional politics.</p>
+                <p>The internal ranking of ministries.</p>
+                <p>Police and prosecutorial procedures.</p>
+                <p>The specialized jargon of Nagatacho and Kasumigaseki.</p>
+                <p>Terms so obscure that only reporters on the beat may fully understand them are dropped into articles with little or no explanation.</p>
+                <p>The reader is expected to keep up.</p>
+                <p>The reporting plunges deeper and deeper into the minutiae.</p>
+                <p>But when the subject is science, the attitude suddenly changes.</p>
+                <p>“We have to make it understandable for ordinary readers.”</p>
+                <p>And so the explanation is simplified.</p>
+                <p>Then simplified again.</p>
+                <p>And sometimes simplified so aggressively that it no longer explains much of anything.</p>
+                <p>In some cases, it is not merely imprecise. The meaning itself has been distorted.</p>
+                <p>You begin to suspect that the issue is not really that the reporter removed technical detail for the reader’s sake.</p>
+                <p>You begin to wonder whether</p>
+                <p><strong>the reporter writing the article did not fully understand the subject in the first place.</strong></p>
+                <p>There is a strange asymmetry here.</p>
+                <p>A political reporter may know the minutiae of factional alignments and party appointments to a degree that would make most readers’ eyes glaze over.</p>
+                <p>A crime reporter may command an entire vocabulary of police organization and criminal procedure.</p>
+                <p>But when science is involved, reporters may be sent out without even a basic conceptual framework for probability, statistics, genetics, cell biology, biochemistry, or physics.</p>
+                <p>At that point, evaluating the research itself becomes nearly impossible.</p>
+                <p>The reporter may not have enough background knowledge even to understand what the scientist is saying.</p>
+                <p>They may read the paper without knowing which part of the methodology matters.</p>
+                <p>They may not know what to look for statistically.</p>
+                <p>They may not grasp the significance of a control experiment, reproducibility, or the limits of what the data actually support.</p>
+                <p>And so science reporting turns into something else.</p>
+                <p>Not the scrutiny of science, but the collection of stories.</p>
+                <p>A young researcher.</p>
+                <p>A breakthrough.</p>
+                <p>A discovery that overturns conventional wisdom.</p>
+                <p>A world first.</p>
+                <p>Struggle.</p>
+                <p>Dreams.</p>
+                <p>Adversity.</p>
+                <p>A white coat.</p>
+                <p>A laboratory.</p>
+                <p>These are familiar narrative materials.</p>
+                <p>A reporter does not have to understand the science very deeply to turn them into a human-interest story.</p>
+                <p>The coverage of STAP cells is an almost perfect illustration.</p>
+                <p>When Haruko Obokata and STAP cells first appeared, newspapers and television celebrated the story on an enormous scale.</p>
+                <p>There were, of course, many reasons.</p>
+                <p>The authority of RIKEN.</p>
+                <p>The irresistible phrase “a discovery that overturns conventional wisdom.”</p>
+                <p>The narrative appeal of a young female researcher.</p>
+                <p>The imprimatur of <em>Nature</em>.</p>
+                <p>Competition among news organizations.</p>
+                <p>It would therefore be too simplistic to blame the episode entirely on reporters’ lack of scientific literacy.</p>
+                <p>But it is still worth asking: if more reporters in those newsrooms had possessed enough scientific grounding to evaluate the research critically for themselves, would such an exuberant and uncritical mythology have been quite so easy to construct?</p>
+                <p>Instead of interrogating the scientific claim, the media took a story from a prestigious research institution—</p>
+                <p>“A world-changing discovery has apparently been made”—</p>
+                <p>and amplified it.</p>
+                <p>What matters here is that this habit is not peculiar to science reporting.</p>
+                <p>Accept an explanation from an authoritative source.</p>
+                <p>Assume you understand it.</p>
+                <p>Reformat it according to the conventions of your profession.</p>
+                <p>Output it.</p>
+                <p>There is something strikingly similar here to the mentality cultivated by entrance examinations: find the sanctioned answer and reproduce it correctly.</p>
+                <p>And the same mentality that works in the newsroom turns out to be extraordinarily useful for surviving inside a large corporation.</p>
+                <p>At university entrance exams, you learn to read the examiner’s preferred answer.</p>
+                <p>At the newspaper, you learn to read your boss’s preferred answer.</p>
+                <p>In school, you raise your deviation score.</p>
+                <p>At work, you raise your personnel evaluation.</p>
+                <p>For an exam, you study the tendencies of the test.</p>
+                <p>At the office, you study the atmosphere of the organization.</p>
+                <p>The setting has changed from classroom to workplace.</p>
+                <p>The game has not changed very much.</p>
+                <p>The company has correct answers too.</p>
+                <p>The boss knows them.</p>
+                <p>Personnel evaluations are grading.</p>
+                <p>Promotions are standardized scores.</p>
+                <p>Assignments are pass-fail decisions.</p>
+                <p>What should you say to be rewarded?</p>
+                <p>Whom must you never contradict?</p>
+                <p>Which department gives you the best chance of promotion?</p>
+                <p>Which superior should you attach yourself to?</p>
+                <p>Which assignment will earn you points?</p>
+                <p>The ability to solve the problem remains useful.</p>
+                <p>But you must not question the problem itself.</p>
+                <p>Why are we doing this job?</p>
+                <p>Why is this person considered important?</p>
+                <p>Why does this system still exist?</p>
+                <p>Why is this number our target?</p>
+                <p>Why are we still producing this newspaper?</p>
+                <p>The moment you ask questions like these, you cease to be a person who solves problems.</p>
+                <p>You become a person who causes them.</p>
+                <p>Half-jokingly, I sometimes think of this type as the <strong>shidai-bunkei ojisan</strong>—the private-university humanities guy.</p>
+                <p>The phrase is not really about the academic discipline itself.</p>
+                <p>It describes a certain mental structure.</p>
+                <p>Memorize.</p>
+                <p>Reproduce.</p>
+                <p>Locate the authoritative answer.</p>
+                <p>Sense what answer the room wants.</p>
+                <p>Read the examiner.</p>
+                <p>But do not question the premises.</p>
+                <p>When you think about it, much of what generative AI now automates is exactly the kind of work these people had been doing manually for years.</p>
+                <p>Store large amounts of existing information.</p>
+                <p>Refer to past patterns.</p>
+                <p>Infer what kind of answer the situation demands.</p>
+                <p>Then output something that sounds plausible.</p>
+                <p>The difference was simply whether a machine or a human being was doing the processing.</p>
+                <p>Generative AI can now perform that sequence vastly faster and at vastly greater scale.</p>
+                <p>It searches faster.</p>
+                <p>It writes faster.</p>
+                <p>It translates.</p>
+                <p>It handles mathematics and statistics.</p>
+                <p>It processes enormous datasets.</p>
+                <p>In that sense, generative AI is not so much their competitor as</p>
+                <p><strong>a machine for automating the very kind of work they had long regarded as their specialty.</strong></p>
+                <p>Much of what they regarded as professional ability can now be performed by a machine in seconds.</p>
+                <p>What should remain, then, is the work that genuinely requires a human being.</p>
+                <p>Doubt.</p>
+                <p>Unease.</p>
+                <p>The ability to imagine the position of someone with less power than yourself.</p>
+                <p>The willingness to resist the premises of the organization.</p>
+                <p>The ability to ask a question nobody else has asked.</p>
+                <p>Yet these are precisely the capacities the Sinking Newspaper has done the least to cultivate.</p>
+                <p>Indeed, people who possess them are often treated as troublesome.</p>
+                <p>Someone contradicts a superior.</p>
+                <p>Someone questions an irrational custom.</p>
+                <p>Someone points out that a person with less power is being treated unfairly.</p>
+                <p>Someone refuses to accept “that’s just how things are done.”</p>
+                <p>Someone talks about facts that are inconvenient for the company.</p>
+                <p>Such people are unlikely to do well in the promotion game.</p>
+                <p>By contrast, people who quickly understand the internal hierarchy and absorb that hierarchy into their own moral judgment can thrive.</p>
+                <p>A department head must be important.</p>
+                <p>A bureau chief must be talented.</p>
+                <p>Anyone who failed to rise must have something wrong with them.</p>
+                <p>A non-regular employee ranks below a regular employee.</p>
+                <p>Someone the company does not value can safely be treated as lesser.</p>
+                <p>A bureaucratic hierarchy quietly becomes a hierarchy of human worth.</p>
+                <p>And the imagination required to question that translation disappears.</p>
+                <p>The privileges that shaped one’s own life become invisible.</p>
+                <p>The protection one receives within the organization becomes invisible.</p>
+                <p>With the same shoe that happened never to step on you, you step on someone below.</p>
+                <p>Often without even recognizing the act as cruel.</p>
+                <p>“It’s work.”</p>
+                <p>“It’s the company.”</p>
+                <p>“That’s how evaluations work.”</p>
+                <p>“It can’t be helped.”</p>
+                <p>No further thought is required.</p>
+                <p>And this kind of organizational intelligence turns out to be terrifyingly compatible with generative AI.</p>
+                <p>Suppose a superior says:</p>
+                <p>“Come up with ideas for making newspapers appealing to young people.”</p>
+                <p>The first question ought perhaps to be:</p>
+                <p>“Do young people actually need newspapers?”</p>
+                <p>Or:</p>
+                <p>“What if the problem is not that young people refuse to read newspapers, but that newspapers are failing to offer them something worth reading?”</p>
+                <p>Or perhaps:</p>
+                <p>“Why do we assume anyone should pay for what we are producing?”</p>
+                <p>But the moment you ask such a question at the Sinking Newspaper, the assignment becomes inconvenient.</p>
+                <p>Better to ask AI.</p>
+                <p>“Give me ten innovative ideas for marketing newspapers to Gen Z.”</p>
+                <p>And AI will promptly respond.</p>
+                <p>Integration with social media.</p>
+                <p>Short-form video.</p>
+                <p>Explainer content.</p>
+                <p>Partnerships with universities.</p>
+                <p>Youth participation events.</p>
+                <p>Collaborations with influencers.</p>
+                <p>A neat list of ideas you have somehow seen many times before.</p>
+                <p>Nobody gets offended.</p>
+                <p>The premise that newspapers are still desirable remains untouched.</p>
+                <p>The purpose of the company remains untouched.</p>
+                <p>And most importantly, there is now documentary evidence that</p>
+                <p>“we thought about it.”</p>
+                <p>The most dangerous use of generative AI is not that it sometimes gives the wrong answer.</p>
+                <p>It is that it can make it unnecessary to formulate the question in the first place.</p>
+                <p>For a newspaper, this ought to be fatal.</p>
+                <p>Because the essence of journalism is not possessing more answers than other people.</p>
+                <p>It is asking questions that other people failed to ask.</p>
+                <p>But perhaps that formulation romanticizes journalism too much.</p>
+                <p>A newspaper was supposed to be an institution that distrusted the plausible stories circulating through society.</p>
+                <p>Government announcements.</p>
+                <p>Corporate publicity.</p>
+                <p>Police statements.</p>
+                <p>Political speeches.</p>
+                <p>Market narratives.</p>
+                <p>Public opinion.</p>
+                <p>Instead of moving these claims from right to left unchanged, journalism was supposed to ask:</p>
+                <p>Is that number true?</p>
+                <p>Does that causal relationship actually hold?</p>
+                <p>Who produced this information?</p>
+                <p>What interests does that source have?</p>
+                <p>Is there contradictory evidence?</p>
+                <p>Where is the primary source?</p>
+                <p>Can the claim be independently verified by another method?</p>
+                <p>The journalist was supposed to take a plausible statement apart, test its pieces, and only then put it back together.</p>
+                <p>That was the idea, anyway.</p>
+                <p>At the Sinking Newspaper, however, that capacity has been in decline for a very long time.</p>
+                <p>The government announces something.</p>
+                <p>A ministry explains it.</p>
+                <p>Investigators say something.</p>
+                <p>A politician comments.</p>
+                <p>The newspaper publishes it.</p>
+                <p>Of course reporters do additional reporting. They contact other sources. They seek confirmation.</p>
+                <p>But this is not the same thing as fact-checking in the stronger sense of questioning the premise of a claim and testing it against independent evidence.</p>
+                <p>I once heard an executive at the Sinking Newspaper insist, “Of course we fact-check.”</p>
+                <p>But what he proceeded to describe was, as far as I could tell, what Japanese reporters have traditionally called <em>uratori</em>: corroboration.</p>
+                <p>You hear something from one source.</p>
+                <p>You ask another source.</p>
+                <p>You check a number.</p>
+                <p>This is basic reporting, and it matters.</p>
+                <p>But if that is simply equated with modern fact-checking, something has gone badly wrong.</p>
+                <p>Fact-checking, properly understood, requires breaking a claim into verifiable propositions and testing those propositions against primary sources, public data, original documents, and independent evidence in order to determine whether the claim is true, false, or misleading.</p>
+                <p>“Another person told me the same thing”</p>
+                <p>is not enough.</p>
+                <p>If three bureaucrats repeat the same explanation, that does not magically turn the explanation into a fact.</p>
+                <p>They may all be reading the same document.</p>
+                <p>They may all share the same institutional interest.</p>
+                <p>They may all be repeating the same mistake.</p>
+                <p>Verifying the explanation of one powerful institution by asking another representative of the same power structure is not independent verification.</p>
+                <p>Here lies a deeper problem at the Sinking Newspaper.</p>
+                <p>Before asking whether it is doing fact-checking, one is forced to wonder whether it even understands</p>
+                <p><strong>what fact-checking is.</strong></p>
+                <p>And this is not merely a dispute over terminology.</p>
+                <p>It is a dispute over what journalism itself is for.</p>
+                <p>What does it mean to doubt an official announcement?</p>
+                <p>What does independence from a source actually require?</p>
+                <p>What is the difference between testimony and evidence?</p>
+                <p>What is the difference between “several people said this” and “this has been established as fact”?</p>
+                <p>If you never confront such epistemological questions, it becomes easy to believe that following a procedure is enough.</p>
+                <p>Source A said it.</p>
+                <p>Source B said it too.</p>
+                <p>They match.</p>
+                <p>Publish.</p>
+                <p>Procedure completed.</p>
+                <p>Correct answer.</p>
+                <p>But the world is not an entrance examination.</p>
+                <p>The correct answer is not hidden somewhere in the question sheet.</p>
+                <p>The person who wrote the question may themselves be lying.</p>
+                <p>The job of a journalist was supposed to begin with refusing to forget that simple possibility.</p>
+                <p>At the Sinking Newspaper, journalism in that sense has been weakening for years.</p>
+                <p>This is why I find the claim that “AI will destroy newspapers” slightly misplaced.</p>
+                <p>Much of what would need to be destroyed has already been hollowed out.</p>
+                <p>AI may not destroy the newspaper so much as</p>
+                <p><strong>make its existing destruction harder to see.</strong></p>
+                <p>AI summarizes government announcements.</p>
+                <p>AI organizes ministry documents.</p>
+                <p>AI transcribes press conferences.</p>
+                <p>AI searches related coverage.</p>
+                <p>AI drafts stories.</p>
+                <p>AI proposes headlines.</p>
+                <p>AI writes copy for social media.</p>
+                <p>The newspaper can now produce more material, faster and more cleanly than before.</p>
+                <p>And on the surface, it may even look more intelligent.</p>
+                <p>The arguments are tidier.</p>
+                <p>The prose is smoother.</p>
+                <p>There are fewer typographical errors.</p>
+                <p>Foreign-language sources may even appear in the text.</p>
+                <p>But one thing may still be missing from the center of it all:</p>
+                <p>the reporter’s own question.</p>
+                <p>AI is astonishingly good at answering questions it has been given.</p>
+                <p>But if the human being also delegates questions such as</p>
+                <p>“Why are we asking this?”</p>
+                <p>“Who defined the problem this way?”</p>
+                <p>“What if the premise itself is wrong?”</p>
+                <p>“Whose existence disappears when we describe the issue in these terms?”</p>
+                <p>then the human being becomes little more than an approval mechanism.</p>
+                <p>AI generates ten ideas.</p>
+                <p>A human selects one.</p>
+                <p>AI writes the proposal.</p>
+                <p>A human pastes it into a document.</p>
+                <p>AI drafts the article.</p>
+                <p>An editor polishes it.</p>
+                <p>AI proposes the headline.</p>
+                <p>A human adjusts it slightly.</p>
+                <p>AI summarizes the result.</p>
+                <p>A human checks it.</p>
+                <p>Eventually, the job may cease to involve judgment at all.</p>
+                <p>The human role becomes looking at the output and saying:</p>
+                <p>“Yeah, this seems fine.”</p>
+                <p>The meetings will continue.</p>
+                <p>Documents will still be produced.</p>
+                <p>Projects will still be given impressive names.</p>
+                <p>“AI Transformation.”</p>
+                <p>“Next-Generation Newsroom.”</p>
+                <p>“Digital First.”</p>
+                <p>“AI-Native Editorial.”</p>
+                <p>Anything will do.</p>
+                <p>AI can come up with the names.</p>
+                <p>Inside the organization, however, nothing changes.</p>
+                <p>Those at the top issue instructions.</p>
+                <p>Those below carry them out.</p>
+                <p>Failure flows downward.</p>
+                <p>Credit flows upward.</p>
+                <p>The hierarchy remains intact.</p>
+                <p>Dissenters remain troublesome.</p>
+                <p>The weak continue to absorb the burden.</p>
+                <p>Nobody questions the fundamental premise.</p>
+                <p>Only the speed of the non-thinking increases.</p>
+                <p>That is the great irony of generative AI.</p>
+                <p>AI is often described as a tool that will “free human beings to focus on creative work.”</p>
+                <p>Let machines handle routine tasks, we are told, and humans will have more time for higher-order thought.</p>
+                <p>In theory, this makes sense.</p>
+                <p>But what if the humans in question were never especially interested in higher-order thought?</p>
+                <p>Once AI takes over their routine work, will they use the extra time to think?</p>
+                <p>Or will they schedule more meetings?</p>
+                <p>Produce more reports?</p>
+                <p>Ask one AI to write a document, another AI to summarize it, a third AI to reduce that summary to three bullet points, then read those bullets and say, “I see”?</p>
+                <p>Technology does not automatically make an organization more intelligent.</p>
+                <p>More often, it amplifies whatever qualities the organization already possesses.</p>
+                <p>A curious organization can use AI to test more hypotheses.</p>
+                <p>A critical thinker can use AI to challenge their own assumptions.</p>
+                <p>A good journalist can use AI as a powerful tool for comparing documents, analyzing data, conducting open-source research, and assisting verification.</p>
+                <p>But an organization that rewards obedience can use AI to accelerate obedience.</p>
+                <p>An organization ruled by precedent can use AI to reproduce precedent faster.</p>
+                <p>An organization that avoids responsibility can add a new phrase to its repertoire:</p>
+                <p>“AI says so too.”</p>
+                <p>And when an organization that has stopped thinking adopts AI, something more subtle happens.</p>
+                <p>The fact that it has stopped thinking becomes harder to see.</p>
+                <p>Because there is always fluent language on the screen.</p>
+                <p>You can think nothing and still look thoughtful.</p>
+                <p>You can understand nothing and still sound informed.</p>
+                <p>You can make no real decision and still possess a “strategy.”</p>
+                <p>And this is where the private-university humanities guy runs into a problem.</p>
+                <p>For years, he built a career by memorizing large amounts of information,</p>
+                <p>recalling precedents,</p>
+                <p>anticipating what his superiors wanted,</p>
+                <p>reading the room,</p>
+                <p>organizing information into the expected format,</p>
+                <p>and producing plausible prose.</p>
+                <p>For a long time, these were treated as the activities of an intelligent professional.</p>
+                <p>He graduated from a prestigious university.</p>
+                <p>He could write.</p>
+                <p>He knew difficult words.</p>
+                <p>He could remember the names of politicians and bureaucrats.</p>
+                <p>He understood internal politics.</p>
+                <p>He could say something appropriately impressive in a meeting.</p>
+                <p>Therefore, he could regard himself as a knowledge worker.</p>
+                <p>Then generative AI arrived and did much of the same work with humiliating ease.</p>
+                <p>Store enormous amounts of information.</p>
+                <p>Retrieve what is needed.</p>
+                <p>Recognize patterns.</p>
+                <p>Organize key points.</p>
+                <p>Write.</p>
+                <p>Translate.</p>
+                <p>Summarize.</p>
+                <p>Generate proposals.</p>
+                <p>Invent headlines.</p>
+                <p>And it does it faster than a human being.</p>
+                <p>It does not get tired.</p>
+                <p>It can process vast quantities of information.</p>
+                <p>It can do mathematics.</p>
+                <p>It can handle statistics.</p>
+                <p>It can write code.</p>
+                <p>It can read documents in foreign languages.</p>
+                <p>And suddenly an uncomfortable question appears:</p>
+                <p><strong>Was what I had always called “intelligence” really intelligence?</strong></p>
+                <p>Or was much of it simply the ability to memorize information, fit it into existing patterns, and output the answer someone else expected?</p>
+                <p>Because if that is what it was, generative AI is extremely good at it.</p>
+                <p>What generative AI has revealed is not that human beings are unnecessary.</p>
+                <p>Almost the opposite.</p>
+                <p>It has made visible the parts of supposedly “human” work that never actually required a human being in the first place.</p>
+                <p>And then we are forced to ask what remains.</p>
+                <p>To doubt.</p>
+                <p>To feel that something is wrong.</p>
+                <p>To question the premise itself.</p>
+                <p>To challenge an authoritative explanation.</p>
+                <p>To think about causation rather than merely repeat numbers.</p>
+                <p>To imagine the life of someone whose circumstances are utterly different from your own.</p>
+                <p>To formulate a question no one has supplied.</p>
+                <p>To accept facts that are inconvenient to yourself.</p>
+                <p>To look at something the organization calls “correct” and ask:</p>
+                <p>“Is it?”</p>
+                <p>Perhaps that was where the real value of human intelligence lay all along.</p>
+                <p>And yet, ironically, those are precisely the qualities the Sinking Newspaper has spent years failing to reward.</p>
+                <p>People who contradict their superiors.</p>
+                <p>People who question precedent.</p>
+                <p>People who object to company policy.</p>
+                <p>People who look at an issue from the perspective of a minority.</p>
+                <p>People who refuse to accept “everyone does it” as an argument.</p>
+                <p>Such people are often dismissed as difficult.</p>
+                <p>The Sinking Newspaper has therefore spent years rewarding the abilities most easily replaced by AI,</p>
+                <p>while suppressing the abilities least easily replaced by it.</p>
+                <p>That is quite an irony.</p>
+                <p>Memorize.</p>
+                <p>Summarize.</p>
+                <p>Organize.</p>
+                <p>Write something plausible.</p>
+                <p>Give the boss the answer he wants.</p>
+                <p>Those abilities received high marks.</p>
+                <p>Meanwhile:</p>
+                <p>Doubt.</p>
+                <p>Object.</p>
+                <p>Ask questions.</p>
+                <p>Depart from convention.</p>
+                <p>Resist authority.</p>
+                <p>Those abilities received low marks.</p>
+                <p>And then generative AI arrived.</p>
+                <p>A machine that performs the first set of tasks much faster than they ever could.</p>
+                <p>AI may not simply put the private-university humanities guy out of work.</p>
+                <p>It does something more brutal.</p>
+                <p><strong>It suddenly lowers the market value of what he spent decades believing was his intelligence.</strong></p>
+                <p>Article summaries.</p>
+                <p>Headline suggestions.</p>
+                <p>Project proposals.</p>
+                <p>Meeting documents.</p>
+                <p>Emails.</p>
+                <p>Ceremonial speeches.</p>
+                <p>Interview questions.</p>
+                <p>Translations of overseas coverage.</p>
+                <p>Archive searches.</p>
+                <p>Routine argument mapping.</p>
+                <p>Once AI can do all of that in seconds, a very simple question remains for the human being:</p>
+                <p><strong>So what do you think?</strong></p>
+                <p>For the Sinking Newspaper, that may turn out to be the hardest question of all.</p>
+                <p>A newspaper was supposed to distrust the plausible stories society tells itself.</p>
+                <p>But the Sinking Newspaper lost much of that ability long ago.</p>
+                <p>And now it is acquiring</p>
+                <p><strong>a machine capable of producing plausible language without limit.</strong></p>
+                <p>If the people operating that machine have themselves forgotten the difference between plausibility and thought,</p>
+                <p>then this is not the modernization of journalism.</p>
+                <p>It is the completion of its hollowing-out.</p>
+                <p>There is nothing inherently wrong with using AI.</p>
+                <p>I think newspapers should use it aggressively.</p>
+                <p>But on one condition.</p>
+                <p>Before asking AI a question, the human being must already possess a question of their own.</p>
+                <p>Why are we writing this story?</p>
+                <p>Why are we interviewing this person?</p>
+                <p>Why are we using this number?</p>
+                <p>Why do we trust this source?</p>
+                <p>Why is this on the front page and that is not?</p>
+                <p>Why are we repeating the government’s explanation?</p>
+                <p>Why does this company exist?</p>
+                <p>Why have people stopped reading newspapers?</p>
+                <p>Why are we so certain that we are right?</p>
+                <p>And finally:</p>
+                <p><strong>What if we are the ones who are wrong?</strong></p>
+                <p>Whether a person can still ask that last question may determine the difference between using AI</p>
+                <p>and hiding behind it.</p>
+                <p>What the Sinking Newspaper needs is not the newest AI.</p>
+                <p>It needs something much more primitive.</p>
+                <p>The ability to doubt.</p>
+                <p>To investigate.</p>
+                <p>To falsify.</p>
+                <p>To read numbers.</p>
+                <p>To think about causation.</p>
+                <p>To resist authority.</p>
+                <p>To question the common sense of one’s own group.</p>
+                <p>To imagine the lives of people with less power.</p>
+                <p>To think with one’s own mind.</p>
+                <p>And, above all,</p>
+                <p><strong>to treat one’s own newspaper as an object of investigation.</strong></p>
+                <p>If it can do that, perhaps generative AI could become a tool that helps save journalism.</p>
+                <p>If it cannot, AI may become the perfect technology for the Sinking Newspaper:</p>
+                <p>a way to forget that it is sinking,</p>
+                <p>to imagine that it is modernizing,</p>
+                <p>to produce more intelligent-looking language than ever before,</p>
+                <p>and to sink</p>
+                <p>with unprecedented efficiency.</p>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html?lang=en">← Back to Home</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem("theme") || "light";
+        if (currentTheme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        }
+    </script>
+</body>
+</html>
