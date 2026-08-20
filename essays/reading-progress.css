@@ -1,0 +1,41 @@
+.reading-progress {
+    --reading-progress: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: rgba(0, 102, 204, 0.12);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1100;
+    transition: opacity 0.2s ease;
+}
+
+.reading-progress.is-visible {
+    opacity: 1;
+}
+
+.reading-progress-bar {
+    width: 100%;
+    height: 100%;
+    background-color: #0066cc;
+    transform: scaleX(var(--reading-progress));
+    transform-origin: left center;
+    will-change: transform;
+}
+
+body.dark-mode .reading-progress {
+    background-color: rgba(74, 158, 255, 0.18);
+}
+
+body.dark-mode .reading-progress-bar {
+    background-color: #4a9eff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reading-progress {
+        transition: none;
+    }
+}
