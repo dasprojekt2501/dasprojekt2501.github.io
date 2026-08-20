@@ -319,8 +319,18 @@
             </article>
 
             <article class="essay-item">
+                <h2 class="essay-title">
+                    <a href="essays/shizumiyuku-shimbunsha-no-shidai-bunkei-ojisan-to-seisei-ai.html" id="fourthEssayLink">沈みゆく新聞社の私大文系おじさんと生成AI</a>
+                </h2>
+                <div class="essay-date" id="fourthEssayDate">August 20, 2026</div>
+                <p class="essay-excerpt" id="fourthEssayExcerpt">
+                    This essay is currently available in Japanese. An English translation will be added later.
+                </p>
+            </article>
+
+            <article class="essay-item">
                 <h2 class="essay-title">Coming soon...</h2>
-                <p class="essay-excerpt" id="fourthEssayExcerpt">The next essay is in progress.</p>
+                <p class="essay-excerpt" id="fifthEssayExcerpt">The next essay is in progress.</p>
             </article>
         </main>
 
@@ -360,7 +370,11 @@
                 thirdEssayHref: 'essays/morceaux-de-conversations-avec-jean-luc-godard.html',
                 thirdEssayDate: '2026年7月31日',
                 thirdEssayExcerpt: 'ジャン＝リュック・ゴダールが、映画、イメージ、そしてポンピドゥー・センターの企画について語った会話の断片。',
-                fourthEssayExcerpt: '次のエッセイを準備中です。'
+                fourthEssayTitle: '沈みゆく新聞社の私大文系おじさんと生成AI',
+                fourthEssayHref: 'essays/shizumiyuku-shimbunsha-no-shidai-bunkei-ojisan-to-seisei-ai.html',
+                fourthEssayDate: '2026年8月20日',
+                fourthEssayExcerpt: '生成AIが、沈みゆく新聞社で長く評価されてきた知性の正体と、組織の思考停止をどう可視化し、加速させるのかを問うエッセイ。',
+                fifthEssayExcerpt: '次のエッセイを準備中です。'
             },
             en: {
                 subtitle: 'Essays and Notes',
@@ -377,7 +391,11 @@
                 thirdEssayHref: 'essays/morceaux-de-conversations-avec-jean-luc-godard-fr.html',
                 thirdEssayDate: 'July 31, 2026',
                 thirdEssayExcerpt: 'Des fragments de conversations où Jean-Luc Godard parle du cinéma, des images et de son projet pour le Centre Pompidou.',
-                fourthEssayExcerpt: 'The next essay is in progress.'
+                fourthEssayTitle: '沈みゆく新聞社の私大文系おじさんと生成AI',
+                fourthEssayHref: 'essays/shizumiyuku-shimbunsha-no-shidai-bunkei-ojisan-to-seisei-ai.html',
+                fourthEssayDate: 'August 20, 2026',
+                fourthEssayExcerpt: 'This essay is currently available in Japanese. An English translation will be added later.',
+                fifthEssayExcerpt: 'The next essay is in progress.'
             }
         };
 
@@ -402,7 +420,11 @@
             document.getElementById('thirdEssayLink').href = content.thirdEssayHref;
             document.getElementById('thirdEssayDate').textContent = content.thirdEssayDate;
             document.getElementById('thirdEssayExcerpt').textContent = content.thirdEssayExcerpt;
+            document.getElementById('fourthEssayLink').textContent = content.fourthEssayTitle;
+            document.getElementById('fourthEssayLink').href = content.fourthEssayHref;
+            document.getElementById('fourthEssayDate').textContent = content.fourthEssayDate;
             document.getElementById('fourthEssayExcerpt').textContent = content.fourthEssayExcerpt;
+            document.getElementById('fifthEssayExcerpt').textContent = content.fifthEssayExcerpt;
 
             document.getElementById('jaButton').classList.toggle('active', selectedLanguage === 'ja');
             document.getElementById('enButton').classList.toggle('active', selectedLanguage === 'en');
