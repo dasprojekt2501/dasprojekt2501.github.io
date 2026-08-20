@@ -393,9 +393,70 @@
         body.dark-mode footer {
             border-top-color: #333;
         }
+
+
+        .reading-progress {
+            --reading-progress: 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: rgba(0, 102, 204, 0.12);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1100;
+            transition: opacity 0.2s ease;
+        }
+
+        .reading-progress.is-visible {
+            opacity: 1;
+        }
+
+        .reading-progress-bar {
+            width: 100%;
+            height: 100%;
+            background-color: #0066cc;
+            transform: scaleY(var(--reading-progress));
+            transform-origin: top center;
+            will-change: transform;
+        }
+
+        body.dark-mode .reading-progress {
+            background-color: rgba(74, 158, 255, 0.18);
+        }
+
+        body.dark-mode .reading-progress-bar {
+            background-color: #4a9eff;
+        }
+
+        @media (max-width: 640px) {
+            .reading-progress {
+                right: 0;
+                bottom: auto;
+                left: 0;
+                width: 100%;
+                height: 3px;
+            }
+
+            .reading-progress-bar {
+                transform: scaleX(var(--reading-progress));
+                transform-origin: left center;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reading-progress {
+                transition: none;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <div class="reading-progress" id="readingProgress" role="progressbar" aria-label="読書の進捗" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="reading-progress-bar"></div>
+    </div>
 
     <div class="container">
         <header>
@@ -986,6 +1047,38 @@
             document.body.classList.toggle("dark-mode");
             localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
         }
+
+
+        const readingProgress = document.getElementById("readingProgress");
+        const essayContent = document.querySelector(".essay-content");
+        let readingProgressFrame = null;
+
+        function updateReadingProgress() {
+            const viewportHeight = window.innerHeight;
+            const contentTop = essayContent.getBoundingClientRect().top + window.scrollY;
+            const contentEnd = contentTop + essayContent.offsetHeight - viewportHeight;
+            const scrollableDistance = Math.max(contentEnd - contentTop, 1);
+            const rawProgress = (window.scrollY - contentTop) / scrollableDistance;
+            const progress = Math.min(Math.max(rawProgress, 0), 1);
+            const hasStartedReading = window.scrollY >= contentTop;
+            const hasScrollableContent = essayContent.offsetHeight > viewportHeight;
+
+            readingProgress.style.setProperty("--reading-progress", progress.toFixed(4));
+            readingProgress.classList.toggle("is-visible", hasStartedReading && hasScrollableContent);
+            readingProgress.setAttribute("aria-valuenow", Math.round(progress * 100));
+            readingProgressFrame = null;
+        }
+
+        function requestReadingProgressUpdate() {
+            if (readingProgressFrame === null) {
+                readingProgressFrame = window.requestAnimationFrame(updateReadingProgress);
+            }
+        }
+
+        window.addEventListener("scroll", requestReadingProgressUpdate, { passive: true });
+        window.addEventListener("resize", requestReadingProgressUpdate);
+        window.addEventListener("load", requestReadingProgressUpdate);
+        requestReadingProgressUpdate();
     </script>
 </body>
 </html>
