@@ -356,17 +356,6 @@
 
         #howtoButton:hover { color: #00f2fe; }
 
-        #controlHint {
-            color: #2d3748;
-            font-size: 0.68em;
-            margin-top: 14px;
-            position: relative;
-            z-index: 1;
-            letter-spacing: 1px;
-            padding: 0 12px;
-            text-align: center;
-        }
-
         /* 下部ティッカー */
         #ticker {
             position: absolute;
@@ -392,6 +381,12 @@
         }
 
         #tickerTrack span { padding: 0 22px; }
+
+        /* 英語表示のときだけ、ティッカーを全部大文字にする */
+        html[lang="en"] #tickerTrack {
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+        }
         #tickerTrack span.hot { color: #7a4a63; }
 
         @keyframes tickerScroll {
@@ -822,7 +817,6 @@
 
         <button id="startButton" onclick="startGame()">MISSION START</button>
         <button id="howtoButton" type="button">HOW TO PLAY</button>
-        <div id="controlHint"></div>
 
         <div id="ticker"><div id="tickerTrack"></div></div>
     </div>
@@ -1659,8 +1653,6 @@
                     '移動　ドラッグ / WASD・矢印<br>' +
                     '撃つ　クリック・Space<br>' +
                     'ポーズ　P・Esc',
-                hintTouch: 'DRAG TO MOVE  /  TOUCH TO SHOOT',
-                hintKey:   'WASD or ARROWS to move  /  SPACE to shoot  /  P to pause',
                 ticker: [
                     { text: '使えねえな', hot: true },
                     { text: 'DX推進室、発足', hot: false },
@@ -1698,8 +1690,6 @@
                     'MOVE　drag / WASD / arrows<br>' +
                     'SHOOT　click / Space<br>' +
                     'PAUSE　P / Esc',
-                hintTouch: 'DRAG TO MOVE  /  TOUCH TO SHOOT',
-                hintKey:   'WASD or ARROWS to move  /  SPACE to shoot  /  P to pause',
                 ticker: [
                     { text: 'Useless.', hot: true },
                     { text: 'Digital Task Force launched', hot: false },
@@ -1752,7 +1742,6 @@
             document.getElementById('howtoTitle').textContent  = t('howtoTitle');
             document.getElementById('howtoBody').innerHTML     = t('howtoBody');
             document.getElementById('howtoClose').textContent  = t('howtoClose');
-            document.getElementById('controlHint').textContent = hasTouch ? t('hintTouch') : t('hintKey');
             document.getElementById('plVerse').innerHTML = t('plVerse');
             document.getElementById('plTurn').innerHTML  = t('plTurn');
             document.getElementById('plClose').innerHTML = t('plClose');
