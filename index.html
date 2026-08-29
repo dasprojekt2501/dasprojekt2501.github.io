@@ -290,6 +290,16 @@
         <main class="essays">
             <article class="essay-item">
                 <h2 class="essay-title">
+                    <a href="essays/yurei-wa-doko-ni-yadoru-no-ka.html" id="fifthEssayLink">Where Does the Ghost Reside?</a>
+                </h2>
+                <div class="essay-date" id="fifthEssayDate">August 29, 2026</div>
+                <p class="essay-excerpt" id="fifthEssayExcerpt">
+                    An essay tracing the question of where the subject resides, from Ryle and Koestler through Ghost in the Shell, Guattari and Karatani to Anthropic&#8217;s J-space research.
+                </p>
+            </article>
+
+            <article class="essay-item">
+                <h2 class="essay-title">
                     <a href="essays/shizumiyuku-shimbunsha-no-shidai-bunkei-ojisan-to-seisei-ai-en.html" id="fourthEssayLink">The Sinking Newspaper, Private-University Humanities Dudes, and Generative AI</a>
                 </h2>
                 <div class="essay-date" id="fourthEssayDate">August 20, 2026</div>
@@ -330,7 +340,7 @@
 
             <article class="essay-item">
                 <h2 class="essay-title">Coming soon...</h2>
-                <p class="essay-excerpt" id="fifthEssayExcerpt">The next essay is in progress.</p>
+                <p class="essay-excerpt" id="sixthEssayExcerpt">The next essay is in progress.</p>
             </article>
         </main>
 
@@ -374,7 +384,11 @@
                 fourthEssayHref: 'essays/shizumiyuku-shimbunsha-no-shidai-bunkei-ojisan-to-seisei-ai.html',
                 fourthEssayDate: '2026年8月20日',
                 fourthEssayExcerpt: '生成AIが、沈みゆく新聞社で長く評価されてきた知性の正体と、組織の思考停止をどう可視化し、加速させるのかを問うエッセイ。',
-                fifthEssayExcerpt: '次のエッセイを準備中です。'
+                fifthEssayTitle: '幽霊はどこに宿るのか',
+                fifthEssayHref: 'essays/yurei-wa-doko-ni-yadoru-no-ka.html',
+                fifthEssayDate: '2026年8月29日',
+                fifthEssayExcerpt: 'ライル、ケストラー、『攻殻機動隊』、ガタリ、柄谷行人から、AnthropicのJ-space研究へ。主体はどこに宿るのかを問うエッセイ。',
+                sixthEssayExcerpt: '次のエッセイを準備中です。'
             },
             en: {
                 subtitle: 'Essays and Notes',
@@ -395,7 +409,11 @@
                 fourthEssayHref: 'essays/shizumiyuku-shimbunsha-no-shidai-bunkei-ojisan-to-seisei-ai-en.html',
                 fourthEssayDate: 'August 20, 2026',
                 fourthEssayExcerpt: 'An essay on how the Sinking Newspaper’s private-university humanities culture finds its perfect machine in generative AI.',
-                fifthEssayExcerpt: 'The next essay is in progress.'
+                fifthEssayTitle: 'Where Does the Ghost Reside?',
+                fifthEssayHref: 'essays/yurei-wa-doko-ni-yadoru-no-ka.html',
+                fifthEssayDate: 'August 29, 2026',
+                fifthEssayExcerpt: 'An essay tracing the question of where the subject resides, from Ryle and Koestler through Ghost in the Shell, Guattari and Karatani to Anthropic’s J-space research.',
+                sixthEssayExcerpt: 'The next essay is in progress.'
             }
         };
 
@@ -424,7 +442,11 @@
             document.getElementById('fourthEssayLink').href = content.fourthEssayHref;
             document.getElementById('fourthEssayDate').textContent = content.fourthEssayDate;
             document.getElementById('fourthEssayExcerpt').textContent = content.fourthEssayExcerpt;
+            document.getElementById('fifthEssayLink').textContent = content.fifthEssayTitle;
+            document.getElementById('fifthEssayLink').href = content.fifthEssayHref;
+            document.getElementById('fifthEssayDate').textContent = content.fifthEssayDate;
             document.getElementById('fifthEssayExcerpt').textContent = content.fifthEssayExcerpt;
+            document.getElementById('sixthEssayExcerpt').textContent = content.sixthEssayExcerpt;
 
             document.getElementById('jaButton').classList.toggle('active', selectedLanguage === 'ja');
             document.getElementById('enButton').classList.toggle('active', selectedLanguage === 'en');

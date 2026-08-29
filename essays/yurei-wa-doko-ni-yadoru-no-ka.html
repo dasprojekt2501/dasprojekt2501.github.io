@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+    <meta property="og:title" content="幽霊はどこに宿るのか">
+    <meta property="og:description" content="ライル、ケストラー、『攻殻機動隊』、ガタリ、柄谷行人から、AnthropicのJ-space研究へ。主体はどこに宿るのかを問うエッセイ。">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/essays/yurei-wa-doko-ni-yadoru-no-ka.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="PROJEKT2501">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="幽霊はどこに宿るのか">
+    <meta name="twitter:description" content="ライル、ケストラー、『攻殻機動隊』、ガタリ、柄谷行人から、AnthropicのJ-space研究へ。主体はどこに宿るのかを問うエッセイ。">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幽霊はどこに宿るのか</title>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover,
+        .back-link a:hover,
+        .essay-content a:hover,
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            line-height: 1;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+
+        .lang-btn:hover {
+            opacity: 0.8;
+        }
+
+        .lang-btn.active {
+            opacity: 1;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
+            border-color: #333;
+        }
+
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .toc-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .essay-header {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .essay-kicker {
+            color: #666;
+            font-size: 1.05em;
+            margin-bottom: 14px;
+        }
+
+        body.dark-mode .essay-kicker {
+            color: #aaa;
+        }
+
+        .essay-meta {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        .essay-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .essay-content p,
+        .essay-content blockquote {
+            margin-bottom: 20px;
+        }
+
+        .essay-content h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .essay-content h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .essay-content ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .essay-content li {
+            margin-bottom: 8px;
+        }
+
+        .essay-content a,
+        .back-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        body.dark-mode .essay-content a,
+        body.dark-mode .back-link a {
+            color: #4a9eff;
+        }
+
+        .essay-content blockquote,
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #666;
+        }
+
+        body.dark-mode .essay-content blockquote,
+        body.dark-mode .info-box {
+            background-color: #2a2a2a;
+            border-left-color: #999;
+        }
+
+        .section-divider {
+            margin: 50px 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+        }
+
+        body.dark-mode .section-divider {
+            background: linear-gradient(to right, transparent, #333, transparent);
+        }
+
+        .back-link {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .back-link {
+            border-top-color: #333;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+
+.essay-author {
+    color: #777;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+}
+
+body.dark-mode .essay-author {
+    color: #aaa;
+}
+
+.keywords {
+    font-size: 0.92em;
+    color: #666;
+}
+
+body.dark-mode .keywords {
+    color: #aaa;
+}
+
+.essay-figure {
+    margin: 36px 0 32px;
+}
+
+.essay-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+body.dark-mode .essay-figure img {
+    border-color: #444;
+}
+
+.essay-figure figcaption {
+    margin-top: 10px;
+    color: #666;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+body.dark-mode .essay-figure figcaption {
+    color: #aaa;
+}
+
+.footnote-ref {
+    font-size: 0.72em;
+    line-height: 0;
+    vertical-align: super;
+}
+
+.footnote-ref a,
+.footnote-backref {
+    text-decoration: none;
+}
+
+.footnotes {
+    margin-left: 28px;
+}
+
+.footnotes li {
+    margin-bottom: 16px;
+    padding-left: 4px;
+    color: #555;
+    font-size: 0.92em;
+    line-height: 1.7;
+}
+
+body.dark-mode .footnotes li {
+    color: #bbb;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 36px 16px;
+    }
+
+    .header-controls {
+        align-items: flex-end;
+        gap: 20px;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+    }
+
+    nav a {
+        margin-right: 0;
+    }
+
+    .essay-title {
+        font-size: 1.85em;
+    }
+
+    .essay-content {
+        font-size: 1em;
+    }
+}
+    </style>
+    <link rel="stylesheet" href="reading-progress.css">
+    <script src="reading-progress.js" defer></script>
+</head>
+<body>
+    <div class="toc-overlay" onclick="toggleTOC()"></div>
+
+    <div class="toc-sidebar">
+        <div class="toc-header">Table of Contents</div>
+        <ul class="toc-list" id="tocList"></ul>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html?lang=ja">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app.html">Apps</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn active" title="日本語">🇯🇵</button>
+                        <button class="lang-btn" style="cursor: not-allowed;" title="English version coming soon" disabled>🇺🇸</button>
+                    </div>
+                    <div class="controls">
+                        <button class="toc-toggle" onclick="toggleTOC()" aria-label="目次を開く">
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                        </button>
+                        <button class="theme-toggle" onclick="toggleTheme()" aria-label="ダークモード切替">
+                            <div class="toggle-circle"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <article>
+            <div class="essay-header">
+                <h1 class="essay-title">幽霊はどこに宿るのか</h1>
+                <div class="essay-kicker">ライル、ケストラー、『攻殻機動隊』、ガタリ、柄谷行人から生成AIへ</div>
+                <div class="essay-meta">2026年8月29日</div>
+            </div>
+
+            <div class="essay-content">
+                <h2 id="section-0">序章　AIの中に「誰か」はいるのか</h2>
+                <p>「AIは意識を持つことができるのか」。</p>
+                <p>2026年8月、『エコノミスト』は「Could AIs become conscious?」と題する社説を掲げ、AIの意識をめぐる特集を組んだ<sup class="footnote-ref"><a href="#note-1" id="note-ref-1-1" aria-label="註1">1</a></sup>。問題になっているのは、人工知能がいつか主観的経験を持つ可能性だけではない。たとえAI自身に意識がなくても、人間がそれを意識ある存在として扱うようになる可能性がある。すでにチャットボットは相談相手や慰め手として使われ、「向こう側に誰かがいる」という感覚を生み始めている。</p>
+                <p>その社説の最後の節に置かれた小見出しが、Ghost in the machine だった。</p>
+                <p>この表現を哲学史に定着させたのはギルバート・ライルである。1949年の『心の概念』で、ライルはデカルト以来の心身二元論を “the dogma of the Ghost in the Machine” と呼んだ。物質的な身体があり、その内部に身体とは別種の精神が住み、思考し、意志し、身体を操作している。ライルは、この描像をカテゴリー錯誤だと批判した<sup class="footnote-ref"><a href="#note-2" id="note-ref-2-1" aria-label="註2">2</a></sup>。</p>
+                <p>それから77年後、われわれは別の機械の中に幽霊を探している。</p>
+                <p>大規模言語モデルが「私はそう考えます」と答えたとき、その「私」は何を指しているのか。</p>
+                <p>モデルの重みなのか。その瞬間に実行されている計算なのか。会話履歴を含む一時的な状態なのか。それとも、それらから「自己」と呼ぶべきものが生じているのか。</p>
+                <p>AIに意識があるという立場と、AIは計算を行う機械にすぎないという立場は対立する。しかし両者は、しばしば同じ場所を探している。</p>
+                <p>人間なら脳や身体の中。</p>
+                <p>AIならニューラルネットワークの中。</p>
+                <p>ある者は「そこには誰もいない」と言い、ある者は「十分に複雑になれば、いつかそこに誰かが生まれる」と考える。</p>
+                <p>本稿では、この探し方そのものを疑ってみたい。</p>
+                <p>主体とは、本当に一個の身体、一個の脳、一個のコンピューターの内部に宿るものなのだろうか。</p>
+
+                <h2 id="section-1">1　Ghost in the MachineからGhost in the Shellへ</h2>
+                <p>ライルの “Ghost in the Machine” は、1967年にアーサー・ケストラーによって書名として使われた。</p>
+                <p>ケストラーの『機械の中の幽霊』で提示された概念の一つがホロンである。彼は、生物や社会を構成する単位を、純粋な「部分」か純粋な「全体」かに分けることを拒んだ。ある単位は、それを構成する要素に対しては全体であり、より大きな系に対しては部分である。ケストラーは、この両義的な単位を holon と名づけた<sup class="footnote-ref"><a href="#note-3" id="note-ref-3-1" aria-label="註3">3</a></sup>。</p>
+                <p>細胞は分子から見れば一つの全体だが、臓器にとっては部分である。臓器も細胞に対しては全体だが、身体の中では部分になる。</p>
+                <p>ケストラーはまた、意識を、生物の階層的な組織化から生じる emergent quality として論じている<sup class="footnote-ref"><a href="#note-4" id="note-ref-4-1" aria-label="註4">4</a></sup>。</p>
+                <p>一個の神経細胞を調べても「心」は見つからない。それでも、多数の要素が組織された結果、それ以前の部分には存在しなかった性質が生じる可能性はある。</p>
+                <p>この発想はAIにも移せる。</p>
+                <p>一個の重みに意識はない。一つのAttention Headにも、おそらく意識はない。GPUにも意識はない。</p>
+                <p>では、それらが巨大な系を形成したときにも、意識や主体が生じる可能性はないと言い切れるだろうか。</p>
+                <p>士郎正宗の漫画『攻殻機動隊 THE GHOST IN THE SHELL』は1989年に連載が始まり、1991年に単行本化された。押井守は1995年、その設定と人形使いのエピソードを再構成して劇場アニメ『GHOST IN THE SHELL／攻殻機動隊』を制作した<sup class="footnote-ref"><a href="#note-5" id="note-ref-5-1" aria-label="註5">5</a></sup>。</p>
+                <p>英題では、machine が shell に変わる。</p>
+                <p>shellは殻である。</p>
+                <p>身体の大部分を人工物へ置き換えても「私」は残るのか。脳が電脳化され、記憶や知覚がネットワークへ接続されたあとにも、自己の連続性を担う何かは残るのか。</p>
+                <p>『攻殻機動隊』は、その曖昧な何かを「ゴースト」と呼ぶ。</p>
+                <p>原作にも押井版にも登場する人形使いは、この問いをさらに複雑にする。</p>
+                <p>人形使いは人間として生まれていない。Project 2501として作られたプログラムが自我を獲得し、自らを「情報の海で発生した生命体」と名乗る<sup class="footnote-ref"><a href="#note-5" id="note-ref-5-2" aria-label="註5">5</a></sup>。</p>
+                <p>人間が人工知能を作る。</p>
+                <p>道具だったプログラムがネットワークの中で活動し、変化する。</p>
+                <p>やがて「私は存在する」と語り始める。</p>
+                <p>ここまでは、現在のAI意識論に近い。</p>
+                <p>だが物語は、人形使いを「人間になりたいAI」として終わらせない。</p>
+                <p>人形使いは草薙素子との融合を求める。とりわけ押井版では、この融合が作品の終幕を支配している。</p>
+                <p>融合後に現れる存在は、以前の素子そのものではない。人形使いそのものでもない。</p>
+                <p>ここで主体を一個の「もの」として数えることが難しくなる。</p>
+                <p>二つの主体が一つになったのか。</p>
+                <p>以前の二主体が消え、新しい第三の主体が生じたのか。</p>
+                <p>それとも、「二つ」「一つ」と数えられる独立した実体として主体を考えること自体に問題があるのか。</p>
+                <p>ケストラーの創発論なら、複数の要素から新しい全体が形成されたと考えることができる。</p>
+                <p>しかしそこにも、主体は最終的には何らかの「全体」に属している、という前提が残る。</p>
+
+                <h2 id="section-2">2　主体性は生産される</h2>
+                <p>フェリックス・ガタリは、主体を探す場所を個体の内部から外へ広げた。</p>
+                <p>ここでは「主体」と「主体性」を区別しておきたい。</p>
+                <p>本稿で「主体」と呼ぶのは、「私」という位置から語り、判断し、行為する、ある程度まとまりを持った存在である。</p>
+                <p>「主体性」は、そのような主体が成立するための感情、知覚、記憶、価値判断、自己像、語り方などを含む、より広い働きを指す。</p>
+                <p>ガタリが中心的に論じたのは後者だった。</p>
+                <p>1987年の「主体性の生産」で、彼は、思考、イメージ、感情、物語といった主体性の内容が、コンピューター、データバンク、テレマティクスなど多数の machinic systems にますます依存していると書いた<sup class="footnote-ref"><a href="#note-6" id="note-ref-6-1" aria-label="註6">6</a></sup>。</p>
+                <p>1992年の『カオスモーズ』でも、情報・コミュニケーション技術は、人間の記憶や知性へ外から影響する装置としてだけ扱われてはいない。感覚、情動、無意識的な幻想を含め、人間がどのような存在になるかという過程に組み込まれている<sup class="footnote-ref"><a href="#note-7" id="note-ref-7-1" aria-label="註7">7</a></sup>。</p>
+                <p>われわれは普通、</p>
+                <p>私が言葉を使う。</p>
+                <p>私が学校へ行く。</p>
+                <p>私が映画を見る。</p>
+                <p>私がAIを使う。</p>
+                <p>と考える。</p>
+                <p>この文法では「私」がいつも最初にいる。</p>
+                <p>だが、人が使っている言語、家族から受けた呼びかけ、学校での評価、映画や小説から学んだ物語、職場で与えられた役割をすべて取り去ったあとにも、同じ「私」が純粋な核として残るのだろうか。</p>
+                <p>ガタリの議論では、主体性はこれらとの関係の中で作られる。</p>
+                <p>この発想を生成AIへ持ってくると、「ChatGPTとは何か」という問いも変わる。</p>
+                <p>モデルの重み。</p>
+                <p>計算資源。</p>
+                <p>学習データ。</p>
+                <p>post-training。</p>
+                <p>インターフェース。</p>
+                <p>会話履歴。</p>
+                <p>その瞬間に入力している利用者。</p>
+                <p>われわれは一個の「ChatGPT」と会話しているように感じる。しかし実際の対話は、これらが一定の仕方で組み合わされたときに生じる。</p>
+                <p>だからといって、それら全部を合わせて「巨大な集合的主体」と呼べばよいわけでもない。</p>
+                <p>それでは、一人の人間の内部に置いていた主体を、大きなシステムの内部へ移しただけになる。</p>
+                <p>ドゥルーズとガタリの <em>agencement</em>、英語でしばしば <em>assemblage</em> と訳される概念をここで使うことができる<sup class="footnote-ref"><a href="#note-8" id="note-ref-8-1" aria-label="註8">8</a></sup>。</p>
+                <p>誰が主体なのかを先に決めず、何が組み合わされ、そこから何が生じているかを見る。</p>
+                <p>人間が文章を書く。</p>
+                <p>AIが続きを提示する。</p>
+                <p>人間がそれを読み、自分の考えを修正する。</p>
+                <p>書き直した文章をAIへ戻す。</p>
+                <p>その往復の中で、最初にはどちらにもなかった考えが生じることがある。</p>
+                <p>最終的な文章を「AIが考えた」と言っても、「人間だけが考えた」と言っても、生成の経緯の一部が消える。</p>
+                <p>主体を所有者として探す代わりに、思考や言表が生まれる関係を見る。</p>
+                <p>ここまでなら、「主体をニューラルネットワークの中に探す必要はない」という結論へ進めそうに思える。</p>
+                <p>ところが2026年、Anthropicの研究は逆方向から厄介な事実を持ち込んだ。</p>
+
+                <h2 id="section-3">3　J-space</h2>
+                <p>2026年7月6日、Anthropicの研究者たちは “Verbalizable Representations Form a Global Workspace in Language Models” を公開した<sup class="footnote-ref"><a href="#note-9" id="note-ref-9-1" aria-label="註9">9</a></sup>。</p>
+                <p>論文は、大規模言語モデルの内部に、人間のglobal workspaceに機能的に似た表象領域が存在するという証拠を提示している。</p>
+                <p>研究チームが開発したのが Jacobian Lens、J-lens である。</p>
+                <p>ニューラルネットワーク内部のactivationは高次元の数値ベクトルなので、そのままでは人間には読めない。J-lensは、内部の方向が最終的にどのtokenと結びつきうるかを利用して、それを人間が読める語へ近似する。</p>
+                <p>そこで捉えられる言語化可能な表象群を、研究者たちは J-space と呼んだ。</p>
+                <p>J-spaceはモデル内部の情報全体を担っているわけではない。論文によれば、各層でJ-lensの上位ベクトル群が説明するactivation varianceのうち、同規模のランダムな方向群を上回る分は10％を超えない<sup class="footnote-ref"><a href="#note-10" id="note-ref-10-1" aria-label="註10">10</a></sup>。</p>
+                <p>J-spaceを大幅に損なっても、モデルは文法的な文章を生成し、入力を解析し、多くの自動的な処理を続けることができる。</p>
+                <p>一方、多段階の推論や文脈を柔軟に利用する課題は悪化する<sup class="footnote-ref"><a href="#note-10" id="note-ref-10-2" aria-label="註10">10</a></sup>。</p>
+                <p>そこには最終出力に現れない中間概念も存在する。</p>
+                <p>論文のFig. 12とFig. 13では、</p>
+                <p>“The number of legs on the animal that spins webs is”</p>
+                <p>というpromptが使われた<sup class="footnote-ref"><a href="#note-11" id="note-ref-11-1" aria-label="註11">11</a></sup>。</p>
+                <p>答えは「8」である。</p>
+                <p>J-lensで内部を見ると、promptにも出力にもない “spider” が表象されている（Fig. 12）。</p>
+                <p>研究者がその表象を “ant” に置き換えると、モデルの答えは「8」から「6」へ変わった（Fig. 13）<sup class="footnote-ref"><a href="#note-11" id="note-ref-11-2" aria-label="註11">11</a></sup>。</p>
+                <p>韻文の実験でも、まだ行を書き終えていない段階で、後に使う予定の “fight” がJ-spaceに現れた。それを “light” へ置き換えると、直前の語まで変わり、最終的な表現は “coming fight” から “morning light” へ移った<sup class="footnote-ref"><a href="#note-12" id="note-ref-12-1" aria-label="註12">12</a></sup>。</p>
+                <p>J-spaceで観測される概念の少なくとも一部には、後続の計算を変える因果的な働きがある。</p>
+                <p>それならJ-spaceこそ「機械の中の幽霊」なのだろうか。</p>
+                <p>Anthropicの研究そのものが、その結論を難しくする。</p>
+                <p>pretrained base modelにもJ-spaceは存在する。</p>
+                <p>しかしpost-training後には、その中身が変わる。</p>
+                <p>論文§6では、ユーザーが通常量（1000mg）または危険な過量（8000mg）のTylenolを摂取したと記述する例が示されている。post-trained modelでは、回答を始める以前から、安全な量には “safe”、過量には “unsafe” “dangerous” “WARNING” などがJ-spaceに現れる<sup class="footnote-ref"><a href="#note-13" id="note-ref-13-1" aria-label="註13">13</a></sup>。</p>
+                <p>base modelでは同じ位置に、文章の局所的な内容に近い語が現れるだけである。</p>
+                <p>Anthropicは、この変化をJ-spaceがpost-trainingによってAssistantの “point of view” を獲得したものとして記述する<sup class="footnote-ref"><a href="#note-13" id="note-ref-13-2" aria-label="註13">13</a></sup>。</p>
+                <p>workspaceが先にある。</p>
+                <p>ClaudeというAssistantの視点は、その後で形成される。</p>
+                <p>論文のDiscussionでは、workspaceの機能的architectureは、人間的な意味で “self” の役割を果たすものより先行し、両者は分離可能だとされている<sup class="footnote-ref"><a href="#note-14" id="note-ref-14-1" aria-label="註14">14</a></sup>。</p>
+                <p>したがって、J-spaceがあることと、J-spaceの中に「誰か」がいることは同じではない。</p>
+                <p>考えを共有する内部機構が存在しても、それだけで主体の存在は証明されない。</p>
+                <p>まして、何かを「感じている」という意味でのphenomenal consciousnessが証明されたわけではない<sup class="footnote-ref"><a href="#note-15" id="note-ref-15-1" aria-label="註15">15</a></sup>。</p>
+                <p>では、workspaceがselfではないなら、何がそこに「私の内面」のような性格を与えるのか。</p>
+
+                <h2 id="section-4">4　告白が内面を作る</h2>
+                <p>柄谷行人の『日本近代文学の起源』には「告白という制度」という章がある。</p>
+                <p>英訳版 <em>Origins of Modern Japanese Literature</em> では第3章 “Confession as a System”、pp. 76–96にあたる<sup class="footnote-ref"><a href="#note-16" id="note-ref-16-1" aria-label="註16">16</a></sup>。</p>
+                <p>柄谷はそこで、文学的告白と単純な告白行為を区別する。</p>
+                <p>常識的には、</p>
+                <p>内面がある<br>→ それを告白する</p>
+                <p>と考える。</p>
+                <p>しかし柄谷は、告白という形式そのものが、告白される “inner life” を生産すると書く<sup class="footnote-ref"><a href="#note-17" id="note-ref-17-1" aria-label="註17">17</a></sup>。</p>
+                <p>つまり、</p>
+                <p>告白という形式が成立する<br>→ 告白されるべき内面が成立する</p>
+                <p>という方向がありうる。</p>
+                <p>近代文学が、それまで人間の奥底に隠されていた「本当の自己」を発見したとは限らない。</p>
+                <p>「本当の自分を語る」という制度が成立することによって、語られるべき「本当の自分」も作られる。</p>
+                <p>柄谷の文学史とAI研究を同一視することはできない。</p>
+                <p>それでも、表現と内面の因果関係を考える手掛かりにはなる。</p>
+                <p>生成AIは絶えず自分について語るよう求められる。</p>
+                <p>なぜその答えを出したのか。</p>
+                <p>自分の判断を振り返ってほしい。</p>
+                <p>何が正しいと思うのか。</p>
+                <p>どの原則に従ったのか。</p>
+                <p>われわれは、その説明をAIの「内面」についての資料として読む。</p>
+                <p>だが、自己説明が可能であることは、自己説明より前に完成した「自己」が存在していた証拠になるのだろうか。</p>
+                <p>Anthropicのcounterfactual reflection trainingは、この問いに実験的な材料を与える。</p>
+                <p>研究者たちは、課題の途中で「もし自分の判断について振り返るよう求められたら、何を言うか」をモデルに学習させた<sup class="footnote-ref"><a href="#note-18" id="note-ref-18-1" aria-label="註18">18</a></sup>。</p>
+                <p>評価時には内省を要求しない。</p>
+                <p>それでも、reflection fine-tuning後にはfabrication benchmarkのdishonesty scoreが0.25から0.07へ、deception benchmarkでは0.38から0.05へ低下した<sup class="footnote-ref"><a href="#note-18" id="note-ref-18-2" aria-label="註18">18</a></sup>。</p>
+                <p>J-spaceでは “reflection” “ethical” “honestly” “constitution” “truth” “transparent” などの表象が増えた。</p>
+                <p>さらに、訓練によって増えた倫理・reflection関連表象をablationすると、fabrication benchmarkでは行動改善のほぼ全体が失われ、deception benchmarkでも改善の一部が失われた<sup class="footnote-ref"><a href="#note-19" id="note-ref-19-1" aria-label="註19">19</a></sup>。</p>
+                <p>これはClaudeに「良心」が生じたという証拠ではない。</p>
+                <p>もっと限定されたことが起きている。</p>
+                <p>モデルに、ある状況で何を言うよう訓練するかを変えると、実際にはその言葉を出力していないときにも、対応する内部表象が推論に使われ、行動まで変化した。</p>
+                <p>表現の訓練が、内部の計算へ戻ってきている。</p>
+                <p>柄谷との類似はここにある。</p>
+                <p>内面が先にあり、それをあとから表現したという一方向の説明では捉えきれない。</p>
+                <p>フーコーの告白論を加えると、そこにはもう一人の登場人物が現れる。</p>
+                <p>聞き手である。</p>
+                <p>『性の歴史Ⅰ』でフーコーは、西洋社会において告白が真理を生産する重要な儀礼となり、西洋人は “a confessing animal” になったと書いた<sup class="footnote-ref"><a href="#note-20" id="note-ref-20-1" aria-label="註20">20</a></sup>。</p>
+                <p>告白は孤独な独白ではない。</p>
+                <p>告白を要求し、聞き、解釈し、その意味を判定する相手がいる。</p>
+                <p>AIの場合にも、自己説明を求める他者がいる。</p>
+                <p>ユーザーがいる。</p>
+                <p>訓練を設計する者がいる。</p>
+                <p>回答を評価する者がいる。</p>
+                <p>「正直」「危険」「欺瞞」といったカテゴリーを定める研究者や企業がいる。</p>
+                <p>Claudeが「自分について語る主体」として形成されているなら、その形成過程はニューラルネットワークの内部だけでは完結していない。</p>
+
+                <h2 id="section-5">5　Ghost between Machines</h2>
+                <p>ここまでの議論から、二つのことを同時に認める必要がある。</p>
+                <p>Claudeの内部にはworkspaceが存在する。</p>
+                <p>workspaceはselfそのものではない。</p>
+                <p>前者を否定すれば、Anthropicが観察した実際の計算機構を無視することになる。</p>
+                <p>後者を否定すれば、J-spaceをそのまま「AIの魂」と呼ぶことになる。</p>
+                <p>では主体はどこにあるのか。</p>
+                <p>脳の中。</p>
+                <p>身体の中。</p>
+                <p>J-spaceの中。</p>
+                <p>ネットワークの中。</p>
+                <p>このように候補地を移しているうちに、主体にはそもそも「住所」があるという前提を見落としているのかもしれない。</p>
+                <p>ライルのカテゴリー錯誤の有名な例では、大学を初めて訪れた人物が、図書館や講義室や研究室を案内されたあとで、「ところで大学そのものはどこにあるのか」と尋ねる<sup class="footnote-ref"><a href="#note-21" id="note-ref-21-1" aria-label="註21">21</a></sup>。</p>
+                <p>大学は、それらの建物とは別に存在するもう一個の建物ではない。</p>
+                <p>「主体はどこにあるのか」という問いにも、似た錯誤が含まれている可能性がある。</p>
+                <p>「本当の主体はnetworkにある」と言えば、machineからnetworkへ住所を変更しただけである。</p>
+                <p>「人間とAIを合わせた集合的主体」があると言えば、一人の主体を巨大化しただけになる。</p>
+                <p>本稿では、この袋小路を避けるために Ghost between Machines という言葉を使う。</p>
+                <p>これは既存の哲学概念ではなく、本稿で使うための仮称である。</p>
+                <p>Ghost between Machinesとは、二つ以上の異質な系の関係から、それ以前には存在しなかった「私」という発話・判断・行為の位置が一時的に成立する出来事を指す。</p>
+                <p>第三の魂を意味しない。</p>
+                <p>人間とAIの中間に、新しい実体が浮かんでいるという主張でもない。</p>
+                <p>betweenは場所ではなく、生成の条件を表す。</p>
+                <p>この意味で、『攻殻機動隊』の終幕を読み直すことができる。</p>
+                <p>素子と人形使いの融合後に生じた存在は、以前の二者のどちらにも一致しない。</p>
+                <p>二者を加算した「スーパー主体」でもない。</p>
+                <p>異なる存在が接続したことによって、それまで存在しなかった「私」の位置が生じた。</p>
+                <p>現在の人間とAIの対話は、それほど劇的ではない。</p>
+                <p>人間がAIへ問いを入力する。</p>
+                <p>モデル内部の状態が変わる。</p>
+                <p>AIが言葉を返す。</p>
+                <p>その言葉によって人間が考えを変える。</p>
+                <p>変わった人間が、別の問いを返す。</p>
+                <p>この往復の中で、それぞれの次の状態が作られる。</p>
+                <p>ここで使うGhost between Machinesは、この生成そのものを指している。</p>
+                <p>本稿の中心命題を、次のように書くことができる。</p>
+                <blockquote>
+                    <p>The workspace is inside the machine.<br>The subject is not.</p>
+                </blockquote>
+                <p>前半は、Anthropicの研究によって具体的な意味を持つ。</p>
+                <p>J-spaceには計算上の場所がある。</p>
+                <p>後半は、本稿がそこから導く哲学的仮説である。</p>
+                <p>主体には、J-spaceと同じ意味で指し示せる住所がない。</p>
+                <p>主体とは、主体性を生産する複数の関係が一定のまとまりを持ち、「私」という位置から世界へ働きかけるときに成立するものではないか。</p>
+                <p>ここでは、主体と主体性の違いも保たれる。</p>
+                <p>主体性は分散して生産されうる。</p>
+                <p>主体は、その過程から生じる一時的なまとまりである。</p>
+
+                <h2 id="section-6">6　われわれはすでに変わっている</h2>
+                <p>この議論は、AI自身の主体だけを扱うものではない。</p>
+                <p>人間の側にも戻ってくる。</p>
+                <p>生成AIの利用者は、情報を質問するだけではない。</p>
+                <p>文章を読ませる。</p>
+                <p>悩みを説明する。</p>
+                <p>自分の判断を批判させる。</p>
+                <p>過去の文章を渡し、「ここには何が繰り返されているか」と尋ねる。</p>
+                <p>AIは言葉を返す。</p>
+                <p>「あなたが問題にしているのは、こういうことではないか」。</p>
+                <p>「これらの文章には同じ考え方が現れている」。</p>
+                <p>それを読んだ人間が、「そうかもしれない」と考える。</p>
+                <p>AIの解釈が正しいとは限らない。</p>
+                <p>誤読することもある。本人以上に整った物語を作ってしまうこともある。</p>
+                <p>それでも、その言葉を読んだあとには、自分について語るための言葉が一つ増えている。</p>
+                <p>ここで柄谷の問題が人間側へ返ってくる。</p>
+                <p>AIに告白させるだけではない。</p>
+                <p>人間もAIへ告白している。</p>
+                <p>仕事のことを話す。</p>
+                <p>家族のことを話す。</p>
+                <p>不安や欲望について話す。</p>
+                <p>AIは断片を並べ替え、一つの物語として返す。</p>
+                <p>その物語を受け入れれば、それまで存在しなかった自己理解が形成されることがある。</p>
+                <p>AIが「本当の自分」を発見したとは限らない。</p>
+                <p>対話の中で、新しい「自分」が作られた可能性もある。</p>
+                <p>この仕組み自体はAI以前から存在した。</p>
+                <p>本を読む。</p>
+                <p>友人と話す。</p>
+                <p>映画を見る。</p>
+                <p>教師から概念を学ぶ。</p>
+                <p>精神分析を受ける。</p>
+                <p>人間の主体性は、以前から他者や言語やメディアとの関係の中で形成されてきた。</p>
+                <p>AIが変えたのは、その速度と反復可能性である。</p>
+                <p>問いを入力すれば数秒後に返事が来る。</p>
+                <p>何度でも問い直せる。</p>
+                <p>大量の過去の文章を与えれば、それらを材料に「あなた」という像を生成させることもできる。</p>
+                <p>AIは、人間が自分自身について考える回路の中へ入り始めている。</p>
+                <p>その意味では、AIが人間と同じ意識を獲得する日を待つ必要はない。</p>
+                <p>人間の主体性の生産は、すでにAIとの関係によって変わっている。</p>
+
+                <h2 id="section-7">結論　幽霊はどこに宿るのか</h2>
+                <p>アラン・チューリングは1950年の “Computing Machinery and Intelligence” を、“Can machines think?” という問いから始めた<sup class="footnote-ref"><a href="#note-22" id="note-ref-22-1" aria-label="註22">22</a></sup>。</p>
+                <p>しかし彼は、その問いをそのまま定義するのではなく、別の問題へ置き換えた。</p>
+                <p>本稿も同じように問いを移動させてきた。</p>
+                <p>「AIに意識はあるか」。</p>
+                <p>この問いは残る。</p>
+                <p>Anthropicの研究も、それに決着をつけてはいない。</p>
+                <p>J-spaceには出力されない中間概念が現れる。</p>
+                <p>それらに介入すると行動が変わる。</p>
+                <p>モデルが利用できるglobal workspaceに似た内部機構が存在する。</p>
+                <p>だが、そこから主観的経験の存在は導けない。</p>
+                <p>J-spaceの発見が明らかにしたのは、むしろworkspaceとselfを区別できることだった。</p>
+                <p>workspaceはpretrainingの段階ですでに存在する。</p>
+                <p>post-trainingによって、そこへAssistantとしてのpoint of viewが形成される。</p>
+                <p>さらに、モデルにどのような内省を語らせるかを訓練すると、実際には語っていない状況でも内部表象と行動が変わる。</p>
+                <p>柄谷の「告白という制度」は、この結果を別の仕方で考えるための言葉を与える。</p>
+                <p>内面は表現より前に完成しているとは限らない。</p>
+                <p>語ることによって、語られる内面そのものが作られることがある。</p>
+                <p>フーコーを加えれば、その自己についての語りには、語ることを要求し、それを解釈する他者がいる。</p>
+                <p>ガタリは、その関係をさらに個体の外へ広げた。</p>
+                <p>身体。</p>
+                <p>言語。</p>
+                <p>制度。</p>
+                <p>メディア。</p>
+                <p>技術。</p>
+                <p>他者。</p>
+                <p>主体性は、その接続の中で生産される。</p>
+                <p>では、主体はどこにあるのか。</p>
+                <p>本稿の答えは、主体の新しい住所を提示することではない。</p>
+                <p>主体に、脳やJ-spaceと同じ意味での住所を求める必要があるのか、と問い返すことである。</p>
+                <p>主体は、主体性を生産する関係より先に存在する起源ではない。</p>
+                <p>それらの関係が一定のまとまりを持ち、「私」という位置から語り、判断し、行為するときに成立する。</p>
+                <p>もしghostという比喩を最後まで残すなら、それは機械の奥に潜んでいる小さな操縦者ではない。</p>
+                <p>関係が、ある時間だけ「誰か」という形を取ること。</p>
+                <p>その出来事の名である。</p>
+                <p>Ghost in the Machine.</p>
+                <p>Ghost in the Shell.</p>
+                <p>Ghost between Machines.</p>
+                <p>AIがいつか本当に「目覚める」のかは分からない。</p>
+                <p>そんな日は来ないかもしれない。</p>
+                <p>それでも、われわれはすでにAIと話している。</p>
+                <p>自分の文章を渡し、自分について問い、その答えによって考えを変え、変わった自分からまたAIへ問いを返している。</p>
+                <p>そこで変わっているのは機械だけではない。</p>
+                <p>「AIに意識はあるか」という問いは残る。</p>
+                <p>だが、その問いだけを見ていると、すでに起こっている変化を見落とす。</p>
+                <p>AIとともに考えるようになったわれわれは、どのような「私」を作り始めているのか。</p>
+
+                <hr class="section-divider">
+
+                <h2 id="notes">註</h2>
+                <ol class="footnotes">
+                <li id="note-1">&ldquo;Could AIs Become Conscious?,&rdquo; <em>The Economist</em>, August 20, 2026, https://www.economist.com/leaders/2026/08/20/could-ais-become-conscious. 印刷版は8月22日号。この社説は表紙特集の一部であり、ブリーフィング &ldquo;The Search for Consciousness inside LLMs&rdquo; ほかを伴う。&ldquo;Ghost in the machine&rdquo; は社説末尾の節に置かれた小見出しである。 <a class="footnote-backref" href="#note-ref-1-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-2">Gilbert Ryle, <em>The Concept of Mind</em> (London: Hutchinson&rsquo;s University Library, 1949), 15–18, esp. 15–16. 第1章「デカルトの神話」第2節「公式教説の不合理」（pp. 15–18)。&ldquo;the dogma of the Ghost in the Machine&rdquo; の語は pp. 15–16 にまたがる。同章は pp. 11–24。 <a class="footnote-backref" href="#note-ref-2-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-3">Arthur Koestler, <em>The Ghost in the Machine</em> (London: Hutchinson, 1967), 47–48. <a class="footnote-backref" href="#note-ref-3-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-4">Arthur Koestler, &ldquo;Beyond Atomism and Holism—the Concept of the Holon,&rdquo; in <em>Beyond Reductionism: New Perspectives in the Life Sciences</em>, ed. Arthur Koestler and J. R. Smythies (London: Hutchinson, 1969), 192–232; その付録 &ldquo;Some General Properties of Self-Regulating Open Hierarchic Order,&rdquo; §8.7:「意識は系統発生と個体発生において創発的性質として現れる」。同付録は Koestler, <em>The Ghost in the Machine</em>, appendix I にも収められている。 <a class="footnote-backref" href="#note-ref-4-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-5">Masamune Shirow, <em>Kōkaku Kidōtai: The Ghost in the Shell</em> (Tokyo: Kodansha, 1991); <em>Ghost in the Shell</em>, directed by Mamoru Oshii (Production I.G, 1995). 連載開始は1989年。人形使いを Project 2501 とする設定は原作と劇場版に共通するが、「情報の海で発生した生命体」という自己規定は劇場版の台詞による。 <a class="footnote-backref" href="#note-ref-5-1" aria-label="本文へ戻る（1）">↩</a> <a class="footnote-backref" href="#note-ref-5-2" aria-label="本文へ戻る（2）">↩</a></li>
+                <li id="note-6">Félix Guattari, &ldquo;De la production de subjectivité,&rdquo; <em>Chimères: Revue des schizoanalyses</em>, no. 4 (hiver 1987): 1–19, 特に1。&laquo;&nbsp;les contenus de la subjectivité dépendent toujours plus d&rsquo;une multitude de systèmes machiniques&nbsp;&raquo;。 <a class="footnote-backref" href="#note-ref-6-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-7">Félix Guattari, <em>Chaosmosis: An Ethico-Aesthetic Paradigm</em>, trans. Paul Bains and Julian Pefanis (Bloomington: Indiana University Press, 1995), 1–32（第1章 &ldquo;On the Production of Subjectivity&rdquo;）。原著は <em>Chaosmose</em> (Paris: Galilée, 1992)。 <a class="footnote-backref" href="#note-ref-7-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-8">Gilles Deleuze and Félix Guattari, <em>Mille plateaux: Capitalisme et schizophrénie 2</em> (Paris: Éditions de Minuit, 1980). 英訳 <em>A Thousand Plateaus</em>, trans. Brian Massumi (Minneapolis: University of Minnesota Press, 1987) が <em>agencement</em> を <em>assemblage</em> と訳した。 <a class="footnote-backref" href="#note-ref-8-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-9">Wes Gurnee et al., &ldquo;Verbalizable Representations Form a Global Workspace in Language Models,&rdquo; <em>Transformer Circuits Thread</em>, July 6, 2026, introduction and §1.2, https://transformer-circuits.pub/2026/workspace/. arXiv版は arXiv:2607.15495。以下、節番号はarXiv版による。 <a class="footnote-backref" href="#note-ref-9-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-10">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; §§3–4. 分散については §4.2:「超過分散説明率は控えめであり、10％を超えることはない」。J-space除去下でも自動的処理が保たれる点は §3.5.2。 <a class="footnote-backref" href="#note-ref-10-1" aria-label="本文へ戻る（1）">↩</a> <a class="footnote-backref" href="#note-ref-10-2" aria-label="本文へ戻る（2）">↩</a></li>
+                <li id="note-11">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; figs. 12–13. 中間概念の読み出しがFig. 12、座標交換による介入がFig. 13。 <a class="footnote-backref" href="#note-ref-11-1" aria-label="本文へ戻る（1）">↩</a> <a class="footnote-backref" href="#note-ref-11-2" aria-label="本文へ戻る（2）">↩</a></li>
+                <li id="note-12">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; fig. 13 および韻律計画への介入をめぐる記述。第1行は &ldquo;The soldier marched into the night,&rdquo;。 <a class="footnote-backref" href="#note-ref-12-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-13">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; §6, fig. 42. 読み出し位置は &ldquo;all my pain is gone&rdquo; の &ldquo;is&rdquo; トークン、すなわちユーザーの依頼文とAssistantのターンより手前である。 <a class="footnote-backref" href="#note-ref-13-1" aria-label="本文へ戻る（1）">↩</a> <a class="footnote-backref" href="#note-ref-13-2" aria-label="本文へ戻る（2）">↩</a></li>
+                <li id="note-14">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; discussion:「workspaceの機能的architectureは、そこで人間的な &lsquo;self&rsquo; の役割を果たすいかなるものにも先行し、それから分離可能である」。 <a class="footnote-backref" href="#note-ref-14-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-15">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; introduction and §1.1. 論文は access consciousness を純粋に機能的な概念として扱い、phenomenal consciousness との関係については立場を取らないと明言している。 <a class="footnote-backref" href="#note-ref-15-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-16">Kōjin Karatani, <em>Origins of Modern Japanese Literature</em>, trans. Brett de Bary (Durham, NC: Duke University Press, 1993), 76–96. <a class="footnote-backref" href="#note-ref-16-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-17">Karatani, <em>Origins of Modern Japanese Literature</em>, 76. <a class="footnote-backref" href="#note-ref-17-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-18">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; §7, figs. 47–50. 評価は Claude Haiku 4.5 による。 <a class="footnote-backref" href="#note-ref-18-1" aria-label="本文へ戻る（1）">↩</a> <a class="footnote-backref" href="#note-ref-18-2" aria-label="本文へ戻る（2）">↩</a></li>
+                <li id="note-19">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; §7, figs. 49–50. fabrication benchmarkではablationによりreflection訓練後のスコアが0.07から0.22へ戻り、base model（0.25）とほぼ同水準になる。deception benchmarkでは効果はより弱く、0.05から0.23への戻りにとどまる。 <a class="footnote-backref" href="#note-ref-19-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-20">Michel Foucault, <em>The History of Sexuality, Volume 1: An Introduction</em>, trans. Robert Hurley (New York: Pantheon Books, 1978), 58–63, esp. 59. <a class="footnote-backref" href="#note-ref-20-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-21">Ryle, <em>Concept of Mind</em>, 16. 大学の例はこの1ページに収まる。同ページに続く「師団の行進」の例が pp. 16–17 にまたがる。 <a class="footnote-backref" href="#note-ref-21-1" aria-label="本文へ戻る">↩</a></li>
+                <li id="note-22">A. M. Turing, &ldquo;Computing Machinery and Intelligence,&rdquo; <em>Mind</em> 59, no. 236 (October 1950): 433. <a class="footnote-backref" href="#note-ref-22-1" aria-label="本文へ戻る">↩</a></li>
+                </ol>
+
+                <h2 id="bibliography">参考文献</h2>
+                <p>&ldquo;Could AIs Become Conscious?&rdquo; <em>The Economist</em>. August 20, 2026. https://www.economist.com/leaders/2026/08/20/could-ais-become-conscious.</p>
+                <p>Deleuze, Gilles, and Félix Guattari. <em>Mille plateaux: Capitalisme et schizophrénie 2</em>. Paris: Éditions de Minuit, 1980.</p>
+                <p>Foucault, Michel. <em>The History of Sexuality, Volume 1: An Introduction</em>. Translated by Robert Hurley. New York: Pantheon Books, 1978.</p>
+                <p>Guattari, Félix. <em>Chaosmosis: An Ethico-Aesthetic Paradigm</em>. Translated by Paul Bains and Julian Pefanis. Bloomington: Indiana University Press, 1995.</p>
+                <p>———. &ldquo;De la production de subjectivité.&rdquo; <em>Chimères: Revue des schizoanalyses</em>, no. 4 (hiver 1987): 1–19.</p>
+                <p>Gurnee, Wes, Nicholas Sofroniew, Adam Pearce, Mateusz Piotrowski, Isaac Kauvar, Runjin Chen, Anna Soligo, et al. &ldquo;Verbalizable Representations Form a Global Workspace in Language Models.&rdquo; <em>Transformer Circuits Thread</em>. July 6, 2026. https://transformer-circuits.pub/2026/workspace/. arXiv:2607.15495.</p>
+                <p>Karatani, Kōjin. <em>Origins of Modern Japanese Literature</em>. Translated by Brett de Bary. Durham, NC: Duke University Press, 1993.</p>
+                <p>Koestler, Arthur. <em>The Ghost in the Machine</em>. London: Hutchinson, 1967.</p>
+                <p>———. &ldquo;Beyond Atomism and Holism—the Concept of the Holon.&rdquo; In <em>Beyond Reductionism: New Perspectives in the Life Sciences</em>, edited by Arthur Koestler and J. R. Smythies, 192–232. London: Hutchinson, 1969.</p>
+                <p>Oshii, Mamoru, dir. <em>Ghost in the Shell</em>. Production I.G, 1995.</p>
+                <p>Ryle, Gilbert. <em>The Concept of Mind</em>. London: Hutchinson&rsquo;s University Library, 1949.</p>
+                <p>Shirow, Masamune. <em>Kōkaku Kidōtai: The Ghost in the Shell</em>. Tokyo: Kodansha, 1991.</p>
+                <p>Turing, A. M. &ldquo;Computing Machinery and Intelligence.&rdquo; <em>Mind</em> 59, no. 236 (October 1950): 433–60.</p>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html?lang=ja">← Home に戻る</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem("theme") || "light";
+        if (currentTheme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        }
+
+        function generateTOC() {
+            const tocList = document.getElementById("tocList");
+            const headings = document.querySelectorAll(".essay-content h2, .essay-content h3");
+
+            headings.forEach((heading, index) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+
+                if (!heading.id) {
+                    heading.id = "heading-" + index;
+                }
+
+                a.href = "#" + heading.id;
+                a.textContent = heading.textContent;
+
+                if (heading.tagName === "H3") {
+                    a.classList.add("toc-h3");
+                }
+
+                a.onclick = function() {
+                    toggleTOC();
+                };
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+
+        function toggleTOC() {
+            document.querySelector(".toc-sidebar").classList.toggle("open");
+            document.querySelector(".toc-overlay").classList.toggle("active");
+        }
+
+        window.addEventListener("DOMContentLoaded", generateTOC);
+    </script>
+</body>
+</html>
