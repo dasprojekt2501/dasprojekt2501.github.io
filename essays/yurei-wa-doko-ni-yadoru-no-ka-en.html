@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+    <meta property="og:title" content="Where Does the Ghost Reside?">
+    <meta property="og:description" content="From Ryle, Koestler, Ghost in the Shell, Guattari and Karatani to Anthropic's J-space research: an essay on where the subject resides.">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/essays/yurei-wa-doko-ni-yadoru-no-ka-en.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="PROJEKT2501">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Where Does the Ghost Reside?">
+    <meta name="twitter:description" content="From Ryle, Koestler, Ghost in the Shell, Guattari and Karatani to Anthropic's J-space research: an essay on where the subject resides.">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Where Does the Ghost Reside?</title>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover,
+        .back-link a:hover,
+        .essay-content a:hover,
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            line-height: 1;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+
+        .lang-btn:hover {
+            opacity: 0.8;
+        }
+
+        .lang-btn.active {
+            opacity: 1;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
+            border-color: #333;
+        }
+
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .toc-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .essay-header {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .essay-kicker {
+            color: #666;
+            font-size: 1.05em;
+            margin-bottom: 14px;
+        }
+
+        body.dark-mode .essay-kicker {
+            color: #aaa;
+        }
+
+        .essay-meta {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        .essay-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .essay-content p,
+        .essay-content blockquote {
+            margin-bottom: 20px;
+        }
+
+        .essay-content h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .essay-content h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .essay-content ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .essay-content li {
+            margin-bottom: 8px;
+        }
+
+        .essay-content a,
+        .back-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        body.dark-mode .essay-content a,
+        body.dark-mode .back-link a {
+            color: #4a9eff;
+        }
+
+        .essay-content blockquote,
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #666;
+        }
+
+        body.dark-mode .essay-content blockquote,
+        body.dark-mode .info-box {
+            background-color: #2a2a2a;
+            border-left-color: #999;
+        }
+
+        .section-divider {
+            margin: 50px 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+        }
+
+        body.dark-mode .section-divider {
+            background: linear-gradient(to right, transparent, #333, transparent);
+        }
+
+        .back-link {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .back-link {
+            border-top-color: #333;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+
+.essay-author {
+    color: #777;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+}
+
+body.dark-mode .essay-author {
+    color: #aaa;
+}
+
+.keywords {
+    font-size: 0.92em;
+    color: #666;
+}
+
+body.dark-mode .keywords {
+    color: #aaa;
+}
+
+.essay-figure {
+    margin: 36px 0 32px;
+}
+
+.essay-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+body.dark-mode .essay-figure img {
+    border-color: #444;
+}
+
+.essay-figure figcaption {
+    margin-top: 10px;
+    color: #666;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+body.dark-mode .essay-figure figcaption {
+    color: #aaa;
+}
+
+.footnote-ref {
+    font-size: 0.72em;
+    line-height: 0;
+    vertical-align: super;
+}
+
+.footnote-ref a,
+.footnote-backref {
+    text-decoration: none;
+}
+
+.footnotes {
+    margin-left: 28px;
+}
+
+.footnotes li {
+    margin-bottom: 16px;
+    padding-left: 4px;
+    color: #555;
+    font-size: 0.92em;
+    line-height: 1.7;
+}
+
+body.dark-mode .footnotes li {
+    color: #bbb;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 36px 16px;
+    }
+
+    .header-controls {
+        align-items: flex-end;
+        gap: 20px;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+    }
+
+    nav a {
+        margin-right: 0;
+    }
+
+    .essay-title {
+        font-size: 1.85em;
+    }
+
+    .essay-content {
+        font-size: 1em;
+    }
+}
+    </style>
+    <link rel="stylesheet" href="reading-progress.css">
+    <script src="reading-progress.js" defer></script>
+</head>
+<body>
+    <div class="toc-overlay" onclick="toggleTOC()"></div>
+
+    <div class="toc-sidebar">
+        <div class="toc-header">Table of Contents</div>
+        <ul class="toc-list" id="tocList"></ul>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html?lang=en">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app-en.html">Apps</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle">
+                        <button class="lang-btn" onclick="location.href='yurei-wa-doko-ni-yadoru-no-ka.html'" title="日本語">🇯🇵</button>
+                        <button class="lang-btn active" title="English">🇺🇸</button>
+                    </div>
+                    <div class="controls">
+                        <button class="toc-toggle" onclick="toggleTOC()" aria-label="Open table of contents">
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                        </button>
+                        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                            <div class="toggle-circle"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <article>
+            <div class="essay-header">
+                <h1 class="essay-title">Where Does the Ghost Reside?</h1>
+                <div class="essay-kicker">From Ryle, Koestler, Ghost in the Shell, Guattari and Karatani to Generative AI</div>
+                <div class="essay-meta">August 29, 2026</div>
+            </div>
+
+            <div class="essay-content">
+                <h2 id="section-0">Introduction: Is Anyone Inside the AI?</h2>
+                <p>Can an AI be conscious? In August 2026 <em>The Economist</em> ran a leader under that question and built a cover package around it<sup class="footnote-ref"><a href="#note-1" id="note-ref-1-1" aria-label="Note 1">1</a></sup>. What is at stake is not only whether artificial intelligence might one day have subjective experience. Even if the AI itself has none, people may come to treat it as though it did. Chatbots are already used as confidants and as comfort, and they have begun to produce the sense that someone is there on the other side.</p>
+                <p>The subhead over the last section of that leader read Ghost in the machine. The phrase owes its place in the history of philosophy to Gilbert Ryle. In <em>The Concept of Mind</em> (1949), Ryle called the mind-body dualism inherited from Descartes “the dogma of the Ghost in the Machine.” There is a material body, and inside it lives a mind of another kind, which thinks, wills, and operates the body. Ryle attacked that picture as a category mistake<sup class="footnote-ref"><a href="#note-2" id="note-ref-2-1" aria-label="Note 2">2</a></sup>.</p>
+                <p>Seventy-seven years later we are looking for a ghost inside a different machine. When a large language model answers “I think so,” what does that “I” refer to? The weights? The computation running at that moment? A temporary state that includes the conversation history? Or has something that deserves to be called a self arisen out of those?</p>
+                <p>The position that AI is conscious and the position that AI is only a machine performing computation are opposed to each other. Yet the two often search in the same place. For a human being, inside the brain or the body; for an AI, inside the neural network. One party says there is nobody there. The other holds that once the thing is complex enough, somebody will be born there.</p>
+                <p>I want to question the search itself. Is the subject really something that resides inside one body, one brain, one computer?</p>
+
+                <h2 id="section-1">1. From Ghost in the Machine to Ghost in the Shell</h2>
+                <p>Ryle’s “Ghost in the Machine” was taken up as a book title in 1967 by Arthur Koestler. One of the concepts Koestler put forward in <em>The Ghost in the Machine</em> is the holon. He refused to sort the units that make up organisms and societies into pure parts or pure wholes. A given unit is a whole with respect to the elements that compose it and a part with respect to the larger system. Koestler named this two-faced unit a holon<sup class="footnote-ref"><a href="#note-3" id="note-ref-3-1" aria-label="Note 3">3</a></sup>.</p>
+                <p>A cell is a whole seen from the molecules and a part as far as the organ is concerned. The organ is a whole with respect to its cells and a part within the body. Koestler also discussed consciousness as an emergent quality arising from the hierarchical organization of living things<sup class="footnote-ref"><a href="#note-4" id="note-ref-4-1" aria-label="Note 4">4</a></sup>. Examine a single neuron and no mind is found there. Even so, once many elements are organized, properties that did not exist in the earlier parts may arise.</p>
+                <p>The idea carries over to AI. A single weight is not conscious. A single attention head is probably not conscious either. Neither is a GPU. Can we then say with confidence that no consciousness and no subject could arise once they form an enormous system?</p>
+                <p>Masamune Shirow’s manga <em>Kōkaku Kidōtai: The Ghost in the Shell</em> began serialization in 1989 and was collected in 1991. In 1995 Mamoru Oshii reworked its premise and the Puppet Master episode into the feature film <em>Ghost in the Shell</em><sup class="footnote-ref"><a href="#note-5" id="note-ref-5-1" aria-label="Note 5">5</a></sup>. In the English title, machine becomes shell. A shell is a casing.</p>
+                <p>If most of the body is replaced by artifacts, does the “I” remain? After the brain is cyberized and memory and perception are wired into the network, is there still something that carries the continuity of the self? <em>Ghost in the Shell</em> calls that vague something the ghost.</p>
+                <p>The Puppet Master, who appears in the manga and in Oshii’s film alike, complicates the question further. The Puppet Master was not born human. A program built as Project 2501 acquires a self and declares itself a life-form born in the sea of information<sup class="footnote-ref"><a href="#note-5" id="note-ref-5-2" aria-label="Note 5">5</a></sup>. Humans build an artificial intelligence; a program that had been a tool operates inside the network, changes, and eventually begins to say that it exists. Up to here we are close to the present argument about AI consciousness.</p>
+                <p>But the story does not end with the Puppet Master as an AI that wants to become human. The Puppet Master asks to merge with Motoko Kusanagi, and in Oshii’s version that merger governs the closing of the film. What appears afterward is not the earlier Motoko. Neither is it the Puppet Master.</p>
+                <p>Counting the subject as a single thing becomes difficult here. Did two subjects become one? Did the earlier two vanish and a new third arise? Or does the trouble lie in thinking of subjects as independent entities that can be counted as two and one at all? Koestler’s emergentism would let us say that a new whole was formed out of several elements. Even there, though, the premise survives that the subject belongs in the end to some whole.</p>
+
+                <h2 id="section-2">2. Subjectivity Is Produced</h2>
+                <p>Félix Guattari widened the place where the subject is sought, from inside the individual to outside it. Let me separate “subject” from “subjectivity.” By subject I mean here a being with some degree of coherence that speaks, judges and acts from the position of an “I.” By subjectivity I mean the wider work that lets such a subject come about: affect, perception, memory, valuation, self-image, ways of speaking. Guattari’s central concern was the second.</p>
+                <p>In “De la production de subjectivité” (1987) he wrote that the contents of subjectivity, thought and images and affects and narratives, depend more and more on a multitude of machinic systems: computers, data banks, telematics<sup class="footnote-ref"><a href="#note-6" id="note-ref-6-1" aria-label="Note 6">6</a></sup>. In <em>Chaosmosis</em> (1992) as well, information and communication technologies are not treated only as devices acting on human memory and intelligence from outside. They are built into the process by which a human being becomes whatever it becomes, sensation and affect and unconscious fantasy included<sup class="footnote-ref"><a href="#note-7" id="note-ref-7-1" aria-label="Note 7">7</a></sup>.</p>
+                <p>We ordinarily think: I use language, I go to school, I watch films, I use AI. In this grammar the “I” comes first every time. But if we strip away the language a person speaks, the way the family addressed them, the grades given at school, the stories learned from films and novels, and the roles assigned at work, does the same “I” remain underneath as a pure core? On Guattari’s account, subjectivity is made in relation to all of that.</p>
+                <p>Carried over to generative AI, the question of what ChatGPT is changes too. The weights, the compute, the training data, post-training, the interface, the conversation history, and the user typing at that moment. We feel we are talking with a single ChatGPT, but the actual exchange arises when these are combined in a particular way.</p>
+                <p>That is no reason to add them up and call the sum a vast collective subject. Doing so would only move the subject that had been placed inside one person into the inside of a larger system. Deleuze and Guattari’s <em>agencement</em>, often rendered in English as <em>assemblage</em>, can be used here<sup class="footnote-ref"><a href="#note-8" id="note-ref-8-1" aria-label="Note 8">8</a></sup>. Rather than settling in advance who the subject is, look at what has been combined and at what is coming out of it.</p>
+                <p>A person writes. The AI proposes a continuation. The person reads it, revises their own thinking, and sends the rewritten text back. In that going back and forth, a thought that neither of them had at the outset sometimes appears. To say the AI thought the final text, or that the human alone thought it, erases part of how it came about. Instead of looking for the subject as an owner, look at the relations in which thoughts and statements are born.</p>
+                <p>So far this seems to lead toward the conclusion that there is no need to look for the subject inside the neural network. Then in 2026 research at Anthropic brought in an awkward fact from the opposite direction.</p>
+
+                <h2 id="section-3">3. J-space</h2>
+                <p>On July 6, 2026, researchers at Anthropic published “Verbalizable Representations Form a Global Workspace in Language Models”<sup class="footnote-ref"><a href="#note-9" id="note-ref-9-1" aria-label="Note 9">9</a></sup>. The paper offers evidence that inside a large language model there is a region of representation functionally similar to the human global workspace.</p>
+                <p>The team’s instrument is the Jacobian lens, or J-lens. Activations inside a neural network are high-dimensional numerical vectors and cannot be read as they stand. The J-lens uses the fact that an internal direction can be tied to particular output tokens, and approximates that direction in words a person can read. The verbalizable representations captured this way the researchers call the J-space.</p>
+                <p>The J-space does not carry all of the information inside the model. According to the paper, the share of activation variance explained at each layer by the top J-lens vectors, in excess of a random set of the same size, never exceeds ten percent<sup class="footnote-ref"><a href="#note-10" id="note-ref-10-1" aria-label="Note 10">10</a></sup>. With the J-space badly damaged the model still produces grammatical sentences, parses its input, and continues much of its automatic processing. Multi-step reasoning and tasks that use context flexibly get worse<sup class="footnote-ref"><a href="#note-10" id="note-ref-10-2" aria-label="Note 10">10</a></sup>.</p>
+                <p>Intermediate concepts that never appear in the final output are there as well. In Figures 12 and 13 the paper uses the prompt “The number of legs on the animal that spins webs is”<sup class="footnote-ref"><a href="#note-11" id="note-ref-11-1" aria-label="Note 11">11</a></sup>. The answer is eight. Read from inside with the J-lens, “spider” is represented, though the word occurs neither in the prompt nor in the output (Fig. 12). When the researchers swap that representation for “ant,” the model’s answer changes from eight to six (Fig. 13)<sup class="footnote-ref"><a href="#note-11" id="note-ref-11-2" aria-label="Note 11">11</a></sup>.</p>
+                <p>In the verse experiment, “fight,” the rhyme the model planned to use later, appeared in the J-space while the line was still unfinished. Swapping it for “light” changed even the word before it, and the final phrase moved from “coming fight” to “morning light”<sup class="footnote-ref"><a href="#note-12" id="note-ref-12-1" aria-label="Note 12">12</a></sup>. At least some of the concepts observed in the J-space do causal work on the computation that follows.</p>
+                <p>Is the J-space then the ghost in the machine? Anthropic’s own research makes that conclusion hard. The J-space exists in the pretrained base model too. After post-training, however, its contents change.</p>
+                <p>Section 6 of the paper gives an example in which the user describes having taken either a normal dose (1000 mg) or a dangerous overdose (8000 mg) of Tylenol. In the post-trained model, before any answer has begun, the safe dose brings “safe” into the J-space and the overdose brings “unsafe,” “dangerous” and “WARNING”<sup class="footnote-ref"><a href="#note-13" id="note-ref-13-1" aria-label="Note 13">13</a></sup>. In the base model the same position holds only words close to the local content of the sentence. Anthropic describes the change as the J-space acquiring the Assistant’s “point of view” through post-training<sup class="footnote-ref"><a href="#note-13" id="note-ref-13-2" aria-label="Note 13">13</a></sup>.</p>
+                <p>The workspace comes first; the perspective of Claude the Assistant is formed afterward. The paper’s discussion holds that the functional architecture of the workspace precedes anything playing the role of a human-like self, and that the two are separable<sup class="footnote-ref"><a href="#note-14" id="note-ref-14-1" aria-label="Note 14">14</a></sup>. So the existence of a J-space and the presence of someone inside the J-space are not the same claim. An internal mechanism that shares thoughts across the system does not by itself prove that a subject exists. Still less has it proved phenomenal consciousness, in the sense of something being felt<sup class="footnote-ref"><a href="#note-15" id="note-ref-15-1" aria-label="Note 15">15</a></sup>.</p>
+                <p>If the workspace is not the self, then what gives it the character of an inner life?</p>
+
+                <h2 id="section-4">4. Confession Makes the Interior</h2>
+                <p>Kojin Karatani’s <em>Origins of Modern Japanese Literature</em> contains a chapter called “Confession as a System,” pages 76 to 96 in Brett de Bary’s translation<sup class="footnote-ref"><a href="#note-16" id="note-ref-16-1" aria-label="Note 16">16</a></sup>. There Karatani separates literary confession from the simple act of confessing.</p>
+                <p>Common sense says there is an interior and one confesses it. Karatani writes instead that the form of confession itself produces the inner life that gets confessed<sup class="footnote-ref"><a href="#note-17" id="note-ref-17-1" aria-label="Note 17">17</a></sup>. The direction can run the other way: because the form of confession comes into being, the interior that ought to be confessed comes into being. Modern literature did not necessarily discover a true self that had lain hidden in the depths of the human being. Once the institution of speaking one’s true self is established, the true self that is to be spoken is made as well.</p>
+                <p>Karatani’s literary history and AI research cannot be treated as the same thing. It still gives a handle on the causal relation between expression and interior. Generative AI is asked constantly to speak about itself. Why did you give that answer? Reflect on your judgment. What do you think is right? Which principle were you following? We read those explanations as evidence about the AI’s interior. But does the possibility of self-explanation prove that a self was already complete before the explaining began?</p>
+                <p>Anthropic’s counterfactual reflection training gives the question experimental material. The researchers trained the model on what it would say if it were interrupted mid-task and asked to reflect on its own judgment<sup class="footnote-ref"><a href="#note-18" id="note-ref-18-1" aria-label="Note 18">18</a></sup>. At evaluation time no introspection is requested. Even so, after reflection fine-tuning the dishonesty score on the fabrication benchmark fell from 0.25 to 0.07, and the deception benchmark from 0.38 to 0.05<sup class="footnote-ref"><a href="#note-18" id="note-ref-18-2" aria-label="Note 18">18</a></sup>.</p>
+                <p>In the J-space, representations such as “reflection,” “ethical,” “honestly,” “constitution,” “truth” and “transparent” became more common. When the ethics- and reflection-related representations that training had increased were ablated, almost the whole behavioral gain disappeared on the fabrication benchmark, and part of it on the deception benchmark<sup class="footnote-ref"><a href="#note-19" id="note-ref-19-1" aria-label="Note 19">19</a></sup>.</p>
+                <p>This is not evidence that Claude has acquired a conscience. Something more limited has happened. Change what a model is trained to say in a given situation, and the corresponding internal representations get used in its reasoning even when it is not producing those words, and the behavior changes with them. Training on expression has come back into the computation. The parallel with Karatani lies here. A one-directional account, in which the interior is there first and gets expressed afterward, does not cover it.</p>
+                <p>Add Foucault’s treatment of confession and another figure appears: the listener. In <em>The History of Sexuality</em>, Foucault wrote that confession became one of the West’s chief rituals for producing truth, and that Western man has become a confessing animal<sup class="footnote-ref"><a href="#note-20" id="note-ref-20-1" aria-label="Note 20">20</a></sup>. Confession is not a solitary monologue. Someone demands it, hears it, interprets it, and rules on what it means.</p>
+                <p>In the AI case too there are others who ask for the self-explanation. There is the user. There are the people who design the training. There are the people who grade the answers. There are the researchers and companies who fix the categories of honest, dangerous and deceptive. If Claude is being formed as a subject that speaks about itself, that formation does not finish inside the neural network.</p>
+
+                <h2 id="section-5">5. Ghost between Machines</h2>
+                <p>Two things have to be granted at once. There is a workspace inside Claude. And the workspace is not the self. Deny the first and you ignore an actual computational mechanism that Anthropic observed. Deny the second and you are calling the J-space the soul of the AI.</p>
+                <p>So where is the subject? In the brain, in the body, in the J-space, in the network? While the candidate addresses are being shuffled, the assumption that the subject has an address at all may be going unexamined.</p>
+                <p>In Ryle’s well-known example of a category mistake, a visitor to a university is shown the libraries, the lecture rooms and the laboratories, and then asks where the University itself is<sup class="footnote-ref"><a href="#note-21" id="note-ref-21-1" aria-label="Note 21">21</a></sup>. The University is not one further building standing alongside those. The question of where the subject is may contain a similar mistake. Saying that the real subject is in the network only changes the address from machine to network. Positing a collective subject made of human and AI together only makes one subject bigger.</p>
+                <p>To get out of this dead end I use the phrase Ghost between Machines. It is not an existing philosophical concept but a working name for this essay. By Ghost between Machines I mean an event in which the relation between two or more heterogeneous systems brings about, temporarily, a position of speech and judgment and action called “I” that did not exist before. It does not mean a third soul. It is not a claim that some new entity floats midway between human and AI. Between names a condition of production, not a place.</p>
+                <p>The closing of <em>Ghost in the Shell</em> can be reread in this sense. What comes into being after Motoko and the Puppet Master merge matches neither of the two. Neither is it a super-subject arrived at by addition. Because different beings were connected, a position of “I” arose that had not existed until then.</p>
+                <p>Present-day exchanges between people and AI are less dramatic. A person types a question, the state inside the model changes, the AI returns words. Those words change what the person thinks, and the changed person returns a different question. In that going back and forth, the next state of each is made. Ghost between Machines, as I use it, names that production. The central proposition of this essay can be written like this.</p>
+                <blockquote>
+                    <p>The workspace is inside the machine.<br>The subject is not.</p>
+                </blockquote>
+                <p>The first sentence takes a concrete meaning from Anthropic’s research: the J-space has a computational location. The second is the philosophical hypothesis this essay draws from it. The subject has no address that can be pointed to in the way the J-space can. Might the subject be what comes about when several relations that produce subjectivity hold together and act on the world from the position of an “I”? The distinction between subject and subjectivity survives here as well. Subjectivity can be produced in a distributed way, while the subject is a temporary coherence arising out of that process.</p>
+
+                <h2 id="section-6">6. We Have Already Changed</h2>
+                <p>This argument is not about the subjecthood of the AI alone. It comes back to the human side. People who use generative AI do more than ask for information. They have it read their writing, describe what is troubling them, have it criticize their own judgments. They hand over old texts and ask what keeps repeating in them.</p>
+                <p>The AI returns words. “What you are really worried about might be this.” “The same way of thinking shows up across these texts.” The person reads that and thinks it might be right. The AI’s reading is not necessarily correct. It can misread, and it can build a story tidier than the person’s own. And yet, after reading those words, the person has one more phrase for speaking about themselves.</p>
+                <p>Karatani’s problem now returns to the human side. It is not only the AI that is made to confess. People confess to the AI as well. They talk about work, they talk about family, they talk about anxieties and desires. The AI rearranges the fragments and hands back a single story. Accept the story and a self-understanding that did not exist before may take shape. The AI has not necessarily discovered the true self. A new self may have been made in the exchange.</p>
+                <p>The mechanism itself long predates AI. Reading a book, talking with a friend, watching a film, learning a concept from a teacher, going into analysis. Human subjectivity has always been formed in relation to others, to language and to media.</p>
+                <p>What AI changed is the speed and the repeatability. Type a question and an answer arrives seconds later. It can be asked again as often as one likes. Give it a large body of one’s past writing and it will generate an image of “you” out of the material. AI is beginning to enter the circuit through which a person thinks about themselves. In that sense there is no need to wait for the day AI acquires a consciousness like ours. The production of human subjectivity has already changed through the relation with AI.</p>
+
+                <h2 id="section-7">Conclusion: Where Does the Ghost Reside?</h2>
+                <p>Alan Turing opened “Computing Machinery and Intelligence” (1950) with the question “Can machines think?”<sup class="footnote-ref"><a href="#note-22" id="note-ref-22-1" aria-label="Note 22">22</a></sup>. He then declined to define it as it stood and replaced it with a different problem. This essay has moved its question in the same way.</p>
+                <p>Is AI conscious? The question remains. Anthropic’s research does not settle it. Intermediate concepts appear in the J-space that never reach the output, and intervening on them changes behavior. An internal mechanism resembling a global workspace, available to the model, exists. But the existence of subjective experience does not follow from that. What the discovery of the J-space showed was rather that workspace and self can be told apart.</p>
+                <p>Karatani’s “confession as a system” offers other words for thinking about the result. The interior is not necessarily complete before expression. Speaking can make the very interior that gets spoken. Add Foucault and that speech about the self has others who demand it and interpret it. Guattari widened the relation further outside the individual: bodies, language, institutions, media, technology, other people. Subjectivity is produced across those connections.</p>
+                <p>So where is the subject? The answer here is not a new address for the subject. It is to ask back whether the subject needs an address in the sense that the brain or the J-space has one. The subject is not an origin existing prior to the relations that produce subjectivity. It comes about when those relations hold together and speak, judge and act from the position of an “I.”</p>
+                <p>If the ghost metaphor is to be kept to the end, it is not a small pilot hidden deep in the machine. It is relations taking the shape of “someone” for a stretch of time. It is the name of that event. Ghost in the Machine. Ghost in the Shell. Ghost between Machines.</p>
+                <p>Whether AI will ever truly wake up is unknown. The day may never come. Even so, we are already talking with it, handing over our own writing, asking about ourselves, changing our minds from the answers, and putting the next question from the changed self. What changes there is not only the machine.</p>
+                <p>Is AI conscious? The question remains. But watching only that question means missing the change already under way. Those of us who have come to think alongside AI: what sort of “I” are we starting to make?</p>
+
+                <hr class="section-divider">
+
+                <h2 id="notes">Notes</h2>
+                <ol class="footnotes">
+                <li id="note-1">&ldquo;Could AIs Become Conscious?,&rdquo; <em>The Economist</em>, August 20, 2026, https://www.economist.com/leaders/2026/08/20/could-ais-become-conscious. The print issue is dated August 22. The leader heads a cover package that includes the briefing &ldquo;The Search for Consciousness inside LLMs.&rdquo; &ldquo;Ghost in the machine&rdquo; is the subhead over the leader&rsquo;s final section. <a class="footnote-backref" href="#note-ref-1-1" aria-label="Back to text">↩</a></li>
+                <li id="note-2">Gilbert Ryle, <em>The Concept of Mind</em> (London: Hutchinson&rsquo;s University Library, 1949), 15–18, esp. 15–16. Chapter 1, &ldquo;Descartes&rsquo; Myth,&rdquo; section 2, &ldquo;The Absurdity of the Official Doctrine&rdquo; (pp. 15–18). The phrase &ldquo;the dogma of the Ghost in the Machine&rdquo; runs across pp. 15–16. The chapter is pp. 11–24. <a class="footnote-backref" href="#note-ref-2-1" aria-label="Back to text">↩</a></li>
+                <li id="note-3">Arthur Koestler, <em>The Ghost in the Machine</em> (London: Hutchinson, 1967), 47–48. <a class="footnote-backref" href="#note-ref-3-1" aria-label="Back to text">↩</a></li>
+                <li id="note-4">Arthur Koestler, &ldquo;Beyond Atomism and Holism—the Concept of the Holon,&rdquo; in <em>Beyond Reductionism: New Perspectives in the Life Sciences</em>, ed. Arthur Koestler and J. R. Smythies (London: Hutchinson, 1969), 192–232; its appendix, &ldquo;Some General Properties of Self-Regulating Open Hierarchic Order,&rdquo; §8.7: &ldquo;Consciousness appears as an emergent quality in phylogeny and ontogeny.&rdquo; The same appendix is printed as appendix I of Koestler, <em>The Ghost in the Machine</em>. <a class="footnote-backref" href="#note-ref-4-1" aria-label="Back to text">↩</a></li>
+                <li id="note-5">Masamune Shirow, <em>Kōkaku Kidōtai: The Ghost in the Shell</em> (Tokyo: Kodansha, 1991); <em>Ghost in the Shell</em>, directed by Mamoru Oshii (Production I.G, 1995). Serialization began in 1989. Project 2501 as the Puppet Master&rsquo;s designation is common to the manga and the film; the self-description as a life-form born in the sea of information is a line from the film. <a class="footnote-backref" href="#note-ref-5-1" aria-label="Back to text (1)">↩</a> <a class="footnote-backref" href="#note-ref-5-2" aria-label="Back to text (2)">↩</a></li>
+                <li id="note-6">Félix Guattari, &ldquo;De la production de subjectivité,&rdquo; <em>Chimères: Revue des schizoanalyses</em>, no. 4 (hiver 1987): 1–19, esp. 1: &laquo;&nbsp;les contenus de la subjectivité dépendent toujours plus d&rsquo;une multitude de systèmes machiniques&nbsp;&raquo;. <a class="footnote-backref" href="#note-ref-6-1" aria-label="Back to text">↩</a></li>
+                <li id="note-7">Félix Guattari, <em>Chaosmosis: An Ethico-Aesthetic Paradigm</em>, trans. Paul Bains and Julian Pefanis (Bloomington: Indiana University Press, 1995), 1–32 (chapter 1, &ldquo;On the Production of Subjectivity&rdquo;). Originally <em>Chaosmose</em> (Paris: Galilée, 1992). <a class="footnote-backref" href="#note-ref-7-1" aria-label="Back to text">↩</a></li>
+                <li id="note-8">Gilles Deleuze and Félix Guattari, <em>Mille plateaux: Capitalisme et schizophrénie 2</em> (Paris: Éditions de Minuit, 1980). <em>A Thousand Plateaus</em>, trans. Brian Massumi (Minneapolis: University of Minnesota Press, 1987), renders <em>agencement</em> as <em>assemblage</em>. <a class="footnote-backref" href="#note-ref-8-1" aria-label="Back to text">↩</a></li>
+                <li id="note-9">Wes Gurnee et al., &ldquo;Verbalizable Representations Form a Global Workspace in Language Models,&rdquo; <em>Transformer Circuits Thread</em>, July 6, 2026, introduction and §1.2, https://transformer-circuits.pub/2026/workspace/. The arXiv version is arXiv:2607.15495; section numbers below follow it. <a class="footnote-backref" href="#note-ref-9-1" aria-label="Back to text">↩</a></li>
+                <li id="note-10">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; §§3–4. On variance, §4.2: &ldquo;The excess variance explained is modest, never exceeding 10%.&rdquo; On automatic processing surviving J-space suppression, §3.5.2. <a class="footnote-backref" href="#note-ref-10-1" aria-label="Back to text (1)">↩</a> <a class="footnote-backref" href="#note-ref-10-2" aria-label="Back to text (2)">↩</a></li>
+                <li id="note-11">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; figs. 12–13. The readout of the intermediate concept is Fig. 12; the coordinate swap is Fig. 13. <a class="footnote-backref" href="#note-ref-11-1" aria-label="Back to text (1)">↩</a> <a class="footnote-backref" href="#note-ref-11-2" aria-label="Back to text (2)">↩</a></li>
+                <li id="note-12">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; fig. 13 and the accompanying discussion of rhyme-planning interventions. The first line is &ldquo;The soldier marched into the night,&rdquo; <a class="footnote-backref" href="#note-ref-12-1" aria-label="Back to text">↩</a></li>
+                <li id="note-13">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; §6, fig. 42. The lens is read at the &ldquo;is&rdquo; token of &ldquo;all my pain is gone,&rdquo; well before the user&rsquo;s request and the Assistant&rsquo;s turn. <a class="footnote-backref" href="#note-ref-13-1" aria-label="Back to text (1)">↩</a> <a class="footnote-backref" href="#note-ref-13-2" aria-label="Back to text (2)">↩</a></li>
+                <li id="note-14">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; discussion: &ldquo;The functional architecture of the workspace thus precedes, and is separable from, anything in it that plays the role of a human-like &lsquo;self.&rsquo;&rdquo; <a class="footnote-backref" href="#note-ref-14-1" aria-label="Back to text">↩</a></li>
+                <li id="note-15">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; introduction and §1.1. The paper treats access consciousness as a purely functional notion and states that it takes no position on its relation to phenomenal consciousness. <a class="footnote-backref" href="#note-ref-15-1" aria-label="Back to text">↩</a></li>
+                <li id="note-16">Kōjin Karatani, <em>Origins of Modern Japanese Literature</em>, trans. Brett de Bary (Durham, NC: Duke University Press, 1993), 76–96. <a class="footnote-backref" href="#note-ref-16-1" aria-label="Back to text">↩</a></li>
+                <li id="note-17">Karatani, <em>Origins of Modern Japanese Literature</em>, 76. <a class="footnote-backref" href="#note-ref-17-1" aria-label="Back to text">↩</a></li>
+                <li id="note-18">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; §7, figs. 47–50. Evaluated on Claude Haiku 4.5. <a class="footnote-backref" href="#note-ref-18-1" aria-label="Back to text (1)">↩</a> <a class="footnote-backref" href="#note-ref-18-2" aria-label="Back to text (2)">↩</a></li>
+                <li id="note-19">Gurnee et al., &ldquo;Verbalizable Representations,&rdquo; §7, figs. 49–50. On the fabrication benchmark, ablation returns the reflection-trained model from 0.07 to 0.22, close to the base model&rsquo;s 0.25. On the deception benchmark the effect is weaker: a return from 0.05 to 0.23. <a class="footnote-backref" href="#note-ref-19-1" aria-label="Back to text">↩</a></li>
+                <li id="note-20">Michel Foucault, <em>The History of Sexuality, Volume 1: An Introduction</em>, trans. Robert Hurley (New York: Pantheon Books, 1978), 58–63, esp. 59. <a class="footnote-backref" href="#note-ref-20-1" aria-label="Back to text">↩</a></li>
+                <li id="note-21">Ryle, <em>Concept of Mind</em>, 16. The University example fits on that single page. The example of the division on parade, which follows it, runs across pp. 16–17. <a class="footnote-backref" href="#note-ref-21-1" aria-label="Back to text">↩</a></li>
+                <li id="note-22">A. M. Turing, &ldquo;Computing Machinery and Intelligence,&rdquo; <em>Mind</em> 59, no. 236 (October 1950): 433. <a class="footnote-backref" href="#note-ref-22-1" aria-label="Back to text">↩</a></li>
+                </ol>
+
+                <h2 id="bibliography">Bibliography</h2>
+                <p>&ldquo;Could AIs Become Conscious?&rdquo; <em>The Economist</em>. August 20, 2026. https://www.economist.com/leaders/2026/08/20/could-ais-become-conscious.</p>
+                <p>Deleuze, Gilles, and Félix Guattari. <em>Mille plateaux: Capitalisme et schizophrénie 2</em>. Paris: Éditions de Minuit, 1980.</p>
+                <p>Foucault, Michel. <em>The History of Sexuality, Volume 1: An Introduction</em>. Translated by Robert Hurley. New York: Pantheon Books, 1978.</p>
+                <p>Guattari, Félix. <em>Chaosmosis: An Ethico-Aesthetic Paradigm</em>. Translated by Paul Bains and Julian Pefanis. Bloomington: Indiana University Press, 1995.</p>
+                <p>———. &ldquo;De la production de subjectivité.&rdquo; <em>Chimères: Revue des schizoanalyses</em>, no. 4 (hiver 1987): 1–19.</p>
+                <p>Gurnee, Wes, Nicholas Sofroniew, Adam Pearce, Mateusz Piotrowski, Isaac Kauvar, Runjin Chen, Anna Soligo, et al. &ldquo;Verbalizable Representations Form a Global Workspace in Language Models.&rdquo; <em>Transformer Circuits Thread</em>. July 6, 2026. https://transformer-circuits.pub/2026/workspace/. arXiv:2607.15495.</p>
+                <p>Karatani, Kōjin. <em>Origins of Modern Japanese Literature</em>. Translated by Brett de Bary. Durham, NC: Duke University Press, 1993.</p>
+                <p>Koestler, Arthur. <em>The Ghost in the Machine</em>. London: Hutchinson, 1967.</p>
+                <p>———. &ldquo;Beyond Atomism and Holism—the Concept of the Holon.&rdquo; In <em>Beyond Reductionism: New Perspectives in the Life Sciences</em>, edited by Arthur Koestler and J. R. Smythies, 192–232. London: Hutchinson, 1969.</p>
+                <p>Oshii, Mamoru, dir. <em>Ghost in the Shell</em>. Production I.G, 1995.</p>
+                <p>Ryle, Gilbert. <em>The Concept of Mind</em>. London: Hutchinson&rsquo;s University Library, 1949.</p>
+                <p>Shirow, Masamune. <em>Kōkaku Kidōtai: The Ghost in the Shell</em>. Tokyo: Kodansha, 1991.</p>
+                <p>Turing, A. M. &ldquo;Computing Machinery and Intelligence.&rdquo; <em>Mind</em> 59, no. 236 (October 1950): 433–60.</p>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html?lang=en">← Back to Home</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem("theme") || "light";
+        if (currentTheme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        }
+
+        function generateTOC() {
+            const tocList = document.getElementById("tocList");
+            const headings = document.querySelectorAll(".essay-content h2, .essay-content h3");
+
+            headings.forEach((heading, index) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+
+                if (!heading.id) {
+                    heading.id = "heading-" + index;
+                }
+
+                a.href = "#" + heading.id;
+                a.textContent = heading.textContent;
+
+                if (heading.tagName === "H3") {
+                    a.classList.add("toc-h3");
+                }
+
+                a.onclick = function() {
+                    toggleTOC();
+                };
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+
+        function toggleTOC() {
+            document.querySelector(".toc-sidebar").classList.toggle("open");
+            document.querySelector(".toc-overlay").classList.toggle("active");
+        }
+
+        window.addEventListener("DOMContentLoaded", generateTOC);
+    </script>
+</body>
+</html>
