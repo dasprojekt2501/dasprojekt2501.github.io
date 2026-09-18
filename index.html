@@ -290,6 +290,16 @@
         <main class="essays">
             <article class="essay-item">
                 <h2 class="essay-title">
+                    <a href="essays/les-rita-mitsouko-tsuito-fr.html" id="tributeEssayLink">Les Rita Mitsouko追悼 — Jean-Luc Godard et les Rita Mitsouko</a>
+                </h2>
+                <div class="essay-date" id="tributeEssayDate">September 18, 2026</div>
+                <p class="essay-excerpt" id="tributeEssayExcerpt">
+                    French transcript and Japanese translation of a 1987 <em>Bains de minuit</em> interview about <em>Soigne ta droite</em>, music, work, and politics.
+                </p>
+            </article>
+
+            <article class="essay-item">
+                <h2 class="essay-title">
                     <a href="essays/yurei-wa-doko-ni-yadoru-no-ka-en.html" id="fifthEssayLink">Where Does the Ghost Reside?</a>
                 </h2>
                 <div class="essay-date" id="fifthEssayDate">August 29, 2026</div>
@@ -368,6 +378,10 @@
             ja: {
                 subtitle: 'エッセイとノート',
                 apps: 'Apps',
+                tributeEssayTitle: 'Les Rita Mitsouko追悼——ジャン＝リュック・ゴダールと『Soigne ta droite』を語る',
+                tributeEssayHref: 'essays/les-rita-mitsouko-tsuito.html',
+                tributeEssayDate: '2026年9月18日',
+                tributeEssayExcerpt: '1987年の『Bains de minuit』で、ゴダールとレ・リタ・ミツコが『Soigne ta droite』、音楽制作、仕事、政治を語ったインタビューのフランス語文字起こしと日本語訳。',
                 firstEssayTitle: '日本の伝統的大企業における「診断書煉獄」',
                 firstEssayHref: 'essays/purgatory-at-work.html',
                 firstEssayDate: '2026年7月17日',
@@ -393,6 +407,10 @@
             en: {
                 subtitle: 'Essays and Notes',
                 apps: 'Apps',
+                tributeEssayTitle: 'Les Rita Mitsouko追悼 — Jean-Luc Godard et les Rita Mitsouko',
+                tributeEssayHref: 'essays/les-rita-mitsouko-tsuito-fr.html',
+                tributeEssayDate: 'September 18, 2026',
+                tributeEssayExcerpt: 'French transcript and Japanese translation of a 1987 Bains de minuit interview about Soigne ta droite, music, work, and politics.',
                 firstEssayTitle: "Medical Certificate Purgatory in Japan's Traditional Corporations",
                 firstEssayHref: 'essays/purgatory-at-work-en.html',
                 firstEssayDate: 'July 17, 2026',
@@ -426,6 +444,10 @@
             document.getElementById('homeLink').href = `index.html?lang=${selectedLanguage}`;
             document.getElementById('appsLink').textContent = content.apps;
             document.getElementById('appsLink').href = selectedLanguage === 'ja' ? 'app.html' : 'app-en.html';
+            document.getElementById('tributeEssayLink').textContent = content.tributeEssayTitle;
+            document.getElementById('tributeEssayLink').href = content.tributeEssayHref;
+            document.getElementById('tributeEssayDate').textContent = content.tributeEssayDate;
+            document.getElementById('tributeEssayExcerpt').textContent = content.tributeEssayExcerpt;
             document.getElementById('firstEssayLink').textContent = content.firstEssayTitle;
             document.getElementById('firstEssayLink').href = content.firstEssayHref;
             document.getElementById('firstEssayDate').textContent = content.firstEssayDate;
