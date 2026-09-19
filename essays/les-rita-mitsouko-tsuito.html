@@ -17,7 +17,7 @@
     <meta name="twitter:description" content="1987年のインタビューの日本語訳。">
     <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
     <title>Les Rita Mitsouko追悼——ジャン＝リュック・ゴダールと『Soigne ta droite』を語る</title>
-    <link rel="stylesheet" href="les-rita-mitsouko.css">
+    <link rel="stylesheet" href="les-rita-mitsouko.css?v=20260919b">
     <link rel="stylesheet" href="reading-progress.css">
     <script src="reading-progress.js" defer></script>
 </head>
@@ -36,7 +36,7 @@
                 <div class="header-actions">
                     <div class="language-toggle" aria-label="Language">
                         <button class="lang-btn active" title="日本語" aria-label="日本語" aria-current="true">🇯🇵</button>
-                        <button class="lang-btn" onclick="location.href='les-rita-mitsouko-tsuito-fr.html'" title="フランス語に切り替える" aria-label="フランス語に切り替える">🇫🇷</button>
+                        <button class="lang-btn" onclick="switchArticleLanguage('les-rita-mitsouko-tsuito-fr.html')" title="フランス語に切り替える" aria-label="フランス語に切り替える">🇫🇷</button>
                     </div>
                     <button class="theme-toggle" onclick="toggleTheme()" aria-label="ダークモード切替">
                         <span class="toggle-circle"></span>
@@ -60,7 +60,7 @@
                 </div>
 
                 <h2 class="section-title">日本語訳</h2>
-                <p class="section-note">会話のくだけた口調、反復、言いよどみをできるだけ残した。「司会者」はスタジオの聞き手を指し、フランク・アラモのアーカイブ映像には別の司会者が登場する。</p>
+                <p class="section-note">会話のくだけた口調、反復、言いよどみをできるだけ残した。「司会者」はスタジオの聞き手を指し、フランク・アラモのアーカイブ映像には別の司会者が登場する。話者名をクリックすると、フランス語の対応する発言へ移動する。</p>
 
                 <div id="transcription" class="essay-content dialogue-transcript">
                     <p class="dialogue"><strong class="speaker">司会者</strong><span>ジャン＝バティストは賞を受け取りに来たの？</span></p>
@@ -215,6 +215,41 @@
             document.body.classList.toggle("dark-mode");
             localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
         }
+
+        function switchArticleLanguage(counterpartPage) {
+            const dialogueHash = location.hash.startsWith("#dialogue-") ? location.hash : "";
+            location.href = counterpartPage + dialogueHash;
+        }
+
+        function initializeParallelLinks() {
+            const counterpartPage = "les-rita-mitsouko-tsuito-fr.html";
+            const turns = Array.from(document.querySelectorAll(".dialogue-transcript .dialogue"));
+
+            turns.forEach((turn, index) => {
+                const id = "dialogue-" + String(index + 1).padStart(3, "0");
+                const speaker = turn.firstElementChild;
+                const link = document.createElement("a");
+
+                turn.id = id;
+                link.className = "speaker-link";
+                link.href = counterpartPage + "#" + id;
+                link.title = "フランス語の対応する発言へ";
+                link.setAttribute("aria-label", speaker.textContent + "、フランス語の対応する発言へ");
+                speaker.before(link);
+                link.appendChild(speaker);
+            });
+
+            const target = document.getElementById(location.hash.slice(1));
+            if (target?.classList.contains("dialogue")) {
+                requestAnimationFrame(() => {
+                    target.scrollIntoView({ block: "center" });
+                    target.classList.add("parallel-target");
+                    setTimeout(() => target.classList.remove("parallel-target"), 2700);
+                });
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", initializeParallelLinks);
     </script>
 </body>
 </html>

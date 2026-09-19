@@ -214,20 +214,84 @@ body.dark-mode .toggle-circle {
     grid-template-columns: minmax(8.5rem, 10rem) minmax(0, 1fr);
     gap: 0.35rem 1.25rem;
     margin-bottom: 1.15em;
+    border-radius: 4px;
+    scroll-margin-top: 24px;
 }
 
 .speaker {
     padding-top: 0.18em;
-    color: #666;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-    font-size: 0.78rem;
-    font-weight: 650;
-    letter-spacing: 0.025em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.015em;
     line-height: 1.45;
 }
 
-body.dark-mode .speaker {
-    color: #aaa;
+.speaker::after {
+    content: "：";
+}
+
+html[lang="fr"] .speaker::after {
+    content: "\00a0:";
+}
+
+.speaker-link {
+    align-self: start;
+    color: #555;
+    text-decoration: none;
+    text-underline-offset: 0.18em;
+}
+
+.speaker-link:hover,
+.speaker-link:focus-visible {
+    color: #0066cc;
+    text-decoration: underline;
+}
+
+body.dark-mode .speaker-link {
+    color: #bbb;
+}
+
+body.dark-mode .speaker-link:hover,
+body.dark-mode .speaker-link:focus-visible {
+    color: #4a9eff;
+}
+
+.dialogue.parallel-target {
+    animation: parallel-highlight 2.6s ease-out;
+}
+
+body.dark-mode .dialogue.parallel-target {
+    animation-name: parallel-highlight-dark;
+}
+
+@keyframes parallel-highlight {
+    0%, 38% {
+        background-color: #fff0a8;
+        box-shadow: 0 0 0 7px #fff0a8;
+    }
+    100% {
+        background-color: transparent;
+        box-shadow: 0 0 0 7px transparent;
+    }
+}
+
+@keyframes parallel-highlight-dark {
+    0%, 38% {
+        background-color: #584d18;
+        box-shadow: 0 0 0 7px #584d18;
+    }
+    100% {
+        background-color: transparent;
+        box-shadow: 0 0 0 7px transparent;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dialogue.parallel-target,
+    body.dark-mode .dialogue.parallel-target {
+        animation-duration: 0.01ms;
+    }
 }
 
 .dialogue > span {

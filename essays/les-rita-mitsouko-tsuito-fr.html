@@ -17,7 +17,7 @@
     <meta name="twitter:description" content="Transcription française d’un entretien diffusé dans Bains de minuit en 1987.">
     <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
     <title>Hommage aux Rita Mitsouko — Une conversation avec Jean-Luc Godard autour de Soigne ta droite</title>
-    <link rel="stylesheet" href="les-rita-mitsouko.css">
+    <link rel="stylesheet" href="les-rita-mitsouko.css?v=20260919b">
     <link rel="stylesheet" href="reading-progress.css">
     <script src="reading-progress.js" defer></script>
 </head>
@@ -35,7 +35,7 @@
                 </nav>
                 <div class="header-actions">
                     <div class="language-toggle" aria-label="Language">
-                        <button class="lang-btn" onclick="location.href='les-rita-mitsouko-tsuito.html'" title="Passer au japonais" aria-label="Passer au japonais">🇯🇵</button>
+                        <button class="lang-btn" onclick="switchArticleLanguage('les-rita-mitsouko-tsuito.html')" title="Passer au japonais" aria-label="Passer au japonais">🇯🇵</button>
                         <button class="lang-btn active" title="Français" aria-label="Français" aria-current="true">🇫🇷</button>
                     </div>
                     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Basculer le mode sombre">
@@ -60,7 +60,7 @@
                 </div>
 
                 <h2 class="section-title">Transcription française</h2>
-                <p class="section-note">Les répétitions, hésitations et tournures familières ont été conservées. « Animateur » désigne l’intervieweur du plateau ; l’extrait consacré à Frank Alamo possède son propre présentateur.</p>
+                <p class="section-note">Les répétitions, hésitations et tournures familières ont été conservées. « Animateur » désigne l’intervieweur du plateau ; l’extrait consacré à Frank Alamo possède son propre présentateur. Cliquez sur le nom d’un intervenant pour ouvrir la réplique japonaise correspondante.</p>
 
                 <div id="transcription" class="essay-content dialogue-transcript">
                     <p class="dialogue"><strong class="speaker">Animateur</strong><span>Il est venu, Jean-Baptiste, chercher sa récompense ?</span></p>
@@ -215,6 +215,41 @@
             document.body.classList.toggle("dark-mode");
             localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
         }
+
+        function switchArticleLanguage(counterpartPage) {
+            const dialogueHash = location.hash.startsWith("#dialogue-") ? location.hash : "";
+            location.href = counterpartPage + dialogueHash;
+        }
+
+        function initializeParallelLinks() {
+            const counterpartPage = "les-rita-mitsouko-tsuito.html";
+            const turns = Array.from(document.querySelectorAll(".dialogue-transcript .dialogue"));
+
+            turns.forEach((turn, index) => {
+                const id = "dialogue-" + String(index + 1).padStart(3, "0");
+                const speaker = turn.firstElementChild;
+                const link = document.createElement("a");
+
+                turn.id = id;
+                link.className = "speaker-link";
+                link.href = counterpartPage + "#" + id;
+                link.title = "Voir la réplique japonaise correspondante";
+                link.setAttribute("aria-label", speaker.textContent + " — Voir la réplique japonaise correspondante");
+                speaker.before(link);
+                link.appendChild(speaker);
+            });
+
+            const target = document.getElementById(location.hash.slice(1));
+            if (target?.classList.contains("dialogue")) {
+                requestAnimationFrame(() => {
+                    target.scrollIntoView({ block: "center" });
+                    target.classList.add("parallel-target");
+                    setTimeout(() => target.classList.remove("parallel-target"), 2700);
+                });
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", initializeParallelLinks);
     </script>
 </body>
 </html>
