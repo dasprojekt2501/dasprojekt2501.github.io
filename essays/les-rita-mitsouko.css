@@ -298,14 +298,6 @@ body.dark-mode .dialogue.parallel-target {
     letter-spacing: 0.04em;
 }
 
-.uncertain {
-    padding: 0 0.14em;
-    background: #fff0a8;
-}
-
-body.dark-mode .uncertain {
-    background: #584d18;
-}
 
 .back-link {
     margin-top: 70px;
