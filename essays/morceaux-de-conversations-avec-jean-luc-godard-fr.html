@@ -188,6 +188,58 @@
             font-size: 0.95em;
         }
 
+        .dek {
+            margin: 0 auto 24px;
+            max-width: 690px;
+            font-family: Georgia, "Times New Roman", "Yu Mincho", "Hiragino Mincho ProN", serif;
+            font-size: 1.06rem;
+        }
+
+        .source-note {
+            margin: 0 auto 48px;
+            padding: 18px 20px;
+            border-left: 3px solid #aaa;
+            color: #666;
+            background: rgba(127, 127, 127, 0.06);
+            font-size: 0.93rem;
+            overflow-wrap: anywhere;
+        }
+
+        .source-note p + p {
+            margin-top: 0.7em;
+        }
+
+        .source-note a {
+            color: #0066cc;
+            text-underline-offset: 0.18em;
+        }
+
+        .source-note code {
+            font-size: 0.95em;
+        }
+
+        .section-title {
+            margin-bottom: 10px;
+            font-family: Georgia, "Times New Roman", "Yu Mincho", "Hiragino Mincho ProN", serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+        }
+
+        .section-note {
+            margin-bottom: 30px;
+            color: #777;
+            font-size: 0.92rem;
+        }
+
+        body.dark-mode .source-note,
+        body.dark-mode .section-note {
+            color: #aaa;
+        }
+
+        body.dark-mode .source-note a {
+            color: #4a9eff;
+        }
+
         .essay-content {
             font-family: Georgia, "Times New Roman", "Yu Mincho", "Hiragino Mincho ProN", serif;
             font-size: 1.04rem;
@@ -341,6 +393,18 @@
                     <h1 class="essay-title">Morceaux de conversations avec Jean-Luc Godard</h1>
                     <div class="essay-meta">31 juillet 2026</div>
                 </div>
+
+                <p class="dek">Transcription du documentaire <em>Morceaux de conversations avec Jean-Luc Godard</em>, réalisé par Alain Fleischer, accompagnée d’une traduction japonaise. Le film suit Godard au travail sur son projet d’exposition au Centre Pompidou et dans ses échanges avec des cinéastes, des critiques et des étudiants du Fresnoy. Les discussions sur le regard, les images et le réel, l’histoire et la politique, le cinéma et l’exposition se mêlent aux échanges pratiques autour de la création de l’exposition.</p>
+
+                <div class="source-note">
+                    <p>Durée de la vidéo utilisée : environ 1 h 58 min 34 s. Source : <a href="https://www.youtube.com/watch?v=ggyCAYXBahk" target="_blank" rel="noopener noreferrer">YouTube, « Morceaux de conversations avec Jean Luc Godard, par Alain Fleischer (Exposition Pompidou 2006) »</a>, mis en ligne par Yannis Villette. Il s’agit d’une mise en ligne par un tiers ; son caractère officiel et l’autorisation des ayants droit n’ont pas été établis.</p>
+                    <p>L’audio a été traité en huit parties d’environ quinze minutes, avec un chevauchement de cinq secondes aux limites. Le texte français repose sur la reconnaissance automatique par <code>gpt-transcribe</code>, nom du modèle consigné dans les fichiers de travail. Les informations de locuteurs produites séparément par <code>gpt-4o-transcribe-diarize</code> ont été mises en correspondance avec ce texte.</p>
+                    <p>Le travail de révision se poursuit avec Codex et Claude Code. Pour l’attribution des répliques, des images fixes extraites de la vidéo sont examinées : noms affichés à l’écran, mouvements de la bouche, gestes et changements de scène. Ces indices sont croisés avec les données de locuteurs existantes et l’enchaînement des propos. La traduction japonaise est ajustée aux noms et aux paragraphes de la version française révisée. Cette confrontation de l’image et des données existantes ne signifie pas que l’IA a directement écouté et vérifié toute la bande sonore.</p>
+                    <p>Le texte publié reste une version de travail : l’intégration des dernières corrections et la relecture finale de la transcription et de la traduction ne sont pas achevées. Des répliques brèves ou superposées, des voix hors champ, certains mots et certaines identités restent à vérifier. Les mentions [Intervenant non identifié — partie…], « Interlocuteur 1 » et « Interlocuteur 2 » sont des étiquettes provisoires ; [à vérifier] signale un passage non résolu. Une transcription ou une traduction établie avec une IA peut comporter des erreurs.</p>
+                </div>
+
+                <h2 class="section-title">Transcription française</h2>
+                <p class="section-note">La mention [Bande-son : …] désigne le son d’un film en cours de projection, et non une réplique prononcée sur place. Cliquez sur le nom d’un intervenant pour ouvrir la réplique japonaise correspondante.</p>
 
                 <div class="essay-content">
                 <p><strong class="speaker">Narrateur:</strong> À partir d’octobre 2004, Jean-Luc Godard, en dialogue avec Dominique Païni, travaille à un projet de neuf films destinés au Centre Pompidou et originellement intitulé Collage de France. Le Fresnoy Studio national devient coproducteur, en vue d’un échange entre ses étudiants, certains de ses professeurs, Danièle Huillet, Jean-Marie Straub, André S. Labarthe et Jean-Luc Godard.</p>
