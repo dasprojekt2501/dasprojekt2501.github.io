@@ -288,6 +288,14 @@
         </header>
 
         <main class="essays">
+            <article class="essay-item" lang="ja">
+                <h2 class="essay-title">
+                    <a href="essays/chukan-dantai-wa-dare-wo-mamotta-no-ka.html" id="chukanEssayLink">中間団体は誰を守ったのか――日本の貧困と「自主性」をめぐる試論</a>
+                </h2>
+                <div class="essay-date" id="chukanEssayDate">October 8, 2026 · 日本語</div>
+                <p class="essay-excerpt">日本の貧困の背景にあるとされる中間団体の衰退を、モンテスキュー、デュルケーム、丸山眞男、柄谷行人の議論からたどり直し、貧困のデータと突き合わせて仮説を組み替える試論。</p>
+            </article>
+
             <article class="essay-item">
                 <h2 class="essay-title">
                     <a href="essays/les-rita-mitsouko-tsuito-fr.html" id="tributeEssayLink">À la mémoire de Catherine Ringer — Les Rita Mitsouko et Jean-Luc Godard autour de <em>Soigne ta droite</em></a>
@@ -377,6 +385,7 @@
         const translations = {
             ja: {
                 subtitle: 'エッセイとノート',
+                chukanEssayDate: '2026年10月8日',
                 apps: 'Apps',
                 tributeEssayTitle: 'カトリーヌ・ランジェ追悼——レ・リタ・ミツコとジャン＝リュック・ゴダール、『右側に気をつけろ』をめぐって',
                 tributeEssayHref: 'essays/les-rita-mitsouko-tsuito.html',
@@ -406,6 +415,7 @@
             },
             en: {
                 subtitle: 'Essays and Notes',
+                chukanEssayDate: 'October 8, 2026 · 日本語',
                 apps: 'Apps',
                 tributeEssayTitle: 'À la mémoire de Catherine Ringer — Les Rita Mitsouko et Jean-Luc Godard autour de Soigne ta droite',
                 tributeEssayHref: 'essays/les-rita-mitsouko-tsuito-fr.html',
@@ -441,6 +451,7 @@
 
             document.documentElement.lang = selectedLanguage;
             document.getElementById('pageSubtitle').textContent = content.subtitle;
+            document.getElementById('chukanEssayDate').textContent = content.chukanEssayDate;
             document.getElementById('homeLink').href = `index.html?lang=${selectedLanguage}`;
             document.getElementById('appsLink').textContent = content.apps;
             document.getElementById('appsLink').href = selectedLanguage === 'ja' ? 'app.html' : 'app-en.html';

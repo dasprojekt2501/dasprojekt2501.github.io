@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="390" viewBox="0 0 760 390" role="img" aria-labelledby="fig1-title fig1-desc">
+  <title id="fig1-title">図1　大人一人の子育て世帯と全体の相対的貧困率（1985〜2024年）</title>
+  <desc id="fig1-desc">折れ線グラフ。大人一人の子育て世帯の相対的貧困率は1985年54.5%、1997年63.1%（最高）、2024年44.7%。全体の相対的貧困率は1985年12.0%、2024年15.0%。前者は期間を通じて全体の約3〜4.5倍で推移している。2018年に算出基準が新基準に変わり、2018年は旧基準と新基準の両方の値がある。</desc>
+  <style>
+    text { font-family: 'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP','Noto Sans CJK JP','Yu Gothic UI','Yu Gothic','Meiryo',sans-serif; }
+    .title { font-size: 18px; font-weight: 700; fill: #1f1f1f; }
+    .sub { font-size: 13px; fill: #5f6368; }
+    .src { font-size: 11.5px; fill: #5f6368; }
+    .lab { font-size: 13px; fill: #1f1f1f; }
+    .tick { font-size: 12px; fill: #5f6368; }
+    .acc { fill: #2563eb; font-weight: 700; }
+    .gry { fill: #4d5156; }
+    .halo { paint-order: stroke; stroke: #ffffff; stroke-width: 4px; stroke-linejoin: round; }
+  </style>
+  <rect width="760" height="390" fill="#ffffff"/>
+
+  <!-- 見出し -->
+  <text class="title" x="24" y="36">大人一人の子育て世帯の貧困率は、1985年以来つねに全体の約3〜4.5倍</text>
+  <text class="sub" x="24" y="60">相対的貧困率（%）。年は所得年（調査年の前年）</text>
+  <text class="sub" x="24" y="79">大人一人の子育て世帯＝子どもがいる現役世帯のうち、大人が一人の世帯</text>
+
+  <!-- 凡例 -->
+  <g>
+    <line x1="24" y1="102" x2="48" y2="102" stroke="#2563eb" stroke-width="2.5"/>
+    <circle cx="36" cy="102" r="3" fill="#2563eb"/>
+    <text class="lab" x="56" y="106.5">大人一人の子育て世帯</text>
+    <line x1="230" y1="102" x2="254" y2="102" stroke="#8c9096" stroke-width="2"/>
+    <circle cx="242" cy="102" r="3" fill="#8c9096"/>
+    <text class="lab" x="262" y="106.5">全体</text>
+  </g>
+
+  <!-- 軸・基準変更 -->
+  <line x1="84" y1="328" x2="640" y2="328" stroke="#bdc1c6"/>
+  <text class="tick" x="76" y="332.5" text-anchor="end">0%</text>
+  <line x1="84" y1="328" x2="84" y2="333" stroke="#bdc1c6"/>
+    <line x1="212.3" y1="328" x2="212.3" y2="333" stroke="#bdc1c6"/>
+    <line x1="340.6" y1="328" x2="340.6" y2="333" stroke="#bdc1c6"/>
+    <line x1="468.9" y1="328" x2="468.9" y2="333" stroke="#bdc1c6"/>
+    <line x1="597.2" y1="328" x2="597.2" y2="333" stroke="#bdc1c6"/>
+    <line x1="640" y1="328" x2="640" y2="333" stroke="#bdc1c6"/>
+  <text class="tick" x="84" y="349" text-anchor="middle">1985</text>
+    <text class="tick" x="212.3" y="349" text-anchor="middle">1994</text>
+    <text class="tick" x="340.6" y="349" text-anchor="middle">2003</text>
+    <text class="tick" x="468.9" y="349" text-anchor="middle">2012</text>
+    <text class="tick" x="597.2" y="349" text-anchor="middle">2021</text>
+    <text class="tick" x="640" y="349" text-anchor="middle">2024</text>
+  <line x1="554.5" y1="128" x2="554.5" y2="328" stroke="#8c9096" stroke-dasharray="4 4"/>
+  <text class="tick" x="548.5" y="142" text-anchor="end">2018年に新基準へ</text>
+
+  <!-- 系列：全体 -->
+  <path d="M84 293.7 L126.8 290.3 L169.5 289.4 L212.3 288.6 L255.1 286.3 L297.8 284.3 L340.6 285.4 L383.4 283.1 L426.2 282.3 L468.9 282 L511.7 283.1 L554.5 284" fill="none" stroke="#8c9096" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M554.5 283.1 L597.2 284 L640 285.1" fill="none" stroke="#8c9096" stroke-width="2" stroke-linejoin="round"/>
+  <g>
+    <circle cx="84" cy="293.7" r="3" fill="#8c9096"/>
+    <circle cx="126.8" cy="290.3" r="3" fill="#8c9096"/>
+    <circle cx="169.5" cy="289.4" r="3" fill="#8c9096"/>
+    <circle cx="212.3" cy="288.6" r="3" fill="#8c9096"/>
+    <circle cx="255.1" cy="286.3" r="3" fill="#8c9096"/>
+    <circle cx="297.8" cy="284.3" r="3" fill="#8c9096"/>
+    <circle cx="340.6" cy="285.4" r="3" fill="#8c9096"/>
+    <circle cx="383.4" cy="283.1" r="3" fill="#8c9096"/>
+    <circle cx="426.2" cy="282.3" r="3" fill="#8c9096"/>
+    <circle cx="468.9" cy="282" r="3" fill="#8c9096"/>
+    <circle cx="511.7" cy="283.1" r="3" fill="#8c9096"/>
+    <circle cx="554.5" cy="284" r="3" fill="#8c9096"/>
+    <circle cx="554.5" cy="283.1" r="3" fill="#8c9096"/>
+    <circle cx="597.2" cy="284" r="3" fill="#8c9096"/>
+    <circle cx="640" cy="285.1" r="3" fill="#8c9096"/>
+  </g>
+
+  <!-- 系列：大人一人の子育て世帯 -->
+  <path d="M84 172.3 L126.8 181.1 L169.5 184.9 L212.3 175.1 L255.1 147.7 L297.8 161.7 L340.6 160.3 L383.4 172.9 L426.2 182.9 L468.9 172 L511.7 182.9 L554.5 190.6" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M554.5 190 L597.2 200.9 L640 200.3" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round"/>
+  <g>
+    <circle cx="84" cy="172.3" r="3" fill="#2563eb"/>
+    <circle cx="126.8" cy="181.1" r="3" fill="#2563eb"/>
+    <circle cx="169.5" cy="184.9" r="3" fill="#2563eb"/>
+    <circle cx="212.3" cy="175.1" r="3" fill="#2563eb"/>
+    <circle cx="255.1" cy="147.7" r="3" fill="#2563eb"/>
+    <circle cx="297.8" cy="161.7" r="3" fill="#2563eb"/>
+    <circle cx="340.6" cy="160.3" r="3" fill="#2563eb"/>
+    <circle cx="383.4" cy="172.9" r="3" fill="#2563eb"/>
+    <circle cx="426.2" cy="182.9" r="3" fill="#2563eb"/>
+    <circle cx="468.9" cy="172" r="3" fill="#2563eb"/>
+    <circle cx="511.7" cy="182.9" r="3" fill="#2563eb"/>
+    <circle cx="554.5" cy="190.6" r="3" fill="#2563eb"/>
+    <circle cx="554.5" cy="190" r="3" fill="#2563eb"/>
+    <circle cx="597.2" cy="200.9" r="3" fill="#2563eb"/>
+    <circle cx="640" cy="200.3" r="3" fill="#2563eb"/>
+  </g>
+
+  <!-- 値ラベル -->
+  <text class="lab acc" x="76.0" y="176.8" text-anchor="end">54.5%</text>
+  <text class="lab gry" x="76.0" y="298.2" text-anchor="end">12.0%</text>
+  <text class="lab acc" x="648.0" y="204.8">44.7%</text>
+  <text class="lab gry" x="648.0" y="289.6">15.0%</text>
+  <text class="lab acc halo" x="255.1" y="137.7" text-anchor="middle">63.1%（1997年）</text>
+
+  <!-- 倍率 -->
+  <line x1="84.0" y1="179.3" x2="84.0" y2="286.7" stroke="#2563eb" stroke-width="1.2"/>
+  <text class="lab acc" x="92.0" y="237.5">全体の4.5倍</text>
+  <line x1="640.0" y1="207.3" x2="640.0" y2="278.1" stroke="#2563eb" stroke-width="1.2"/>
+  <text class="lab acc" x="648.0" y="247.2">全体の3.0倍</text>
+
+  <!-- 出典 -->
+  <text class="src" x="24" y="376">出典：厚生労働省「2025年 国民生活基礎調査の概況」表11より作成</text>
+</svg>
