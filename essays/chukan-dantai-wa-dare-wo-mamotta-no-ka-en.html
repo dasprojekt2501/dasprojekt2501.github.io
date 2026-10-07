@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+    <meta property="og:title" content="Whom Did Intermediary Associations Protect? An Essay on Poverty and Autonomy in Japan">
+    <meta property="og:description" content="Revisiting Montesquieu, Durkheim, Maruyama, and Karatani to examine intermediary associations, poverty in Japan, and the conditions of autonomy.">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/essays/chukan-dantai-wa-dare-wo-mamotta-no-ka-en.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="PROJEKT2501">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Whom Did Intermediary Associations Protect? An Essay on Poverty and Autonomy in Japan">
+    <meta name="twitter:description" content="Revisiting Montesquieu, Durkheim, Maruyama, and Karatani to examine intermediary associations, poverty in Japan, and the conditions of autonomy.">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Revisiting Montesquieu, Durkheim, Maruyama, and Karatani to examine intermediary associations, poverty in Japan, and the conditions of autonomy.">
+    <link rel="canonical" href="https://dasprojekt2501.github.io/essays/chukan-dantai-wa-dare-wo-mamotta-no-ka-en.html">
+    <title>Whom Did Intermediary Associations Protect? An Essay on Poverty and Autonomy in Japan</title>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover,
+        .back-link a:hover,
+        .essay-content a:hover,
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            line-height: 1;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+
+        .lang-btn:hover {
+            opacity: 0.8;
+        }
+
+        .lang-btn.active {
+            opacity: 1;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
+            border-color: #333;
+        }
+
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .toc-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .essay-header {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .essay-kicker {
+            color: #666;
+            font-size: 1.05em;
+            margin-bottom: 14px;
+        }
+
+        body.dark-mode .essay-kicker {
+            color: #aaa;
+        }
+
+        .essay-meta {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        .essay-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .essay-content p,
+        .essay-content blockquote {
+            margin-bottom: 20px;
+        }
+
+        .essay-content h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .essay-content h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .essay-content ul,
+        .essay-content ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .essay-content li {
+            margin-bottom: 8px;
+        }
+
+        .essay-content a,
+        .back-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        body.dark-mode .essay-content a,
+        body.dark-mode .back-link a {
+            color: #4a9eff;
+        }
+
+        .essay-content blockquote,
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #666;
+        }
+
+        body.dark-mode .essay-content blockquote,
+        body.dark-mode .info-box {
+            background-color: #2a2a2a;
+            border-left-color: #999;
+        }
+
+        .section-divider {
+            margin: 50px 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+        }
+
+        body.dark-mode .section-divider {
+            background: linear-gradient(to right, transparent, #333, transparent);
+        }
+
+        .back-link {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .back-link {
+            border-top-color: #333;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+
+.essay-author {
+    color: #777;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+}
+
+body.dark-mode .essay-author {
+    color: #aaa;
+}
+
+.keywords {
+    font-size: 0.92em;
+    color: #666;
+}
+
+body.dark-mode .keywords {
+    color: #aaa;
+}
+
+.essay-figure {
+    margin: 36px 0 32px;
+}
+
+.essay-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+body.dark-mode .essay-figure img {
+    border-color: #444;
+}
+
+.essay-figure figcaption {
+    margin-top: 10px;
+    color: #666;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+body.dark-mode .essay-figure figcaption {
+    color: #aaa;
+}
+
+.footnote-ref {
+    font-size: 0.72em;
+    line-height: 0;
+    vertical-align: super;
+}
+
+.footnote-ref a,
+.footnote-backref {
+    text-decoration: none;
+}
+
+.footnotes {
+    margin-left: 28px;
+}
+
+.footnotes li {
+    margin-bottom: 16px;
+    padding-left: 4px;
+    color: #555;
+    font-size: 0.92em;
+    line-height: 1.7;
+}
+
+body.dark-mode .footnotes li {
+    color: #bbb;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 36px 16px;
+    }
+
+    .header-controls {
+        align-items: flex-end;
+        gap: 20px;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+    }
+
+    nav a {
+        margin-right: 0;
+    }
+
+    .essay-title {
+        font-size: 1.85em;
+    }
+
+    .essay-content {
+        font-size: 1em;
+    }
+}
+        a.lang-btn { text-decoration: none; }
+        .essay-content { overflow-wrap: break-word; }
+    </style>
+    <link rel="stylesheet" href="reading-progress.css">
+    <script src="reading-progress.js" defer></script>
+    <link rel="alternate" hreflang="ja" href="https://dasprojekt2501.github.io/essays/chukan-dantai-wa-dare-wo-mamotta-no-ka.html">
+    <link rel="alternate" hreflang="en" href="https://dasprojekt2501.github.io/essays/chukan-dantai-wa-dare-wo-mamotta-no-ka-en.html">
+</head>
+<body>
+    <div class="toc-overlay" onclick="toggleTOC()"></div>
+
+    <div class="toc-sidebar">
+        <div class="toc-header">Table of Contents</div>
+        <ul class="toc-list" id="tocList"></ul>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html?lang=en">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app-en.html">Apps</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle" aria-label="Language">
+                        <a class="lang-btn" href="chukan-dantai-wa-dare-wo-mamotta-no-ka.html" lang="ja" aria-label="日本語">🇯🇵</a>
+                        <a class="lang-btn active" href="chukan-dantai-wa-dare-wo-mamotta-no-ka-en.html" lang="en" aria-label="English" aria-current="page">🇺🇸</a>
+                    </div>
+                    <div class="controls">
+                        <button class="toc-toggle" onclick="toggleTOC()" aria-label="Open table of contents">
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                        </button>
+                        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                            <div class="toggle-circle"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+        <article>
+            <div class="essay-header">
+                <h1 class="essay-title">Whom Did Intermediary Associations Protect? An Essay on Poverty and Autonomy in Japan</h1>
+                <div class="essay-meta"><time datetime="2026-10-08">October 8, 2026</time></div>
+            </div>
+
+            <div class="essay-content">
+<h2 id="section-0">Introduction</h2>
+<p>Behind poverty in Japan lies the decline of intermediary associations. Trade unions, neighborhood associations, and the company as a community no longer support people as they once did. This is a widely shared intuition, and it was my own starting point.</p>
+<p>Yet this essay takes that intuition to be only half right. The problem is not simply a decline in the “quantity” of intermediary associations. It is that Japan’s intermediary associations were not independent of the state; that they also excluded nonmembers; and that postwar Japan entrusted people’s livelihood security to these groups.</p>
+<p>What follows revisits the arguments of Montesquieu, Durkheim, Masao Maruyama, and Kojin Karatani on intermediary associations, then reformulates the hypothesis in light of poverty data. This exploratory essay offers a map for future empirical inquiry.</p>
+<h2 id="section-1">1. The Ambivalence of Intermediate Powers: Montesquieu and Revolution</h2>
+<p>In <em>The Spirit of the Laws</em> (1748), Montesquieu located the essence of monarchy in “intermediate powers”: forces subordinate to the monarch but possessing a basis of authority distinct from his. These included the nobility, the clergy, the parlements as repositories of the law, and the privileges of towns. His point is captured in the maxim: “No monarch, no nobility; no nobility, no monarch. Otherwise, there is a despot” (Book II, Chapter 4; translated here).</p>
+<p>Two points matter. First, these forces could check despotism because their authority did not originate with the monarch. They rested on lineage, the Church, and legal tradition—foundations the king had not bestowed. Second, these were themselves privileges of status, and from the individual’s perspective they could also be oppressive.</p>
+<p>The French Revolution therefore swept away intermediary associations. In <em>The Social Contract</em> (1762), Rousseau argued that the general will could best be expressed if there were no partial associations within the state; if such associations existed, they should be numerous and equal in power. The Le Chapelier Law of 1791 prohibited even occupational associations and workers’ combinations. Yet the revolutionary government that swept away the old powers ended in Robespierre’s dictatorship. Montesquieu’s argument consequently came to be reread as a critique of despotism rather than a defense of the nobility (Karatani, “Commentary”).</p>
+<p>The same ambivalence appears in Japanese debates. The constitutional scholar Yoichi Higuchi argued that Japan should take up anew the significance of the French revolutionary model, which dismantled status-based intermediary associations and brought individuals face to face with the state, accepting its costs as well (Higuchi 1994). Whether one sees intermediary associations as a bulwark against despotism or as institutions that bind individuals leads to diametrically opposed prescriptions.</p>
+<h2 id="section-2">2. Durkheim’s Reconciliation—and Its Shadow</h2>
+<p>In the late nineteenth century, Durkheim sought to reconcile this opposition through institutions. In the preface to the second edition of <em>The Division of Labor in Society</em> (1902), he proposed rebuilding occupational groups as a remedy for the lack of regulation in economic life, or anomie. Between the state and the individual, he argued, there must be a layer of secondary groups that attract individuals and connect them to social life.</p>
+<p>Durkheim did not, however, regard the state as an enemy. In <em>Leçons de sociologie</em>, he argued that it was the state that had freed individuals from the constraints of family, locality, and occupational groups. Conversely, without secondary groups, the state would crush the individual. Individual freedom emerges from the tension in which the state and intermediary groups check one another. This is Durkheim’s model.</p>
+<p>The problem is how easily this model can be reinterpreted as state-led corporatism. Wartime Japan’s neighborhood units and Industrial Patriotic Associations exemplified the transformation of intermediary groups into instruments of state mobilization. For the postwar period, too, the political scientists Pempel and Keiichi Tsunekawa described Japan’s system as “corporatism without labor”: business and agricultural organizations were closely tied to the state, while labor was excluded from national policymaking (Pempel and Tsunekawa 1979). Intermediary groups do not, merely by existing, form a bulwark against despotism. They can also become the state’s instruments.</p>
+<h2 id="section-3">3. Masao Maruyama: What Matters Is Autonomy, Not Intermediacy</h2>
+<p>The decisive criterion Masao Maruyama introduced into this debate was “autonomy.” It is not enough for a group to stand between the state and the individual. The question is whether it is independent of power, rather than a creation of the state.</p>
+<p>In “Thought and Politics,” Maruyama presented the European Church as a model of an autonomous group. Standing outside the state, the Church provided education and contested the state’s authority over it in country after country. In Japan, by contrast, Buddhist temples had already been incorporated into the machinery of government during the Tokugawa period. The Meiji state could therefore take control of education with little resistance. What limited autonomy remained in villages was also absorbed into the lowest tier of state administration through the municipal system. Maruyama called this process, which unfolded in the absence of groups capable of opposing the state, “equalization without freedom” (Maruyama, “Thought and Politics”).</p>
+<p>In <em>Japanese Thought</em> (1961), Maruyama likewise identified the weakness of resistance from intermediary powers sustained by privileges of their own as one condition that enabled the Meiji state’s rapid centralization. Japan had long lacked strong social defenses against political power: an entrenched aristocratic tradition, self-governing towns, privileged guilds, and temples capable of refusing state intervention (Maruyama 1961).</p>
+<p>In his English-language essay “Patterns of Individuation,” Maruyama further distinguished four ways in which individuals emerge from traditional communities during modernization (Maruyama 1965). Two axes—movement toward or away from association, and toward or away from political authority—yield four types: autonomization, democratization, privatization, and atomization. In Maruyama’s diagnosis, privatization and atomization appeared early in modern Japan and became dominant. Atomized individuals, ordinarily indifferent to public affairs, can abruptly swing toward fervent participation out of loneliness and anxiety. They are susceptible to throwing themselves behind a strong leader or into an enduring whole such as the national community.</p>
+<h2 id="section-4">4. Kojin Karatani: Associations Make Individuals</h2>
+<p>Kojin Karatani reread Maruyama as an “associationist” (Karatani 2006). In Karatani’s account, autonomous individuals do not exist prior to associations. Only through participation in autonomous groups such as cooperatives and trade unions do individuals become capable of standing firm even against the state.</p>
+<p>Karatani traces these characteristics of the post-Meiji period back to the Tokugawa era. The Ikko Buddhist movement, associated with cities such as Sakai and peasant self-government in Kaga, was suppressed in the transition from the regimes of Oda Nobunaga and Toyotomi Hideyoshi to the Tokugawa order. In his view, this destroyed the very religious foundations that sustained autonomous association. Where there is no layer of “society” composed of voluntary associations, Karatani argues, resistance to capitalism flows toward statism rather than the self-organization of society. This is a crucial point when considering where anger at poverty may lead.</p>
+<p>One qualification is necessary. To say that Japan’s intermediary groups were “weak” means weak vis-à-vis the state, not weak vis-à-vis their members. According to Manabu Miyazaki’s argument as presented by Karatani, what binds people in Japan is neither state law nor rules specific to a group, but diffuse norms known as <em>seken</em>—the surrounding social world—or <em>kuki</em>, the prevailing atmosphere (Karatani, “Commentary”). Asao Naito’s concept of “intermediary-group totalitarianism,” developed through his research on school bullying, can be read as another face of the same condition (Naito 2009). Japan’s intermediary groups were coercive internally and subordinate to the state externally. They neither checked despotism nor liberated individuals: the worst possible combination.</p>
+<p>Karatani’s argument has its critics. The sociologist Shinji Miyadai dismissively characterized his position as “intermediary-groupism without the state” (Miyadai and Miyazaki 2004). This criticism can be read as an objection from a Durkheimian position that situates intermediary groups within a framework presupposing the state. Indeed, NAM—the New Associationist Movement, which Karatani founded in 2000—dissolved in 2003. I return to this opposition at the end of the essay.</p>
+<h2 id="section-5">5. Livelihood Security in Postwar Japan: “Protection through Membership”</h2>
+<p>Viewed from this perspective, the structure of livelihood security in postwar Japan becomes clear. The state kept direct redistribution limited and entrusted livelihood security to three channels: the company (lifetime employment, seniority wages, and corporate welfare), the family (the male-breadwinner model), and the Liberal Democratic Party’s distribution of benefits to its constituencies (public works, agricultural cooperatives, and protection for small and medium-sized enterprises). The political scientist Margarita Estévez-Abe calls these “functional equivalents” of welfare (Estévez-Abe 2008).</p>
+<p>The 1979 vision of a “Japanese-style welfare society” explicitly assigned welfare responsibilities to families and local communities. In Karatani’s vocabulary of modes of exchange, this was a system in which the state (B) subcontracted much of redistribution to quasi-communities organized around reciprocity (A) embedded in the market (C). I call this “protection through membership.”</p>
+<p>The dismantling of this system was not simply the result of structural changes such as deindustrialization and population aging. It was also deliberate politics. Yasuhiro Nakasone, who carried out the breakup and privatization of Japanese National Railways, later publicly stated that the National Railway Workers’ Union had to be destroyed because it formed the core of Sohyo, the General Council of Trade Unions of Japan (<a href="https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/a164306.htm">House of Representatives 2006</a>). Sohyo dissolved in 1989.</p>
+<p>The figures also show a contraction in “membership.”</p>
+<ul>
+<li>Nonregular employment rose from 6.04 million workers (15.3% of employees) in 1984 to 21.26 million (36.8%) in 2024 (<a href="https://www.mhlw.go.jp/content/11601000/001613119.pdf">MHLW 2025</a>).</li>
+<li>The estimated unionization rate fell to 16.0% in 2025, the lowest since the survey began in 1947 (<a href="https://www.jil.go.jp/kokunai/blt/backnumber/2026/03/kokunai_01.html">JILPT 2026a</a>).</li>
+<li>Single-person households nearly doubled as a share of all households, from 18.2% in 1986 to 35.4% in 2025. Over the same period, the proportion of people aged 65 and over living with their children halved, from 64.3% to 32.2% (<a href="https://www.mhlw.go.jp/toukei/saikin/hw/k-tyosa/k-tyosa25/dl/02.pdf">MHLW 2026a</a>).</li>
+</ul>
+<p>The loss of <em>tame</em>—reserves or buffers—described by Makoto Yuasa in <em>Anti-Poverty</em> (2008) can be read as the sudden loss of the cushioning that membership had provided.</p>
+<h2 id="section-6">6. Five Facts That Challenge the Hypothesis</h2>
+<p>The argument so far supports the intuition that “the decline of intermediary associations produced poverty.” Yet the following five facts make it difficult to sustain that intuition in its original form.</p>
+<p><strong>First, even when intermediary associations were strong, people outside them were unprotected.</strong> Among working-age households with children, the poverty rate for those with only one adult already exceeded 50% in 1985 (Figure 1). In the era when companies and families supposedly guaranteed livelihood security, these households—primarily single-mother households—faced higher poverty than they do today.</p>
+<figure class="essay-figure"><a href="chukan-dantai-wa-dare-wo-mamotta-no-ka/fig1-poverty-rate-en.svg" aria-label="Enlarge Figure 1"><img src="chukan-dantai-wa-dare-wo-mamotta-no-ka/fig1-poverty-rate-en.svg" alt="Figure 1. Relative poverty rates, 1985–2024. The rate for one-adult households with children was 54.5% in 1985, peaked at 63.1% in 1997, and reached 44.7% in 2024. The overall rate rose from 12.0% to 15.0%. The former remained roughly 3–4.5 times the latter throughout." width="760" height="390" loading="lazy"></a><figcaption>Figure 1. Relative poverty rates for one-adult households with children and the population overall, 1985–2024. Compiled from MHLW (2026b), Table 11. Years refer to income years. Both the old and new standards are shown for 2018.</figcaption></figure>
+<p>The rise in poverty between 1985 and 2012 also fits the data better when understood as a compositional effect—an increase in the proportion of people falling outside protection—than as a deterioration in the “quality” of protection. Moreover, because poverty is measured at the household level, the poverty of women economically dependent within households has always been difficult to see.</p>
+<p><strong>Second, poverty rates have fallen since 2012 while unionization has declined almost continuously.</strong> This decline in poverty, at least, cannot be attributed to the rebuilding of intermediary associations. Since relative poverty rates also move with median income, macroeconomic issues such as deflation and wage stagnation cannot be explained through institutional arguments alone.</p>
+<p><strong>Third, Japan’s intermediary associations were exclusionary.</strong> Enterprise unions protected insiders—male regular employees—and often accepted the expansion of nonregular employment. In a 2011 interview, Karatani himself noted that the Tokyo Electric Power Company’s labor union supported nuclear power, arguing that demonstrations were now being driven not by established organizations but by associations of individuals coming together (Karatani 2011). The intermediary associations that remained had been incorporated into the camp of capital and the state. Part of their “decline” was also liberation in Higuchi’s sense.</p>
+<p><strong>Fourth, international comparisons do not fit a simple model.</strong> Relative poverty rates in 2021 were 15.4% in Japan, 15.2% in the United States, 12.8% in Italy, and 6.3% in Denmark (<a href="https://www.jil.go.jp/kokunai/statistics/databook/2026/05/d2026_5T-16.pdf">JILPT 2026b</a>). Southern European societies, often described as having strong family and community ties, are not low-poverty societies. Poverty is low in countries where organized groups have pressed the state for universal redistribution, as in the highly unionized Nordic countries. This is the finding of what is known as power resources theory (Korpi 1983; Esping-Andersen 1990). What matters is not whether intermediary associations exist, but where they stand in relation to the state.</p>
+<p><strong>Fifth, the “revival” of intermediary associations can provide an excuse for state withdrawal.</strong> From the “Japanese-style welfare society” to the triad of “self-help, mutual help, and public help,” praise for mutual help has gone hand in hand with the shrinking of public support. By fiscal 2025, Japan had 12,601 <em>kodomo shokudo</em>, community meal spaces for children (<a href="https://musubie.org/wp/wp-content/uploads/2025/12/Soukatsu_2025.pdf">Musubie 2025</a>). Nationwide support organizations describe them as practices of residents’ self-government, while also receiving support through government programs. Will these spaces develop into autonomous associations, or become subcontractors for a retreating state? That fork in the road is already before us.</p>
+<h2 id="section-7">7. Reformulating the Hypothesis: Three Channels and Three Criteria</h2>
+<p>On this basis, I reformulate the hypothesis as follows. Poverty in Japan is explained not by “the decline of intermediary associations” as such, but by the overlap of three processes (Figure 2).</p>
+<ol>
+<li><strong>The contraction of “protection through membership”:</strong> the protection provided by quasi-communities lacking autonomy from the state came to cover fewer people.</li>
+<li><strong>The underdevelopment of “protection through rights”:</strong> universal benefits and social insurance were not sufficiently developed to replace it.</li>
+<li><strong>The absence of “counterpower through association”:</strong> autonomous, open associations capable of representing newly impoverished groups and pressing demands on the state failed to develop.</li>
+</ol>
+<figure class="essay-figure"><a href="chukan-dantai-wa-dare-wo-mamotta-no-ka/fig2-framework-en.svg" aria-label="Enlarge Figure 2"><img src="chukan-dantai-wa-dare-wo-mamotta-no-ka/fig2-framework-en.svg" alt="Figure 2. Three channels and three criteria. A thick arrow carries protection through membership from intermediary groups to members, while a dashed line fails to reach nonmembers. Thin arrows carry protection through rights from the state to both groups and counterpower through association from intermediary groups to the state. The criteria are autonomy from the state, voluntary membership, and openness to nonmembers." width="760" height="496" loading="lazy"></a><figcaption>Figure 2. Three channels and three criteria. Author’s diagram.</figcaption></figure>
+<p>Intermediary groups themselves should be assessed at three boundaries: “autonomy” vis-à-vis the state, “voluntariness” vis-à-vis members (can people leave without penalty?), and “openness” vis-à-vis nonmembers (are outsiders excluded?). These correspond, respectively, to Maruyama’s theory of autonomous groups, Naito’s account of intermediary-group totalitarianism, and critiques of enterprise unions’ protection of insiders.</p>
+<h2 id="section-8">8. From Exploration to Verification</h2>
+<p>This reformulation remains a hypothesis. Going forward, I would like to investigate three questions.</p>
+<ul>
+<li><strong>How much of the rise in poverty can compositional effects explain?</strong> I would decompose the extent to which an increase in household types outside existing protection explains the rise in poverty. The poverty rates by demographic characteristics published on Aya Abe’s Poverty Statistics website offer a starting point (<a href="https://www.hinkonstat.net/">Abe 2024</a>). The argument that demographic change explains much of the growth in inequality, however, has been familiar since Fumio Ohtake’s <em>Inequality in Japan</em> (2005). The novelty lies less in the figures themselves than in rereading them through the lens of “membership.”</li>
+<li><strong>Do associations function as a channel for “voice”?</strong> Does membership in associations direct low-income people’s discontent toward demands for redistribution? Among those without such membership, is discontent more likely to turn toward exclusionary attitudes? The Japanese data from the World Values Survey (WVS) include questions on membership in trade unions and self-help groups, as well as whether nationals should receive priority when jobs are scarce.</li>
+<li><strong>Can the “quality” of membership be measured?</strong> Publicly available data tell us only the type of membership; they do not measure autonomy, voluntariness, or openness. These dimensions require an original survey. Only then can this essay’s reformulation become a testable claim.</li>
+</ul>
+<p>When writing in a venue without peer review, making the hypotheses and analysis plan public before beginning the analysis would help safeguard the integrity of the argument.</p>
+<h2 id="section-9">Conclusion: The Despotism of Social Atmosphere and the Possibility of Association</h2>
+<p>My theoretical assessment should also be explicit. If poverty reduction alone is the criterion, the stronger empirical case lies with Durkheim’s account of mutual checks between the state and intermediary groups, rather than with Karatani’s associationism, which seeks to sublate the state. For Karatani, mode of exchange D is a regulative idea in the Kantian sense, not a blueprint for institutional design.</p>
+<p>Even so, Karatani’s diagnosis is incisive. As early as 2006, he wrote that in societies with weak traditions of association, online spaces amplify anonymous isolation rather than connection, and that when desires unleashed under anonymity become political, they are prone to generate movements that exclude others (Karatani 2006). In 2011, he also argued that waiting for someone else to act on one’s behalf instead of taking action oneself ultimately leads to handing power to a popularity-seeking demagogue (Karatani 2011).</p>
+<p>In contemporary Japan, Montesquieu’s despotism appears not as a single despotic ruler, but as the despotism of public opinion and the prevailing social atmosphere. The discontent of atomized people in poverty is easily drawn toward identification with the imagined community of the nation, rather than demands for redistribution.</p>
+<p>This essay therefore takes a dual position: Durkheimian institutional design should be scrutinized through Maruyama’s and Karatani’s criterion of autonomy. Universal benefits should be combined with occupational and local groups, while continually asking whether those groups are becoming subcontractors for the state, constraining their members, or shutting out outsiders. Whom did intermediary associations protect? That question is also a question about whom they will protect in the future.</p>
+<h2 id="section-10">References and Data Sources</h2>
+<p><strong>References</strong></p>
+<p>English renderings of Japanese titles below are descriptive translations, not indications of published English editions.</p>
+<ul>
+<li>Durkheim, Émile (1902). <em>De la division du travail social</em>, 2nd ed., preface. Japanese translation by Tahara (田原音和).</li>
+<li>Durkheim, Émile (1950). <em>Leçons de sociologie</em>. Japanese translation by Miyajima (宮島喬) and Kawakita (川喜多喬), Misuzu Shobo.</li>
+<li>Esping-Andersen, Gøsta (1990). <em>The Three Worlds of Welfare Capitalism</em>. Polity Press.</li>
+<li>Estévez-Abe, Margarita (2008). <em>Welfare and Capitalism in Postwar Japan</em>. Cambridge University Press.</li>
+<li>Higuchi, Yoichi (1994). <em>The Constitutional Structure of the Modern Nation-State</em>. University of Tokyo Press. In Japanese.</li>
+<li>Karatani, Kojin (2006). “<a href="https://www.kojinkaratani.com/jp/essay/post-68.html">Maruyama Masao and Associationism</a>.” <em>Shiso</em>, no. 988. In Japanese.</li>
+<li>Karatani, Kojin (2011). “<a href="https://www.kojinkaratani.com/jp/essay/post-64.html">Anti-Nuclear Demonstrations Will Change Japan</a>.” <em>Shukan Dokushojin</em>, June 17. In Japanese.</li>
+<li>Karatani, Kojin. “<a href="https://www.kojinkaratani.com/jp/essay/post-35.html">Commentary</a>.” In Manabu Miyazaki, <em>Law and Codes</em>. Kadokawa Bunko. In Japanese.</li>
+<li>Korpi, Walter (1983). <em>The Democratic Class Struggle</em>. Routledge &amp; Kegan Paul.</li>
+<li>Maruyama, Masao (1961). <em>Japanese Thought</em>. Iwanami Shinsho. In Japanese.</li>
+<li>Maruyama, Masao. “Thought and Politics.” <em>Collected Works of Masao Maruyama</em>, vol. 7. Iwanami Shoten. In Japanese.</li>
+<li>Maruyama, Masao (1965). “Patterns of Individuation and the Case of Japan: A Conceptual Scheme.” In M. B. Jansen, ed., <em>Changing Japanese Attitudes Toward Modernization</em>. Princeton University Press. Japanese translation in <em>Collected Works of Masao Maruyama</em>, vol. 9.</li>
+<li>Miyadai, Shinji, and Tetsuya Miyazaki (2004). <em>M2: In Our Time</em>. Asahi Bunko. In Japanese.</li>
+<li>Montesquieu (1748). <em>The Spirit of the Laws</em>, Book II, Chapter 4.</li>
+<li>Naito, Asao (2009). <em>The Structure of Bullying</em>. Kodansha Gendai Shinsho. In Japanese.</li>
+<li>Ohtake, Fumio (2005). <em>Inequality in Japan</em>. Nihon Keizai Shimbunsha. In Japanese.</li>
+<li>Pempel, T. J., and Keiichi Tsunekawa (1979). “Corporatism without Labor? The Japanese Anomaly.” In P. Schmitter and G. Lehmbruch, eds., <em>Trends toward Corporatist Intermediation</em>. Sage.</li>
+<li>Rousseau (1762). <em>The Social Contract</em>, Book II, Chapter 3.</li>
+<li>Yuasa, Makoto (2008). <em>Anti-Poverty: Escaping the “Slide Society”</em>. Iwanami Shinsho. In Japanese.</li>
+</ul>
+<p><strong>Data sources</strong></p>
+<ul>
+<li>Abe, Aya (2024). “<a href="https://www.hinkonstat.net/">Trends in Relative Poverty Rates (2022 Survey Update)</a>.” Poverty Statistics website. In Japanese.</li>
+<li>Ministry of Health, Labour and Welfare (MHLW) (2025). “<a href="https://www.mhlw.go.jp/content/11601000/001613119.pdf">Implementation of the Part-Time and Fixed-Term Employment Act and the Worker Dispatching Act</a>.” In Japanese.</li>
+<li>MHLW (2026a). “<a href="https://www.mhlw.go.jp/toukei/saikin/hw/k-tyosa/k-tyosa25/dl/02.pdf">Overview of the 2025 Comprehensive Survey of Living Conditions: I. Households and Household Members</a>.” In Japanese.</li>
+<li>MHLW (2026b). “<a href="https://www.mhlw.go.jp/toukei/saikin/hw/k-tyosa/k-tyosa25/dl/03.pdf">Overview of the 2025 Comprehensive Survey of Living Conditions: II. Income of Different Household Types</a>.” In Japanese.</li>
+<li>Japan Institute for Labour Policy and Training (JILPT) (2026a). “<a href="https://www.jil.go.jp/kokunai/blt/backnumber/2026/03/kokunai_01.html">Estimated Unionization Rate Falls to 16.0%, a Record Low for the Fourth Consecutive Year</a>.” <em>Business Labor Trend</em>, March. In Japanese.</li>
+<li>JILPT (2026b). “<a href="https://www.jil.go.jp/kokunai/statistics/databook/2026/05/d2026_5T-16.pdf">Databook of International Labour Statistics 2026, Table 5-16: Relative Poverty Rates</a>.” In Japanese.</li>
+<li>Musubie (2025). “<a href="https://musubie.org/wp/wp-content/uploads/2025/12/Soukatsu_2025.pdf">2025 Nationwide Survey of Kodomo Shokudo: Summary</a>.” In Japanese.</li>
+<li>House of Representatives (2006). “<a href="https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/a164306.htm">Written Question Concerning Former Prime Minister Yasuhiro Nakasone’s Remarks on the National Railway Workers’ Union</a>.” In Japanese.</li>
+<li>World Values Survey Association. “<a href="https://www.worldvaluessurvey.org/AJDownloadLicense.jsp">Conditions of Use</a>.”</li>
+</ul>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html?lang=en">← Back to Home</a>
+            </div>
+        </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem("theme") || "light";
+        if (currentTheme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        }
+
+        function generateTOC() {
+            const tocList = document.getElementById("tocList");
+            const headings = document.querySelectorAll(".essay-content h2, .essay-content h3");
+
+            headings.forEach((heading, index) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+
+                if (!heading.id) {
+                    heading.id = "heading-" + index;
+                }
+
+                a.href = "#" + heading.id;
+                a.textContent = heading.textContent;
+
+                if (heading.tagName === "H3") {
+                    a.classList.add("toc-h3");
+                }
+
+                a.onclick = function() {
+                    toggleTOC();
+                };
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+
+        function toggleTOC() {
+            document.querySelector(".toc-sidebar").classList.toggle("open");
+            document.querySelector(".toc-overlay").classList.toggle("active");
+        }
+
+        window.addEventListener("DOMContentLoaded", generateTOC);
+    </script>
+</body>
+</html>

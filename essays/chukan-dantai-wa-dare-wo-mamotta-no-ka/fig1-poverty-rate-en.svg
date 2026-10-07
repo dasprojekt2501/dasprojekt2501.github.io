@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="390" viewBox="0 0 760 390" role="img" aria-labelledby="fig1-title fig1-desc">
+  <title id="fig1-title">Figure 1. Relative poverty rates, 1985–2024</title>
+  <desc id="fig1-desc">One-adult households with children: 54.5% in 1985, a peak of 63.1% in 1997, and 44.7% in 2024. Overall: 12.0% in 1985 and 15.0% in 2024. Both old and new standards are shown for 2018.</desc>
+  <style>
+    text { font-family: 'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP','Noto Sans CJK JP','Yu Gothic UI','Yu Gothic','Meiryo',sans-serif; }
+    .title { font-size: 17px; font-weight: 700; fill: #1f1f1f; }
+    .sub { font-size: 13px; fill: #5f6368; }
+    .src { font-size: 11.5px; fill: #5f6368; }
+    .lab { font-size: 13px; fill: #1f1f1f; }
+    .tick { font-size: 12px; fill: #5f6368; }
+    .acc { fill: #2563eb; font-weight: 700; }
+    .gry { fill: #4d5156; }
+    .halo { paint-order: stroke; stroke: #ffffff; stroke-width: 4px; stroke-linejoin: round; }
+  </style>
+  <rect width="760" height="390" fill="#ffffff"/>
+
+  
+  <text class="title" x="24" y="36">One-adult households with children: poverty at 3–4.5 times the overall rate</text>
+  <text class="sub" x="24" y="60">Relative poverty rate (%). Income years (the year before each survey).</text>
+  <text class="sub" x="24" y="79">One-adult households with children: working-age households with children and one adult.</text>
+
+  
+  <g>
+    <line x1="24" y1="102" x2="48" y2="102" stroke="#2563eb" stroke-width="2.5"/>
+    <circle cx="36" cy="102" r="3" fill="#2563eb"/>
+    <text class="lab" x="56" y="106.5">One-adult households with children</text>
+    <line x1="320" y1="102" x2="344" y2="102" stroke="#8c9096" stroke-width="2"/>
+    <circle cx="332" cy="102" r="3" fill="#8c9096"/>
+    <text class="lab" x="352" y="106.5">Overall</text>
+  </g>
+
+  
+  <line x1="84" y1="328" x2="640" y2="328" stroke="#bdc1c6"/>
+  <text class="tick" x="76" y="332.5" text-anchor="end">0%</text>
+  <line x1="84" y1="328" x2="84" y2="333" stroke="#bdc1c6"/>
+    <line x1="212.3" y1="328" x2="212.3" y2="333" stroke="#bdc1c6"/>
+    <line x1="340.6" y1="328" x2="340.6" y2="333" stroke="#bdc1c6"/>
+    <line x1="468.9" y1="328" x2="468.9" y2="333" stroke="#bdc1c6"/>
+    <line x1="597.2" y1="328" x2="597.2" y2="333" stroke="#bdc1c6"/>
+    <line x1="640" y1="328" x2="640" y2="333" stroke="#bdc1c6"/>
+  <text class="tick" x="84" y="349" text-anchor="middle">1985</text>
+    <text class="tick" x="212.3" y="349" text-anchor="middle">1994</text>
+    <text class="tick" x="340.6" y="349" text-anchor="middle">2003</text>
+    <text class="tick" x="468.9" y="349" text-anchor="middle">2012</text>
+    <text class="tick" x="597.2" y="349" text-anchor="middle">2021</text>
+    <text class="tick" x="640" y="349" text-anchor="middle">2024</text>
+  <line x1="554.5" y1="128" x2="554.5" y2="328" stroke="#8c9096" stroke-dasharray="4 4"/>
+  <text class="tick" x="548.5" y="142" text-anchor="end">New standard from 2018</text>
+
+  
+  <path d="M84 293.7 L126.8 290.3 L169.5 289.4 L212.3 288.6 L255.1 286.3 L297.8 284.3 L340.6 285.4 L383.4 283.1 L426.2 282.3 L468.9 282 L511.7 283.1 L554.5 284" fill="none" stroke="#8c9096" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M554.5 283.1 L597.2 284 L640 285.1" fill="none" stroke="#8c9096" stroke-width="2" stroke-linejoin="round"/>
+  <g>
+    <circle cx="84" cy="293.7" r="3" fill="#8c9096"/>
+    <circle cx="126.8" cy="290.3" r="3" fill="#8c9096"/>
+    <circle cx="169.5" cy="289.4" r="3" fill="#8c9096"/>
+    <circle cx="212.3" cy="288.6" r="3" fill="#8c9096"/>
+    <circle cx="255.1" cy="286.3" r="3" fill="#8c9096"/>
+    <circle cx="297.8" cy="284.3" r="3" fill="#8c9096"/>
+    <circle cx="340.6" cy="285.4" r="3" fill="#8c9096"/>
+    <circle cx="383.4" cy="283.1" r="3" fill="#8c9096"/>
+    <circle cx="426.2" cy="282.3" r="3" fill="#8c9096"/>
+    <circle cx="468.9" cy="282" r="3" fill="#8c9096"/>
+    <circle cx="511.7" cy="283.1" r="3" fill="#8c9096"/>
+    <circle cx="554.5" cy="284" r="3" fill="#8c9096"/>
+    <circle cx="554.5" cy="283.1" r="3" fill="#8c9096"/>
+    <circle cx="597.2" cy="284" r="3" fill="#8c9096"/>
+    <circle cx="640" cy="285.1" r="3" fill="#8c9096"/>
+  </g>
+
+  
+  <path d="M84 172.3 L126.8 181.1 L169.5 184.9 L212.3 175.1 L255.1 147.7 L297.8 161.7 L340.6 160.3 L383.4 172.9 L426.2 182.9 L468.9 172 L511.7 182.9 L554.5 190.6" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M554.5 190 L597.2 200.9 L640 200.3" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round"/>
+  <g>
+    <circle cx="84" cy="172.3" r="3" fill="#2563eb"/>
+    <circle cx="126.8" cy="181.1" r="3" fill="#2563eb"/>
+    <circle cx="169.5" cy="184.9" r="3" fill="#2563eb"/>
+    <circle cx="212.3" cy="175.1" r="3" fill="#2563eb"/>
+    <circle cx="255.1" cy="147.7" r="3" fill="#2563eb"/>
+    <circle cx="297.8" cy="161.7" r="3" fill="#2563eb"/>
+    <circle cx="340.6" cy="160.3" r="3" fill="#2563eb"/>
+    <circle cx="383.4" cy="172.9" r="3" fill="#2563eb"/>
+    <circle cx="426.2" cy="182.9" r="3" fill="#2563eb"/>
+    <circle cx="468.9" cy="172" r="3" fill="#2563eb"/>
+    <circle cx="511.7" cy="182.9" r="3" fill="#2563eb"/>
+    <circle cx="554.5" cy="190.6" r="3" fill="#2563eb"/>
+    <circle cx="554.5" cy="190" r="3" fill="#2563eb"/>
+    <circle cx="597.2" cy="200.9" r="3" fill="#2563eb"/>
+    <circle cx="640" cy="200.3" r="3" fill="#2563eb"/>
+  </g>
+
+  
+  <text class="lab acc" x="76.0" y="176.8" text-anchor="end">54.5%</text>
+  <text class="lab gry" x="76.0" y="298.2" text-anchor="end">12.0%</text>
+  <text class="lab acc" x="648.0" y="204.8">44.7%</text>
+  <text class="lab gry" x="648.0" y="289.6">15.0%</text>
+  <text class="lab acc halo" x="255.1" y="137.7" text-anchor="middle">63.1% (1997)</text>
+
+  
+  <line x1="84.0" y1="179.3" x2="84.0" y2="286.7" stroke="#2563eb" stroke-width="1.2"/>
+  <text class="lab acc" x="92.0" y="237.5">4.5× overall</text>
+  <line x1="640.0" y1="207.3" x2="640.0" y2="278.1" stroke="#2563eb" stroke-width="1.2"/>
+  <text class="lab acc" x="648.0" y="247.2">3.0× overall</text>
+
+  
+  <text class="src" x="24" y="376">Source: MHLW, Overview of the 2025 Comprehensive Survey of Living Conditions, Table 11.</text>
+</svg>

@@ -500,9 +500,13 @@ body.dark-mode .footnotes li {
         font-size: 1em;
     }
 }
+        a.lang-btn { text-decoration: none; }
+        .essay-content { overflow-wrap: break-word; }
     </style>
     <link rel="stylesheet" href="reading-progress.css">
     <script src="reading-progress.js" defer></script>
+    <link rel="alternate" hreflang="ja" href="https://dasprojekt2501.github.io/essays/chukan-dantai-wa-dare-wo-mamotta-no-ka.html">
+    <link rel="alternate" hreflang="en" href="https://dasprojekt2501.github.io/essays/chukan-dantai-wa-dare-wo-mamotta-no-ka-en.html">
 </head>
 <body>
     <div class="toc-overlay" onclick="toggleTOC()"></div>
@@ -524,6 +528,10 @@ body.dark-mode .footnotes li {
                     <a href="../about.html">About</a>
                 </nav>
                 <div style="display: flex; align-items: center;">
+                    <div class="language-toggle" aria-label="Language">
+                        <a class="lang-btn active" href="chukan-dantai-wa-dare-wo-mamotta-no-ka.html" lang="ja" aria-label="日本語" aria-current="page">🇯🇵</a>
+                        <a class="lang-btn" href="chukan-dantai-wa-dare-wo-mamotta-no-ka-en.html" lang="en" aria-label="English">🇺🇸</a>
+                    </div>
                     <div class="controls">
                         <button class="toc-toggle" onclick="toggleTOC()" aria-label="目次を開く">
                             <span class="hamburger-line"></span>
