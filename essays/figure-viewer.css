@@ -1,0 +1,70 @@
+.figure-viewer-trigger {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    cursor: zoom-in;
+}
+.figure-viewer-trigger:focus-visible,
+.figure-viewer button:focus-visible {
+    outline: 3px solid #0066cc;
+    outline-offset: 3px;
+}
+html.figure-viewer-open { overflow: hidden; }
+.figure-viewer {
+    margin: auto;
+    padding: 0;
+    width: min(1100px, calc(100% - 32px));
+    max-width: none;
+    max-height: 90vh;
+    max-height: 90dvh;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #faf8f5;
+    color: #333;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+.figure-viewer[open] { display: flex; flex-direction: column; }
+.figure-viewer::backdrop { background: rgba(0, 0, 0, 0.6); }
+.figure-viewer-header {
+    display: flex;
+    flex: none;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+}
+.figure-viewer-header h2 { margin: 0; font-size: 1.1rem; }
+.figure-viewer-actions { display: flex; align-items: center; gap: 12px; }
+.figure-viewer button { color: inherit; font: inherit; cursor: pointer; }
+.figure-viewer-zoom {
+    min-height: 44px;
+    padding: 6px 12px;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    background: transparent;
+}
+.figure-viewer-close {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    font-size: 1.8rem !important;
+}
+.figure-viewer-body { min-height: 0; padding: 16px; overflow: auto; overscroll-behavior: contain; }
+.figure-viewer-image { overflow: auto; }
+.figure-viewer-image img { display: block; width: 100%; height: auto; background: #fff; }
+.figure-viewer:not(.is-zoomed) .figure-viewer-image img { max-height: max(120px, calc(90dvh - 200px)); object-fit: contain; }
+.figure-viewer.is-zoomed .figure-viewer-image img { width: 150%; min-width: 1000px; max-width: none; }
+.figure-viewer-caption { margin: 12px 0 0; font-size: 0.9rem; line-height: 1.6; }
+body.dark-mode .figure-viewer { background: #1a1a1a; color: #e0e0e0; border-color: #444; }
+body.dark-mode .figure-viewer-header { border-color: #444; }
+body.dark-mode .figure-viewer::backdrop { background: rgba(0, 0, 0, 0.8); }
+@media (max-width: 640px) {
+    .figure-viewer { width: calc(100% - 16px); }
+    .figure-viewer-body { padding: 10px; }
+    .figure-viewer-header { padding: 8px 10px; }
+}
