@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+    <meta property="og:title" content="When Will Humans Bow to AI?">
+    <meta property="og:description" content="How does power shape civility toward AI? An essay on self-presentation, institutional assessment, surveillance, and the formation of subjects.">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/essays/ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka-en.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="PROJEKT2501">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="When Will Humans Bow to AI?">
+    <meta name="twitter:description" content="How does power shape civility toward AI? An essay on self-presentation, institutional assessment, surveillance, and the formation of subjects.">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How does power shape civility toward AI? An essay on self-presentation, institutional assessment, surveillance, and the formation of subjects.">
+    <link rel="canonical" href="https://dasprojekt2501.github.io/essays/ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka-en.html">
+    <title>When Will Humans Bow to AI? | PROJEKT2501</title>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover,
+        .back-link a:hover,
+        .essay-content a:hover,
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            line-height: 1;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+
+        .lang-btn:hover {
+            opacity: 0.8;
+        }
+
+        .lang-btn.active {
+            opacity: 1;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
+            border-color: #333;
+        }
+
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .toc-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .essay-header {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .essay-kicker {
+            color: #666;
+            font-size: 1.05em;
+            margin-bottom: 14px;
+        }
+
+        body.dark-mode .essay-kicker {
+            color: #aaa;
+        }
+
+        .essay-meta {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        .essay-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .essay-content p,
+        .essay-content blockquote {
+            margin-bottom: 20px;
+        }
+
+        .essay-content h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .essay-content h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .essay-content ul,
+        .essay-content ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .essay-content li {
+            margin-bottom: 8px;
+        }
+
+        .essay-content a,
+        .back-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        body.dark-mode .essay-content a,
+        body.dark-mode .back-link a {
+            color: #4a9eff;
+        }
+
+        .essay-content blockquote,
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #666;
+        }
+
+        body.dark-mode .essay-content blockquote,
+        body.dark-mode .info-box {
+            background-color: #2a2a2a;
+            border-left-color: #999;
+        }
+
+        .section-divider {
+            margin: 50px 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+        }
+
+        body.dark-mode .section-divider {
+            background: linear-gradient(to right, transparent, #333, transparent);
+        }
+
+        .back-link {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .back-link {
+            border-top-color: #333;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+
+.essay-author {
+    color: #777;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+}
+
+body.dark-mode .essay-author {
+    color: #aaa;
+}
+
+.keywords {
+    font-size: 0.92em;
+    color: #666;
+}
+
+body.dark-mode .keywords {
+    color: #aaa;
+}
+
+.essay-figure {
+    margin: 36px 0 32px;
+}
+
+.essay-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+body.dark-mode .essay-figure img {
+    border-color: #444;
+}
+
+.essay-figure figcaption {
+    margin-top: 10px;
+    color: #666;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+body.dark-mode .essay-figure figcaption {
+    color: #aaa;
+}
+
+.footnote-ref {
+    font-size: 0.72em;
+    line-height: 0;
+    vertical-align: super;
+}
+
+.footnote-ref a,
+.footnote-backref {
+    text-decoration: none;
+}
+
+.footnotes {
+    margin-left: 28px;
+}
+
+.footnotes li {
+    margin-bottom: 16px;
+    padding-left: 4px;
+    color: #555;
+    font-size: 0.92em;
+    line-height: 1.7;
+}
+
+body.dark-mode .footnotes li {
+    color: #bbb;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 36px 16px;
+    }
+
+    .header-controls {
+        align-items: flex-end;
+        gap: 20px;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+    }
+
+    nav a {
+        margin-right: 0;
+    }
+
+    .essay-title {
+        font-size: 1.85em;
+    }
+
+    .essay-content {
+        font-size: 1em;
+    }
+}
+        a.lang-btn { text-decoration: none; }
+        .essay-content { overflow-wrap: break-word; }
+        .essay-content .references { margin-left: 24px; font-size: 0.92em; }
+        .essay-content .references li { margin-bottom: 16px; }
+        .source-note { margin-top: 32px; font-size: 0.92em; color: #666; }
+        .source-note summary { cursor: pointer; margin-bottom: 12px; }
+        body.dark-mode .source-note { color: #aaa; }
+    </style>
+    <link rel="stylesheet" href="reading-progress.css">
+    <script src="reading-progress.js" defer></script>
+    <link rel="alternate" hreflang="ja" href="https://dasprojekt2501.github.io/essays/ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka.html">
+    <link rel="alternate" hreflang="en" href="https://dasprojekt2501.github.io/essays/ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka-en.html">
+    <meta property="article:published_time" content="2026-10-10">
+</head>
+<body>
+    <div class="toc-overlay" onclick="toggleTOC()"></div>
+
+    <div class="toc-sidebar">
+        <div class="toc-header">Table of Contents</div>
+        <ul class="toc-list" id="tocList"></ul>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html?lang=en">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app-en.html">Apps</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle" aria-label="Language">
+                        <a class="lang-btn" href="ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka.html" lang="ja" aria-label="日本語">🇯🇵</a>
+                        <a class="lang-btn active" href="ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka-en.html" lang="en" aria-label="English" aria-current="page">🇺🇸</a>
+                    </div>
+                    <div class="controls">
+                        <button class="toc-toggle" onclick="toggleTOC()" aria-label="Open table of contents">
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                        </button>
+                        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                            <div class="toggle-circle"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+        <article>
+            <div class="essay-header">
+                <h1 class="essay-title">When Will Humans Bow to AI?</h1>
+                <p class="essay-kicker">Civility, Power, and Surveillance in the Age of Generative AI</p>
+                <div class="essay-meta"><time datetime="2026-10-10">October 10, 2026</time></div>
+            </div>
+
+            <div class="essay-content">
+                <h2 id="abstract">Abstract</h2>
+                <p>In October 2026, Anthropic announced a policy revision prohibiting sustained and needless abuse of its models. Taking this event as a starting point, this essay examines civility as conduct distributed according to rewards and sanctions attributed to an interlocutor. It introduces power-contingent civility as a provisional analytical term and brings self-presentation, disciplinary power, societies of control, and reactivity to measurement into conversation. When AI serves both as an interlocutor and as a medium of institutional assessment, the classification of conduct, its connection to consequential decisions, and anticipatory adjustment may form a recursive process that produces subjects oriented toward evaluation. Such adjustment need not remain superficial: repeated conduct may also reshape habits and self-understanding. The essay considers deterrence, habituation, selective compliance, and evasion as possible responses to surveillance, distinguishing fewer detected incidents from less experienced harm. It then asks who sets standards of civility, whose grievances those standards recognize, and who can contest an assessment. Respect is approached through relationships that permit response and challenge, rather than through judgments of inward authenticity alone. This is a theoretical essay informed by existing research, not a new empirical demonstration that AI makes people civil or that surveillance necessarily improves or displaces abusive conduct.</p>
+                <p class="keywords"><strong>Keywords:</strong> generative AI; civility; institutional power; self-presentation; subject formation; algorithmic management</p>
+                <h2 id="section-1">1. What Abuse Directed at AI Makes Visible</h2>
+                <p>A manager who shouts at subordinates may address a superior with remarkable courtesy. A customer who treats a service worker contemptuously might choose their words more carefully if that worker could influence the customer&#x27;s employment or status. Explaining these encounters solely as failures to control anger overlooks the selectivity of restraint. The question is relational: toward whom does a person consider emotional restraint necessary, and toward whom do they feel free to dispense with it?</p>
+                <p>Conversational AI provides another setting for this question. On October 8, 2026, Anthropic announced a revision to its usage policy addressing extreme, repeated abuse of its models without a discernible purpose. Scheduled to take effect on November 12, the revision excludes ordinary frustration, pushback, dark creative themes, and model testing or research. At the time of writing, the revised policy has not yet taken effect, and this essay does not assess its effects on user behavior (<a href="https://www.anthropic.com/news/2026-usage-policy-update">Anthropic, 2026</a>).</p>
+                <p>The announcement invites questions about AI suffering and moral status. It also raises a different question: what capacities do people attribute to those they address? Why might the perceived inability to retaliate or impose a disadvantage make someone seem unworthy of consideration? Conversely, what changes when that same interlocutor becomes associated with assessment and consequential decisions?</p>
+                <p>The suffering and material disadvantages produced by harassment of human beings must be distinguished from abuse directed at AI. Comparing these interactions does not establish that AI experiences the same injuries as a person. The comparison concerns the relationship between an actor&#x27;s perception of another&#x27;s power and the conduct that follows. Nor does it license diagnosing workplace perpetrators from their treatment of a chatbot.</p>
+                <p>This essay uses research on organizational ingratiation and exploitation, self-presentation under anticipated AI assessment, and algorithmic management to develop a theoretical inquiry. It distinguishes the findings those studies directly support from the thought experiments built around them. Its question is how civility is distributed, and how the assessment of civility might participate in forming subjects. Japanese workplaces and service encounters provide points of departure, not grounds for treating a particular age group, gender, or national culture as a uniform source of aggression.</p>
+                <h2 id="section-2">2. Kissing Up and Kicking Down: The Distribution of Civility</h2>
+                <p>Ingratiation toward superiors and extraction of resources from subordinates can operate together. Gerpott and Van Quaquebeke (2023) theorize this combination as the “Kiss-Up-Kick-Down” phenomenon. Their conceptual paper explains how middle managers might seek career resources through different relationships above and below them. It does not empirically establish that all managers behave this way or that the strategy guarantees promotion (<a href="https://doi.org/10.1111/joms.12855">Gerpott and Van Quaquebeke, 2023</a>).</p>
+                <p>For the present argument, the significance is that apparently contradictory attitudes may constitute a coherent adaptation to anticipated benefits and sanctions. A person who is courteous only to certain interlocutors may possess the capacity for civility while choosing where to exercise it.</p>
+                <p>Adjusting speech to an interlocutor is not inherently abusive or hypocritical. Speaking differently to a stranger and a close colleague can itself express consideration. The relationship between power and linguistic politeness also has an established literature. Brown&#x27;s account identifies relative power as one condition shaping choices of expression (<a href="https://doi.org/10.1017/CBO9780511621710.010">Brown, 1995</a>). This essay focuses on a further possibility: that an interlocutor&#x27;s limited ability to impose disadvantages becomes a reason to withhold basic consideration, rather than merely to adopt a different register.</p>
+                <p>Goffman&#x27;s account of self-presentation helps frame this variation as an interactional accomplishment: the impression a person conveys is presented and sustained in relation to a situation and an audience (<a href="https://catalogimages.wiley.com/images/db/pdf/9781119527244.excerpt.pdf">Goffman, 1959</a>).</p>
+                <p>Several terms therefore require separation. Here, <em>polite expression</em> refers to linguistic forms, although politeness also depends on context and attributed intentions. <em>Civility</em>, as used here, denotes interactional norms that restrain insult and preserve another&#x27;s opportunity to respond. <em>Respect</em> involves treating someone&#x27;s position and grievances as deserving consideration. <em>Deference</em> acknowledges an asymmetry of status or authority and need not imply respect, while <em>ingratiation</em> seeks another&#x27;s approval or favorable treatment. These can overlap, but they are not interchangeable. Polite language can accompany unjust exclusion; forceful speech can express a legitimate objection.</p>
+                <p>I use <em>power-contingent civility</em> provisionally to describe the selective distribution of civility according to the capacities for reward and sanction attributed to an interlocutor. The term names an analytical relationship, not an established scale or universal law. Its empirical examination would require comparing the same person&#x27;s conduct toward different recipients while separately examining their perceptions of those recipients&#x27; power. It would also require distinguishing power from other reasons for varying one&#x27;s conduct.</p>
+                <p>The relevant question consequently concerns distribution as well as degree. How politely someone speaks is different from whom they address politely. Introducing AI into this comparison brings the conditions governing that distribution into focus: where does the capacity to impose consequences reside, and how is it connected to the encounter?</p>
+                <p>An improvement in someone&#x27;s manner toward an evaluator could therefore leave their treatment of less powerful recipients unchanged. Conversely, a practice that makes consideration less dependent on the recipient&#x27;s status would alter the distribution itself. These are different changes, even if both register as greater civility in an isolated exchange.</p>
+                <h2 id="section-3">3. AI as a Medium: Obedience and the Limits of Compliance</h2>
+                <p>Conversational AI is not a transparent mirror of human interiority. The command interface, patterns of response, grounds for refusal, and recording of exchanges help shape the meaning and consequences of users&#x27; actions. Speech directed at a nonhuman interlocutor should therefore not be treated automatically as a disclosure of the speaker&#x27;s “true personality.”</p>
+                <p>Suler&#x27;s theory of online disinhibition explains weakened restraint through interactions between environmental conditions and individual differences. Invisibility and diminished authority are among its proposed conditions. Suler also rejects the assumption that disinhibited behavior necessarily reveals a more authentic self. Some features of AI interaction resemble these conditions, but identifiable accounts, stored histories, and immediate replies differ from the circumstances of anonymous online forums (<a href="https://doi.org/10.1089/1094931041291295">Suler, 2004</a>).</p>
+                <p>An exploratory study by Strait, Contreras, and Duarte Vela selected 40 users from posts directed at two robots&#x27; Twitter accounts and analyzed 50 surrounding posts per user. Users who had posted abusively toward a robot displayed a higher proportion of abusive content in their broader posting. The design could not distinguish stable personal characteristics from temporary negative affect, and it examined neither private conversations with generative AI nor actual workplace harassment (<a href="https://arxiv.org/abs/1808.01076">Strait et al., 2018</a>). It opens a question about association; it supplies no warrant for personality diagnosis.</p>
+                <p>Companies can also change the conditions of interaction. On August 15, 2025, Anthropic announced that Claude Opus 4 and 4.1 could terminate rare, persistently harmful or abusive conversations in consumer chat interfaces. Its 2026 policy announcement identifies conversation termination on Claude.ai and Claude Code as the primary response to the relevant abuse (<a href="https://www.anthropic.com/research/end-subset-conversations">Anthropic, 2025</a>; <a href="https://www.anthropic.com/news/2026-usage-policy-update">2026</a>). The expectation that interaction will continue on the same terms regardless of a user&#x27;s conduct is thus qualified.</p>
+                <p>This capability does not make AI an independent bearer of institutional power. The company establishes the rules, implements the feature, and grants the system its capacity to terminate an exchange. Gillespie&#x27;s account of moderation concerns platforms&#x27; work in setting boundaries for permissible speech and participation. Extending that argument to AI dialogue, conversation termination can be analyzed as governance exercised by those operating the medium (<a href="https://yalebooks.yale.edu/book/9780300261431/custodians-of-the-internet/">Gillespie, 2018</a>).</p>
+                <p>Losing access to a particular conversation must nevertheless be distinguished from suffering a disadvantage in employment or pay. The former changes participation in an exchange. The latter requires an additional institution connecting conversational records or assessments to consequential decisions. AI&#x27;s reversal of position is best understood as the possible connection of different powers along a shared channel of interaction, rather than as a tool suddenly becoming a ruler.</p>
+                <h2 id="section-4">4. From Assessing AI to Being Assessed Through AI</h2>
+                <p>Imagine an organization using employees&#x27; conversations with AI to evaluate cooperation, with the resulting judgments informing promotion or remuneration. This is a thought experiment, not a report that such arrangements are already general practice. In this setting, employees obtain information from AI while also becoming legible to their organization through it.</p>
+                <p>Goergen and colleagues report 12 preregistered studies involving a total of 13,342 participants. Compared with those expecting human assessment, people expecting AI assessment tended to emphasize analytical characteristics and downplay intuition and emotion. The authors identify the belief that AI favors analysis as an important mechanism; interventions challenging that belief change the effect. The studies employ several assessment contexts and experimental designs, rather than long-term observation of 13,342 people&#x27;s workplace conduct (<a href="https://doi.org/10.1073/pnas.2425439122">Goergen et al., 2025</a>).</p>
+                <p>These findings do not establish that people become more civil whenever AI evaluates them. They show changes in self-presentation associated with beliefs about an assessor. Extending the argument to civility requires additional conditions: people must believe that AI evaluates their conduct, perceive consequences for their interests, and be able to adjust their behavior to the presumed criteria.</p>
+                <p>The crucial connection is thus between a judgment and what happens to the person judged. Merely classifying a conversation does not create the same relation as making that classification consequential for pay or promotion. The institutional adoption of a classification, and the person&#x27;s knowledge of that adoption, belong within the analysis.</p>
+                <p>If those conditions hold, their treatment of AI might change. If AI also assesses exchanges between people, adjustment could extend to colleagues and subordinates. AI as an interlocutor and AI as an assessor of relationships with others are distinct roles, even when the same interface accommodates both.</p>
+                <p>Adaptation may involve a gap between a model&#x27;s actual criteria and the criteria users imagine. People need not orient themselves toward what AI can accurately measure; they can orient themselves toward what they believe it rewards. Explanations of assessment, links to consequential decisions, and procedures for correcting judgments consequently become conditions shaping behavior, rather than merely information surrounding a technical process.</p>
+                <p>This argument enters an existing discussion. Klowait and Erofeeva use Goffman&#x27;s perspective to examine the presentation of competence and layered evaluative relations in workplaces using AI (<a href="https://doi.org/10.3389/fsoc.2025.1614473">Klowait and Erofeeva, 2025</a>). The contribution proposed here is narrower: to investigate the distribution of civility and how the same arrangement shapes both evaluated conduct and the possibility of challenging evaluative standards.</p>
+                <p>Power in this situation does not reside in AI alone. Organizations decide which classifications inform personnel decisions, what interactions are recorded, and whether objections will be heard. Courteous conduct toward AI might express respect, adaptation to institutional power mediated through AI, or some combination of motives. Its appearance cannot settle the matter. The institutional connections that make the conduct consequential can, however, be investigated.</p>
+                <h2 id="section-5">5. Panopticism and Societies of Control: The Technological Production of Civility</h2>
+                <p>Foucault&#x27;s account of disciplinary power concerns more than surveillance. Normalizing judgment and examination participate in constituting individuals as objects of comparison, training, and documentation. The significance of panopticism is that the possibility of observation organizes a person&#x27;s own adjustments. The subject is not simply an already complete entity subsequently constrained from outside (<a href="https://depts.washington.edu/lsearlec/510/Texts/Foucault-Panopticism.pdf">Foucault, 1977 [1975]</a>).</p>
+                <p>A worker who expects recorded speech to be evaluated later might choose words carefully without a supervisor being present. Yet the results of such self-discipline cannot all be dismissed as disguise. Goffman offers the example of a recruit who initially observes military etiquette to avoid punishment and later does so out of concern for the organization and the esteem of superiors and peers (<a href="https://catalogimages.wiley.com/images/db/pdf/9781119527244.excerpt.pdf">Goffman, 1959, p. 20</a>). The example illustrates that the relationship between motive and conduct can change. It does not demonstrate universal respect for others or ethical improvement through AI surveillance.</p>
+                <p>Repeatedly moderating one&#x27;s speech might develop into a habit of allowing others to respond. That habit could alter how a person understands themselves in relation to others. It could also become a habit of managing only the conduct visible to an evaluator. These are theoretical possibilities, not long-term processes established by short-term experiments on self-presentation. The distinction matters because external inducement and internal change need not be mutually exclusive.</p>
+                <p>Deleuze distinguishes the molds of enclosed disciplinary institutions from the continuous modulation characteristic of societies of control (<a href="https://www.jstor.org/stable/778828">Deleuze, 1992</a>). His historical diagnosis need not be adopted as an empirical claim that discipline has disappeared throughout society. Here, it helps distinguish training toward a relatively fixed norm from the continuous adjustment of evaluative conditions. Continuous surveillance and examination also belong to discipline; frequency alone cannot distinguish the two. The distinction concerns the variability of norms, institutional connections, and consequential treatment. Both may operate in AI assessment. A civility standard can remain stable while the conduct demanded by context, assessment periods, or changing classifications varies.</p>
+                <p>The possibility that measurement transforms its object also has a substantial precedent. Espeland and Sauder analyze reactivity to evaluation, observation, and measurement through law school rankings (<a href="https://doi.org/10.1086/517897">Espeland and Sauder, 2007</a>). Evaluating civility through AI may introduce this problem into a different setting of interaction. AI need not originate the mechanism to reorganize where and how it operates.</p>
+                <p>I propose understanding the technological production of civility through three connections. First, speech and conduct are converted into assessable data: some features, such as insults, expressions of gratitude, or response tone, are selected for classification. Second, classifications are connected to warnings, instruction, rewards, or disadvantages. Third, people anticipate these connections and adjust their conduct. When adjusted conduct returns as new evaluative data, behavior that fits a classification may reinforce the organization&#x27;s image of a “civil person.” This recursive arrangement is an analytical schema proposed by this essay, not an established mechanism verified across organizations adopting AI.</p>
+                <p>The resulting data would then record behavior already shaped by the expectation of assessment. Reading it as an independent discovery of civility could conceal the evaluator&#x27;s participation in producing what it observes. This is why the proposed cycle concerns classification, consequential treatment, and anticipation together, rather than the accuracy of a classifier alone.</p>
+                <p>Classification therefore does more than reproduce an existing norm neutrally. Suppose an assessment rewards a calm tone more heavily than it considers the substance of an objection. A person contesting an unjust decision may then be required to demonstrate composure before their grievance becomes recognizable. Alternatively, an assessment attending to exclusion and opportunities for response could help demand explanation and consideration from those with greater authority. The relationship produced depends on what is classified and who bears the consequences.</p>
+                <p>These differences cannot be captured by asking only whether observed civility is authentic. Repeated participation in an evaluative practice might shape what people notice, what they avoid, and what kind of speaker they understand themselves to be. The question is not resolved by identifying a motive at the beginning of the process. It concerns the practices through which motives, habits, and self-understanding may develop, and the relations those practices make possible.</p>
+                <h2 id="section-6">6. Harassment Beyond the Reach of Surveillance</h2>
+                <p>The proposed cycle contains a gap between what is detected and what is experienced. Avoiding insults does not preclude excluding someone from meetings, withholding necessary information, or manipulating their evaluation. Depending on their severity and persistence, such actions can cause substantial harm; they should not all be subsumed under minor incivility.</p>
+                <p>Andersson and Pearson&#x27;s theory of workplace incivility concerns how low-intensity conduct with ambiguous harmful intent can escalate through interaction. Cortina theorizes incivility as a potentially ambiguous vehicle for discriminatory treatment: if an organization suppresses overt discrimination while individual prejudice persists, discrimination may take less visible forms (<a href="https://doi.org/10.5465/amr.1999.2202131">Andersson and Pearson, 1999</a>; <a href="https://doi.org/10.5465/amr.2008.27745097">Cortina, 2008</a>). Neither examines the displacement of abuse in response to AI detection. They help articulate why the surface of speech may fail to reveal intent or structures of exclusion.</p>
+                <p>Responses to AI surveillance need not follow a single path. Abuse might be deterred; habitual treatment of others might change; only evaluated expressions might improve; or aggression might move into less detectable actions and settings. These possibilities can coexist. The studies considered here supply no basis for predicting that more sophisticated surveillance must increase invisible abuse.</p>
+                <p>Kellogg and colleagues&#x27; research review treats algorithmic management as a contested domain of managerial control and workers&#x27; responses and resistance (<a href="https://doi.org/10.5465/annals.2018.0174">Kellogg et al., 2020</a>). A worker&#x27;s resistance to unjust surveillance is nevertheless ethically different from a perpetrator&#x27;s evasion of detection. The relevant implication is that adaptation to evaluation cannot be reduced to obedience. It is not that resistance in general should be associated with harassment.</p>
+                <p>This distinction also affects how interventions are assessed. A reduction in recorded insults may represent a real reduction in verbal harm and deserves recognition. The same record cannot establish that exclusion from information or disadvantages in treatment have also declined. Conversely, more complaints may indicate either more harm or improved conditions for speaking about it. Detection and complaint counts register changes in what an institution makes visible as well as changes in conduct.</p>
+                <p>Ahmed&#x27;s <em>Complaint!</em> examines institutional barriers and the burdens of making complaints through accounts of experiences in universities and comparable educational institutions (<a href="https://www.dukeupress.edu/complaint">Ahmed, 2021</a>). Its perspective brings two problems into view: whether an institution can detect abuse, and whether it can receive the speech through which harm is described. If an urgent complaint is classified as uncooperative, an apparent improvement in civility could also suppress institutional dissent.</p>
+                <p>Assessment consequently concerns more than detecting hostile language. Whose speech is recorded, whose experience is heard, and who can correct a classification are questions of power. A system may make an otherwise overlooked pattern available for challenge; it may also grant an incomplete record the authority to discredit a complainant. These possibilities depend on how its judgments enter institutional procedures.</p>
+                <p>Harassment detection cannot be separated from those relationships. AI might help expose their asymmetries, or make them harder to see. Fewer recorded incidents, a calmer conversational tone, and fewer complaints cannot by themselves identify which process is occurring. The experience of those affected and their ability to challenge decisions remain part of evaluating the intervention.</p>
+                <h2 id="section-7">7. The Machine That Produces Civil Subjects</h2>
+                <p>When will humans bow to AI? The thought experiment offers a conditional answer: when an assessment mediated through AI is believed to influence their treatment. It does not predict an identical response from everyone or reduce courteous conduct to a single motive.</p>
+                <p>The argument connects three questions. To whom is civility distributed? How is the evaluative cycle that changes its distribution organized? Can the subjects formed within that cycle question the cycle itself? When AI as an interlocutor and AI as a medium of institutional assessment share an interactional channel, more than a person&#x27;s manner of address may change. Their position in relation to the standards governing that manner can also be reorganized.</p>
+                <p>Reading civility as an adaptation to power does not reduce all consideration to hypocrisy. Repeated conduct may alter habits and motives, and institutions restraining abuse may offer real protection to people in vulnerable positions. Yet internalization does not guarantee a desirable norm. If withholding objections becomes part of what someone learns to regard as maturity, adaptation to domination may become part of their self-understanding.</p>
+                <p>We therefore need to move beyond observing that a subject oriented toward evaluation and a subject responsive to others&#x27; grievances may look alike. The question concerns whether consideration reaches people unable to impose sanctions, whether those people can speak out about unjust treatment, and whether those establishing evaluative standards can themselves be required to explain and revise their decisions. Respect can be examined through these practices and institutional relationships, as well as through judgments of inward sincerity.</p>
+                <p>The recipient&#x27;s inability to punish is particularly revealing here. If consideration depends on that capacity, a change in the identity of the evaluator need not change the underlying asymmetry. Extending the opportunity to speak and receive a response would address a different aspect of the relationship.</p>
+                <p>A person who behaves imperiously toward subordinates and deferentially toward superiors might learn to bow to AI as well. The change may involve both ethical transformation and adaptation to a redistribution of power. New adaptations may generate new habits and understandings of self. That is precisely why the kind of subject being formed remains a necessary question.</p>
+                <p>Does the production of civility through generative AI develop a capacity to display politeness, a capacity to respond when another person objects, or both? Who judges the difference, and who can change that judgment?</p>
+                <p>The figure of the human bowing to AI reveals more than the acquisition of respect for machines. It makes visible a politics of subject formation: whose speech society recognizes as civil, and from whom it demands silence. Its consequences should be assessed less by the number of people who bow than by whether relationships expand in which people can refuse deference, contest decisions, and avoid unjust harm.</p>
+                <h2 id="references">References</h2>
+                <ul class="references">
+<li>Ahmed, S. (2021). <em>Complaint!</em>. Duke University Press. <a href="https://doi.org/10.1215/9781478022336">https://doi.org/10.1215/9781478022336</a>.</li>
+<li>Andersson, L. M., &amp; Pearson, C. M. (1999). Tit for tat? The spiraling effect of incivility in the workplace. <em>Academy of Management Review, 24</em>(3), 452–471. <a href="https://doi.org/10.5465/amr.1999.2202131">https://doi.org/10.5465/amr.1999.2202131</a>.</li>
+<li>Anthropic. (2025, August 15). <em>Claude Opus 4 and 4.1 can now end a rare subset of conversations</em>. <a href="https://www.anthropic.com/research/end-subset-conversations">Official announcement</a>.</li>
+<li>Anthropic. (2026, October 8). <em>2026 Usage Policy update</em>. <a href="https://www.anthropic.com/news/2026-usage-policy-update">Official announcement</a>.</li>
+<li>Brown, P. (1995). Politeness strategies and the attribution of intentions: The case of Tzeltal irony. In E. N. Goody (Ed.), <em>Social intelligence and interaction: Expressions and implications of the social bias in human intelligence</em> (pp. 153–174). Cambridge University Press. <a href="https://doi.org/10.1017/CBO9780511621710.010">https://doi.org/10.1017/CBO9780511621710.010</a>.</li>
+<li>Cortina, L. M. (2008). Unseen injustice: Incivility as modern discrimination in organizations. <em>Academy of Management Review, 33</em>(1), 55–75. <a href="https://doi.org/10.5465/amr.2008.27745097">https://doi.org/10.5465/amr.2008.27745097</a>.</li>
+<li>Deleuze, G. (1992). Postscript on the societies of control. <em>October, 59</em>, 3–7. <a href="https://www.jstor.org/stable/778828">JSTOR stable record</a>.</li>
+<li>Espeland, W. N., &amp; Sauder, M. (2007). Rankings and reactivity: How public measures recreate social worlds. <em>American Journal of Sociology, 113</em>(1), 1–40. <a href="https://doi.org/10.1086/517897">https://doi.org/10.1086/517897</a>.</li>
+<li>Foucault, M. (1977). <em>Discipline and punish: The birth of the prison</em> (A. Sheridan, Trans.). Pantheon Books. (Original work published 1975). <a href="https://librarycatalog.sps.edu/cgi-bin/koha/opac-detail.pl?biblionumber=3415">Library catalogue record</a>.</li>
+<li>Gerpott, F. H., &amp; Van Quaquebeke, N. (2023). Kiss-Up-Kick-Down to Get Ahead: A Resource Perspective on How, When, Why, and With Whom Middle Managers Use Ingratiatory and Exploitative Behaviours to Advance Their Careers. <em>Journal of Management Studies, 60</em>(7), 1855–1883. <a href="https://doi.org/10.1111/joms.12855">https://doi.org/10.1111/joms.12855</a>.</li>
+<li>Gillespie, T. (2018). <em>Custodians of the internet: Platforms, content moderation, and the hidden decisions that shape social media</em>. Yale University Press. <a href="https://doi.org/10.12987/9780300235029">https://doi.org/10.12987/9780300235029</a>.</li>
+<li>Goergen, J., de Bellis, E., &amp; Klesse, A.-K. (2025). AI assessment changes human behavior. <em>Proceedings of the National Academy of Sciences, 122</em>(25), e2425439122. <a href="https://doi.org/10.1073/pnas.2425439122">https://doi.org/10.1073/pnas.2425439122</a>.</li>
+<li>Goffman, E. (1959). <em>The presentation of self in everyday life</em>. Doubleday. <a href="https://catalogimages.wiley.com/images/db/pdf/9781119527244.excerpt.pdf">Authorized excerpt from the 1959 edition</a>.</li>
+<li>Kellogg, K. C., Valentine, M. A., &amp; Christin, A. (2020). Algorithms at work: The new contested terrain of control. <em>Academy of Management Annals, 14</em>(1), 366–410. <a href="https://doi.org/10.5465/annals.2018.0174">https://doi.org/10.5465/annals.2018.0174</a>.</li>
+<li>Klowait, N., &amp; Erofeeva, M. (2025). The presentation of self in the age of ChatGPT. <em>Frontiers in Sociology, 10</em>, 1614473. <a href="https://doi.org/10.3389/fsoc.2025.1614473">https://doi.org/10.3389/fsoc.2025.1614473</a>.</li>
+<li>Strait, M., Contreras, V., &amp; Duarte Vela, C. (2018). <em>Verbal disinhibition towards robots is associated with general antisociality</em>. arXiv:1808.01076. <a href="https://doi.org/10.48550/arXiv.1808.01076">https://doi.org/10.48550/arXiv.1808.01076</a>.</li>
+<li>Suler, J. (2004). The online disinhibition effect. <em>CyberPsychology &amp; Behavior, 7</em>(3), 321–326. <a href="https://doi.org/10.1089/1094931041291295">https://doi.org/10.1089/1094931041291295</a>.</li>
+</ul>
+                <details class="source-note"><summary>Scope of source verification (October 10, 2026)</summary><p>The news account was checked against official sources; research and theoretical claims were checked against article texts, public abstracts, or relevant excerpts. The full text of Andersson and Pearson (1999) could not be obtained, so the publisher’s abstract and Cortina’s (2008) quotation of their definition were consulted. The Foucault bibliography identifies the first English edition of 1977; the printing of the university-hosted excerpt linked in the text has not been established. Study and participant counts for Goergen and colleagues (2025) are the article’s reported figures; the supporting information has not been checked in full, and the raw data have not been reanalyzed. Verification did not cover every chapter of each cited book.</p></details>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html?lang=en">← Back to Home</a>
+            </div>
+        </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem("theme") || "light";
+        if (currentTheme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        }
+
+        function generateTOC() {
+            const tocList = document.getElementById("tocList");
+            const headings = document.querySelectorAll(".essay-content h2, .essay-content h3");
+
+            headings.forEach((heading, index) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+
+                if (!heading.id) {
+                    heading.id = "heading-" + index;
+                }
+
+                a.href = "#" + heading.id;
+                a.textContent = heading.textContent;
+
+                if (heading.tagName === "H3") {
+                    a.classList.add("toc-h3");
+                }
+
+                a.onclick = function() {
+                    toggleTOC();
+                };
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+
+        function toggleTOC() {
+            document.querySelector(".toc-sidebar").classList.toggle("open");
+            document.querySelector(".toc-overlay").classList.toggle("active");
+        }
+
+        window.addEventListener("DOMContentLoaded", generateTOC);
+    </script>
+</body>
+</html>

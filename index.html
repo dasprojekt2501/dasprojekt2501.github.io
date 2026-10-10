@@ -288,6 +288,14 @@
         </header>
 
         <main class="essays">
+            <article class="essay-item" id="aiCivilityEssayItem" lang="en">
+                <h2 class="essay-title">
+                    <a href="essays/ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka-en.html" id="aiCivilityEssayLink">When Will Humans Bow to AI?</a>
+                </h2>
+                <div class="essay-date" id="aiCivilityEssayDate">October 10, 2026</div>
+                <p class="essay-excerpt" id="aiCivilityEssayExcerpt">How does power shape civility toward AI? An essay on self-presentation, institutional assessment, surveillance, and the formation of subjects.</p>
+            </article>
+
             <article class="essay-item" id="chukanEssayItem" lang="en">
                 <h2 class="essay-title">
                     <a href="essays/chukan-dantai-wa-dare-wo-mamotta-no-ka-en.html" id="chukanEssayLink">Whom Did Intermediary Associations Protect? An Essay on Poverty and Autonomy in Japan</a>
@@ -385,6 +393,10 @@
         const translations = {
             ja: {
                 subtitle: 'エッセイとノート',
+                aiCivilityEssayTitle: 'AIを罵る人間は、いつAIに頭を下げるのか',
+                aiCivilityEssayHref: 'essays/ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka.html',
+                aiCivilityEssayExcerpt: 'AIへの接し方は、相手の力によって変わるのか。礼儀の配分、AIを介した評価、監視と主体形成の関係を考察する。',
+                aiCivilityEssayDate: '2026年10月10日',
                 chukanEssayTitle: '中間団体は誰を守ったのか――日本の貧困と「自主性」をめぐる試論',
                 chukanEssayHref: 'essays/chukan-dantai-wa-dare-wo-mamotta-no-ka.html',
                 chukanEssayExcerpt: '日本の貧困の背景にあるとされる中間団体の衰退を、モンテスキュー、デュルケーム、丸山眞男、柄谷行人の議論からたどり直し、貧困のデータと突き合わせて仮説を組み替える試論。',
@@ -418,6 +430,10 @@
             },
             en: {
                 subtitle: 'Essays and Notes',
+                aiCivilityEssayTitle: 'When Will Humans Bow to AI?',
+                aiCivilityEssayHref: 'essays/ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka-en.html',
+                aiCivilityEssayExcerpt: 'How does power shape civility toward AI? An essay on self-presentation, institutional assessment, surveillance, and the formation of subjects.',
+                aiCivilityEssayDate: 'October 10, 2026',
                 chukanEssayTitle: 'Whom Did Intermediary Associations Protect? An Essay on Poverty and Autonomy in Japan',
                 chukanEssayHref: 'essays/chukan-dantai-wa-dare-wo-mamotta-no-ka-en.html',
                 chukanEssayExcerpt: 'Revisiting Montesquieu, Durkheim, Maruyama, and Karatani to examine intermediary associations, poverty in Japan, and the conditions of autonomy.',
@@ -457,6 +473,11 @@
 
             document.documentElement.lang = selectedLanguage;
             document.getElementById('pageSubtitle').textContent = content.subtitle;
+            document.getElementById('aiCivilityEssayDate').textContent = content.aiCivilityEssayDate;
+            document.getElementById('aiCivilityEssayItem').lang = selectedLanguage;
+            document.getElementById('aiCivilityEssayLink').textContent = content.aiCivilityEssayTitle;
+            document.getElementById('aiCivilityEssayLink').href = content.aiCivilityEssayHref;
+            document.getElementById('aiCivilityEssayExcerpt').textContent = content.aiCivilityEssayExcerpt;
             document.getElementById('chukanEssayDate').textContent = content.chukanEssayDate;
             document.getElementById('chukanEssayItem').lang = selectedLanguage;
             document.getElementById('chukanEssayLink').textContent = content.chukanEssayTitle;

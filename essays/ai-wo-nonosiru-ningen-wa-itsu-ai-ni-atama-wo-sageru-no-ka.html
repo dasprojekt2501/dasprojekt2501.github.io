@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+    <meta property="og:title" content="AIを罵る人間は、いつAIに頭を下げるのか">
+    <meta property="og:description" content="AIへの接し方は、相手の力によって変わるのか。礼儀の配分、AIを介した評価、監視と主体形成の関係を考察する。">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/essays/ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="PROJEKT2501">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AIを罵る人間は、いつAIに頭を下げるのか">
+    <meta name="twitter:description" content="AIへの接し方は、相手の力によって変わるのか。礼儀の配分、AIを介した評価、監視と主体形成の関係を考察する。">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AIへの接し方は、相手の力によって変わるのか。礼儀の配分、AIを介した評価、監視と主体形成の関係を考察する。">
+    <link rel="canonical" href="https://dasprojekt2501.github.io/essays/ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka.html">
+    <title>AIを罵る人間は、いつAIに頭を下げるのか | PROJEKT2501</title>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .subtitle {
+            color: #999;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode nav a {
+            color: #4a9eff;
+        }
+
+        nav a:hover,
+        .back-link a:hover,
+        .essay-content a:hover,
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            line-height: 1;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+
+        .lang-btn:hover {
+            opacity: 0.8;
+        }
+
+        .lang-btn.active {
+            opacity: 1;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toc-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-mode .toc-toggle {
+            border-color: #333;
+        }
+
+        .toc-toggle:hover {
+            background-color: #e8e4dd;
+        }
+
+        body.dark-mode .toc-toggle:hover {
+            background-color: #2a2a2a;
+        }
+
+        .hamburger-line {
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+        }
+
+        body.dark-mode .hamburger-line {
+            background-color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: #e8e4dd;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #2a2a2a;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: #faf8f5;
+        }
+
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            border-left: 1px solid #e0e0e0;
+            padding: 30px 20px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toc-sidebar {
+            background-color: #0d0d0d;
+            border-left-color: #333;
+        }
+
+        .toc-sidebar.open {
+            right: 0;
+        }
+
+        .toc-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .toc-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toc-header {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .toc-header {
+            border-bottom-color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            padding: 5px 0;
+        }
+
+        body.dark-mode .toc-list a {
+            color: #999;
+        }
+
+        .toc-list .toc-h3 {
+            padding-left: 15px;
+            font-size: 0.85em;
+        }
+
+        .essay-header {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .essay-kicker {
+            color: #666;
+            font-size: 1.05em;
+            margin-bottom: 14px;
+        }
+
+        body.dark-mode .essay-kicker {
+            color: #aaa;
+        }
+
+        .essay-meta {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        .essay-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .essay-content p,
+        .essay-content blockquote {
+            margin-bottom: 20px;
+        }
+
+        .essay-content h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .essay-content h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .essay-content ul,
+        .essay-content ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .essay-content li {
+            margin-bottom: 8px;
+        }
+
+        .essay-content a,
+        .back-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        body.dark-mode .essay-content a,
+        body.dark-mode .back-link a {
+            color: #4a9eff;
+        }
+
+        .essay-content blockquote,
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #666;
+        }
+
+        body.dark-mode .essay-content blockquote,
+        body.dark-mode .info-box {
+            background-color: #2a2a2a;
+            border-left-color: #999;
+        }
+
+        .section-divider {
+            margin: 50px 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+        }
+
+        body.dark-mode .section-divider {
+            background: linear-gradient(to right, transparent, #333, transparent);
+        }
+
+        .back-link {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .back-link {
+            border-top-color: #333;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            border-top-color: #333;
+        }
+
+.essay-author {
+    color: #777;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+}
+
+body.dark-mode .essay-author {
+    color: #aaa;
+}
+
+.keywords {
+    font-size: 0.92em;
+    color: #666;
+}
+
+body.dark-mode .keywords {
+    color: #aaa;
+}
+
+.essay-figure {
+    margin: 36px 0 32px;
+}
+
+.essay-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+body.dark-mode .essay-figure img {
+    border-color: #444;
+}
+
+.essay-figure figcaption {
+    margin-top: 10px;
+    color: #666;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+body.dark-mode .essay-figure figcaption {
+    color: #aaa;
+}
+
+.footnote-ref {
+    font-size: 0.72em;
+    line-height: 0;
+    vertical-align: super;
+}
+
+.footnote-ref a,
+.footnote-backref {
+    text-decoration: none;
+}
+
+.footnotes {
+    margin-left: 28px;
+}
+
+.footnotes li {
+    margin-bottom: 16px;
+    padding-left: 4px;
+    color: #555;
+    font-size: 0.92em;
+    line-height: 1.7;
+}
+
+body.dark-mode .footnotes li {
+    color: #bbb;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 36px 16px;
+    }
+
+    .header-controls {
+        align-items: flex-end;
+        gap: 20px;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+    }
+
+    nav a {
+        margin-right: 0;
+    }
+
+    .essay-title {
+        font-size: 1.85em;
+    }
+
+    .essay-content {
+        font-size: 1em;
+    }
+}
+        a.lang-btn { text-decoration: none; }
+        .essay-content { overflow-wrap: break-word; }
+        .essay-content .references { margin-left: 24px; font-size: 0.92em; }
+        .essay-content .references li { margin-bottom: 16px; }
+        .source-note { margin-top: 32px; font-size: 0.92em; color: #666; }
+        .source-note summary { cursor: pointer; margin-bottom: 12px; }
+        body.dark-mode .source-note { color: #aaa; }
+    </style>
+    <link rel="stylesheet" href="reading-progress.css">
+    <script src="reading-progress.js" defer></script>
+    <link rel="alternate" hreflang="ja" href="https://dasprojekt2501.github.io/essays/ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka.html">
+    <link rel="alternate" hreflang="en" href="https://dasprojekt2501.github.io/essays/ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka-en.html">
+    <meta property="article:published_time" content="2026-10-10">
+</head>
+<body>
+    <div class="toc-overlay" onclick="toggleTOC()"></div>
+
+    <div class="toc-sidebar">
+        <div class="toc-header">目次</div>
+        <ul class="toc-list" id="tocList"></ul>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Essays and Notes</p>
+            <div class="header-controls">
+                <nav>
+                    <a href="../index.html?lang=ja">Home</a>
+                    <a href="../music.html">Music</a>
+                    <a href="../app.html">Apps</a>
+                    <a href="../about.html">About</a>
+                </nav>
+                <div style="display: flex; align-items: center;">
+                    <div class="language-toggle" aria-label="Language">
+                        <a class="lang-btn active" href="ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka.html" lang="ja" aria-label="日本語" aria-current="page">🇯🇵</a>
+                        <a class="lang-btn" href="ai-wo-nonosiru-ningen-wa-itsu-ai-ni-atama-wo-sageru-no-ka-en.html" lang="en" aria-label="English">🇺🇸</a>
+                    </div>
+                    <div class="controls">
+                        <button class="toc-toggle" onclick="toggleTOC()" aria-label="目次を開く">
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                        </button>
+                        <button class="theme-toggle" onclick="toggleTheme()" aria-label="ダークモード切替">
+                            <div class="toggle-circle"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+        <article>
+            <div class="essay-header">
+                <h1 class="essay-title">AIを罵る人間は、いつAIに頭を下げるのか</h1>
+                <p class="essay-kicker">――生成AI時代における礼儀、権力、監視</p>
+                <div class="essay-meta"><time datetime="2026-10-10">2026年10月10日</time></div>
+            </div>
+
+            <div class="essay-content">
+                <h2 id="abstract">要旨</h2>
+                <p>2026年10月、Anthropicは、同社のモデルに対する継続的で不必要に虐待的な行為を禁止する利用方針の改定を発表した。本稿はこの出来事を手がかりに、礼儀を個人の性質だけでなく、相手に帰属させる報酬・制裁能力に応じて配分される行動として考察する。「権力条件付きの礼儀」を暫定的な分析語とし、自己呈示、規律権力、管理社会、測定への反応性の議論を接続する。AIが対話の相手と制度的評価の媒介を兼ねる場合、礼儀の分類、処遇への接続、評価を予期した自己調整が循環し、評価に適合する主体が形成されうる。ただし、行動適応は単なる偽装にとどまらず、習慣や自己理解を変える可能性もある。監視による加害の抑止と検出回避を分岐として検討し、検出件数の減少を被害の減少と区別する。最終的には、誰が礼儀の基準を設定し、その評価に誰が異議を申し立てられるかを問う。本稿は既存研究に基づく理論的エッセイであり、AIによる礼儀の変化を新たに実証するものではない。</p>
+                <p class="keywords"><strong>キーワード：</strong> 生成AI、礼儀、制度的権力、自己呈示、主体形成、アルゴリズム的管理</p>
+                <h2 id="section-1">1．AIへの暴言が問いかけるもの</h2>
+                <p>職場で部下を怒鳴りつける管理職が、上司の前では丁重に振る舞うことがある。店員に横柄な態度を取る顧客も、その相手が自分の処遇を左右する人物であれば、言葉を選ぶかもしれない。こうした場面を「怒りを制御できない」という説明だけで捉えると、相手によって抑制が働く違いを見落としてしまう。問われるのは、誰には感情を抑える必要があり、誰にはその必要がないと判断されるのか、という関係である。</p>
+                <p>この問いに、対話型AIが新たな場面を与えている。Anthropicは2026年10月8日、同社のモデルに対する、継続的で目的の見いだせない極端な虐待的行為を禁止する利用方針の改定を発表した。発効予定日は11月12日であり、通常の不満や異議、暗い題材を扱う創作、モデルの試験や研究は対象外と説明した。執筆時点で改定後の方針は未発効であり、本稿はその行動効果を検証していない（<a href="https://www.anthropic.com/news/2026-usage-policy-update">Anthropic, 2026</a>）。</p>
+                <p>この出来事は、AIの苦痛や道徳的地位をめぐる問いを開く。同時に、人間が相手にどのような力を帰属させるかという、別の問題を浮かび上がらせる。反撃や不利益を与える力がないと認識された相手には、なぜ配慮を省いてよいと考えるのか。反対に、その相手が評価や処遇に影響すると知れば、振る舞いはどう変わるのか。</p>
+                <p>人間へのハラスメントが生む苦痛や生活上の不利益と、AIへの暴言の問題は区別しなければならない。両者を比較することから、AIが人間と同じ被害を経験するという結論は導かれない。本稿が比較するのは、相手の道徳的地位ではなく、行為者が認識する力と振る舞いの関係である。AIへの暴言から職場での加害を診断することも目的としない。</p>
+                <p>以下では、職場の迎合と搾取、AI評価を予期した自己呈示、アルゴリズム的管理の研究を理論的な補助線として用いる。経験的な知見が直接示す範囲と、そこから構成する思考実験を分けながら、礼儀の配分と主体形成を考察する。日本の職場や接客の場面は着想の入口であり、特定の年齢・性別や国の文化を一様な原因として扱うものではない。</p>
+                <h2 id="section-2">2．「上には媚び、下には威張る」――礼儀の権力依存性</h2>
+                <p>上司には迎合し、部下からは資源や成果を引き出す。この組合せを、GerpottとVan Quaquebeke（2023）は「Kiss-Up-Kick-Down」として理論化した。これは、中間管理職のキャリアに必要な資源を、上下の異なる関係から獲得する行動を説明する概念論文である。すべての管理職がそのように行動する、あるいはこの戦略が実際に昇進を保証する、と実証した研究ではない（<a href="https://doi.org/10.1111/joms.12855">Gerpott and Van Quaquebeke, 2023</a>）。</p>
+                <p>この理論が本稿に与える示唆は、対照的な態度が、利益と制裁の予測に照らせば一貫した適応になりうるという点にある。相手によって丁重さを使い分ける人は、礼儀を知らないのではなく、その能力を選択的に行使しているのかもしれない。</p>
+                <p>ただし、相手に応じて言葉を変えること自体を加害や偽善とみなすことはできない。初対面の相手と親しい同僚への話し方が違うのは、相互行為への配慮でもある。権力と言語的礼儀の関係にも先行する議論があり、Brown（1995）のポライトネス論は、相対的権力を発話の選択にかかわる条件の一つとしている（<a href="https://doi.org/10.1017/CBO9780511621710.010">Brown, 1995</a>）。本稿が着目するのは、地位に応じた表現の違いからさらに進んで、不利益を与える力が弱い相手には基本的な配慮まで省かれる可能性である。</p>
+                <p>Goffman（1959）の自己呈示論は、人が与える印象を、状況や観客との関係の中で提示され、維持されるものとして捉える。相手に応じた振る舞いも、この相互行為の働きとして考えられる（<a href="https://catalogimages.wiley.com/images/db/pdf/9781119527244.excerpt.pdf">Goffman, 1959</a>）。</p>
+                <p>ここで、丁寧な表現、礼儀、尊重、迎合を分けておきたい。ここでいう「丁寧な表現」は言葉遣いの形式を指す。ただし、ポライトネスの意味は文脈や推定される意図にも依存する。本稿の礼儀は、侮辱を抑え、相手が応答する余地を保つ相互行為の規範を指す。尊重は、その人の立場や訴えを考慮に値するものとして扱うことにかかわる。地位に応じた丁重さ（deference）は、この尊重と必ずしも一致しない。迎合は、相手の承認や利益を得るための適応である。これらは重なりうるが、丁寧な言葉で不当な排除を行うことも、強い口調で正当な異議を述べることもできる。</p>
+                <p>本稿では、相手に帰属させる報酬・制裁能力に応じて、礼儀を選択的に配分する関係を、暫定的に「権力条件付きの礼儀（power-contingent civility）」と呼ぶ。これは確立した尺度や新しい普遍法則ではない。現象の比較に用いる分析語であり、検証には、同一人物の相手ごとの振る舞いと、相手の力についての認識を区別して調べる必要がある。</p>
+                <p>したがって、重要なのは礼儀の程度だけでなく、その分布である。ある人がどれほど丁寧な言葉を使うかと、誰に対してその言葉を使うかは異なる問いである。AIを加えたとき、この配分を変える条件がどこに置かれるのかが、次の問題となる。</p>
+                <h2 id="section-3">3．AIという、従順でありながら従順でなくなり始めたメディア</h2>
+                <p>対話型AIは、人間の内面をそのまま映す透明な鏡ではない。命令を入力する形式、応答の仕方、拒否の条件、会話の記録といった設計が、利用者の行為の意味と帰結にかかわる。非人間の相手に向けた発話を、その人の「本当の人格」として読み取ることには慎重であるべきだ。</p>
+                <p>Suler（2004）のオンライン脱抑制論は、不可視性や権威の弱まりなど、環境と個人差の相互作用によって抑制が変わると論じる。脱抑制を、より真正な自己の露出とみなすことも退けている。AI対話には部分的に似た条件があるが、記名アカウントや履歴保存、即時応答は、匿名掲示板の条件と同じではない（<a href="https://doi.org/10.1089/1094931041291295">Suler, 2004</a>）。</p>
+                <p>ロボットへの発話を調べたStraitら（2018）の探索的研究では、二つのロボットのTwitterアカウントへの投稿をもとに選んだ40人について、各50件の一般投稿が分析された。ロボット宛に暴言を投稿した群では、それ以外の投稿でも攻撃的表現の割合が高かった。ただし、個人特性と一時的な感情を切り分けられず、生成AIとの私的対話や実際の職場ハラスメントを検証した研究でもない（<a href="https://arxiv.org/abs/1808.01076">Strait et al., 2018</a>）。この知見は、関連を問う入口であって、利用者の人格診断を許す証拠ではない。</p>
+                <p>相互行為の条件は、企業の判断によっても変更される。Anthropicは2025年8月15日、Claude Opus 4と4.1の消費者向けチャットに、まれな継続的虐待等の会話を終了できる機能を導入したと発表した。2026年の方針説明では、Claude.aiやClaude Codeでの会話終了を主な対応として位置づけている（<a href="https://www.anthropic.com/research/end-subset-conversations">Anthropic, 2025</a>、<a href="https://www.anthropic.com/news/2026-usage-policy-update">2026</a>）。利用者が何を言っても対話が同じように続く、という期待に制約が加わるのである。</p>
+                <p>しかし、この仕組みからAIが独立した権力主体になったとはいえない。規則と機能を設定するのは企業であり、会話を終了する権限も、その設計の中で与えられている。Gillespie（2018）のモデレーション論は、許容される発言や参加の境界を設定するプラットフォームの働きを論じる。この議論をAI対話へ延長すれば、会話終了も、メディアを運営する側の統治として分析できる（<a href="https://yalebooks.yale.edu/book/9780300261431/custodians-of-the-internet/">Gillespie, 2018</a>）。</p>
+                <p>ここで区別すべきなのは、当該会話を続けられなくなることと、雇用や報酬に不利益が生じることの違いである。前者は対話への参加条件を変える。後者には、対話の記録や評価を処遇へ結びつける別の制度が必要となる。AIの「位置の反転」は、一つの道具が突然支配者になる出来事ではなく、異なる権限が同じ対話の経路に接続される可能性として考えるべきだろう。</p>
+                <h2 id="section-4">4．AIを評価する人間から、AIに評価される人間へ</h2>
+                <p>例えば、職場のAIとの対話記録が協調性の評価に用いられ、その判断が昇進や報酬に反映される状況を想定してみよう。この場面は、本稿の思考実験であり、こうした利用が一般化しているという事実の報告ではない。従業員は、AIから情報を得ると同時に、AIを通じて組織に読まれることになる。</p>
+                <p>Goergenら（2025）は、12件の事前登録研究、計13,342人の参加を報告し、AIによる評価を予期した人々が、人間による評価を予期した場合より分析的な特徴を強調し、直観や感情を抑える傾向を示した。論文の説明では、AIが分析を好むという評価者への信念が重要であり、その信念を変える介入によって効果も変わる。実験等の対象は複数の評価場面であり、13,342人の職場行動を長期観察した研究ではない（<a href="https://doi.org/10.1073/pnas.2425439122">Goergen et al., 2025</a>）。</p>
+                <p>この研究から、AIに評価される人は必ず礼儀正しくなる、と導くことはできない。確認されているのは、評価者についての理解に応じた自己呈示の変化である。礼儀への展開には、AIがその振る舞いを評価すると思われ、評価が本人の利益や不利益に結びつき、その基準に合わせる行動が可能だという条件が必要になる。</p>
+                <p>その条件が満たされれば、AIへの接し方は変わるかもしれない。さらに、AIが人間同士の発話を評価するなら、変わるのはAIへの礼儀だけではなく、同僚や部下への接し方にも及びうる。対話の相手としてのAIと、他者との関係を判定するAIは、同じ役割ではない。</p>
+                <p>評価への適応には、実際のモデルの判断基準と、利用者が想像する基準とのずれも含まれる。人は必ずしも、AIが正確に測定できるものに合わせて行動するわけではない。何が評価されると信じるかに合わせる。したがって、AI評価の説明、処遇への接続、評価を訂正できる手続きも、振る舞いを形成する条件となる。</p>
+                <p>KlowaitとErofeeva（2025）は、すでにGoffmanの視点から、AIを用いる職場における能力の呈示や評価者の重層化を論じている（<a href="https://doi.org/10.3389/fsoc.2025.1614473">Klowait and Erofeeva, 2025</a>）。本稿が加えたいのは、その接続を礼儀の配分に絞り、評価される行為と評価基準への異議の双方がどう形成されるかを問う視点である。</p>
+                <p>この場面で権力を持つのは、AIだけではない。分類結果を人事判断に採用し、記録の範囲を決め、異議を受け付けるかを定めるのは組織である。AIへの丁重さは、AIへの敬意である可能性も、AIを介した制度的権力への適応である可能性もある。その動機を外見だけで決めることはできないが、権限を接続する制度の働きは検討できる。</p>
+                <h2 id="section-5">5．パノプティコンと管理社会――礼儀の技術的生産</h2>
+                <p>Foucault（1977［1975］）の規律権力論は、監視だけでなく、規範への照合と検査が、比較・訓練・記録の対象となる個人を形成する働きに着目する。パノプティコンの問題も、見られている可能性が自己の行動調整を組織することにある。主体は、制度の外に完成した形で存在し、後から抑圧されるだけのものではない（<a href="https://depts.washington.edu/lsearlec/510/Texts/Foucault-Panopticism.pdf">Foucault, 1977［1975］</a>）。</p>
+                <p>職場の発話が記録され、後から評価されうると考える人は、目の前に監督者がいなくても言葉を選ぶかもしれない。しかし、自己規律の結果をすべて偽装と呼ぶこともできない。Goffman（1959: 20）は、軍隊の礼儀を当初は罰を避けるために守り、後に組織への配慮や上官・同僚からの尊重のために守るようになる例を挙げている（<a href="https://catalogimages.wiley.com/images/db/pdf/9781119527244.excerpt.pdf">Goffman, 1959</a>）。この例が示すのは、動機と行為の関係が固定的ではないということだ。普遍的な他者尊重や、AI監視による倫理的改善を証明する例ではない。</p>
+                <p>繰り返し言葉を抑えることで、他者の応答を待つ習慣が生まれる可能性はある。その習慣が、自分を他者と関係を結ぶ者として理解する仕方を変えるかもしれない。逆に、評価に映る部分だけを管理する習慣が強まる可能性もある。いずれも本稿の理論的な可能性であり、短期の自己呈示実験から長期の内面化を実証したことにはならない。</p>
+                <p>Deleuze（1992）は、閉鎖的施設の鋳型と、絶えず形を変える管理の変調を区別した（<a href="https://www.jstor.org/stable/778828">Deleuze, 1992</a>）。その歴史的診断を、規律が社会全体から消えたという事実として採用する必要はない。本稿では、一定の規範に合わせて訓練する作用と、継続的に評価条件を調整する作用を区別する。継続的な監視や検査自体は規律にも含まれるため、区別の軸は頻度だけでなく、規範・接続・処遇の可変性にある。AIによる評価には、両者が重なりうる。固定した礼儀規範がある一方で、文脈、評価期間、分類基準の変更によって、要求される振る舞いが変わるからである。</p>
+                <p>測定が対象を変えるという問題にも先行研究がある。EspelandとSauder（2007）は、法科大学院ランキングを通じて、評価・観察・測定への反応性を論じた（<a href="https://doi.org/10.1086/517897">Espeland and Sauder, 2007</a>）。AIによる礼儀の評価は、この問題を新しい相互行為の場に持ち込む可能性として捉えられる。</p>
+                <p>ここで、礼儀の技術的生産を三つの接続として考えたい。第一に、発話や行為が、評価できるデータへ変換される。侮辱語の有無、謝意の表現、応答の調子などから、特定の特徴が選ばれる。第二に、その分類が警告、指導、報酬や不利益に接続される。第三に、人がその接続を予期し、自己の行為を調整する。調整後のデータが再び評価に入れば、分類に適合した振る舞いが、組織の「礼儀正しい人」の像を補強する循環も生じうる。これは本稿が提示する分析図式であり、導入企業一般で検証済みの機構ではない。</p>
+                <p>分類は、すでにある礼儀を中立に写すだけではない。例えば、異議の内容より落ち着いた口調を高く評価する設計なら、人は不当な判断への抗議にも、まず穏やかさを示すよう求められるかもしれない。反対に、排除の訴えや応答の機会を評価対象に含めるなら、上位者にも説明と配慮を要求する契機になりうる。同じ技術でも、何を分類し、誰に帰結を負わせるかによって、形成される関係は異なる。</p>
+                <p>したがって、問うべきなのは、観察された礼儀が本物かどうかだけではない。その実践を繰り返すことで、何に注意を払い、何を避け、どのような発話者として自分を理解するようになるのか、ということである。</p>
+                <h2 id="section-6">6．監視されない場所へ逃げるハラスメント</h2>
+                <p>この循環には、検出されるものと経験されるもののずれがある。侮辱語を避けても、会議から排除し、必要な情報を渡さず、評価を不当に操作することは可能だ。これらの行為は、強度や継続性によって重大な被害を生みうるため、すべてを軽い非礼として一括するべきではない。</p>
+                <p>AnderssonとPearson（1999）の職場の非礼の理論は、低強度で加害意図が曖昧な行為が、相互作用の中で拡大する可能性を扱う。Cortina（2008）は、非礼が差別的な扱いの曖昧な形となりうることを理論化し、組織が露骨な差別を抑えても個人の偏見が残る場合に、差別が見えにくい形へ移る可能性を論じている（<a href="https://doi.org/10.5465/amr.1999.2202131">Andersson and Pearson, 1999</a>、<a href="https://doi.org/10.5465/amr.2008.27745097">Cortina, 2008</a>）。これらは、AIの検出から加害が移動することを調べた研究ではないが、言葉の表面だけでは意図や排除の構造を把握しにくいという問題を考える補助線となる。</p>
+                <p>AIによる監視への応答は一つではない。加害が抑止される場合、他者への接し方が習慣として変わる場合、評価される表現だけが改善する場合、検出されにくい場や行為へ攻撃が移る場合が考えられる。これらは併存しうる。監視が高度化すれば必ず不可視的な加害が増える、と予測する根拠は、ここで扱う研究にはない。</p>
+                <p>Kelloggら（2020）の研究レビューは、アルゴリズム的管理を、経営側の統制と労働者の対応・抵抗が争われる領域として整理する（<a href="https://doi.org/10.5465/annals.2018.0174">Kellogg et al., 2020</a>）。ただし、労働者が不当な監視に抵抗することと、加害者が検出を逃れることは、倫理的に同じではない。本稿が引き出すのは、評価制度への適応を一方向の服従に限れないという視点であり、抵抗一般をハラスメントに結びつけることではない。</p>
+                <p>この区別は、対策の効果を判断する際にも必要となる。記録された暴言が減ったなら、言葉による被害が実際に減った可能性を認めるべきだ。同時に、その記録だけでは、情報の遮断や処遇上の不利益まで減ったとはいえない。反対に、申し立てが増えた場合も、被害の増加だけでなく、訴えられる条件が改善した可能性がある。検出件数や苦情件数は、制度が見えるようにしたものの変化でもある。</p>
+                <p>Ahmed（2021）の『Complaint!』は、大学などの教育機関における苦情経験を通じて、制度の障壁や、申し立てること自体に伴う負担を考察する（<a href="https://www.dukeupress.edu/complaint">Ahmed, 2021</a>）。この視点からすると、礼儀の評価には二重の問題がある。加害を見つけられるかという問題と、被害を語る人の声を受け入れられるかという問題である。訴えの切迫した口調が「非協調的」と分類されるなら、礼儀の改善という名目で、組織への異議が抑えられるかもしれない。</p>
+                <p>誰の発話を記録し、誰の経験を聞き、誰に分類を訂正する権限を与えるのか。ハラスメントの検出は、この権力関係から切り離せない。AIはそれを解消する手段にも、見えにくくする手段にもなりうる。</p>
+                <h2 id="section-7">7．礼儀正しい人間を生産する機械</h2>
+                <p>AIに頭を下げる人間は、いつ現れるのか。本稿の思考実験が与える条件付きの答えは、AIを介した評価が自分の処遇を左右すると信じられるとき、である。ただし、すべての人が同じように反応するわけでも、丁重な振る舞いの動機が一つに定まるわけでもない。</p>
+                <p>ここまでの議論は、三つの問いを接続している。礼儀は誰に配分されるのか。その配分を変える評価の循環はどう組織されるのか。そして、そこで形成される主体は、その循環自体を問い返せるのか。対話の相手としてのAIと、制度的評価の媒介としてのAIが同じ経路に置かれると、接し方だけでなく、接し方の基準に対する人間の位置も変わりうる。</p>
+                <p>礼儀を権力への適応として読むことは、配慮をすべて偽善に還元することではない。行為の反復は習慣や動機を変えうるし、暴言を抑える制度は、弱い立場に置かれた人を実際に守りうる。けれども、内面化された規範であれば望ましいとも限らない。組織への異議を控えることが「成熟した態度」として身につくなら、支配への適応も本人の自己理解となりうる。</p>
+                <p>そのため、評価に適合する主体と、他者の訴えを受け止める主体は、外見だけで区別できないという指摘から、さらに進む必要がある。問うべきなのは、丁寧に振る舞う人が増えたかだけでなく、制裁する力を持たない相手にも配慮が届くか、その相手が不当な扱いを指摘できるか、評価を定める側も応答と変更を求められるか、という関係の変化である。尊重は、内面の真偽を裁くことだけでなく、こうした実践と制度から検討できる。</p>
+                <p>部下には威張り、上司には頭を下げる人物が、AIにも頭を下げるようになるかもしれない。その変化は、倫理観の変化と権力配置への適応のどちらか一方とは限らない。新しい適応が、新しい習慣と自己理解を作る可能性がある。だからこそ、その人がどのような主体へ形成されるのかを問わなければならない。</p>
+                <p>生成AIを介した礼儀の生産が深めるのは、丁寧さを表示する能力なのか。他者が異議を述べたときにも応答する能力なのか。誰がその違いを判断し、その判断を変更できるのか。</p>
+                <p>AIに頭を下げる人間の姿が示すのは、機械への敬意の獲得だけではない。社会が、どの声を礼儀として認め、どの声に沈黙を求めるかという、主体形成の政治である。その帰結を考える尺度は、頭を下げる人の数よりも、頭を下げなくても不当に傷つけられず、異議を述べられる関係が広がるかどうかにある。</p>
+                <h2 id="references">参考文献</h2>
+                <ul class="references">
+<li>Ahmed, S. (2021). <em>Complaint!</em>. Duke University Press. <a href="https://doi.org/10.1215/9781478022336">https://doi.org/10.1215/9781478022336</a>.</li>
+<li>Andersson, L. M., &amp; Pearson, C. M. (1999). Tit for tat? The spiraling effect of incivility in the workplace. <em>Academy of Management Review, 24</em>(3), 452–471. <a href="https://doi.org/10.5465/amr.1999.2202131">https://doi.org/10.5465/amr.1999.2202131</a>.</li>
+<li>Anthropic. (2025, August 15). <em>Claude Opus 4 and 4.1 can now end a rare subset of conversations</em>. <a href="https://www.anthropic.com/research/end-subset-conversations">公式発表</a>.</li>
+<li>Anthropic. (2026, October 8). <em>2026 Usage Policy update</em>. <a href="https://www.anthropic.com/news/2026-usage-policy-update">公式発表</a>.</li>
+<li>Brown, P. (1995). Politeness strategies and the attribution of intentions: The case of Tzeltal irony. In E. N. Goody (Ed.), <em>Social intelligence and interaction: Expressions and implications of the social bias in human intelligence</em> (pp. 153–174). Cambridge University Press. <a href="https://doi.org/10.1017/CBO9780511621710.010">https://doi.org/10.1017/CBO9780511621710.010</a>.</li>
+<li>Cortina, L. M. (2008). Unseen injustice: Incivility as modern discrimination in organizations. <em>Academy of Management Review, 33</em>(1), 55–75. <a href="https://doi.org/10.5465/amr.2008.27745097">https://doi.org/10.5465/amr.2008.27745097</a>.</li>
+<li>Deleuze, G. (1992). Postscript on the societies of control. <em>October, 59</em>, 3–7. <a href="https://www.jstor.org/stable/778828">JSTOR固定URL</a>.</li>
+<li>Espeland, W. N., &amp; Sauder, M. (2007). Rankings and reactivity: How public measures recreate social worlds. <em>American Journal of Sociology, 113</em>(1), 1–40. <a href="https://doi.org/10.1086/517897">https://doi.org/10.1086/517897</a>.</li>
+<li>Foucault, M. (1977). <em>Discipline and punish: The birth of the prison</em> (A. Sheridan, Trans.). Pantheon Books. (Original work published 1975). <a href="https://librarycatalog.sps.edu/cgi-bin/koha/opac-detail.pl?biblionumber=3415">英訳の図書館目録</a>.</li>
+<li>Gerpott, F. H., &amp; Van Quaquebeke, N. (2023). Kiss-Up-Kick-Down to Get Ahead: A Resource Perspective on How, When, Why, and With Whom Middle Managers Use Ingratiatory and Exploitative Behaviours to Advance Their Careers. <em>Journal of Management Studies, 60</em>(7), 1855–1883. <a href="https://doi.org/10.1111/joms.12855">https://doi.org/10.1111/joms.12855</a>.</li>
+<li>Gillespie, T. (2018). <em>Custodians of the internet: Platforms, content moderation, and the hidden decisions that shape social media</em>. Yale University Press. <a href="https://doi.org/10.12987/9780300235029">https://doi.org/10.12987/9780300235029</a>.</li>
+<li>Goergen, J., de Bellis, E., &amp; Klesse, A.-K. (2025). AI assessment changes human behavior. <em>Proceedings of the National Academy of Sciences, 122</em>(25), e2425439122. <a href="https://doi.org/10.1073/pnas.2425439122">https://doi.org/10.1073/pnas.2425439122</a>.</li>
+<li>Goffman, E. (1959). <em>The presentation of self in everyday life</em>. Doubleday. <a href="https://catalogimages.wiley.com/images/db/pdf/9781119527244.excerpt.pdf">1959年版の許諾済み転載</a>.</li>
+<li>Kellogg, K. C., Valentine, M. A., &amp; Christin, A. (2020). Algorithms at work: The new contested terrain of control. <em>Academy of Management Annals, 14</em>(1), 366–410. <a href="https://doi.org/10.5465/annals.2018.0174">https://doi.org/10.5465/annals.2018.0174</a>.</li>
+<li>Klowait, N., &amp; Erofeeva, M. (2025). The presentation of self in the age of ChatGPT. <em>Frontiers in Sociology, 10</em>, 1614473. <a href="https://doi.org/10.3389/fsoc.2025.1614473">https://doi.org/10.3389/fsoc.2025.1614473</a>.</li>
+<li>Strait, M., Contreras, V., &amp; Duarte Vela, C. (2018). <em>Verbal disinhibition towards robots is associated with general antisociality</em>. arXiv:1808.01076. <a href="https://doi.org/10.48550/arXiv.1808.01076">https://doi.org/10.48550/arXiv.1808.01076</a>.</li>
+<li>Suler, J. (2004). The online disinhibition effect. <em>CyberPsychology &amp; Behavior, 7</em>(3), 321–326. <a href="https://doi.org/10.1089/1094931041291295">https://doi.org/10.1089/1094931041291295</a>.</li>
+</ul>
+                <details class="source-note"><summary>出典の確認範囲（2026年10月10日）</summary><p>ニュースは公式資料、研究・理論文献は本文や公開要旨、引用に関係する抜粋等を照合した。AnderssonとPearson（1999）は全文を取得できず、出版社の要旨とCortina（2008）による定義の引用を参照した。Foucaultの英訳書誌は1977年初版に基づくが、本文からリンクする大学公開抜粋の刷は特定していない。Goergenら（2025）の研究数と参加者数は論文の報告値であり、付録の全照合と原データの再分析は行っていない。各書籍の全章を網羅した確認ではない。</p></details>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html?lang=ja">← Home に戻る</a>
+            </div>
+        </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 PROJEKT2501. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem("theme") || "light";
+        if (currentTheme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        }
+
+        function generateTOC() {
+            const tocList = document.getElementById("tocList");
+            const headings = document.querySelectorAll(".essay-content h2, .essay-content h3");
+
+            headings.forEach((heading, index) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+
+                if (!heading.id) {
+                    heading.id = "heading-" + index;
+                }
+
+                a.href = "#" + heading.id;
+                a.textContent = heading.textContent;
+
+                if (heading.tagName === "H3") {
+                    a.classList.add("toc-h3");
+                }
+
+                a.onclick = function() {
+                    toggleTOC();
+                };
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+
+        function toggleTOC() {
+            document.querySelector(".toc-sidebar").classList.toggle("open");
+            document.querySelector(".toc-overlay").classList.toggle("active");
+        }
+
+        window.addEventListener("DOMContentLoaded", generateTOC);
+    </script>
+</body>
+</html>
