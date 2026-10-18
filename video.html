@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video - PROJEKT2501</title>
+    <meta name="description" content="Video works by PROJEKT2501. Drone footage of Miyakojima transformed through slit-scan processing.">
+    <link rel="canonical" href="https://dasprojekt2501.github.io/video.html">
+
+    <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/image/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
+
+    <meta property="og:title" content="Video - PROJEKT2501">
+    <meta property="og:description" content="Video works by PROJEKT2501. Drone footage of Miyakojima transformed through slit-scan processing.">
+    <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+    <meta property="og:url" content="https://dasprojekt2501.github.io/video.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PROJEKT2501">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Video - PROJEKT2501">
+    <meta name="twitter:description" content="Video works by PROJEKT2501. Drone footage of Miyakojima transformed through slit-scan processing.">
+    <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #faf8f5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode { background-color: #1a1a1a; color: #e0e0e0; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        header { margin-bottom: 60px; border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; }
+        body.dark-mode header { border-bottom-color: #333; }
+        h1 { font-size: 2em; margin-bottom: 10px; font-weight: 600; }
+        .subtitle { color: #666; font-size: 1.1em; }
+        body.dark-mode .subtitle { color: #999; }
+
+        .header-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        nav a { color: #0066cc; text-decoration: none; margin-right: 20px; font-size: 0.95em; }
+        body.dark-mode nav a { color: #4a9eff; }
+        nav a:hover { text-decoration: underline; }
+        nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
+
+        .header-actions { display: flex; align-items: center; }
+        .language-toggle { display: flex; gap: 10px; margin-right: 15px; }
+        .lang-btn {
+            background: none; border: none; font-size: 1.5em; cursor: pointer;
+            padding: 4px; opacity: 0.5; transition: opacity 0.3s; line-height: 1;
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+        .lang-btn:hover { opacity: 0.8; }
+        .lang-btn.active { opacity: 1; }
+        .theme-toggle {
+            position: relative; width: 48px; height: 24px; background-color: #e8e4dd;
+            border: none; border-radius: 12px; cursor: pointer; padding: 0;
+            transition: background-color 0.3s ease;
+        }
+        body.dark-mode .theme-toggle { background-color: #2a2a2a; }
+        .theme-toggle:hover { opacity: 0.8; }
+        .toggle-circle {
+            position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
+            background-color: #333; border-radius: 50%; transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        body.dark-mode .toggle-circle { transform: translateX(24px); background-color: #faf8f5; }
+        a:focus-visible, button:focus-visible { outline: 2px solid #0066cc; outline-offset: 5px; }
+        body.dark-mode a:focus-visible, body.dark-mode button:focus-visible { outline-color: #4a9eff; }
+
+        .video-item { margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid #e0e0e0; }
+        body.dark-mode .video-item { border-bottom-color: #333; }
+        .video-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .video-title { font-size: 1.4em; font-weight: 600; margin-bottom: 10px; }
+        .video-description { color: #666; line-height: 1.8; margin-bottom: 24px; }
+        body.dark-mode .video-description { color: #999; }
+        .video-frame {
+            position: relative; width: 100%; aspect-ratio: 16 / 9; min-height: 200px;
+            overflow: hidden; border-radius: 4px; background: #151515;
+        }
+        .video-frame iframe { position: absolute; inset: 0; display: block; width: 100%; height: 100%; border: 0; }
+        .video-link { margin-top: 14px; font-size: 0.9em; }
+        .video-link a { color: #0066cc; text-decoration: none; }
+        body.dark-mode .video-link a { color: #4a9eff; }
+        .video-link a:hover { text-decoration: underline; }
+        .coming-soon .video-title { color: #999; font-weight: 400; font-style: italic; }
+        .coming-soon .video-description { margin-bottom: 0; }
+
+        footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid #e0e0e0; color: #999; font-size: 0.9em; text-align: center; }
+        body.dark-mode footer { border-top-color: #333; }
+
+        @media (max-width: 640px) {
+            .container { padding: 40px 20px; }
+            header { margin-bottom: 40px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            body, .theme-toggle, .toggle-circle, .lang-btn { transition: none; }
+        }
+    </style>
+    <link rel="stylesheet" href="navigation.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PROJEKT2501</h1>
+            <p class="subtitle">Video</p>
+            <div class="header-controls">
+                <nav aria-label="Main navigation">
+                    <a href="index.html?lang=en" id="homeLink">Home</a>
+                    <a href="music.html">Music</a>
+                    <a href="video.html" aria-current="page">Video</a>
+                    <a href="app-en.html" id="appsLink">Apps</a>
+                    <a href="about.html">About</a>
+                </nav>
+                <div class="header-actions">
+                    <div class="language-toggle" aria-label="Language">
+                        <button class="lang-btn" type="button" id="jaButton" onclick="setLanguage('ja')" title="日本語" aria-label="日本語に切り替える" aria-pressed="false">🇯🇵</button>
+                        <button class="lang-btn active" type="button" id="enButton" onclick="setLanguage('en')" title="English" aria-label="Switch to English" aria-pressed="true">🇺🇸</button>
+                    </div>
+                    <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode" aria-pressed="false">
+                        <span class="toggle-circle"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <article class="video-item" aria-labelledby="miyakojimaTitle">
+                <h2 class="video-title" id="miyakojimaTitle" lang="en">STUDY FOR SLIT SCAN (MIYAKOJIMA)</h2>
+                <p class="video-description" id="miyakojimaDescription">Drone footage of Miyakojima, transformed through slit-scan processing.</p>
+                <div class="video-frame">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/04k7u4iqWOA?si=NuBj7EylW_DMSsVR&amp;rel=0&amp;playsinline=1" title="STUDY FOR SLIT SCAN (MIYAKOJIMA)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <p class="video-link"><a href="https://www.youtube.com/watch?v=04k7u4iqWOA" target="_blank" rel="noopener noreferrer" id="youtubeLink">Watch on YouTube ↗</a></p>
+            </article>
+
+            <article class="video-item coming-soon" aria-labelledby="comingSoonTitle">
+                <h2 class="video-title" id="comingSoonTitle" lang="en">Coming soon...</h2>
+                <p class="video-description" id="comingSoonDescription">The next video is in progress.</p>
+            </article>
+        </main>
+
+        <footer><p>&copy; 2026 PROJEKT2501. All rights reserved.</p></footer>
+    </div>
+
+    <script>
+        const themeToggle = document.querySelector('.theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.body.classList.toggle('dark-mode', currentTheme === 'dark');
+        themeToggle.setAttribute('aria-pressed', String(currentTheme === 'dark'));
+
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            themeToggle.setAttribute('aria-pressed', String(isDark));
+        }
+
+        const translations = {
+            ja: {
+                description: '宮古島をドローンで空撮した映像に、Slit Scan処理を施しました。',
+                youtube: 'YouTubeで見る ↗',
+                comingSoon: '次の映像作品を準備中です。'
+            },
+            en: {
+                description: 'Drone footage of Miyakojima, transformed through slit-scan processing.',
+                youtube: 'Watch on YouTube ↗',
+                comingSoon: 'The next video is in progress.'
+            }
+        };
+
+        function setLanguage(language) {
+            const selectedLanguage = Object.hasOwn(translations, language) ? language : 'en';
+            const content = translations[selectedLanguage];
+            document.documentElement.lang = selectedLanguage;
+            document.getElementById('miyakojimaDescription').textContent = content.description;
+            document.getElementById('youtubeLink').textContent = content.youtube;
+            document.getElementById('comingSoonDescription').textContent = content.comingSoon;
+            document.getElementById('homeLink').href = `index.html?lang=${selectedLanguage}`;
+            document.getElementById('appsLink').href = selectedLanguage === 'ja' ? 'app.html' : 'app-en.html';
+            document.querySelectorAll('.lang-btn').forEach(button => {
+                const isActive = button.id === `${selectedLanguage}Button`;
+                button.classList.toggle('active', isActive);
+                button.setAttribute('aria-pressed', String(isActive));
+            });
+            localStorage.setItem('language', selectedLanguage);
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', selectedLanguage);
+            window.history.replaceState({}, '', url);
+        }
+
+        const requestedLanguage = new URLSearchParams(window.location.search).get('lang');
+        setLanguage(requestedLanguage || localStorage.getItem('language') || 'en');
+    </script>
+</body>
+</html>

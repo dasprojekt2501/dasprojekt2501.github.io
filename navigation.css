@@ -1,0 +1,40 @@
+/* Shared site navigation: keep links and controls usable as sections grow. */
+.header-controls {
+    flex-wrap: wrap;
+    gap: 16px 20px;
+}
+
+.header-controls > nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    min-width: 0;
+}
+
+.header-controls > nav a {
+    margin-right: 0;
+    white-space: nowrap;
+}
+
+.header-controls > :not(nav),
+.header-controls .language-toggle,
+.header-controls .theme-toggle,
+.header-controls .toc-toggle {
+    flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+    .header-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .header-controls > nav {
+        gap: 8px 18px;
+    }
+
+    .header-controls > :not(nav) {
+        align-self: flex-end;
+    }
+}
