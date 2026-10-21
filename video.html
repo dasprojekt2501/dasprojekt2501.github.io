@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video - PROJEKT2501</title>
-    <meta name="description" content="Video works by PROJEKT2501. Drone footage of Miyakojima transformed through slit-scan processing.">
+    <meta name="description" content="Slit-scan video works by PROJEKT2501: Miyakojima aerial footage and Tokyo at night from Rainbow Bridge.">
     <link rel="canonical" href="https://dasprojekt2501.github.io/video.html">
 
     <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16.png">
@@ -14,14 +14,14 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/image/favicon-512x512.png">
 
     <meta property="og:title" content="Video - PROJEKT2501">
-    <meta property="og:description" content="Video works by PROJEKT2501. Drone footage of Miyakojima transformed through slit-scan processing.">
+    <meta property="og:description" content="Slit-scan video works by PROJEKT2501: Miyakojima aerial footage and Tokyo at night from Rainbow Bridge.">
     <meta property="og:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
     <meta property="og:url" content="https://dasprojekt2501.github.io/video.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="PROJEKT2501">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Video - PROJEKT2501">
-    <meta name="twitter:description" content="Video works by PROJEKT2501. Drone footage of Miyakojima transformed through slit-scan processing.">
+    <meta name="twitter:description" content="Slit-scan video works by PROJEKT2501: Miyakojima aerial footage and Tokyo at night from Rainbow Bridge.">
     <meta name="twitter:image" content="https://dasprojekt2501.github.io/image/ogp.jpg">
 
     <style>
@@ -89,8 +89,6 @@
         .video-link a { color: #0066cc; text-decoration: none; }
         body.dark-mode .video-link a { color: #4a9eff; }
         .video-link a:hover { text-decoration: underline; }
-        .coming-soon .video-title { color: #999; font-weight: 400; font-style: italic; }
-        .coming-soon .video-description { margin-bottom: 0; }
 
         footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid #e0e0e0; color: #999; font-size: 0.9em; text-align: center; }
         body.dark-mode footer { border-top-color: #333; }
@@ -140,9 +138,13 @@
                 <p class="video-link"><a href="https://www.youtube.com/watch?v=04k7u4iqWOA" target="_blank" rel="noopener noreferrer" id="youtubeLink">Watch on YouTube ↗</a></p>
             </article>
 
-            <article class="video-item coming-soon" aria-labelledby="comingSoonTitle">
-                <h2 class="video-title" id="comingSoonTitle" lang="en">Coming soon...</h2>
-                <p class="video-description" id="comingSoonDescription">The next video is in progress.</p>
+            <article class="video-item" aria-labelledby="bridgeTitle">
+                <h2 class="video-title" id="bridgeTitle" lang="en">STUDY FOR SLIT SCAN (BRIDGE)</h2>
+                <p class="video-description" id="bridgeDescription">Tokyo at night, seen from Rainbow Bridge and transformed through slit-scan processing.</p>
+                <div class="video-frame">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/9qpp-M4DbLc?si=50e-rU56hnzYaHAz&amp;rel=0&amp;playsinline=1" title="STUDY FOR SLIT SCAN (BRIDGE)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <p class="video-link"><a href="https://www.youtube.com/watch?v=9qpp-M4DbLc" target="_blank" rel="noopener noreferrer" id="bridgeYoutubeLink">Watch on YouTube ↗</a></p>
             </article>
         </main>
 
@@ -164,13 +166,13 @@
         const translations = {
             ja: {
                 description: '宮古島をドローンで空撮した映像に、Slit Scan処理を施しました。',
-                youtube: 'YouTubeで見る ↗',
-                comingSoon: '次の映像作品を準備中です。'
+                bridgeDescription: 'レインボーブリッジから見た東京の夜景に、Slit Scan処理を施しました。',
+                youtube: 'YouTubeで見る ↗'
             },
             en: {
                 description: 'Drone footage of Miyakojima, transformed through slit-scan processing.',
-                youtube: 'Watch on YouTube ↗',
-                comingSoon: 'The next video is in progress.'
+                bridgeDescription: 'Tokyo at night, seen from Rainbow Bridge and transformed through slit-scan processing.',
+                youtube: 'Watch on YouTube ↗'
             }
         };
 
@@ -179,8 +181,9 @@
             const content = translations[selectedLanguage];
             document.documentElement.lang = selectedLanguage;
             document.getElementById('miyakojimaDescription').textContent = content.description;
+            document.getElementById('bridgeDescription').textContent = content.bridgeDescription;
             document.getElementById('youtubeLink').textContent = content.youtube;
-            document.getElementById('comingSoonDescription').textContent = content.comingSoon;
+            document.getElementById('bridgeYoutubeLink').textContent = content.youtube;
             document.getElementById('homeLink').href = `index.html?lang=${selectedLanguage}`;
             document.getElementById('appsLink').href = selectedLanguage === 'ja' ? 'app.html' : 'app-en.html';
             document.querySelectorAll('.lang-btn').forEach(button => {
