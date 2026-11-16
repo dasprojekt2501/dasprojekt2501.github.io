@@ -111,6 +111,58 @@ function formatSize(b) {
 function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+// ブラウザは、タブが非表示の間（別のタブを表示中・最小化中・ウィンドウが完全に隠れている間）
+// requestAnimationFrameを一切呼ばず、setTimeoutも1秒に1回まで間引く。
+// MessageChannelのメッセージは間引かれないので、長い処理の「続き」はこちらで予約する。
+const backgroundTasks = (() => {
+  const channel = new MessageChannel();
+  const queue = new Map();
+  let nextId = -1; // requestAnimationFrameのIDは正の整数なので、負の番号で区別する
+  channel.port1.onmessage = ({ data }) => {
+    const callback = queue.get(data);
+    if (!callback) return;
+    queue.delete(data);
+    callback(performance.now());
+  };
+  return {
+    schedule(callback) {
+      const id = nextId--;
+      queue.set(id, callback);
+      channel.port2.postMessage(id);
+      return id;
+    },
+    cancel(id) { return queue.delete(id); },
+  };
+})();
+
+// ほかの処理（画面の更新や入力）に順番を譲る。sleep(0)と違い、タブが非表示でも待たされない。
+function nextTask() {
+  return new Promise(resolve => backgroundTasks.schedule(resolve));
+}
+
+// pdf.jsは描画の続きをrequestAnimationFrameで予約する（画面表示用の描画では切り替える手段がない）。
+// そのままではタブが非表示の間は1ページも描けず、処理が止まったように見えていた。
+// 出力用の描画の間だけ、非表示でも止まらない予約に差し替える。pdf.jsは予約のたびに
+// windowから関数を引くので、差し替えは実行中の描画にもそのまま効く。
+const nativeFrames = { request: window.requestAnimationFrame, cancel: window.cancelAnimationFrame };
+let backgroundFrameUsers = 0;
+async function withBackgroundFrames(render) {
+  if (backgroundFrameUsers++ === 0) {
+    window.requestAnimationFrame = callback => backgroundTasks.schedule(callback);
+    window.cancelAnimationFrame = id => {
+      if (!backgroundTasks.cancel(id)) nativeFrames.cancel.call(window, id);
+    };
+  }
+  try {
+    return await render();
+  } finally {
+    if (--backgroundFrameUsers === 0) {
+      window.requestAnimationFrame = nativeFrames.request;
+      window.cancelAnimationFrame = nativeFrames.cancel;
+    }
+  }
+}
+
 function sanitizeDownloadName(name) {
   const cleaned = String(name)
     .replace(/[\\/\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069]/g, '_')
@@ -774,10 +826,23 @@ function abortIfStale(generation, file) {
 }
 
 function canvasToJpeg(canvas, quality) {
+  const failure = () => new Error(msg('ページ画像を作成できませんでした。', 'Could not create the page image.'));
+  // タブが非表示になって10秒ほど経つと、ブラウザはtoBlobを1回あたり1秒以上待たせる
+  // （Chromeでの実測: A4・300 DPIで約1.1秒。表示中は約0.04秒）。
+  // 非表示の間は、待たされない同期のtoDataURLで同じJPEGを作る。
+  if (document.hidden) {
+    const dataUrl = canvas.toDataURL('image/jpeg', quality);
+    const prefix = 'data:image/jpeg;base64,';
+    if (!dataUrl.startsWith(prefix)) return Promise.reject(failure());
+    const binary = atob(dataUrl.slice(prefix.length));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return Promise.resolve(bytes);
+  }
   return new Promise((resolve, reject) => {
     canvas.toBlob(blob => {
       if (!blob) {
-        reject(new Error(msg('ページ画像を作成できませんでした。', 'Could not create the page image.')));
+        reject(failure());
         return;
       }
       blob.arrayBuffer().then(buffer => resolve(new Uint8Array(buffer)), reject);
@@ -828,7 +893,7 @@ async function renderPageToCanvas(pdfDoc, pageNumber, dpi, runningTotal = 0) {
     const context = canvas.getContext('2d', { alpha: false });
     context.fillStyle = '#fff';
     context.fillRect(0, 0, canvas.width, canvas.height);
-    await page.render({ canvasContext: context, viewport }).promise;
+    await withBackgroundFrames(() => page.render({ canvasContext: context, viewport }).promise);
   } catch (error) {
     release();
     throw error;
@@ -1205,7 +1270,7 @@ async function executeCompress() {
         if (rendered.blank) blankPages.push(i);
         const img = await outDoc.embedJpg(rendered.bytes);
         outDoc.addPage([rendered.width, rendered.height]).drawImage(img, { x: 0, y: 0, width: rendered.width, height: rendered.height });
-        await sleep(0);
+        await nextTask();
       }
 
       if (rmMeta) {
@@ -1216,7 +1281,11 @@ async function executeCompress() {
       }
 
       setProgress(94, msg('PDF出力中…', 'Writing PDF…'));
-      return { bytes: await outDoc.save({ useObjectStreams: true }), blankPages, jpegBytes, doneArea };
+      await nextTask();
+      // pdf-libは既定で50オブジェクトごとにsetTimeoutで一息つく。タブが非表示だとその1回ごとに
+      // 1秒待たされる（Chromeでの実測: 500ページで約44秒。表示中は約0.2秒）ため、一息つかずに書き出す。
+      const bytes = await outDoc.save({ useObjectStreams: true, objectsPerTick: Infinity });
+      return { bytes, blankPages, jpegBytes, doneArea };
     };
 
     // 目標サイズは上限として扱う。超えた場合は、実際に出たサイズをもとに設定を下げてやり直す。
