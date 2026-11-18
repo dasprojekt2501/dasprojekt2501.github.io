@@ -425,6 +425,8 @@
   .calib-done .calib-spinner { display: none; }
   .calib-error { background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.25); color: #ff9a9a; }
   .calib-error .calib-spinner { display: none; }
+  .calib-warn { background: rgba(252,176,92,0.08); border-color: rgba(252,176,92,0.25); color: #fcb05c; }
+  .calib-warn .calib-spinner { display: none; }
 
   .compress-result {
     background: var(--surface);

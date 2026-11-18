@@ -111,6 +111,58 @@ function formatSize(b) {
 function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+// ブラウザは、タブが非表示の間（別のタブを表示中・最小化中・ウィンドウが完全に隠れている間）
+// requestAnimationFrameを一切呼ばず、setTimeoutも1秒に1回まで間引く。
+// MessageChannelのメッセージは間引かれないので、長い処理の「続き」はこちらで予約する。
+const backgroundTasks = (() => {
+  const channel = new MessageChannel();
+  const queue = new Map();
+  let nextId = -1; // requestAnimationFrameのIDは正の整数なので、負の番号で区別する
+  channel.port1.onmessage = ({ data }) => {
+    const callback = queue.get(data);
+    if (!callback) return;
+    queue.delete(data);
+    callback(performance.now());
+  };
+  return {
+    schedule(callback) {
+      const id = nextId--;
+      queue.set(id, callback);
+      channel.port2.postMessage(id);
+      return id;
+    },
+    cancel(id) { return queue.delete(id); },
+  };
+})();
+
+// ほかの処理（画面の更新や入力）に順番を譲る。sleep(0)と違い、タブが非表示でも待たされない。
+function nextTask() {
+  return new Promise(resolve => backgroundTasks.schedule(resolve));
+}
+
+// pdf.jsは描画の続きをrequestAnimationFrameで予約する（画面表示用の描画では切り替える手段がない）。
+// そのままではタブが非表示の間は1ページも描けず、処理が止まったように見えていた。
+// 出力用の描画の間だけ、非表示でも止まらない予約に差し替える。pdf.jsは予約のたびに
+// windowから関数を引くので、差し替えは実行中の描画にもそのまま効く。
+const nativeFrames = { request: window.requestAnimationFrame, cancel: window.cancelAnimationFrame };
+let backgroundFrameUsers = 0;
+async function withBackgroundFrames(render) {
+  if (backgroundFrameUsers++ === 0) {
+    window.requestAnimationFrame = callback => backgroundTasks.schedule(callback);
+    window.cancelAnimationFrame = id => {
+      if (!backgroundTasks.cancel(id)) nativeFrames.cancel.call(window, id);
+    };
+  }
+  try {
+    return await render();
+  } finally {
+    if (--backgroundFrameUsers === 0) {
+      window.requestAnimationFrame = nativeFrames.request;
+      window.cancelAnimationFrame = nativeFrames.cancel;
+    }
+  }
+}
+
 function sanitizeDownloadName(name) {
   const cleaned = String(name)
     .replace(/[\\/\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069]/g, '_')
@@ -712,6 +764,22 @@ function resetReorder() {
 
 // ===== COMPRESS =====
 let compressFile = null, compressedBytes = null, compressedName = '', compressGeneration = 0;
+// 直近の自動設定の結果。同じファイルなら、圧縮の実行時にページ寸法と見積もりを使い回す。
+let compressPlan = null;
+// 進行中の自動設定。圧縮ボタンはこの最中でも押せ、完了を待ってから実行する。
+// 以前は自動設定中にボタンを無効化していたため、目標サイズを書き換えた直後のクリックが
+// （入力欄のchange → 再計測 → 無効化 が先に走って）握りつぶされていた。
+let compressCalibration = null;
+
+// 自動設定のふるまい
+const COMPRESS_AUTO = Object.freeze({
+  margin: 0.95,             // 見積もり誤差の余裕として、目標の95%に収まる設定を選ぶ
+  minQuality: 30,           // 自動設定が選ぶ品質の下限（手動ではスライダーで10まで下げられる）
+  maxQuality: 95,
+  samplePages: 5,           // 見積もりに使うページ数
+  samplePixels: 50_000_000, // 品質の探索中に保持するサンプルcanvasの合計画素数の上限
+  maxAttempts: 4,           // 目標を超えたときに設定を下げてやり直す回数の上限
+});
 
 // Slider listeners
 document.getElementById('compress-quality').addEventListener('input', function() {
@@ -721,7 +789,7 @@ document.getElementById('compress-dpi').addEventListener('input', function() {
   document.getElementById('compress-dpi-val').textContent = this.value + ' DPI';
 });
 document.getElementById('compress-target').addEventListener('change', function() {
-  if (compressFile && !processingScopes.has('compress')) void calibrateCompress(compressFile);
+  if (compressFile && !processingScopes.has('compress')) void startCompressCalibration(compressFile);
 });
 
 setupDrop('compress-drop', 'compress-file-input', loadCompressFile);
@@ -731,15 +799,24 @@ async function loadCompressFile(file) {
   compressFile = file;
   compressedBytes = null;
   compressedName = '';
+  compressPlan = null;
   showFileInfo('compress-file-info', file.name, null, file.size, 'resetCompress');
-  document.getElementById('compress-btn').disabled = true;
+  document.getElementById('compress-btn').disabled = false;
   document.getElementById('compress-result').style.display = 'none';
   document.getElementById('compress-progress-wrap').style.display = 'none';
   setStatus('compress', '');
   document.getElementById('quality-badge').style.display = 'none';
   document.getElementById('dpi-badge').style.display = 'none';
   document.getElementById('compress-dpi').max = String(COMPRESS_DPI.max);
-  await calibrateCompress(file);
+  await startCompressCalibration(file);
+}
+
+function startCompressCalibration(file) {
+  const run = calibrateCompress(file).finally(() => {
+    if (compressCalibration === run) compressCalibration = null;
+  });
+  compressCalibration = run;
+  return run;
 }
 
 function abortIfStale(generation, file) {
@@ -749,10 +826,23 @@ function abortIfStale(generation, file) {
 }
 
 function canvasToJpeg(canvas, quality) {
+  const failure = () => new Error(msg('ページ画像を作成できませんでした。', 'Could not create the page image.'));
+  // タブが非表示になって10秒ほど経つと、ブラウザはtoBlobを1回あたり1秒以上待たせる
+  // （Chromeでの実測: A4・300 DPIで約1.1秒。表示中は約0.04秒）。
+  // 非表示の間は、待たされない同期のtoDataURLで同じJPEGを作る。
+  if (document.hidden) {
+    const dataUrl = canvas.toDataURL('image/jpeg', quality);
+    const prefix = 'data:image/jpeg;base64,';
+    if (!dataUrl.startsWith(prefix)) return Promise.reject(failure());
+    const binary = atob(dataUrl.slice(prefix.length));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return Promise.resolve(bytes);
+  }
   return new Promise((resolve, reject) => {
     canvas.toBlob(blob => {
       if (!blob) {
-        reject(new Error(msg('ページ画像を作成できませんでした。', 'Could not create the page image.')));
+        reject(failure());
         return;
       }
       blob.arrayBuffer().then(buffer => resolve(new Uint8Array(buffer)), reject);
@@ -786,7 +876,8 @@ function isRenderBlank(canvas) {
   }
 }
 
-async function renderPageToJpeg(pdfDoc, pageNumber, dpi, quality, runningTotal = 0) {
+// 1ページを指定DPIでcanvasへ描画する。使い終わったら呼び出し側が release() でcanvasを解放すること。
+async function renderPageToCanvas(pdfDoc, pageNumber, dpi, runningTotal = 0) {
   const page = await pdfDoc.getPage(pageNumber);
   const baseViewport = page.getViewport({ scale: 1 });
   const viewport = page.getViewport({ scale: dpi / 72 });
@@ -794,123 +885,277 @@ async function renderPageToJpeg(pdfDoc, pageNumber, dpi, quality, runningTotal =
   const canvas = document.createElement('canvas');
   canvas.width = Math.ceil(viewport.width);
   canvas.height = Math.ceil(viewport.height);
+  const release = () => {
+    canvas.width = 0;
+    canvas.height = 0;
+  };
   try {
     const context = canvas.getContext('2d', { alpha: false });
     context.fillStyle = '#fff';
     context.fillRect(0, 0, canvas.width, canvas.height);
-    await page.render({ canvasContext: context, viewport }).promise;
-    return {
-      bytes: await canvasToJpeg(canvas, quality),
-      blank: isRenderBlank(canvas),
-      width: baseViewport.width,
-      height: baseViewport.height,
-      runningTotal: nextTotal,
-    };
+    await withBackgroundFrames(() => page.render({ canvasContext: context, viewport }).promise);
+  } catch (error) {
+    release();
+    throw error;
   } finally {
     page.cleanup();
-    canvas.width = 0;
-    canvas.height = 0;
+  }
+  return { canvas, release, width: baseViewport.width, height: baseViewport.height, runningTotal: nextTotal };
+}
+
+async function renderPageToJpeg(pdfDoc, pageNumber, dpi, quality, runningTotal = 0) {
+  const rendered = await renderPageToCanvas(pdfDoc, pageNumber, dpi, runningTotal);
+  try {
+    return {
+      bytes: await canvasToJpeg(rendered.canvas, quality),
+      blank: isRenderBlank(rendered.canvas),
+      width: rendered.width,
+      height: rendered.height,
+      runningTotal: rendered.runningTotal,
+    };
+  } finally {
+    rendered.release();
+  }
+}
+
+function showCompressSettings(quality, dpi) {
+  document.getElementById('compress-quality').value = quality;
+  document.getElementById('compress-quality-val').textContent = quality + '%';
+  document.getElementById('compress-dpi').value = dpi;
+  document.getElementById('compress-dpi-val').textContent = dpi + ' DPI';
+}
+
+// 自動設定が狙うサイズ。目標と「元の95%」の小さい方に、見積もり誤差の余裕を掛ける。
+function compressAimBytes(requestedBytes, originalSize) {
+  return Math.max(1, Math.min(requestedBytes, originalSize * 0.95)) * COMPRESS_AUTO.margin;
+}
+
+// 全ページの寸法と、上限を超えずに描画できる最大DPIを調べる。
+async function readCompressGeometry(pdfDoc, checkAbort) {
+  const pageSizes = [];
+  for (let pageNumber = 1; pageNumber <= pdfDoc.numPages; pageNumber++) {
+    checkAbort();
+    const viewport = (await pdfDoc.getPage(pageNumber)).getViewport({ scale: 1 });
+    pageSizes.push({ width: viewport.width, height: viewport.height });
+  }
+  const safeDpi = maxRenderDpi(pageSizes);
+  if (!safeDpi) {
+    throw new Error(msg('ページサイズが大きすぎるため、このPDFは圧縮できません。', 'The pages are too large for this PDF to be compressed.'));
+  }
+  const totalArea = pageSizes.reduce((sum, size) => sum + size.width * size.height, 0);
+  return { pageSizes, safeDpi, totalArea };
+}
+
+// 見積もりに使うページを文書全体へ均等に散らして選ぶ。
+// 以前の「先頭・中央・末尾」は、表紙や奥付のように他と性質の違うページに引きずられやすかった。
+function pickCompressSamples(geometry) {
+  const { pageSizes, safeDpi } = geometry;
+  const scale = Math.min(COMPRESS_DPI.base, safeDpi) / 72;
+  const largestPage = Math.max(...pageSizes.map(({ width, height }) => Math.ceil(width * scale) * Math.ceil(height * scale)));
+  // 大判ページではサンプルcanvasの保持量が膨らむため、枚数を減らす（最低1ページ）
+  const affordable = Math.max(1, Math.floor(COMPRESS_AUTO.samplePixels / Math.max(1, largestPage)));
+  const count = Math.min(COMPRESS_AUTO.samplePages, pageSizes.length, affordable);
+  return Array.from({ length: count }, (_, index) => Math.ceil((index + 0.5) * pageSizes.length / count));
+}
+
+// サンプルのJPEG合計から文書全体の出力サイズを見積もる関数を返す。
+// ページ寸法が混在していても偏らないよう、ページ数ではなく面積で比例させる。
+function compressSizeEstimator(geometry, samplePages) {
+  const { pageSizes, totalArea } = geometry;
+  const sampleArea = samplePages.reduce((sum, pageNumber) => {
+    const { width, height } = pageSizes[pageNumber - 1];
+    return sum + width * height;
+  }, 0);
+  const overhead = 2048 + pageSizes.length * 300; // ページ辞書など、画像以外の出力ぶん
+  return sampleBytes => sampleBytes * totalArea / Math.max(1, sampleArea) + overhead;
+}
+
+// サンプルページを1枚ずつ描画→JPEG化→解放し、合計バイト数を返す（canvasを溜め込まない）。
+async function measureCompressSamples(pdfDoc, samplePages, dpi, quality, checkAbort) {
+  let total = 0;
+  let runningTotal = 0;
+  for (const pageNumber of samplePages) {
+    checkAbort();
+    const rendered = await renderPageToJpeg(pdfDoc, pageNumber, dpi, quality / 100, runningTotal);
+    runningTotal = rendered.runningTotal;
+    total += rendered.bytes.length;
+  }
+  return total;
+}
+
+// 指定の設定で圧縮した場合の出力サイズを、サンプルページの実測から見積もる。
+async function estimateCompressSize({ pdfDoc, geometry, quality, dpi, checkAbort }) {
+  const samplePages = pickCompressSamples(geometry);
+  const estimate = compressSizeEstimator(geometry, samplePages);
+  return estimate(await measureCompressSamples(pdfDoc, samplePages, dpi, quality, checkAbort));
+}
+
+// 出力が budgetBytes に収まる見込みの（品質, DPI）を求める。
+// 以前はサンプルを150 DPIで2回だけ測り、ほかのDPI・品質には計算で当てはめていた。
+// JPEGのサイズは品質にもDPIにも素直に比例しないので、DPIを上げる側では目標を2〜4割超え、
+// 品質を下げる側では必要以上に下げていた。ここでは候補の設定でサンプルを実際に
+// 描画・JPEG化して確かめる。選び方の方針は従来どおり:
+//   1. 品質95のまま、収まる範囲でDPIを上げる
+//   2. 基準DPIで品質95が収まらなければ、基準DPIのまま品質を下げる
+//   3. 品質の下限でも収まらなければ、下限の品質のままDPIを下げる
+// 3でも収まらない場合は、下限の設定と feasible: false を返す。
+async function solveCompressSettings({ pdfDoc, geometry, budgetBytes, checkAbort }) {
+  const { minQuality, maxQuality } = COMPRESS_AUTO;
+  const { min: minDpi, step } = COMPRESS_DPI;
+  const baseDpi = Math.min(COMPRESS_DPI.base, geometry.safeDpi);
+  const samplePages = pickCompressSamples(geometry);
+  const estimate = compressSizeEstimator(geometry, samplePages);
+  const fits = bytes => bytes <= budgetBytes;
+  const snapDown = dpi => minDpi + Math.floor((dpi - minDpi) / step) * step;
+  const measureAt = async (dpi, quality) => estimate(await measureCompressSamples(pdfDoc, samplePages, dpi, quality, checkAbort));
+
+  // 品質を固定し、収まる最大のDPIを実測で探す。
+  // fitting / tooBig は「収まる」「収まらない」と分かっている実測点（無ければnull）。
+  const searchDpi = async (quality, fitting, tooBig, highestDpi) => {
+    let exponent = 2; // サイズはおおよそDPIの2乗に比例する。実測が2点そろえば実際の傾きに置き換える
+    for (let round = 0; round < 4; round++) {
+      const anchor = fitting ?? tooBig;
+      const floorDpi = fitting ? fitting.dpi + step : minDpi;
+      const ceilDpi = tooBig ? tooBig.dpi - step : highestDpi;
+      if (floorDpi > ceilDpi) break;
+      const wanted = snapDown(anchor.dpi * Math.pow(budgetBytes / anchor.estimatedBytes, 1 / exponent));
+      if (fitting && wanted < floorDpi) break; // もう1段上げる余地はない
+      const dpi = Math.max(floorDpi, Math.min(ceilDpi, wanted));
+      const measured = { dpi, estimatedBytes: await measureAt(dpi, quality) };
+      const slope = Math.log(measured.estimatedBytes / anchor.estimatedBytes) / Math.log(dpi / anchor.dpi);
+      if (Number.isFinite(slope)) exponent = Math.min(3.5, Math.max(1, slope));
+      if (fits(measured.estimatedBytes)) fitting = measured; else tooBig = measured;
+    }
+    return { fitting, tooBig };
+  };
+
+  // 基準DPIのcanvasは保持し、品質だけを変えて再エンコードする（描画し直すより桁違いに速い）
+  const samples = [];
+  const releaseSamples = () => { samples.splice(0).forEach(sample => sample.release()); };
+  const measureQuality = async quality => {
+    let total = 0;
+    for (const sample of samples) {
+      checkAbort();
+      total += (await canvasToJpeg(sample.canvas, quality / 100)).length;
+    }
+    return estimate(total);
+  };
+
+  try {
+    let runningTotal = 0;
+    for (const pageNumber of samplePages) {
+      checkAbort();
+      const rendered = await renderPageToCanvas(pdfDoc, pageNumber, baseDpi, runningTotal);
+      runningTotal = rendered.runningTotal;
+      samples.push(rendered);
+    }
+
+    const top = await measureQuality(maxQuality);
+    if (fits(top)) {
+      releaseSamples();
+      const { fitting } = await searchDpi(maxQuality, { dpi: baseDpi, estimatedBytes: top }, null, geometry.safeDpi);
+      return { quality: maxQuality, dpi: fitting.dpi, estimatedBytes: fitting.estimatedBytes, feasible: true };
+    }
+
+    const bottom = await measureQuality(minQuality);
+    if (fits(bottom)) {
+      let quality = minQuality;
+      let estimatedBytes = bottom;
+      let tooHigh = maxQuality;
+      while (tooHigh - quality > 1) {
+        const middle = Math.floor((quality + tooHigh) / 2);
+        const size = await measureQuality(middle);
+        if (fits(size)) {
+          quality = middle;
+          estimatedBytes = size;
+        } else {
+          tooHigh = middle;
+        }
+      }
+      return { quality, dpi: baseDpi, estimatedBytes, feasible: true };
+    }
+
+    releaseSamples();
+    let { fitting, tooBig } = await searchDpi(minQuality, null, { dpi: baseDpi, estimatedBytes: bottom }, baseDpi);
+    if (!fitting && tooBig.dpi > minDpi) {
+      // 探索が下限まで届かなかった場合は、下限そのものを測って決着をつける
+      const floor = { dpi: minDpi, estimatedBytes: await measureAt(minDpi, minQuality) };
+      if (fits(floor.estimatedBytes)) fitting = floor; else tooBig = floor;
+    }
+    const chosen = fitting ?? tooBig;
+    return { quality: minQuality, dpi: chosen.dpi, estimatedBytes: chosen.estimatedBytes, feasible: Boolean(fitting) };
+  } finally {
+    releaseSamples();
   }
 }
 
 async function calibrateCompress(file) {
   const generation = ++compressGeneration;
+  const checkAbort = () => abortIfStale(generation, file);
   const calibBar = document.getElementById('calib-bar');
   const calibMsg = document.getElementById('calib-msg');
-  const btn = document.getElementById('compress-btn');
   const targetMB = parseFloat(document.getElementById('compress-target').value) || 10;
   const requestedBytes = targetMB * 1024 * 1024;
-  const targetBytes = Math.max(1, Math.min(requestedBytes, file.size * 0.95));
   let loadingTask = null;
+  let readable = false;
 
-  btn.disabled = true;
+  compressPlan = null;
   calibBar.className = 'calib-bar';
   calibBar.style.display = 'flex';
   calibMsg.textContent = msg('最適な設定を自動で探しています…', 'Finding safe compression settings…');
 
   try {
     const arrayBuf = await file.arrayBuffer();
-    abortIfStale(generation, file);
-    const opened = await openPdfJs(arrayBuf);
-    loadingTask = opened.task;
-    const pdfDoc = opened.doc;
-    const numPages = pdfDoc.numPages;
-    const samplePages = [...new Set([1, Math.ceil(numPages / 2), numPages])];
+    checkAbort();
+    const result = await openPdfJs(arrayBuf);
+    loadingTask = result.task;
+    const pdfDoc = result.doc;
+    const geometry = await readCompressGeometry(pdfDoc, checkAbort);
+    readable = true;
 
-    const pageSizes = [];
-    for (let pageNumber = 1; pageNumber <= numPages; pageNumber++) {
-      abortIfStale(generation, file);
-      const viewport = (await pdfDoc.getPage(pageNumber)).getViewport({ scale: 1 });
-      pageSizes.push({ width: viewport.width, height: viewport.height });
-    }
-    const safeDpi = maxRenderDpi(pageSizes);
-    if (!safeDpi) {
-      throw new Error(msg('ページサイズが大きすぎるため、このPDFは圧縮できません。', 'The pages are too large for this PDF to be compressed.'));
-    }
-    // 計測自体も描画可能なDPIで行う（A0などはbase DPIでも上限を超える）。
-    const measureDpi = Math.min(COMPRESS_DPI.base, safeDpi);
+    calibMsg.textContent = msg('サンプルページで計測中…', 'Measuring sample pages…');
+    const solved = await solveCompressSettings({
+      pdfDoc,
+      geometry,
+      checkAbort,
+      budgetBytes: compressAimBytes(requestedBytes, file.size),
+    });
+    checkAbort();
 
-    const estimatePdfSize = async (dpi, quality) => {
-      const out = await PDFDocument.create();
-      let runningTotal = 0;
-      for (const pageNumber of samplePages) {
-        abortIfStale(generation, file);
-        const rendered = await renderPageToJpeg(pdfDoc, pageNumber, dpi, quality / 100, runningTotal);
-        runningTotal = rendered.runningTotal;
-        const img = await out.embedJpg(rendered.bytes);
-        out.addPage([rendered.width, rendered.height]).drawImage(img, { x: 0, y: 0, width: rendered.width, height: rendered.height });
-      }
-      const sampleSize = (await out.save({ useObjectStreams: true })).byteLength;
-      return sampleSize * numPages / samplePages.length;
-    };
-
-    calibMsg.textContent = msg('サンプル計測中 (1/2)…', 'Measuring samples (1/2)…');
-    const baseSizeQ95 = await estimatePdfSize(measureDpi, 95);
-    let bestQuality = 95, bestDpi = measureDpi;
-
-    if (baseSizeQ95 <= targetBytes) {
-      bestDpi = Math.round(measureDpi * Math.sqrt(targetBytes / baseSizeQ95) / COMPRESS_DPI.step) * COMPRESS_DPI.step;
-      bestQuality = 95;
-    } else {
-      calibMsg.textContent = msg('サンプル計測中 (2/2)…', 'Measuring samples (2/2)…');
-      const baseSizeQ30 = await estimatePdfSize(measureDpi, 30);
-      if (targetBytes >= baseSizeQ30) {
-        const range = Math.max(1, baseSizeQ95 - baseSizeQ30);
-        const t = (targetBytes - baseSizeQ30) / range;
-        bestQuality = Math.max(10, Math.min(95, Math.round(30 + t * 65)));
-        bestDpi = measureDpi;
-      } else {
-        bestQuality = 30;
-        bestDpi = Math.round(measureDpi * Math.sqrt(targetBytes / baseSizeQ30) / COMPRESS_DPI.step) * COMPRESS_DPI.step;
-      }
-    }
-    // 提案値は必ず実際に描画できる範囲へ収める。
-    bestDpi = Math.max(COMPRESS_DPI.min, Math.min(safeDpi, bestDpi));
-
-    abortIfStale(generation, file);
-    const dpiInput = document.getElementById('compress-dpi');
-    // 手動操作でも描画上限を超えられないよう、スライダーの上限も下げる。
-    dpiInput.max = String(safeDpi);
-    document.getElementById('compress-quality').value = bestQuality;
-    document.getElementById('compress-quality-val').textContent = bestQuality + '%';
-    dpiInput.value = bestDpi;
-    document.getElementById('compress-dpi-val').textContent = bestDpi + ' DPI';
+    // 手動操作でも描画上限を超えられないよう、スライダーの上限も下げる（値より先に設定する）。
+    document.getElementById('compress-dpi').max = String(geometry.safeDpi);
+    showCompressSettings(solved.quality, solved.dpi);
     document.getElementById('quality-badge').style.display = 'block';
     document.getElementById('dpi-badge').style.display = 'block';
+    compressPlan = { file, geometry, quality: solved.quality, dpi: solved.dpi, estimatedBytes: solved.estimatedBytes };
 
-    calibBar.className = 'calib-bar calib-done';
-    calibMsg.textContent = safeDpi < COMPRESS_DPI.max
-      ? msg(`✓ 自動設定完了 — ページが大きいため解像度は${safeDpi} DPIまでに制限されます`, `✓ Automatic settings applied — large pages cap the resolution at ${safeDpi} DPI`)
-      : msg('✓ 自動設定完了 — スライダーを調整しました', '✓ Automatic settings applied — you can fine-tune the sliders');
-    btn.disabled = false;
+    const expected = formatSize(solved.estimatedBytes);
+    const alreadySmall = file.size <= requestedBytes;
+    if (!solved.feasible) {
+      calibBar.className = 'calib-bar calib-warn';
+      calibMsg.textContent = alreadySmall
+        ? msg(`⚠ すでに目標以下です（${formatSize(file.size)}）。この方式ではこれ以上小さくできない見込みです`, `⚠ Already under the target (${formatSize(file.size)}). This method is not expected to make it any smaller`)
+        : msg(`⚠ 最小の自動設定でも目標に収まらない見込みです（約${expected}）`, `⚠ Even the lowest automatic settings are expected to exceed the target (about ${expected})`);
+    } else {
+      calibBar.className = 'calib-bar calib-done';
+      const lead = alreadySmall
+        ? msg(`✓ すでに目標以下です（${formatSize(file.size)}）。さらに小さくする設定にしました`, `✓ Already under the target (${formatSize(file.size)}). Settings chosen to shrink it further`)
+        : msg('✓ 自動設定完了', '✓ Automatic settings applied');
+      const capped = geometry.safeDpi < COMPRESS_DPI.max
+        ? msg(`（ページが大きいため解像度は${geometry.safeDpi} DPIまで）`, ` (large pages cap the resolution at ${geometry.safeDpi} DPI)`)
+        : '';
+      calibMsg.textContent = `${lead} — ${msg(`圧縮後の見込み 約${expected}`, `expected result about ${expected}`)}${capped}`;
+    }
 
   } catch(e) {
     if (e.name !== 'AbortError') {
       console.error('Calibration error:', e);
       calibBar.className = 'calib-bar calib-error';
-      calibMsg.textContent = msg('自動設定に失敗しました。手動設定で実行できます。', 'Automatic settings failed. You can still use manual settings.');
+      // PDFを開けない・ページが大きすぎる場合は手動設定でも実行できないので、そう案内しない。
+      calibMsg.textContent = readable
+        ? msg('自動設定に失敗しました。手動設定で実行できます。', 'Automatic settings failed. You can still use manual settings.')
+        : msg('このPDFは圧縮できません。', 'This PDF cannot be compressed.');
       setStatus('compress', humanError(e), true);
-      if (file === compressFile) btn.disabled = false;
     }
   } finally {
     if (loadingTask) await loadingTask.destroy().catch(() => {});
@@ -928,21 +1173,24 @@ function copyCompressionMetadata(outDoc, metadata) {
   if (clean(info.Keywords)) outDoc.setKeywords(clean(info.Keywords).split(/[,;]+/).map(v => v.trim()).filter(Boolean));
 }
 
+// 途中で打ち切ったパスから、同じ設定で最後まで進めた場合の合計サイズを見積もる。
+// 残りのページは「見積もりどおり」と「ここまでと同じ割合で見積もりを超える」の間を取り、
+// 半分以上進んでいれば後者とする。先頭の数ページだけが重い文書で設定を下げすぎないための折衷。
+function projectCompressSize(actualBytes, fraction, predictedBytes) {
+  if (fraction >= 1) return actualBytes;
+  const ratio = actualBytes / Math.max(1, predictedBytes * fraction);
+  const weight = Math.min(1, fraction / 0.5);
+  return actualBytes + predictedBytes * (1 - fraction) * Math.pow(ratio, weight);
+}
+
 async function executeCompress() {
-  if (!compressFile) return;
+  if (!compressFile || processingScopes.has('compress')) return;
   const file = compressFile;
-  const generation = ++compressGeneration;
   const btn = document.getElementById('compress-btn');
   const progWrap = document.getElementById('compress-progress-wrap');
   const progFill = document.getElementById('compress-progress-fill');
   const progText = document.getElementById('compress-progress-text');
   const progPct  = document.getElementById('compress-progress-pct');
-
-  const targetMB = parseFloat(document.getElementById('compress-target').value) || 10;
-  const targetBytes = targetMB * 1024 * 1024;
-  const quality = parseInt(document.getElementById('compress-quality').value) / 100;
-  const dpi = parseInt(document.getElementById('compress-dpi').value);
-  const rmMeta = document.getElementById('compress-meta').checked;
 
   beginProcessing('compress');
   btn.disabled = true;
@@ -961,47 +1209,144 @@ async function executeCompress() {
   };
 
   try {
+    // 自動設定の途中で押された場合は、その完了を待ってから始める。
+    setProgress(0, msg('準備中…', 'Preparing…'));
+    while (compressCalibration) {
+      setProgress(2, msg('自動設定の完了を待っています…', 'Waiting for automatic settings…'));
+      await compressCalibration;
+    }
+    const generation = ++compressGeneration;
+    const checkAbort = () => abortIfStale(generation, file);
+
+    const targetMB = parseFloat(document.getElementById('compress-target').value) || 10;
+    const targetBytes = targetMB * 1024 * 1024;
+    const rmMeta = document.getElementById('compress-meta').checked;
+    let quality = parseInt(document.getElementById('compress-quality').value, 10);
+    let dpi = parseInt(document.getElementById('compress-dpi').value, 10);
+
     const originalArray = await file.arrayBuffer();
     const originalSize = originalArray.byteLength;
+    // 結果がこれを超えたら（目標を超えた、または元より小さくならなかった）設定を下げてやり直す。
+    const limitBytes = Math.min(targetBytes, originalSize - 1);
 
     setProgress(5, msg('PDF解析中…', 'Parsing PDF…'));
     const opened = await openPdfJs(originalArray);
     loadingTask = opened.task;
     const pdfDoc = opened.doc;
     const numPages = pdfDoc.numPages;
+    const plan = compressPlan?.file === file ? compressPlan : null;
+    const geometry = plan?.geometry ?? await readCompressGeometry(pdfDoc, checkAbort);
+    // 自動設定に失敗していた場合でも、描画できる上限は超えさせない。
+    if (dpi > geometry.safeDpi) {
+      dpi = geometry.safeDpi;
+      document.getElementById('compress-dpi').max = String(geometry.safeDpi);
+      showCompressSettings(quality, dpi);
+    }
     const metadata = rmMeta ? null : await pdfDoc.getMetadata().catch(() => null);
-    const outDoc = await PDFDocument.create();
-    let runningTotal = 0;
-    const blankPages = [];
+    // この設定での出力サイズの見積もり（自動設定のままなら計測済み）。設定を下げるときの補正に使う。
+    let predicted = plan && plan.quality === quality && plan.dpi === dpi ? plan.estimatedBytes : null;
 
-    for (let i = 1; i <= numPages; i++) {
-      abortIfStale(generation, file);
-      const pct = 8 + ((i - 1) / numPages) * 82;
-      setProgress(pct, msg(`レンダリング・構築中… (${i} / ${numPages}ページ)`, `Rendering and building… (${i} / ${numPages} pages)`));
-      const rendered = await renderPageToJpeg(pdfDoc, i, dpi, quality, runningTotal);
-      runningTotal = rendered.runningTotal;
-      if (rendered.blank) blankPages.push(i);
-      const img = await outDoc.embedJpg(rendered.bytes);
-      outDoc.addPage([rendered.width, rendered.height]).drawImage(img, { x: 0, y: 0, width: rendered.width, height: rendered.height });
-      await sleep(0);
+    // 全ページを1回通して出力PDFを作る。JPEGの合計が abortAbove を超えた時点で、
+    // 最後まで描いても目標に収まらないと確定するので打ち切る（bytes: null を返す）。
+    const runPass = async (attempt, abortAbove) => {
+      const outDoc = await PDFDocument.create();
+      const blankPages = [];
+      const retryNote = attempt > 1
+        ? `${msg(`設定を下げて再圧縮中（${attempt}回目）`, `Re-compressing with lower settings (attempt ${attempt})`)} — `
+        : '';
+      let runningTotal = 0;
+      let jpegBytes = 0;
+      let doneArea = 0;
+
+      for (let i = 1; i <= numPages; i++) {
+        checkAbort();
+        const pct = 8 + ((i - 1) / numPages) * 82;
+        setProgress(pct, `${retryNote}${msg(`レンダリング・構築中… (${i} / ${numPages}ページ)`, `Rendering and building… (${i} / ${numPages} pages)`)}`);
+        const rendered = await renderPageToJpeg(pdfDoc, i, dpi, quality / 100, runningTotal);
+        runningTotal = rendered.runningTotal;
+        jpegBytes += rendered.bytes.length;
+        doneArea += rendered.width * rendered.height;
+        if (jpegBytes > abortAbove) return { bytes: null, blankPages, jpegBytes, doneArea };
+        if (rendered.blank) blankPages.push(i);
+        const img = await outDoc.embedJpg(rendered.bytes);
+        outDoc.addPage([rendered.width, rendered.height]).drawImage(img, { x: 0, y: 0, width: rendered.width, height: rendered.height });
+        await nextTask();
+      }
+
+      if (rmMeta) {
+        outDoc.setTitle(''); outDoc.setAuthor(''); outDoc.setSubject('');
+        outDoc.setKeywords([]); outDoc.setProducer(''); outDoc.setCreator('');
+      } else {
+        copyCompressionMetadata(outDoc, metadata);
+      }
+
+      setProgress(94, msg('PDF出力中…', 'Writing PDF…'));
+      await nextTask();
+      // pdf-libは既定で50オブジェクトごとにsetTimeoutで一息つく。タブが非表示だとその1回ごとに
+      // 1秒待たされる（Chromeでの実測: 500ページで約44秒。表示中は約0.2秒）ため、一息つかずに書き出す。
+      const bytes = await outDoc.save({ useObjectStreams: true, objectsPerTick: Infinity });
+      return { bytes, blankPages, jpegBytes, doneArea };
+    };
+
+    // 目標サイズは上限として扱う。超えた場合は、実際に出たサイズをもとに設定を下げてやり直す。
+    // 自動設定の下限に達したとき、または回数の上限に達したときは、その結果を警告付きで出す。
+    const isAtFloor = () => quality <= COMPRESS_AUTO.minQuality && dpi <= COMPRESS_DPI.min;
+    let pass = null;
+    let attempt = 1;
+    for (;; attempt++) {
+      const finalTry = isAtFloor() || attempt >= COMPRESS_AUTO.maxAttempts;
+      pass = await runPass(attempt, finalTry ? Infinity : limitBytes);
+      if (pass.bytes && pass.bytes.byteLength <= limitBytes) break;
+      if (finalTry) break;
+
+      setProgress(6, msg('目標を超えたため、設定を下げて計測し直しています…', 'Over the target — measuring lower settings…'));
+      if (predicted === null) predicted = await estimateCompressSize({ pdfDoc, geometry, quality, dpi, checkAbort });
+      const actual = pass.bytes ? pass.bytes.byteLength : pass.jpegBytes;
+      const fraction = pass.bytes ? 1 : pass.doneArea / geometry.totalArea;
+      const projected = projectCompressSize(actual, fraction, predicted);
+      const aimBytes = compressAimBytes(targetBytes, originalSize) * 0.97;
+      let next;
+      if (quality < COMPRESS_AUTO.minQuality) {
+        // 手動で自動設定の下限より低い品質にしている場合は、品質を勝手に上げ直さず、DPIだけを下げる。
+        const { min, step } = COMPRESS_DPI;
+        const wanted = min + Math.floor((dpi * Math.sqrt(aimBytes / projected) - min) / step) * step;
+        next = { quality, dpi: Math.max(min, Math.min(dpi - step, wanted)), estimatedBytes: null };
+      } else {
+        // 見積もりに対して実際がどれだけ大きかったか。次の設定にも同じだけの外れを見込む。
+        const bias = Math.max(1.02, projected / predicted);
+        next = await solveCompressSettings({ pdfDoc, geometry, checkAbort, budgetBytes: aimBytes / bias });
+      }
+      if (next.quality === quality && next.dpi === dpi) {
+        // 見積もり上は同じ設定に行き着いた場合でも、必ず一段は下げて進める。
+        if (quality > COMPRESS_AUTO.minQuality) next.quality = Math.max(COMPRESS_AUTO.minQuality, quality - 5);
+        else next.dpi = Math.max(COMPRESS_DPI.min, dpi - COMPRESS_DPI.step);
+        next.estimatedBytes = null;
+      }
+      quality = next.quality;
+      dpi = next.dpi;
+      predicted = next.estimatedBytes;
+      showCompressSettings(quality, dpi);
     }
 
-    if (rmMeta) {
-      outDoc.setTitle(''); outDoc.setAuthor(''); outDoc.setSubject('');
-      outDoc.setKeywords([]); outDoc.setProducer(''); outDoc.setCreator('');
-    } else {
-      copyCompressionMetadata(outDoc, metadata);
-    }
-
-    setProgress(94, msg('PDF出力中…', 'Writing PDF…'));
-    const outBytes = await outDoc.save({ useObjectStreams: true });
-    abortIfStale(generation, file);
+    const outBytes = pass.bytes;
+    checkAbort();
     setProgress(100, msg('完了！', 'Complete!'));
     compressedBytes = outBytes;
     compressedName = `${baseName(file.name)}_compressed.pdf`;
+    compressPlan = { file, geometry, quality, dpi, estimatedBytes: predicted };
+    if (attempt > 1) {
+      // スライダーは下げた後の設定を示しているので、自動設定の表示も実態に合わせる。
+      const calibBar = document.getElementById('calib-bar');
+      calibBar.className = 'calib-bar calib-done';
+      calibBar.style.display = 'flex';
+      document.getElementById('calib-msg').textContent = msg('✓ 実際の出力に合わせて設定を下げました', '✓ Settings lowered to match the actual output');
+    }
 
     const afterSize = outBytes.byteLength;
     const ratio = Math.round((1 - afterSize / originalSize) * 100);
+    // 元がすでに目標以下なら「目標に収まらない」は当てはまらない（元のファイルを使えばよい）。
+    const overTarget = afterSize > targetBytes && originalSize > targetBytes;
+    const notSmaller = afterSize >= originalSize;
 
     document.getElementById('compress-stat-before').textContent = formatSize(originalSize);
     document.getElementById('compress-stat-after').textContent = formatSize(afterSize);
@@ -1009,19 +1354,31 @@ async function executeCompress() {
 
     const warnEl = document.getElementById('compress-warn');
     const warnings = [];
-    if (blankPages.length) {
-      const shown = blankPages.slice(0, 10).map(page => `P${page}`).join(', ');
-      const list = blankPages.length > 10 ? `${shown} …` : shown;
+    if (pass.blankPages.length) {
+      const shown = pass.blankPages.slice(0, 10).map(page => `P${page}`).join(', ');
+      const list = pass.blankPages.length > 10 ? `${shown} …` : shown;
       warnings.push(msg(
         `白紙として出力されたページがあります（${list}）。元のPDFに内容がある場合、そのページの描画に失敗しています。`,
         `Some pages came out blank (${list}). If those pages have content in the original, they failed to render.`,
       ));
     }
-    if (afterSize >= originalSize) {
-      warnings.push(msg('元ファイルより小さくなりませんでした。', 'The result is not smaller than the original.'));
+    if (notSmaller) {
+      warnings.push(msg(
+        '元のファイルより小さくできませんでした。文字や図形が中心のPDFや、すでに十分圧縮されているPDFは、各ページを画像に変換するこの方式では小さくなりません。元のファイルをそのままお使いください。',
+        'The result is not smaller than the original. PDFs made mostly of text and line art, or ones that are already well compressed, do not shrink with this method, which converts every page to an image. Keep using the original file.',
+      ));
     }
-    if (afterSize > targetBytes) {
-      warnings.push(msg(`目標 ${targetMB}MB を超えています（${formatSize(afterSize)}）。品質またはDPIを下げてください。`, `The result exceeds the ${targetMB} MB target (${formatSize(afterSize)}). Lower quality or DPI.`));
+    if (overTarget) {
+      const size = formatSize(afterSize);
+      warnings.push(isAtFloor()
+        ? msg(
+          `目標 ${targetMB}MB に収まりませんでした（${size}）。自動設定の下限（${COMPRESS_DPI.min} DPI・品質${COMPRESS_AUTO.minQuality}%）まで下げた結果です。「分割」タブでPDFを分け、必要ならそれぞれを圧縮してください。`,
+          `The ${targetMB} MB target could not be met (${size}), even at the lowest automatic settings (${COMPRESS_DPI.min} DPI, quality ${COMPRESS_AUTO.minQuality}%). Split the PDF in the Split tab and, if needed, compress each part.`,
+        )
+        : msg(
+          `目標 ${targetMB}MB を超えています（${size}）。自動での再調整が上限回数に達しました。もう一度実行するか、品質またはDPIを下げてください。`,
+          `The result exceeds the ${targetMB} MB target (${size}). Automatic readjustment reached its limit; run it again, or lower quality or DPI.`,
+        ));
     }
     if (warnings.length) {
       warnEl.style.display = 'block';
@@ -1031,7 +1388,15 @@ async function executeCompress() {
     }
 
     document.getElementById('compress-result').style.display = 'block';
-    setStatus('compress', msg('✓ 圧縮処理が完了しました', '✓ Compression complete'));
+    if (overTarget) {
+      setStatus('compress', msg('⚠ 目標サイズに収まりませんでした', '⚠ The target size was not met'), true);
+    } else if (notSmaller) {
+      setStatus('compress', msg('⚠ 元のファイルより小さくなりませんでした', '⚠ The result is not smaller than the original'), true);
+    } else if (attempt > 1) {
+      setStatus('compress', msg('✓ 圧縮処理が完了しました（目標に収まるよう設定を下げて再圧縮）', '✓ Compression complete (re-compressed with lower settings to meet the target)'));
+    } else {
+      setStatus('compress', msg('✓ 圧縮処理が完了しました', '✓ Compression complete'));
+    }
     setTimeout(() => document.getElementById('compress-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
 
   } catch(err) {
@@ -1054,7 +1419,7 @@ document.getElementById('compress-download-btn').addEventListener('click', () =>
 function resetCompress() {
   if (refuseResetWhileProcessing('compress')) return;
   ++compressGeneration;
-  compressFile = null; compressedBytes = null; compressedName = '';
+  compressFile = null; compressedBytes = null; compressedName = ''; compressPlan = null;
   document.getElementById('compress-file-info').innerHTML = '';
   document.getElementById('calib-bar').style.display = 'none';
   document.getElementById('compress-btn').disabled = true;
